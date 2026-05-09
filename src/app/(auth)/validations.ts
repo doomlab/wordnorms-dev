@@ -7,14 +7,20 @@ export const email = z
 
 export const password = z
   .string()
-  .min(10)
+  .min(8, "Password must be at least 8 characters")
   .max(100)
   .transform((str) => str.trim())
 
-export const Signup = z.object({
-  email,
-  password,
-})
+export const Signup = z
+  .object({
+    email,
+    password,
+    passwordConfirmation: password,
+  })
+  .refine((data) => data.password === data.passwordConfirmation, {
+    message: "Passwords don't match",
+    path: ["passwordConfirmation"],
+  })
 
 export const Login = z.object({
   email,

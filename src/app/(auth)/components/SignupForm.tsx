@@ -31,10 +31,10 @@ export const SignupForm = (props: SignupFormProps) => {
           <Form
             submitText="Sign up"
             schema={Signup}
-            initialValues={{ email: "", password: "" }}
-            onSubmit={async (values) => {
+            initialValues={{ email: "", password: "", passwordConfirmation: "" }}
+            onSubmit={async ({ email, password }) => {
               try {
-                await signupMutation(values)
+                await signupMutation({ email, password })
                 router.refresh()
                 router.push("/")
               } catch (error: any) {
@@ -48,6 +48,7 @@ export const SignupForm = (props: SignupFormProps) => {
           >
             <LabeledTextField name="email" label="Email" placeholder="you@example.com" type="email" />
             <LabeledTextField name="password" label="Password" placeholder="••••••••" type="password" />
+            <LabeledTextField name="passwordConfirmation" label="Confirm password" placeholder="••••••••" type="password" />
           </Form>
         </div>
       </div>
