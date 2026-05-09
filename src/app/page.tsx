@@ -1,10 +1,6 @@
-import Link from "next/link"
 import { Suspense } from "react"
-import { invoke } from "./blitz-server"
-import getCurrentUser from "./users/queries/getCurrentUser"
-import { LogoutButton } from "./(auth)/components/LogoutButton"
+import { Navbar } from "./components/Navbar"
 import { BrowseFilters } from "./components/BrowseFilters"
-import { ThemeToggle } from "./components/ThemeToggle"
 import { DATASETS, filterDatasets } from "./data/datasets"
 
 export default async function Home({
@@ -12,7 +8,6 @@ export default async function Home({
 }: {
   searchParams: Promise<{ q?: string; lang?: string | string[]; decade?: string | string[] }>
 }) {
-  const currentUser = await invoke(getCurrentUser, null)
   const params = await searchParams
 
   const q = params.q
@@ -27,37 +22,7 @@ export default async function Home({
 
   return (
     <div className="min-h-screen bg-base-100 flex flex-col">
-      {/* Navbar */}
-      <div className="navbar bg-base-200 px-6 shadow-sm shrink-0 sticky top-0 z-50">
-        <div className="flex-1">
-          <span className="text-xl font-bold">WordNorms.com</span>
-        </div>
-        <div className="flex-none gap-2">
-          <ThemeToggle />
-          {currentUser ? (
-            <>
-              <Link href="/dashboard" className="btn btn-primary btn-sm m-2">
-                Dashboard
-              </Link>
-              {currentUser.role === "ADMIN" && (
-                <Link href="/admin" className="btn btn-ghost btn-sm">
-                  Admin
-                </Link>
-              )}
-              <LogoutButton />
-            </>
-          ) : (
-            <>
-              <Link href="/login" className="btn btn-primary btn-sm m-2">
-                Log in
-              </Link>
-              <Link href="/signup" className="btn btn-secondary btn-sm">
-                Sign up
-              </Link>
-            </>
-          )}
-        </div>
-      </div>
+      <Navbar />
 
       {/* Body */}
       <div className="flex flex-1 max-w-6xl w-full mx-auto px-6 py-8 gap-8">
