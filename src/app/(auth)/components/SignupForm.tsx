@@ -17,16 +17,10 @@ export const SignupForm = (props: SignupFormProps) => {
   const router = useRouter()
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-base-100 px-4">
-      <div className="card w-full max-w-sm bg-base-200 shadow-lg">
+    <div className="flex flex-1 items-center justify-center px-4 py-12">
+      <div className="card w-full max-w-sm bg-base-200 shadow-sm">
         <div className="card-body gap-0">
-          <h1 className="text-2xl font-bold mb-1">Create an account</h1>
-          <p className="text-sm text-base-content/60 mb-6">
-            Already have one?{" "}
-            <Link href="/login" className="link link-primary">
-              Log in
-            </Link>
-          </p>
+          <h1 className="text-2xl font-bold mb-6">Create an account</h1>
 
           <Form
             submitText="Sign up"
@@ -50,6 +44,13 @@ export const SignupForm = (props: SignupFormProps) => {
             <LabeledTextField name="password" label="Password" placeholder="••••••••" type="password" />
             <LabeledTextField name="passwordConfirmation" label="Confirm password" placeholder="••••••••" type="password" />
           </Form>
+
+          <div className="divider mt-4 mb-2" />
+          <div className="flex gap-2 justify-center">
+            <Link href="/login" className="btn btn-secondary btn-outline btn-sm">
+              Already have an account?
+            </Link>
+          </div>
         </div>
       </div>
     </div>

@@ -20,16 +20,10 @@ export const LoginForm = (props: LoginFormProps) => {
   const next = useSearchParams()?.get("next")
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-base-100 px-4">
-      <div className="card w-full max-w-sm bg-base-200 shadow-lg">
+    <div className="flex flex-1 items-center justify-center px-4 py-12">
+      <div className="card w-full max-w-sm bg-base-200 shadow-sm">
         <div className="card-body gap-0">
-          <h1 className="text-2xl font-bold mb-1">Log in</h1>
-          <p className="text-sm text-base-content/60 mb-6">
-            No account?{" "}
-            <Link href="/signup" className="link link-primary">
-              Sign up
-            </Link>
-          </p>
+          <h1 className="text-2xl font-bold mb-6">Log in</h1>
 
           <Form
             submitText="Log in"
@@ -53,9 +47,13 @@ export const LoginForm = (props: LoginFormProps) => {
             <LabeledTextField name="password" label="Password" placeholder="••••••••" type="password" />
           </Form>
 
-          <div className="text-center mt-4">
-            <Link href="/forgot-password" className="link link-primary text-sm">
-              Forgot your password?
+          <div className="divider mt-4 mb-2" />
+          <div className="flex gap-2 justify-center flex-wrap">
+            <Link href="/signup" className="btn btn-secondary btn-outline btn-sm">
+              Create an account
+            </Link>
+            <Link href="/forgot-password" className="btn btn-accent btn-outline btn-sm">
+              Forgot password
             </Link>
           </div>
         </div>

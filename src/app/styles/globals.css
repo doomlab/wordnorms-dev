@@ -1,2 +1,9 @@
 @import "tailwindcss";
 @plugin "daisyui";
+
+/* Increase base layer separation in dark mode — default theme has <2% difference */
+[data-theme="dark"] {
+  --color-base-100: oklch(20% 0.015 264);
+  --color-base-200: oklch(28% 0.015 264);
+  --color-base-300: oklch(34% 0.015 264);
+}
