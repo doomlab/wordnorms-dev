@@ -5,9 +5,7 @@ import { z } from "zod"
 
 export interface FormProps<S extends z.ZodType<any, any>>
   extends Omit<PropsWithoutRef<React.JSX.IntrinsicElements["form"]>, "onSubmit"> {
-  /** All your form fields */
   children?: ReactNode
-  /** Text to display in the submit button */
   submitText?: string
   schema?: S
   onSubmit: (values: z.infer<S>) => Promise<void | OnSubmitResult>
@@ -36,38 +34,25 @@ export function Form<S extends z.ZodType<any, any>>({
       validate={validateZodSchema(schema)}
       onSubmit={async (values, { setErrors }) => {
         const { FORM_ERROR, ...otherErrors } = (await onSubmit(values)) || {}
-
-        if (FORM_ERROR) {
-          setFormError(FORM_ERROR)
-        }
-
-        if (Object.keys(otherErrors).length > 0) {
-          setErrors(otherErrors)
-        }
+        if (FORM_ERROR) setFormError(FORM_ERROR)
+        if (Object.keys(otherErrors).length > 0) setErrors(otherErrors)
       }}
     >
       {({ handleSubmit, isSubmitting }) => (
-        <form onSubmit={handleSubmit} className="form" {...props}>
-          {/* Form fields supplied as children are rendered here */}
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4" {...props}>
           {children}
 
           {formError && (
-            <div role="alert" style={{ color: "red" }}>
+            <div role="alert" className="alert alert-error text-sm py-2">
               {formError}
             </div>
           )}
 
           {submitText && (
-            <button type="submit" disabled={isSubmitting}>
-              {submitText}
+            <button type="submit" disabled={isSubmitting} className="btn btn-primary w-full mt-1">
+              {isSubmitting ? <span className="loading loading-spinner loading-sm" /> : submitText}
             </button>
           )}
-
-          <style global jsx>{`
-            .form > * + * {
-              margin-top: 1rem;
-            }
-          `}</style>
         </form>
       )}
     </Formik>

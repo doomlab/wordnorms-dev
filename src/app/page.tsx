@@ -4,6 +4,7 @@ import { invoke } from "./blitz-server"
 import getCurrentUser from "./users/queries/getCurrentUser"
 import { LogoutButton } from "./(auth)/components/LogoutButton"
 import { BrowseFilters } from "./components/BrowseFilters"
+import { ThemeToggle } from "./components/ThemeToggle"
 import { DATASETS, filterDatasets } from "./data/datasets"
 
 export default async function Home({
@@ -32,6 +33,7 @@ export default async function Home({
           <span className="text-xl font-bold">Word Norms</span>
         </div>
         <div className="flex-none gap-2">
+          <ThemeToggle />
           {currentUser ? (
             <>
               <Link href="/dashboard" className="btn btn-ghost btn-sm">

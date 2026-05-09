@@ -2,6 +2,7 @@ import { redirect } from "next/navigation"
 import { getBlitzContext } from "../blitz-server"
 import Link from "next/link"
 import { LogoutButton } from "../(auth)/components/LogoutButton"
+import { ThemeToggle } from "../components/ThemeToggle"
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const ctx = await getBlitzContext()
@@ -23,7 +24,8 @@ export default async function DashboardLayout({ children }: { children: React.Re
             </Link>
           )}
         </div>
-        <div className="flex-none">
+        <div className="flex-none gap-1">
+          <ThemeToggle />
           <LogoutButton />
         </div>
       </div>
