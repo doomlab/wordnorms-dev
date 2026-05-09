@@ -30,7 +30,7 @@ export default async function Home({
       {/* Navbar */}
       <div className="navbar bg-base-200 px-6 shadow-sm shrink-0">
         <div className="flex-1">
-          <span className="text-xl font-bold">Word Norms</span>
+          <span className="text-xl font-bold">WordNorms.com</span>
         </div>
         <div className="flex-none gap-2">
           <ThemeToggle />
@@ -48,10 +48,10 @@ export default async function Home({
             </>
           ) : (
             <>
-              <Link href="/login" className="btn btn-ghost btn-sm">
+              <Link href="/login" className="btn btn-primary btn-sm m-2">
                 Log in
               </Link>
-              <Link href="/signup" className="btn btn-primary btn-sm">
+              <Link href="/signup" className="btn btn-secondary btn-sm">
                 Sign up
               </Link>
             </>
@@ -85,12 +85,13 @@ export default async function Home({
           ) : (
             <ul className="flex flex-col divide-y divide-base-200">
               {results.map((dataset) => (
-                <li key={dataset.id} className="py-5 hover:bg-base-200/40 px-3 -mx-3 rounded-lg transition-colors">
+                <li
+                  key={dataset.id}
+                  className="py-5 hover:bg-base-200/40 px-3 -mx-3 rounded-lg transition-colors"
+                >
                   <div className="flex items-start justify-between gap-4">
                     <div className="min-w-0">
-                      <h2 className="font-semibold text-base leading-snug mb-1">
-                        {dataset.name}
-                      </h2>
+                      <h2 className="font-semibold text-base leading-snug mb-1">{dataset.name}</h2>
                       <p className="text-sm text-base-content/60 mb-3 line-clamp-2">
                         {dataset.description}
                       </p>
@@ -106,10 +107,7 @@ export default async function Home({
                         <span>{dataset.normTypes.join(", ")}</span>
                       </div>
                     </div>
-                    <a
-                      href={`/datasets/${dataset.id}`}
-                      className="btn btn-outline btn-sm shrink-0"
-                    >
+                    <a href={`/datasets/${dataset.id}`} className="btn btn-outline btn-sm shrink-0">
                       View
                     </a>
                   </div>

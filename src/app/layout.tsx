@@ -5,7 +5,7 @@ import { Inter } from "next/font/google"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata = {
-  title: { default: "Word Norms", template: "%s – Word Norms" },
+  title: { default: "WordNorms.com", template: "%s – Word Norms" },
   description: "A searchable database of lexical and psycholinguistic word norms.",
 }
 
