@@ -8,27 +8,26 @@ export default async function DashboardLayout({ children }: { children: React.Re
   if (!ctx.session.userId) redirect("/login")
 
   return (
-    <div style={{ fontFamily: "sans-serif", maxWidth: 900, margin: "0 auto", padding: "2rem" }}>
-      <header
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          borderBottom: "1px solid #e5e7eb",
-          paddingBottom: "1rem",
-          marginBottom: "2rem",
-        }}
-      >
-        <nav style={{ display: "flex", gap: "1.5rem", alignItems: "center" }}>
-          <Link href="/" style={{ fontWeight: 600 }}>
+    <div className="min-h-screen bg-base-100">
+      <div className="navbar bg-base-200 px-6 shadow-sm">
+        <div className="flex-1 gap-4">
+          <Link href="/" className="text-xl font-bold">
             Word Norms
           </Link>
-          <Link href="/dashboard">Dashboard</Link>
-          {ctx.session.role === "ADMIN" && <Link href="/admin">Admin</Link>}
-        </nav>
-        <LogoutButton />
-      </header>
-      {children}
+          <Link href="/dashboard" className="btn btn-ghost btn-sm">
+            Dashboard
+          </Link>
+          {ctx.session.role === "ADMIN" && (
+            <Link href="/admin" className="btn btn-ghost btn-sm">
+              Admin
+            </Link>
+          )}
+        </div>
+        <div className="flex-none">
+          <LogoutButton />
+        </div>
+      </div>
+      <main className="max-w-4xl mx-auto px-6 py-10">{children}</main>
     </div>
   )
 }

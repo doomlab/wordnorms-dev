@@ -9,30 +9,26 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   if (ctx.session.role !== "ADMIN") redirect("/dashboard")
 
   return (
-    <div style={{ fontFamily: "sans-serif", maxWidth: 1000, margin: "0 auto", padding: "2rem" }}>
-      <header
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          borderBottom: "2px solid #1d4ed8",
-          paddingBottom: "1rem",
-          marginBottom: "2rem",
-        }}
-      >
-        <nav style={{ display: "flex", gap: "1.5rem", alignItems: "center" }}>
-          <Link href="/" style={{ fontWeight: 700, color: "#1d4ed8" }}>
+    <div className="min-h-screen bg-base-100">
+      <div className="navbar bg-neutral text-neutral-content px-6 shadow-sm">
+        <div className="flex-1 gap-4">
+          <Link href="/" className="text-xl font-bold">
             Word Norms
           </Link>
-          <Link href="/admin">Admin Home</Link>
-          <Link href="/admin/users">Users</Link>
-        </nav>
-        <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
-          <span style={{ color: "#6b7280", fontSize: "0.875rem" }}>Admin</span>
+          <div className="divider divider-horizontal mx-0" />
+          <Link href="/admin" className="btn btn-ghost btn-sm">
+            Admin
+          </Link>
+          <Link href="/admin/users" className="btn btn-ghost btn-sm">
+            Users
+          </Link>
+        </div>
+        <div className="flex-none gap-3">
+          <span className="badge badge-outline badge-sm">admin</span>
           <LogoutButton />
         </div>
-      </header>
-      {children}
+      </div>
+      <main className="max-w-5xl mx-auto px-6 py-10">{children}</main>
     </div>
   )
 }

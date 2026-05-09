@@ -9,47 +9,38 @@ export default async function AdminUsersPage() {
   })
 
   return (
-    <main>
-      <h1 style={{ marginBottom: "0.5rem" }}>Users</h1>
-      <p style={{ color: "#6b7280", marginBottom: "1.5rem" }}>{users.length} registered accounts</p>
+    <>
+      <h1 className="text-3xl font-bold mb-2">Users</h1>
+      <p className="text-base-content/60 mb-6">{users.length} registered accounts</p>
 
-      <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.9rem" }}>
-        <thead>
-          <tr style={{ borderBottom: "2px solid #e5e7eb", textAlign: "left" }}>
-            <th style={{ padding: "0.5rem 1rem" }}>ID</th>
-            <th style={{ padding: "0.5rem 1rem" }}>Email</th>
-            <th style={{ padding: "0.5rem 1rem" }}>Name</th>
-            <th style={{ padding: "0.5rem 1rem" }}>Role</th>
-            <th style={{ padding: "0.5rem 1rem" }}>Joined</th>
-          </tr>
-        </thead>
-        <tbody>
-          {users.map((u) => (
-            <tr key={u.id} style={{ borderBottom: "1px solid #e5e7eb" }}>
-              <td style={{ padding: "0.5rem 1rem", color: "#6b7280" }}>{u.id}</td>
-              <td style={{ padding: "0.5rem 1rem" }}>{u.email}</td>
-              <td style={{ padding: "0.5rem 1rem" }}>{u.name ?? "—"}</td>
-              <td style={{ padding: "0.5rem 1rem" }}>
-                <span
-                  style={{
-                    padding: "0.15rem 0.5rem",
-                    borderRadius: 4,
-                    fontSize: "0.8rem",
-                    background: u.role === "ADMIN" ? "#dbeafe" : "#f3f4f6",
-                    color: u.role === "ADMIN" ? "#1d4ed8" : "#374151",
-                    fontWeight: 500,
-                  }}
-                >
-                  {u.role}
-                </span>
-              </td>
-              <td style={{ padding: "0.5rem 1rem", color: "#6b7280" }}>
-                {u.createdAt.toLocaleDateString()}
-              </td>
+      <div className="overflow-x-auto">
+        <table className="table table-zebra">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Email</th>
+              <th>Name</th>
+              <th>Role</th>
+              <th>Joined</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-    </main>
+          </thead>
+          <tbody>
+            {users.map((u) => (
+              <tr key={u.id}>
+                <td className="text-base-content/50">{u.id}</td>
+                <td>{u.email}</td>
+                <td>{u.name ?? "—"}</td>
+                <td>
+                  <span className={`badge badge-sm ${u.role === "ADMIN" ? "badge-primary" : "badge-ghost"}`}>
+                    {u.role}
+                  </span>
+                </td>
+                <td className="text-base-content/50">{u.createdAt.toLocaleDateString()}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </>
   )
 }

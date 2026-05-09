@@ -2,44 +2,24 @@ export const metadata = { title: "Admin" }
 
 export default function AdminPage() {
   return (
-    <main>
-      <h1 style={{ marginBottom: "0.5rem" }}>Admin Dashboard</h1>
-      <p style={{ color: "#6b7280", marginBottom: "2rem" }}>
-        Manage users, datasets, and site settings.
-      </p>
+    <>
+      <h1 className="text-3xl font-bold mb-2">Admin Dashboard</h1>
+      <p className="text-base-content/60 mb-8">Manage users, datasets, and site settings.</p>
 
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
-          gap: "1rem",
-        }}
-      >
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {[
           { href: "/admin/users", label: "Users", desc: "View and manage user accounts" },
           { href: "/admin/datasets", label: "Datasets", desc: "Upload and manage norm sets" },
           { href: "/admin/settings", label: "Settings", desc: "Site-wide configuration" },
         ].map((item) => (
-          <a
-            key={item.href}
-            href={item.href}
-            style={{
-              display: "block",
-              padding: "1.25rem",
-              border: "1px solid #e5e7eb",
-              borderRadius: 8,
-              textDecoration: "none",
-              color: "inherit",
-              background: "#f9fafb",
-            }}
-          >
-            <strong style={{ color: "#1d4ed8" }}>{item.label}</strong>
-            <p style={{ margin: "0.25rem 0 0", color: "#6b7280", fontSize: "0.875rem" }}>
-              {item.desc}
-            </p>
+          <a key={item.href} href={item.href} className="card card-bordered bg-base-200 hover:bg-base-300 transition-colors">
+            <div className="card-body">
+              <h2 className="card-title">{item.label}</h2>
+              <p className="text-base-content/60 text-sm">{item.desc}</p>
+            </div>
           </a>
         ))}
       </div>
-    </main>
+    </>
   )
 }

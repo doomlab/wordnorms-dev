@@ -7,21 +7,36 @@ export default async function DashboardPage() {
   const user = await invoke(getCurrentUser, null)
 
   return (
-    <main>
-      <h1 style={{ marginBottom: "0.5rem" }}>Dashboard</h1>
-      <p style={{ color: "#6b7280", marginBottom: "2rem" }}>
-        Welcome back{user?.name ? `, ${user.name}` : ""}! You are signed in as{" "}
-        <strong>{user?.email}</strong>.
+    <>
+      <h1 className="text-3xl font-bold mb-2">Dashboard</h1>
+      <p className="text-base-content/60 mb-8">
+        Welcome back{user?.name ? `, ${user.name}` : ""}! Signed in as{" "}
+        <span className="font-medium text-base-content">{user?.email}</span>.
       </p>
 
-      <section>
-        <h2 style={{ fontSize: "1.1rem", marginBottom: "1rem" }}>Quick actions</h2>
-        <ul style={{ lineHeight: 2 }}>
-          <li>Search word norms → <a href="/">browse the database</a></li>
-          <li>Download a norm set → coming soon</li>
-          <li>Save a query → coming soon</li>
-        </ul>
-      </section>
-    </main>
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="card card-bordered bg-base-200">
+          <div className="card-body">
+            <h2 className="card-title text-base">Search word norms</h2>
+            <p className="text-sm text-base-content/60">Browse the public database</p>
+            <div className="card-actions mt-2">
+              <a href="/" className="btn btn-primary btn-sm">Browse</a>
+            </div>
+          </div>
+        </div>
+        <div className="card card-bordered bg-base-200 opacity-50">
+          <div className="card-body">
+            <h2 className="card-title text-base">Download a norm set</h2>
+            <p className="text-sm text-base-content/60">Coming soon</p>
+          </div>
+        </div>
+        <div className="card card-bordered bg-base-200 opacity-50">
+          <div className="card-body">
+            <h2 className="card-title text-base">Saved queries</h2>
+            <p className="text-sm text-base-content/60">Coming soon</p>
+          </div>
+        </div>
+      </div>
+    </>
   )
 }

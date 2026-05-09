@@ -7,93 +7,62 @@ export default async function Home() {
   const currentUser = await invoke(getCurrentUser, null)
 
   return (
-    <div style={{ fontFamily: "sans-serif", maxWidth: 800, margin: "0 auto", padding: "2rem" }}>
-      <header
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          borderBottom: "1px solid #e5e7eb",
-          paddingBottom: "1rem",
-          marginBottom: "2rem",
-        }}
-      >
-        <h1 style={{ margin: 0, fontSize: "1.5rem" }}>Word Norms</h1>
-        <nav style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
+    <div className="min-h-screen bg-base-100">
+      <div className="navbar bg-base-200 px-6 shadow-sm">
+        <div className="flex-1">
+          <span className="text-xl font-bold">Word Norms</span>
+        </div>
+        <div className="flex-none gap-2">
           {currentUser ? (
             <>
-              <Link href="/dashboard">Dashboard</Link>
-              {currentUser.role === "ADMIN" && <Link href="/admin">Admin</Link>}
+              <Link href="/dashboard" className="btn btn-ghost btn-sm">
+                Dashboard
+              </Link>
+              {currentUser.role === "ADMIN" && (
+                <Link href="/admin" className="btn btn-ghost btn-sm">
+                  Admin
+                </Link>
+              )}
               <LogoutButton />
             </>
           ) : (
             <>
-              <Link href="/login">Log in</Link>
-              <Link
-                href="/signup"
-                style={{
-                  background: "#2563eb",
-                  color: "#fff",
-                  padding: "0.4rem 1rem",
-                  borderRadius: 6,
-                  textDecoration: "none",
-                }}
-              >
+              <Link href="/login" className="btn btn-ghost btn-sm">
+                Log in
+              </Link>
+              <Link href="/signup" className="btn btn-primary btn-sm">
                 Sign up
               </Link>
             </>
           )}
-        </nav>
-      </header>
+        </div>
+      </div>
 
-      <main>
-        <section style={{ marginBottom: "2.5rem" }}>
-          <h2 style={{ fontSize: "2rem", marginBottom: "0.5rem" }}>
+      <main className="max-w-3xl mx-auto px-6 py-12">
+        <section className="mb-10">
+          <h1 className="text-4xl font-bold mb-3">
             Lexical &amp; psycholinguistic word norms
-          </h2>
-          <p style={{ color: "#6b7280", fontSize: "1.1rem", marginBottom: "1.5rem" }}>
+          </h1>
+          <p className="text-base-content/60 text-lg mb-6">
             Browse, search, and download standardized ratings for thousands of English words —
             including valence, arousal, concreteness, frequency, and more.
           </p>
-          <form action="/search" method="GET" style={{ display: "flex", gap: "0.5rem" }}>
+          <form action="/search" method="GET" className="flex gap-2">
             <input
               name="q"
               type="search"
-              placeholder="Search a word (e.g. &quot;cat&quot;)"
-              style={{
-                flex: 1,
-                padding: "0.6rem 1rem",
-                border: "1px solid #d1d5db",
-                borderRadius: 6,
-                fontSize: "1rem",
-              }}
+              placeholder='Search a word (e.g. "cat")'
+              className="input input-bordered flex-1"
             />
-            <button
-              type="submit"
-              style={{
-                padding: "0.6rem 1.25rem",
-                background: "#2563eb",
-                color: "#fff",
-                border: "none",
-                borderRadius: 6,
-                cursor: "pointer",
-                fontSize: "1rem",
-              }}
-            >
+            <button type="submit" className="btn btn-primary">
               Search
             </button>
           </form>
         </section>
 
         <section>
-          <h3 style={{ marginBottom: "1rem" }}>Available norm sets</h3>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
-              gap: "1rem",
-            }}
-          >
+          <h2 className="text-xl font-semibold mb-4">Available norm sets</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {[
               { label: "Valence & Arousal", desc: "Affective ratings (ANEW / Warriner)" },
               { label: "Concreteness", desc: "Brysbaert et al. 2014" },
@@ -102,35 +71,19 @@ export default async function Home() {
               { label: "Age of Acquisition", desc: "Kuperman et al. 2012" },
               { label: "Semantic Richness", desc: "Neighborhood density / features" },
             ].map((item) => (
-              <div
-                key={item.label}
-                style={{
-                  padding: "1rem",
-                  border: "1px solid #e5e7eb",
-                  borderRadius: 8,
-                  background: "#f9fafb",
-                }}
-              >
-                <strong>{item.label}</strong>
-                <p style={{ margin: "0.25rem 0 0", color: "#6b7280", fontSize: "0.875rem" }}>
-                  {item.desc}
-                </p>
+              <div key={item.label} className="card card-bordered bg-base-200 card-compact">
+                <div className="card-body">
+                  <h3 className="card-title text-base">{item.label}</h3>
+                  <p className="text-base-content/60 text-sm">{item.desc}</p>
+                </div>
               </div>
             ))}
           </div>
         </section>
       </main>
 
-      <footer
-        style={{
-          marginTop: "3rem",
-          borderTop: "1px solid #e5e7eb",
-          paddingTop: "1rem",
-          color: "#9ca3af",
-          fontSize: "0.875rem",
-        }}
-      >
-        Word Norms Database — open access for researchers
+      <footer className="footer footer-center p-4 text-base-content/40 text-sm border-t border-base-200">
+        <p>Word Norms Database — open access for researchers</p>
       </footer>
     </div>
   )
