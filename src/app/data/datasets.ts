@@ -122,8 +122,8 @@ export const DATASETS: Dataset[] = [
   },
 ]
 
-export const ALL_LANGUAGES = [...new Set(DATASETS.flatMap((d) => d.languages))].sort()
-export const ALL_YEARS = [...new Set(DATASETS.map((d) => d.year))].sort((a, b) => b - a)
+export const ALL_LANGUAGES = Array.from(new Set(DATASETS.flatMap((d) => d.languages))).sort()
+export const ALL_YEARS = Array.from(new Set(DATASETS.map((d) => d.year))).sort((a, b) => b - a)
 
 export const DECADE_LABELS: Record<string, [number, number]> = {
   "2020s": [2020, 2029],
