@@ -1,18 +1,19 @@
+import { resolver } from "@blitzjs/rpc"
 import db from "db"
 import { SecurePassword } from "@blitzjs/auth/secure-password"
+import { email, password } from "../validations"
+import { z } from "zod"
 
-export default async function signup(input: { password: string; email: string }, ctx: any) {
-  const blitzContext = ctx
-  const hashedPassword = await SecurePassword.hash((input.password as string) || "test-password")
-  const email = (input.email as string) || "test" + Math.random() + "@test.com"
+const SignupInput = z.object({ email, password })
+import { Role } from "types"
+
+export default resolver.pipe(resolver.zod(SignupInput), async ({ email, password }, ctx) => {
+  const hashedPassword = await SecurePassword.hash(password)
   const user = await db.user.create({
     data: { email, hashedPassword },
   })
 
-  await blitzContext.session.$create({
-    userId: user.id,
-    role: "USER",
-  })
+  await ctx.session.$create({ userId: user.id, role: "USER" as Role })
 
-  return { userId: blitzContext.session.userId, ...user, email: input.email }
-}
+  return { userId: ctx.session.userId, ...user }
+})

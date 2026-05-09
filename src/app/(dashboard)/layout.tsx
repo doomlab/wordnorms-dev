@@ -10,12 +10,15 @@ export default async function DashboardLayout({ children }: { children: React.Re
 
   return (
     <div className="min-h-screen bg-base-100">
-      <div className="navbar bg-base-200 px-6 shadow-sm">
-        <div className="flex-1 gap-4">
+      <div className="navbar bg-base-200 px-6 shadow-sm sticky top-0 z-50">
+        <div className="flex-1">
           <Link href="/" className="text-xl font-bold">
-            Word Norms
+            WordNorms.com
           </Link>
-          <Link href="/dashboard" className="btn btn-ghost btn-sm">
+        </div>
+        <div className="flex-none gap-2">
+          <ThemeToggle />
+          <Link href="/dashboard" className="btn btn-primary btn-sm m-2">
             Dashboard
           </Link>
           {ctx.session.role === "ADMIN" && (
@@ -23,9 +26,6 @@ export default async function DashboardLayout({ children }: { children: React.Re
               Admin
             </Link>
           )}
-        </div>
-        <div className="flex-none gap-1">
-          <ThemeToggle />
           <LogoutButton />
         </div>
       </div>

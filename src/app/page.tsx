@@ -28,7 +28,7 @@ export default async function Home({
   return (
     <div className="min-h-screen bg-base-100 flex flex-col">
       {/* Navbar */}
-      <div className="navbar bg-base-200 px-6 shadow-sm shrink-0">
+      <div className="navbar bg-base-200 px-6 shadow-sm shrink-0 sticky top-0 z-50">
         <div className="flex-1">
           <span className="text-xl font-bold">WordNorms.com</span>
         </div>
@@ -36,7 +36,7 @@ export default async function Home({
           <ThemeToggle />
           {currentUser ? (
             <>
-              <Link href="/dashboard" className="btn btn-ghost btn-sm">
+              <Link href="/dashboard" className="btn btn-primary btn-sm m-2">
                 Dashboard
               </Link>
               {currentUser.role === "ADMIN" && (

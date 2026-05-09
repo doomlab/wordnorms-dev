@@ -14,7 +14,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
       <div className="navbar bg-neutral text-neutral-content px-6 shadow-sm">
         <div className="flex-1 gap-4">
           <Link href="/" className="text-xl font-bold">
-            Word Norms
+            WordNorms.com
           </Link>
           <div className="divider divider-horizontal mx-0" />
           <Link href="/admin" className="btn btn-ghost btn-sm">

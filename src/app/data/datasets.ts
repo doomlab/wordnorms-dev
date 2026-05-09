@@ -39,7 +39,8 @@ export const DATASETS: Dataset[] = [
       "Age of acquisition ratings for 30,121 English words collected via web-based crowdsourcing. Covers a wide range of vocabulary including rare and abstract words.",
     languages: ["English"],
     year: 2012,
-    citation: "Kuperman, V., Stadthagen-Gonzalez, H., & Brysbaert, M. (2012). Behavior Research Methods.",
+    citation:
+      "Kuperman, V., Stadthagen-Gonzalez, H., & Brysbaert, M. (2012). Behavior Research Methods.",
     normTypes: ["Age of Acquisition"],
     wordCount: 30121,
   },
@@ -135,11 +136,7 @@ export const DECADE_LABELS: Record<string, [number, number]> = {
 
 export function filterDatasets(
   datasets: Dataset[],
-  {
-    q,
-    languages,
-    decades,
-  }: { q?: string; languages?: string[]; decades?: string[] }
+  { q, languages, decades }: { q?: string; languages?: string[]; decades?: string[] }
 ): Dataset[] {
   return datasets.filter((d) => {
     if (q) {
