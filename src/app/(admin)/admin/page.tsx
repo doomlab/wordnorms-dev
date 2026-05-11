@@ -1,21 +1,58 @@
+import db from "db"
+
 export const metadata = { title: "Admin" }
 
-export default function AdminPage() {
+export default async function AdminPage() {
+  const counts = await db.paper.groupBy({ by: ["status"], _count: { _all: true } })
+  const byStatus = Object.fromEntries(counts.map((c) => [c.status, c._count._all]))
+
+  const cards = [
+    {
+      href: "/admin/review",
+      label: "Review Queue",
+      desc: "Papers flagged by the prediction model",
+      badge: byStatus.PENDING_REVIEW ?? 0,
+    },
+    {
+      href: "/admin/excluded",
+      label: "Excluded",
+      desc: "Papers rejected or added to training",
+      badge: null,
+    },
+    {
+      href: "/admin/stats",
+      label: "Pipeline Stats",
+      desc: "Model accept rate and throughput",
+      badge: null,
+    },
+    {
+      href: "/admin/users",
+      label: "Users",
+      desc: "View and manage user accounts",
+      badge: null,
+    },
+  ]
+
   return (
     <>
       <h1 className="text-3xl font-bold mb-2">Admin Dashboard</h1>
-      <p className="text-base-content/60 mb-8">Manage users, datasets, and site settings.</p>
+      <p className="text-base-content/60 mb-8">Manage the curation pipeline and site.</p>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        {[
-          { href: "/admin/users", label: "Users", desc: "View and manage user accounts" },
-          { href: "/admin/datasets", label: "Datasets", desc: "Upload and manage norm sets" },
-          { href: "/admin/settings", label: "Settings", desc: "Site-wide configuration" },
-        ].map((item) => (
-          <a key={item.href} href={item.href} className="card card-bordered bg-base-200 hover:bg-base-300 transition-colors">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {cards.map((c) => (
+          <a
+            key={c.href}
+            href={c.href}
+            className="card card-bordered bg-base-200 hover:bg-base-300 transition-colors"
+          >
             <div className="card-body">
-              <h2 className="card-title">{item.label}</h2>
-              <p className="text-base-content/60 text-sm">{item.desc}</p>
+              <div className="flex items-center justify-between">
+                <h2 className="card-title">{c.label}</h2>
+                {c.badge != null && c.badge > 0 && (
+                  <span className="badge badge-warning">{c.badge}</span>
+                )}
+              </div>
+              <p className="text-base-content/60 text-sm">{c.desc}</p>
             </div>
           </a>
         ))}

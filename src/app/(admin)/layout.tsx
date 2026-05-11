@@ -16,7 +16,16 @@ export default async function AdminLayout({ children }: { children: React.ReactN
           <>
             <div className="divider divider-horizontal mx-0" />
             <Link href="/admin" className="btn btn-ghost btn-sm">
-              Admin
+              Home
+            </Link>
+            <Link href="/admin/review" className="btn btn-ghost btn-sm">
+              Review
+            </Link>
+            <Link href="/admin/excluded" className="btn btn-ghost btn-sm">
+              Excluded
+            </Link>
+            <Link href="/admin/stats" className="btn btn-ghost btn-sm">
+              Stats
             </Link>
             <Link href="/admin/users" className="btn btn-ghost btn-sm">
               Users

@@ -21,6 +21,14 @@ enum TokenType {
   RESET_PASSWORD
 }
 
+enum PaperStatus {
+  PENDING_REVIEW
+  PENDING_PDF
+  ACCEPTED
+  EXCLUDED
+  ADDED_TO_TRAINING
+}
+
 model User {
   id             Int      @id @default(autoincrement())
   createdAt      DateTime @default(now())
@@ -30,8 +38,9 @@ model User {
   hashedPassword String?
   role           Role     @default(USER)
 
-  tokens   Token[]
-  sessions Session[]
+  tokens         Token[]
+  sessions       Session[]
+  papersReviewed Paper[]
 }
 
 model Session {
@@ -47,6 +56,24 @@ model Session {
 
   user   User? @relation(fields: [userId], references: [id])
   userId Int?
+}
+
+model Paper {
+  id           Int         @id @default(autoincrement())
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  title        String
+  authors      String[]
+  year         Int?
+  doi          String?     @unique
+  openAlexId   String?     @unique
+  abstract     String?
+  pdfUrl       String?
+  modelScore   Float?
+  status       PaperStatus @default(PENDING_REVIEW)
+  reviewNote   String?
+  reviewedBy   User?       @relation(fields: [reviewedById], references: [id])
+  reviewedById Int?
 }
 
 model Token {
