@@ -15,6 +15,7 @@ export default async function ExcludedPage() {
       authors: true,
       year: true,
       doi: true,
+      abstract: true,
       reviewNote: true,
     },
     orderBy: { year: "desc" },
@@ -88,6 +89,12 @@ export default async function ExcludedPage() {
                           {paper.doi}
                         </a>
                       </p>
+                    )}
+                    {paper.abstract && (
+                      <div>
+                        <p className="font-medium text-base-content mb-1">Abstract:</p>
+                        <p className="leading-relaxed">{paper.abstract}</p>
+                      </div>
                     )}
                     {paper.reviewNote && (
                       <p>

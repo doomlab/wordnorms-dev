@@ -42,8 +42,18 @@ export default async function AdminExcludedPage() {
               <tr key={p.id}>
                 <td className="max-w-sm">
                   <p className="font-medium line-clamp-2">{p.title}</p>
+                  {p.abstract && (
+                    <p className="text-xs text-base-content/50 line-clamp-2 mt-0.5">{p.abstract}</p>
+                  )}
                   {p.doi && (
-                    <span className="text-xs text-base-content/50">{p.doi}</span>
+                    <a
+                      href={`https://doi.org/${p.doi}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="link link-primary text-xs"
+                    >
+                      {p.doi}
+                    </a>
                   )}
                 </td>
                 <td>{p.year ?? "—"}</td>
