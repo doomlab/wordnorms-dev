@@ -16,8 +16,8 @@ export function RoleControl({ userId, currentRole }: { userId: number; currentRo
   }
 
   return (
-    <button className="btn btn-xs btn-ghost" onClick={toggle} disabled={isLoading}>
-      {currentRole === "ADMIN" ? "Demote" : "Make admin"}
+    <button className="btn btn-sm btn-primary" onClick={toggle} disabled={isLoading}>
+      {currentRole === "ADMIN" ? "Make user" : "Make admin"}
     </button>
   )
 }
