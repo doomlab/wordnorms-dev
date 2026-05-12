@@ -47,7 +47,7 @@ def load_remaining(cur):
         SELECT id, doi, authors[1]
         FROM "Paper"
         WHERE array_length(authors, 1) = 1
-          AND LENGTH(authors[1]) > 50
+          AND LENGTH(authors[1]) > 30
           AND doi IS NOT NULL
         ORDER BY id
     """)
