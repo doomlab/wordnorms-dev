@@ -1,180 +1,219 @@
 #!/usr/bin/env python3
-import math, requests, pandas as pd, re
-import textwrap
-import numpy as np
+"""
+Fetches candidate papers from OpenAlex, enriches missing abstracts via
+Crossref and EuropePMC, then inserts new papers into the Paper table with
+status PENDING_REVIEW.
 
-base_url = (
+Papers already in the DB (matched by DOI or OpenAlex ID) are skipped.
+Run on a cron schedule (e.g. weekly) to keep the review queue fresh.
+"""
+import math
+import re
+import time
+import requests
+
+from db import get_conn
+
+CONTACT_EMAIL = "buchananlab@gmail.com"
+HEADERS = {
+    "Accept": "application/json",
+    "User-Agent": f"wordnorms-fetcher ({CONTACT_EMAIL})",
+}
+
+BASE_URL = (
     "https://api.openalex.org/works?"
-    "filter=title_and_abstract.search:lexical+database+OR+lexical+norms+OR+linguistic+database+OR+linguistic+norms,"
-    "publication_year:2018-2025,"
-    "type:types/article|types/dataset|types/preprint|types/supplementary-materials|types/report|types/book-chapter"
+    "filter=title_and_abstract.search:"
+    "lexical+database+OR+lexical+norms+OR+linguistic+database+OR+linguistic+norms,"
+    "type:types/article|types/dataset|types/preprint"
+    "|types/supplementary-materials|types/report|types/book-chapter"
     "&sort=relevance_score:desc"
-    "&per_page=200"     # bump page size to reduce calls
+    "&per_page=200"
 )
 
+
+# ---------------------------------------------------------------------------
+# Abstract decoding
+# ---------------------------------------------------------------------------
+
 def decode_abstract(inv):
-    if not isinstance(inv, dict) or not inv: return None
-    pos2tok = {p:t for t,ps in inv.items() for p in ps}
-    txt = " ".join(pos2tok.get(i,"") for i in range(max(pos2tok)+1))
+    if not isinstance(inv, dict) or not inv:
+        return None
+    pos2tok = {p: t for t, ps in inv.items() for p in ps}
+    txt = " ".join(pos2tok.get(i, "") for i in range(max(pos2tok) + 1))
     txt = re.sub(r"\s+([,.!?;:])", r"\1", txt)
     return re.sub(r"\s{2,}", " ", txt).strip() or None
 
-# probe for total
-probe = requests.get(base_url + "&page=1", timeout=30)
-probe.raise_for_status()
-meta = probe.json()["meta"]
-total, per_page = meta["count"], meta["per_page"]
-pages = math.ceil(total / per_page)
-print(f"total={total}, per_page={per_page}, pages={pages}")
 
-rows = []
-for p in range(1, pages+1):
-    r = requests.get(base_url + f"&page={p}", timeout=60)
-    r.raise_for_status()
-    for w in r.json().get("results", []):
-        rows.append({
-            "title": w.get("title"),
-            "year": w.get("publication_year"),
-            "doi": (w.get("doi") or "").replace("https://doi.org/", ""),
-            "venue": ((w.get("primary_location") or {}).get("source") or {}).get("display_name"),
-            "authors": "; ".join(a["author"]["display_name"] for a in w.get("authorships", [])),
-            "abstract": decode_abstract(w.get("abstract_inverted_index")),
-            # OpenAlex doesn’t store author-entered keywords; concepts are the closest proxy
-            "keywords": [c["display_name"] for c in w.get("concepts", [])],
-            "openalex_id": w.get("id"),
-            "is_oa": (w.get("open_access") or {}).get("is_oa"),
-            "cited_by": w.get("cited_by_count", 0),
-        })
-    print(f"page {p}/{pages}… collected {len(rows)}", end="\r")
+# ---------------------------------------------------------------------------
+# Abstract enrichment (Crossref → EuropePMC fallback)
+# ---------------------------------------------------------------------------
 
-df = pd.DataFrame(rows)
-print("\nDone. Rows fetched:", len(df))
-df.head()
+def _clean_doi(doi):
+    if not doi:
+        return ""
+    return re.sub(r"^https?://(dx\.)?doi\.org/", "", doi.strip(), flags=re.I)
 
-def summarize_abstracts(df: pd.DataFrame, n_show: int = 5):
-    # treat empty strings/whitespace as missing
-    has_abs = df["abstract"].astype("string").str.strip().ne("").fillna(False)
 
-    total = len(df)
-    with_abs = int(has_abs.sum())
-    without_abs = total - with_abs
-    pct = (with_abs / total * 100) if total else 0.0
-
-    print(f"Total rows: {total}")
-    print(f"With abstract: {with_abs} ({pct:.1f}%)")
-    print(f"Missing abstract: {without_abs}")
-
-    if without_abs:
-        # show a few examples that are missing
-        missing = df.loc[~has_abs, ["title", "year", "doi", "venue", "openalex_id"]].head(n_show)
-        print("\nExamples missing abstracts:")
-        for _, r in missing.iterrows():
-            print("•", r["year"], "|", (r["title"] or "")[:120].rstrip(), "|", r["venue"] or "", "| DOI:", r["doi"] or "—")
-
-    return has_abs
-
-# Run the summary on your df
-has_abs_mask = summarize_abstracts(df, n_show=30)
-
-# ---- polite headers (some APIs appreciate a contact) ----
-CONTACT_EMAIL = "ebuchanan@harrisburgu.edu"  # set yours
-HEADERS = {"Accept": "application/json", "User-Agent": f"LAB-abstract-enricher ({CONTACT_EMAIL})"}
-
-def _clean_doi(doi: str) -> str:
-    if not doi: return ""
-    doi = doi.strip()
-    return re.sub(r"^https?://(dx\.)?doi\.org/", "", doi, flags=re.I)
-
-def safe_request(url, params=None, headers=None):
+def _safe_get(url, params=None):
     try:
-        r = requests.get(url, params=params, headers=headers, timeout=30)
+        r = requests.get(url, params=params, headers=HEADERS, timeout=30)
         r.raise_for_status()
         return r.json(), None
     except requests.exceptions.HTTPError as e:
-        return None, f"HTTP {r.status_code}: {r.text[:200]}"
+        return None, f"HTTP {r.status_code}"
     except Exception as e:
-        return None, f"Other error: {str(e)}"
+        return None, str(e)
+
 
 def fetch_crossref_abstract(doi):
     doi = _clean_doi(doi)
-    url = f"https://api.crossref.org/works/{doi}"
-    js, err = safe_request(url, headers=HEADERS)
-    if err: return None, "ERROR", err
-    abs_ = (js.get("message") or {}).get("abstract")
-    if abs_:
-        # strip tags
-        abs_ = re.sub(r"<[^>]+>", "", abs_)
-        return abs_.strip(), "Crossref", None
-    return None, "MISSING", None
+    js, err = _safe_get(f"https://api.crossref.org/works/{doi}")
+    if err:
+        return None
+    abstract = (js.get("message") or {}).get("abstract")
+    if abstract:
+        return re.sub(r"<[^>]+>", "", abstract).strip()
+    return None
+
 
 def fetch_europepmc_abstract(doi):
-    url = "https://www.ebi.ac.uk/europepmc/webservices/rest/search"
-    params = {"query": f"DOI:{doi}", "format": "json", "pageSize": 1}
-    js, err = safe_request(url, params=params, headers=HEADERS)
-    if err: return None, "ERROR", err
-    res = js.get("resultList", {}).get("result", [])
-    if res and res[0].get("abstractText"):
-        return res[0]["abstractText"], "EuropePMC", None
-    return None, "MISSING", None
+    js, err = _safe_get(
+        "https://www.ebi.ac.uk/europepmc/webservices/rest/search",
+        params={"query": f"DOI:{_clean_doi(doi)}", "format": "json", "pageSize": 1},
+    )
+    if err:
+        return None
+    results = (js or {}).get("resultList", {}).get("result", [])
+    if results and results[0].get("abstractText"):
+        return results[0]["abstractText"]
+    return None
 
-def get_abstract_by_doi(doi):
-    doi = _clean_doi(doi)
-    if not doi: return None, "MISSING", None
-    # try Crossref then Europe PMC
+
+def enrich_abstract(doi):
     for fetcher in (fetch_crossref_abstract, fetch_europepmc_abstract):
-        abs_, status, err = fetcher(doi)
-        if status == "ERROR":  # API error
-            return None, status, err
-        if status != "MISSING":  # success
-            return abs_, status, None
-    return None, "MISSING", None
+        abstract = fetcher(doi)
+        if abstract:
+            return abstract
+        time.sleep(0.3)
+    return None
 
-def enrich_missing_abstracts(df, doi_col="doi", abs_col="abstract", sleep=0.3):
-    """
-    For rows where df[abs_col] is empty, try to fetch an abstract by DOI.
-    Prints status for each attempt; only writes into df[abs_col] on success.
-    Expects get_abstract_by_doi() -> (abstract, status, err).
-    """
-    import time
-    import pandas as pd
 
-    if abs_col not in df.columns:
-        df[abs_col] = None
+# ---------------------------------------------------------------------------
+# OpenAlex fetch
+# ---------------------------------------------------------------------------
 
-    mask_missing = df[abs_col].isna() | (df[abs_col].astype(str).str.strip() == "")
-    idxs = df.index[mask_missing].tolist()
+def fetch_openalex():
+    probe = requests.get(BASE_URL + "&page=1", headers=HEADERS, timeout=30)
+    probe.raise_for_status()
+    meta = probe.json()["meta"]
+    total, per_page = meta["count"], meta["per_page"]
+    pages = math.ceil(total / per_page)
+    print(f"OpenAlex: {total} results across {pages} pages")
 
-    for i in idxs:
-        doi = str(df.at[i, doi_col] or "").strip()
-        if not doi:
-            print(f"[Row {i}] No DOI, skipping.")
-            continue
+    papers = []
+    for page in range(1, pages + 1):
+        r = requests.get(BASE_URL + f"&page={page}", headers=HEADERS, timeout=60)
+        r.raise_for_status()
+        for w in r.json().get("results", []):
+            doi = (w.get("doi") or "").replace("https://doi.org/", "").lower() or None
+            papers.append({
+                "title": w.get("title"),
+                "year": w.get("publication_year"),
+                "doi": doi,
+                "openalex_id": w.get("id"),
+                "authors": [
+                    a["author"]["display_name"]
+                    for a in w.get("authorships", [])
+                    if a.get("author", {}).get("display_name")
+                ],
+                "abstract": decode_abstract(w.get("abstract_inverted_index")),
+            })
+        print(f"  page {page}/{pages} — {len(papers)} collected", end="\r")
 
-        abs_, status, err = get_abstract_by_doi(doi)
+    print()
+    return papers
 
-        if status == "ERROR":
-            print(f"[Row {i}] DOI {doi}: API error -> {err}")
-        elif status == "MISSING":
-            print(f"[Row {i}] DOI {doi}: No abstract found.")
-        else:
-            print(f"[Row {i}] DOI {doi}: Abstract found via {status}.")
-            df.at[i, abs_col] = abs_
 
-        time.sleep(sleep)  # be polite to APIs
+# ---------------------------------------------------------------------------
+# DB helpers
+# ---------------------------------------------------------------------------
 
-    return df
+def load_existing(conn):
+    cur = conn.cursor()
+    cur.execute('SELECT doi, "openAlexId" FROM "Paper"')
+    dois, openalex_ids = set(), set()
+    for doi, oa_id in cur.fetchall():
+        if doi:
+            dois.add(doi.lower())
+        if oa_id:
+            openalex_ids.add(oa_id)
+    return dois, openalex_ids
 
-# df = <your dataframe from OpenAlex>
-# Summarize before:
-missing_before = df["abstract"].isna() | (df["abstract"].astype(str).str.strip() == "")
-print("Missing before:", int(missing_before.sum()), "of", len(df))
 
-df = enrich_missing_abstracts(df)
+def insert_paper(cur, paper):
+    cur.execute(
+        """
+        INSERT INTO "Paper"
+            ("createdAt", "updatedAt", title, authors, year, doi,
+             "openAlexId", abstract, status)
+        VALUES
+            (NOW(), NOW(), %s, %s, %s, %s, %s, %s, 'PENDING_REVIEW'::"PaperStatus")
+        ON CONFLICT (doi) DO NOTHING
+        """,
+        (
+            paper["title"],
+            paper["authors"],
+            paper["year"],
+            paper["doi"],
+            paper["openalex_id"],
+            paper["abstract"],
+        ),
+    )
+    return cur.rowcount
 
-missing_after = df["abstract"].isna() | (df["abstract"].astype(str).str.strip() == "")
-print("Missing after:", int(missing_after.sum()), "of", len(df))
 
-# Peek at newly-filled examples
-# df.loc[df["abstract_source"].notna(), ["title", "doi", "abstract_source"]].head()
+# ---------------------------------------------------------------------------
+# Main
+# ---------------------------------------------------------------------------
 
-df.to_csv('new_data_to_classify.csv', index=False) 
+def main():
+    papers = fetch_openalex()
+
+    conn = get_conn()
+    try:
+        existing_dois, existing_oa_ids = load_existing(conn)
+        print(f"DB already has {len(existing_dois)} DOIs, {len(existing_oa_ids)} OpenAlex IDs")
+
+        cur = conn.cursor()
+        inserted = skipped = enriched = 0
+
+        for paper in papers:
+            # skip if already in DB
+            if paper["doi"] and paper["doi"] in existing_dois:
+                skipped += 1
+                continue
+            if paper["openalex_id"] and paper["openalex_id"] in existing_oa_ids:
+                skipped += 1
+                continue
+
+            # enrich missing abstracts
+            if not paper["abstract"] and paper["doi"]:
+                paper["abstract"] = enrich_abstract(paper["doi"])
+                if paper["abstract"]:
+                    enriched += 1
+
+            if not paper["title"]:
+                skipped += 1
+                continue
+
+            inserted += insert_paper(cur, paper)
+
+        conn.commit()
+    finally:
+        conn.close()
+
+    print(f"\nDone — inserted: {inserted}  |  enriched: {enriched}  |  skipped: {skipped}")
+
+
+if __name__ == "__main__":
+    main()

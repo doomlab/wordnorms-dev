@@ -74,8 +74,22 @@ model Paper {
   modelScore   Float?
   status       PaperStatus @default(PENDING_REVIEW)
   reviewNote   String?
+  isValidation Boolean     @default(false)
   reviewedBy   User?       @relation(fields: [reviewedById], references: [id])
   reviewedById Int?
+}
+
+model ModelRun {
+  id             Int      @id @default(autoincrement())
+  createdAt      DateTime @default(now())
+  trainSize      Int
+  valSize        Int
+  accuracy       Float
+  precision      Float
+  recall         Float
+  f1             Float
+  valRebalanced  Boolean  @default(false)
+  notes          String?
 }
 
 model Token {
