@@ -1,6 +1,7 @@
 import { Suspense } from "react"
 import { Navbar } from "./components/Navbar"
 import { BrowseFilters } from "./components/BrowseFilters"
+import { FavoriteButton } from "./components/FavoriteButton"
 import { DECADE_LABELS } from "./data/datasets"
 import { getBlitzContext } from "./blitz-server"
 import db from "db"
@@ -20,8 +21,8 @@ export default async function Home({
       : [params.decade]
     : []
 
-  // Initialize Blitz context so the enhanced Prisma client is ready
-  await getBlitzContext()
+  const ctx = await getBlitzContext()
+  const userId = ctx.session.userId as number | undefined
 
   // Build AND clauses for search and decade filters
   const andClauses: object[] = []
@@ -45,7 +46,7 @@ export default async function Home({
     })
   }
 
-  const [papers, allPapers] = await Promise.all([
+  const [papers, allPapers, favoritedIds] = await Promise.all([
     db.paper.findMany({
       where: {
         status: { in: ["ACCEPTED", "ADDED_TO_TRAINING"] },
@@ -57,7 +58,6 @@ export default async function Home({
       include: { extraction: true },
       orderBy: { year: "desc" },
     }),
-    // Fetch all languages for the filter sidebar (unfiltered)
     db.paper.findMany({
       where: {
         status: { in: ["ACCEPTED", "ADDED_TO_TRAINING"] },
@@ -65,6 +65,11 @@ export default async function Home({
       },
       select: { extraction: { select: { language: true } } },
     }),
+    userId
+      ? db.userFavorite
+          .findMany({ where: { userId }, select: { paperId: true } })
+          .then((rows) => new Set(rows.map((r) => r.paperId)))
+      : Promise.resolve(new Set<number>()),
   ])
 
   const allLanguages = Array.from(
@@ -75,14 +80,11 @@ export default async function Home({
     <div className="min-h-screen bg-base-100 flex flex-col">
       <Navbar />
 
-      {/* Body */}
       <div className="flex flex-1 max-w-6xl w-full mx-auto px-6 py-8 gap-8">
-        {/* Filters — Suspense required because BrowseFilters reads useSearchParams */}
         <Suspense fallback={<div className="w-56 shrink-0" />}>
           <BrowseFilters allLanguages={allLanguages} />
         </Suspense>
 
-        {/* Results */}
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between mb-5">
             <p className="text-sm text-base-content/60">
@@ -142,16 +144,22 @@ export default async function Home({
                           )}
                         </div>
                       </div>
-                      {doiUrl && (
-                        <a
-                          href={doiUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="btn btn-outline btn-sm shrink-0"
-                        >
-                          View
-                        </a>
-                      )}
+                      <div className="flex items-center gap-1 shrink-0">
+                        <FavoriteButton
+                          paperId={paper.id}
+                          initialFavorited={favoritedIds.has(paper.id)}
+                        />
+                        {doiUrl && (
+                          <a
+                            href={doiUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="btn btn-outline btn-sm"
+                          >
+                            View
+                          </a>
+                        )}
+                      </div>
                     </div>
                   </li>
                 )

@@ -43,6 +43,7 @@ model User {
   tokens         Token[]
   sessions       Session[]
   papersReviewed Paper[]
+  favorites      UserFavorite[]
 }
 
 model Session {
@@ -78,6 +79,18 @@ model Paper {
   reviewedBy   User?             @relation(fields: [reviewedById], references: [id])
   reviewedById Int?
   extraction   PaperExtraction?
+  favorites    UserFavorite[]
+}
+
+model UserFavorite {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  userId    Int
+  paperId   Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  paper     Paper    @relation(fields: [paperId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, paperId])
 }
 
 model PaperExtraction {
