@@ -1,12 +1,23 @@
 import db from "db"
+import { getBlitzContext } from "@/app/blitz-server"
+import { RoleControl } from "./RoleControl"
 
 export const metadata = { title: "Users – Admin" }
 
 export default async function AdminUsersPage() {
+  const ctx = await getBlitzContext()
+  const isSuperAdmin = ctx.session.role === "SUPER_ADMIN"
+
   const users = await db.user.findMany({
     select: { id: true, email: true, name: true, role: true, createdAt: true },
     orderBy: { createdAt: "desc" },
   })
+
+  const badgeClass = (role: string) => {
+    if (role === "SUPER_ADMIN") return "badge-warning"
+    if (role === "ADMIN") return "badge-primary"
+    return "badge-ghost"
+  }
 
   return (
     <>
@@ -22,6 +33,7 @@ export default async function AdminUsersPage() {
               <th>Name</th>
               <th>Role</th>
               <th>Joined</th>
+              {isSuperAdmin && <th></th>}
             </tr>
           </thead>
           <tbody>
@@ -31,11 +43,16 @@ export default async function AdminUsersPage() {
                 <td>{u.email}</td>
                 <td>{u.name ?? "—"}</td>
                 <td>
-                  <span className={`badge badge-sm ${u.role === "ADMIN" ? "badge-primary" : "badge-ghost"}`}>
-                    {u.role}
+                  <span className={`badge badge-sm ${badgeClass(u.role)}`}>
+                    {u.role === "SUPER_ADMIN" ? "super admin" : u.role.toLowerCase()}
                   </span>
                 </td>
                 <td className="text-base-content/50">{u.createdAt.toLocaleDateString()}</td>
+                {isSuperAdmin && (
+                  <td>
+                    <RoleControl userId={u.id} currentRole={u.role} />
+                  </td>
+                )}
               </tr>
             ))}
           </tbody>

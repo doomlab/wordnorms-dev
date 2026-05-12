@@ -27,11 +27,11 @@ export async function Navbar({ leftLinks, rightExtra, className }: NavbarProps) 
         <ThemeToggle />
         {userId ? (
           <>
-            <Link href="/dashboard" className="btn btn-primary btn-sm m-2">
+            <Link href="/dashboard" className="btn btn-primary btn-sm mr-2">
               Dashboard
             </Link>
-            {role === "ADMIN" && (
-              <Link href="/admin" className="btn btn-ghost btn-sm">
+            {(role === "ADMIN" || role === "SUPER_ADMIN") && (
+              <Link href="/admin" className="btn btn-secondary btn-sm mr-2">
                 Admin
               </Link>
             )}

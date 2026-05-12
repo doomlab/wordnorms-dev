@@ -15,6 +15,7 @@ generator client {
 enum Role {
   USER
   ADMIN
+  SUPER_ADMIN
 }
 
 enum TokenType {

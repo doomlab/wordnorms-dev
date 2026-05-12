@@ -11,7 +11,7 @@ const ReviewPaper = z.object({
 
 export default resolver.pipe(
   resolver.zod(ReviewPaper),
-  resolver.authorize("ADMIN"),
+  resolver.authorize(["ADMIN", "SUPER_ADMIN"]),
   async ({ paperId, status, reviewNote }, ctx) => {
     return db.paper.update({
       where: { id: paperId },
