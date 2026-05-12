@@ -9,7 +9,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
   return (
     <div className="min-h-screen bg-base-100">
       <Navbar />
-      <main className="max-w-4xl mx-auto px-6 py-10">{children}</main>
+      <main className="max-w-6xl mx-auto px-6 py-10">{children}</main>
     </div>
   )
 }

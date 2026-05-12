@@ -30,10 +30,35 @@ export async function Navbar({ leftLinks, rightExtra, className }: NavbarProps) 
             <Link href="/dashboard" className="btn btn-primary btn-sm mr-2">
               Dashboard
             </Link>
+            <Link href="/dashboard/profile" className="btn btn-info btn-sm mr-2">
+              Profile
+            </Link>
             {(role === "ADMIN" || role === "SUPER_ADMIN") && (
-              <Link href="/admin" className="btn btn-secondary btn-sm mr-2">
-                Admin
-              </Link>
+              <div className="dropdown dropdown-end">
+                <div tabIndex={0} role="button" className="btn btn-secondary btn-sm mr-2">
+                  Admin ▾
+                </div>
+                <ul
+                  tabIndex={0}
+                  className="dropdown-content menu bg-base-100 rounded-box z-50 w-44 p-2 shadow-md border border-base-300 mt-1"
+                >
+                  <li>
+                    <Link href="/admin">Home</Link>
+                  </li>
+                  <li>
+                    <Link href="/admin/review">Review</Link>
+                  </li>
+                  <li>
+                    <Link href="/admin/excluded">Excluded</Link>
+                  </li>
+                  <li>
+                    <Link href="/admin/stats">Stats</Link>
+                  </li>
+                  <li>
+                    <Link href="/admin/users">Users</Link>
+                  </li>
+                </ul>
+              </div>
             )}
             <LogoutButton />
           </>

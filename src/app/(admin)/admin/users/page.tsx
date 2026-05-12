@@ -1,5 +1,5 @@
 import db from "db"
-import { getBlitzContext } from "@/app/blitz-server"
+import { getBlitzContext } from "../../../blitz-server"
 import { RoleControl } from "./RoleControl"
 
 export const metadata = { title: "Users – Admin" }
