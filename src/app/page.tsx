@@ -1,7 +1,9 @@
 import { Suspense } from "react"
 import { Navbar } from "./components/Navbar"
 import { BrowseFilters } from "./components/BrowseFilters"
-import { DATASETS, filterDatasets } from "./data/datasets"
+import { DECADE_LABELS } from "./data/datasets"
+import { getBlitzContext } from "./blitz-server"
+import db from "db"
 
 export default async function Home({
   searchParams,
@@ -10,7 +12,7 @@ export default async function Home({
 }) {
   const params = await searchParams
 
-  const q = params.q
+  const q = params.q?.trim() || undefined
   const languages = params.lang ? (Array.isArray(params.lang) ? params.lang : [params.lang]) : []
   const decades = params.decade
     ? Array.isArray(params.decade)
@@ -18,7 +20,56 @@ export default async function Home({
       : [params.decade]
     : []
 
-  const results = filterDatasets(DATASETS, { q, languages, decades })
+  // Initialize Blitz context so the enhanced Prisma client is ready
+  await getBlitzContext()
+
+  // Build AND clauses for search and decade filters
+  const andClauses: object[] = []
+
+  if (q) {
+    andClauses.push({
+      OR: [
+        { title: { contains: q, mode: "insensitive" } },
+        { abstract: { contains: q, mode: "insensitive" } },
+        { extraction: { normsCollected: { hasSome: [q] } } },
+      ],
+    })
+  }
+
+  if (decades.length) {
+    andClauses.push({
+      OR: decades.flatMap((decade) => {
+        const range = DECADE_LABELS[decade]
+        return range ? [{ year: { gte: range[0], lte: range[1] } }] : []
+      }),
+    })
+  }
+
+  const [papers, allPapers] = await Promise.all([
+    db.paper.findMany({
+      where: {
+        status: { in: ["ACCEPTED", "ADDED_TO_TRAINING"] },
+        extraction: languages.length
+          ? { language: { hasSome: languages } }
+          : { isNot: null },
+        ...(andClauses.length ? { AND: andClauses } : {}),
+      },
+      include: { extraction: true },
+      orderBy: { year: "desc" },
+    }),
+    // Fetch all languages for the filter sidebar (unfiltered)
+    db.paper.findMany({
+      where: {
+        status: { in: ["ACCEPTED", "ADDED_TO_TRAINING"] },
+        extraction: { isNot: null },
+      },
+      select: { extraction: { select: { language: true } } },
+    }),
+  ])
+
+  const allLanguages = Array.from(
+    new Set(allPapers.flatMap((p) => p.extraction?.language ?? []))
+  ).sort()
 
   return (
     <div className="min-h-screen bg-base-100 flex flex-col">
@@ -28,19 +79,19 @@ export default async function Home({
       <div className="flex flex-1 max-w-6xl w-full mx-auto px-6 py-8 gap-8">
         {/* Filters — Suspense required because BrowseFilters reads useSearchParams */}
         <Suspense fallback={<div className="w-56 shrink-0" />}>
-          <BrowseFilters />
+          <BrowseFilters allLanguages={allLanguages} />
         </Suspense>
 
         {/* Results */}
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between mb-5">
             <p className="text-sm text-base-content/60">
-              <span className="font-semibold text-base-content">{results.length}</span> norm{" "}
-              {results.length === 1 ? "set" : "sets"}
+              <span className="font-semibold text-base-content">{papers.length}</span> norm{" "}
+              {papers.length === 1 ? "set" : "sets"}
             </p>
           </div>
 
-          {results.length === 0 ? (
+          {papers.length === 0 ? (
             <div className="text-center py-16 text-base-content/40">
               <p className="text-lg">No results match your filters.</p>
               <a href="/" className="link link-primary text-sm mt-2 inline-block">
@@ -49,35 +100,62 @@ export default async function Home({
             </div>
           ) : (
             <ul className="flex flex-col divide-y divide-base-200">
-              {results.map((dataset) => (
-                <li
-                  key={dataset.id}
-                  className="py-5 hover:bg-base-200/40 px-3 -mx-3 rounded-lg transition-colors"
-                >
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="min-w-0">
-                      <h2 className="font-semibold text-base leading-snug mb-1">{dataset.name}</h2>
-                      <p className="text-sm text-base-content/60 mb-3 line-clamp-2">
-                        {dataset.description}
-                      </p>
-                      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-base-content/50">
-                        <span className="font-medium text-base-content/70">
-                          {dataset.languages.join(", ")}
-                        </span>
-                        <span>·</span>
-                        <span>{dataset.year}</span>
-                        <span>·</span>
-                        <span>{dataset.wordCount.toLocaleString()} words</span>
-                        <span>·</span>
-                        <span>{dataset.normTypes.join(", ")}</span>
+              {papers.map((paper) => {
+                const ext = paper.extraction
+                const doiUrl = paper.doi ? `https://doi.org/${paper.doi}` : null
+                return (
+                  <li
+                    key={paper.id}
+                    className="py-5 hover:bg-base-200/40 px-3 -mx-3 rounded-lg transition-colors"
+                  >
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="min-w-0">
+                        <h2 className="font-semibold text-base leading-snug mb-1">
+                          {paper.title}
+                        </h2>
+                        {paper.abstract && (
+                          <p className="text-sm text-base-content/60 mb-3 line-clamp-2">
+                            {paper.abstract}
+                          </p>
+                        )}
+                        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-base-content/50">
+                          {ext?.language && ext.language.length > 0 && (
+                            <>
+                              <span className="font-medium text-base-content/70">
+                                {ext.language.join(", ")}
+                              </span>
+                              <span>·</span>
+                            </>
+                          )}
+                          {paper.year && <span>{paper.year}</span>}
+                          {ext?.stimuliCount && (
+                            <>
+                              <span>·</span>
+                              <span>{ext.stimuliCount.toLocaleString()} stimuli</span>
+                            </>
+                          )}
+                          {ext?.normsCollected && ext.normsCollected.length > 0 && (
+                            <>
+                              <span>·</span>
+                              <span>{ext.normsCollected.join(", ")}</span>
+                            </>
+                          )}
+                        </div>
                       </div>
+                      {doiUrl && (
+                        <a
+                          href={doiUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="btn btn-outline btn-sm shrink-0"
+                        >
+                          View
+                        </a>
+                      )}
                     </div>
-                    <a href={`/datasets/${dataset.id}`} className="btn btn-outline btn-sm shrink-0">
-                      View
-                    </a>
-                  </div>
-                </li>
-              ))}
+                  </li>
+                )
+              })}
             </ul>
           )}
         </div>

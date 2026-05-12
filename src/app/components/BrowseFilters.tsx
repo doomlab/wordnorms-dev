@@ -2,9 +2,9 @@
 
 import { useRouter, useSearchParams, usePathname } from "next/navigation"
 import { useCallback } from "react"
-import { ALL_LANGUAGES, DECADE_LABELS } from "../data/datasets"
+import { DECADE_LABELS } from "../data/datasets"
 
-export function BrowseFilters() {
+export function BrowseFilters({ allLanguages }: { allLanguages: string[] }) {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -62,24 +62,26 @@ export function BrowseFilters() {
       </div>
 
       {/* Language */}
-      <div className="mb-6">
-        <p className="text-xs font-medium uppercase tracking-wide text-base-content/50 mb-2">
-          Language
-        </p>
-        <div className="flex flex-col gap-1.5">
-          {ALL_LANGUAGES.map((lang) => (
-            <label key={lang} className="flex items-center gap-2 cursor-pointer">
-              <input
-                type="checkbox"
-                className="checkbox checkbox-sm checkbox-primary"
-                checked={selectedLanguages.includes(lang)}
-                onChange={(e) => update("lang", lang, e.target.checked)}
-              />
-              <span className="text-sm">{lang}</span>
-            </label>
-          ))}
+      {allLanguages.length > 0 && (
+        <div className="mb-6">
+          <p className="text-xs font-medium uppercase tracking-wide text-base-content/50 mb-2">
+            Language
+          </p>
+          <div className="flex flex-col gap-1.5">
+            {allLanguages.map((lang) => (
+              <label key={lang} className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  className="checkbox checkbox-sm checkbox-primary"
+                  checked={selectedLanguages.includes(lang)}
+                  onChange={(e) => update("lang", lang, e.target.checked)}
+                />
+                <span className="text-sm">{lang}</span>
+              </label>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Publication Year */}
       <div className="mb-6">
