@@ -116,6 +116,10 @@ def fetch_openalex():
         r.raise_for_status()
         for w in r.json().get("results", []):
             doi = (w.get("doi") or "").replace("https://doi.org/", "").lower() or None
+            best_oa = w.get("best_oa_location") or {}
+            primary = w.get("primary_location") or {}
+            oa = w.get("open_access") or {}
+            pdf_url = best_oa.get("pdf_url") or primary.get("pdf_url") or oa.get("oa_url")
             papers.append({
                 "title": w.get("title"),
                 "year": w.get("publication_year"),
@@ -127,9 +131,8 @@ def fetch_openalex():
                     if a.get("author", {}).get("display_name")
                 ],
                 "abstract": decode_abstract(w.get("abstract_inverted_index")),
-                "journal": (
-                    (w.get("primary_location") or {}).get("source", {}) or {}
-                ).get("display_name"),
+                "journal": (primary.get("source") or {}).get("display_name"),
+                "pdf_url": pdf_url,
             })
         print(f"  page {page}/{pages} — {len(papers)} collected", end="\r")
 
@@ -158,9 +161,9 @@ def insert_paper(cur, paper):
         """
         INSERT INTO "Paper"
             ("createdAt", "updatedAt", title, authors, year, doi,
-             "openAlexId", abstract, journal, status)
+             "openAlexId", abstract, journal, "pdfUrl", status)
         VALUES
-            (NOW(), NOW(), %s, %s, %s, %s, %s, %s, %s, 'PENDING_REVIEW'::"PaperStatus")
+            (NOW(), NOW(), %s, %s, %s, %s, %s, %s, %s, %s, 'PENDING_REVIEW'::"PaperStatus")
         ON CONFLICT (doi) DO NOTHING
         """,
         (
@@ -171,6 +174,7 @@ def insert_paper(cur, paper):
             paper["openalex_id"],
             paper["abstract"],
             paper.get("journal"),
+            paper.get("pdf_url"),
         ),
     )
     return cur.rowcount
