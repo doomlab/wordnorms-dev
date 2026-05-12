@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation"
 import updateUserRole from "../../mutations/updateUserRole"
 
 export function RoleControl({ userId, currentRole }: { userId: number; currentRole: string }) {
-  const [update, { isLoading }] = useMutation(updateUserRole)
+  const [update] = useMutation(updateUserRole)
   const router = useRouter()
 
   if (currentRole === "SUPER_ADMIN") return null
@@ -16,7 +16,7 @@ export function RoleControl({ userId, currentRole }: { userId: number; currentRo
   }
 
   return (
-    <button className="btn btn-sm btn-primary" onClick={toggle} disabled={isLoading}>
+    <button className="btn btn-sm btn-primary" onClick={toggle}>
       {currentRole === "ADMIN" ? "Make user" : "Make admin"}
     </button>
   )

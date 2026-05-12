@@ -5,6 +5,9 @@ export const metadata = { title: "Admin" }
 export default async function AdminPage() {
   const counts = await db.paper.groupBy({ by: ["status"], _count: { _all: true } })
   const byStatus = Object.fromEntries(counts.map((c) => [c.status, c._count._all]))
+  const pendingExtraction = await db.paper.count({
+    where: { status: "ACCEPTED", extraction: null },
+  })
 
   const cards = [
     {
@@ -12,6 +15,12 @@ export default async function AdminPage() {
       label: "Review Queue",
       desc: "Papers flagged by the prediction model",
       badge: byStatus.PENDING_REVIEW ?? 0,
+    },
+    {
+      href: "/admin/extract",
+      label: "Extraction",
+      desc: "Extract metadata from accepted papers",
+      badge: pendingExtraction,
     },
     {
       href: "/admin/excluded",
@@ -22,7 +31,7 @@ export default async function AdminPage() {
     {
       href: "/admin/stats",
       label: "Pipeline Stats",
-      desc: "Model accept rate and throughput",
+      desc: "Model performance and validation metrics",
       badge: null,
     },
     {

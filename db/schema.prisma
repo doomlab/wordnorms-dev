@@ -61,22 +61,42 @@ model Session {
 }
 
 model Paper {
-  id           Int         @id @default(autoincrement())
-  createdAt    DateTime    @default(now())
-  updatedAt    DateTime    @updatedAt
+  id           Int               @id @default(autoincrement())
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
   title        String
   authors      String[]
   year         Int?
-  doi          String?     @unique
-  openAlexId   String?     @unique
+  doi          String?           @unique
+  openAlexId   String?           @unique
   abstract     String?
   pdfUrl       String?
   modelScore   Float?
-  status       PaperStatus @default(PENDING_REVIEW)
+  status       PaperStatus       @default(PENDING_REVIEW)
   reviewNote   String?
-  isValidation Boolean     @default(false)
-  reviewedBy   User?       @relation(fields: [reviewedById], references: [id])
+  isValidation Boolean           @default(false)
+  reviewedBy   User?             @relation(fields: [reviewedById], references: [id])
   reviewedById Int?
+  extraction   PaperExtraction?
+}
+
+model PaperExtraction {
+  id               Int      @id @default(autoincrement())
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  paperId          Int      @unique
+  paper            Paper    @relation(fields: [paperId], references: [id])
+  language         String[]
+  participantCount Int?
+  participantType  String?
+  stimuliType      String[]
+  stimuliCount     Int?
+  normsCollected   String[]
+  instructions     String?
+  confidence       Float?
+  needsReview      Boolean  @default(false)
+  extractedBy      String?
+  extractedAt      DateTime
 }
 
 model ModelRun {
