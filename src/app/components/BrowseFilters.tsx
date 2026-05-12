@@ -1,7 +1,7 @@
 "use client"
 
 import { useRouter, useSearchParams, usePathname } from "next/navigation"
-import { useCallback } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { DECADE_LABELS } from "../data/datasets"
 
 export function BrowseFilters({ allLanguages }: { allLanguages: string[] }) {
@@ -12,6 +12,14 @@ export function BrowseFilters({ allLanguages }: { allLanguages: string[] }) {
   const q = searchParams.get("q") ?? ""
   const selectedLanguages = searchParams.getAll("lang")
   const selectedDecades = searchParams.getAll("decade")
+
+  const [inputValue, setInputValue] = useState(q)
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  // Sync input when URL param changes externally (e.g. Reset)
+  useEffect(() => {
+    setInputValue(q)
+  }, [q])
 
   const update = useCallback(
     (key: string, value: string, checked?: boolean) => {
@@ -32,6 +40,12 @@ export function BrowseFilters({ allLanguages }: { allLanguages: string[] }) {
     [router, pathname, searchParams]
   )
 
+  const handleSearchChange = (value: string) => {
+    setInputValue(value)
+    if (debounceRef.current) clearTimeout(debounceRef.current)
+    debounceRef.current = setTimeout(() => update("q", value), 400)
+  }
+
   const hasFilters = q || selectedLanguages.length || selectedDecades.length
 
   return (
@@ -39,23 +53,23 @@ export function BrowseFilters({ allLanguages }: { allLanguages: string[] }) {
       <div className="flex items-center justify-between mb-4">
         <span className="font-semibold text-sm">Filters</span>
         {hasFilters && (
-          <a href={pathname} className="text-xs text-primary">
+          <a href={pathname} className="btn btn-primary btn-xs">
             Reset
           </a>
         )}
       </div>
 
-      {/* Keyword */}
+      {/* Search */}
       <div className="mb-6">
         <label className="label py-1">
           <span className="label-text text-xs font-medium uppercase tracking-wide text-base-content/50">
-            Keyword
+            Search
           </span>
         </label>
         <input
           type="search"
-          value={q}
-          onChange={(e) => update("q", e.target.value)}
+          value={inputValue}
+          onChange={(e) => handleSearchChange(e.target.value)}
           placeholder="e.g. concreteness"
           className="input input-bordered input-sm w-full"
         />

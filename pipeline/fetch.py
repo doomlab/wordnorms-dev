@@ -127,6 +127,9 @@ def fetch_openalex():
                     if a.get("author", {}).get("display_name")
                 ],
                 "abstract": decode_abstract(w.get("abstract_inverted_index")),
+                "journal": (
+                    (w.get("primary_location") or {}).get("source", {}) or {}
+                ).get("display_name"),
             })
         print(f"  page {page}/{pages} — {len(papers)} collected", end="\r")
 
@@ -155,9 +158,9 @@ def insert_paper(cur, paper):
         """
         INSERT INTO "Paper"
             ("createdAt", "updatedAt", title, authors, year, doi,
-             "openAlexId", abstract, status)
+             "openAlexId", abstract, journal, status)
         VALUES
-            (NOW(), NOW(), %s, %s, %s, %s, %s, %s, 'PENDING_REVIEW'::"PaperStatus")
+            (NOW(), NOW(), %s, %s, %s, %s, %s, %s, %s, 'PENDING_REVIEW'::"PaperStatus")
         ON CONFLICT (doi) DO NOTHING
         """,
         (
@@ -167,6 +170,7 @@ def insert_paper(cur, paper):
             paper["doi"],
             paper["openalex_id"],
             paper["abstract"],
+            paper.get("journal"),
         ),
     )
     return cur.rowcount

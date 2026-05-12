@@ -44,6 +44,7 @@ model User {
   sessions       Session[]
   papersReviewed Paper[]
   favorites      UserFavorite[]
+  reports        PaperReport[]
 }
 
 model Session {
@@ -71,6 +72,7 @@ model Paper {
   doi          String?           @unique
   openAlexId   String?           @unique
   abstract     String?
+  journal      String?
   pdfUrl       String?
   modelScore   Float?
   status       PaperStatus       @default(PENDING_REVIEW)
@@ -80,6 +82,7 @@ model Paper {
   reviewedById Int?
   extraction   PaperExtraction?
   favorites    UserFavorite[]
+  reports      PaperReport[]
 }
 
 model UserFavorite {
@@ -89,6 +92,21 @@ model UserFavorite {
   paperId   Int
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   paper     Paper    @relation(fields: [paperId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, paperId])
+}
+
+model PaperReport {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  paperId   Int
+  userId    Int
+  reason    String
+  note      String?
+  resolved  Boolean  @default(false)
+
+  paper     Paper    @relation(fields: [paperId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, paperId])
 }

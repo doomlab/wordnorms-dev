@@ -3,11 +3,12 @@ import db from "db"
 export const metadata = { title: "Admin" }
 
 export default async function AdminPage() {
-  const counts = await db.paper.groupBy({ by: ["status"], _count: { _all: true } })
+  const [counts, pendingExtraction, openReports] = await Promise.all([
+    db.paper.groupBy({ by: ["status"], _count: { _all: true } }),
+    db.paper.count({ where: { status: "ACCEPTED", extraction: null } }),
+    db.paperReport.count({ where: { resolved: false } }),
+  ])
   const byStatus = Object.fromEntries(counts.map((c) => [c.status, c._count._all]))
-  const pendingExtraction = await db.paper.count({
-    where: { status: "ACCEPTED", extraction: null },
-  })
 
   const cards = [
     {
@@ -39,6 +40,12 @@ export default async function AdminPage() {
       label: "Users",
       desc: "View and manage user accounts",
       badge: null,
+    },
+    {
+      href: "/admin/reports",
+      label: "Reports",
+      desc: "Papers flagged by users as incorrectly classified",
+      badge: openReports,
     },
   ]
 

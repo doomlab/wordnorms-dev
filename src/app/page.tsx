@@ -2,6 +2,7 @@ import { Suspense } from "react"
 import { Navbar } from "./components/Navbar"
 import { BrowseFilters } from "./components/BrowseFilters"
 import { FavoriteButton } from "./components/FavoriteButton"
+import { ReportButton } from "./components/ReportButton"
 import { DECADE_LABELS } from "./data/datasets"
 import { getBlitzContext } from "./blitz-server"
 import db from "db"
@@ -46,7 +47,7 @@ export default async function Home({
     })
   }
 
-  const [papers, allPapers, favoritedIds] = await Promise.all([
+  const [papers, allPapers, favoritedIds, reportedIds] = await Promise.all([
     db.paper.findMany({
       where: {
         status: { in: ["ACCEPTED", "ADDED_TO_TRAINING"] },
@@ -67,6 +68,11 @@ export default async function Home({
     }),
     userId
       ? db.userFavorite
+          .findMany({ where: { userId }, select: { paperId: true } })
+          .then((rows) => new Set(rows.map((r) => r.paperId)))
+      : Promise.resolve(new Set<number>()),
+    userId
+      ? db.paperReport
           .findMany({ where: { userId }, select: { paperId: true } })
           .then((rows) => new Set(rows.map((r) => r.paperId)))
       : Promise.resolve(new Set<number>()),
@@ -130,6 +136,12 @@ export default async function Home({
                             </>
                           )}
                           {paper.year && <span>{paper.year}</span>}
+                          {paper.journal && (
+                            <>
+                              <span>·</span>
+                              <span className="italic">{paper.journal}</span>
+                            </>
+                          )}
                           {ext?.stimuliCount && (
                             <>
                               <span>·</span>
@@ -145,6 +157,10 @@ export default async function Home({
                         </div>
                       </div>
                       <div className="flex items-center gap-1 shrink-0">
+                        <ReportButton
+                          paperId={paper.id}
+                          initialReported={reportedIds.has(paper.id)}
+                        />
                         <FavoriteButton
                           paperId={paper.id}
                           initialFavorited={favoritedIds.has(paper.id)}
