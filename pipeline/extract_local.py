@@ -15,6 +15,7 @@ Usage:
 import argparse
 import os
 import tempfile
+import time
 
 import requests
 
@@ -88,6 +89,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--limit", type=int, default=None)
     parser.add_argument("--pdf-dir", default=None)
+    parser.add_argument("--delay", type=float, default=4.0, help="Seconds to wait between papers (default: 4)")
     args = parser.parse_args()
 
     engine = get_engine()
@@ -137,6 +139,9 @@ def main():
                 save_extraction_failure(conn, int(row["id"]), "failed:llm_error")
                 conn.commit()
                 failed += 1
+
+            if args.delay > 0:
+                time.sleep(args.delay)
 
     finally:
         conn.close()

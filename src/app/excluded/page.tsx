@@ -54,11 +54,9 @@ export default async function ExcludedPage({
       select: {
         id: true,
         title: true,
-        authors: true,
-        year: true,
-        doi: true,
-        journal: true,
         abstract: true,
+        year: true,
+        journal: true,
         reviewNote: true,
       },
       orderBy: { year: "desc" },
@@ -83,8 +81,8 @@ export default async function ExcludedPage({
           <div className="mb-6">
             <h1 className="text-3xl font-bold mb-1">Excluded papers</h1>
             <p className="text-base-content/60 text-sm">
-              Papers reviewed and determined not to be word norm studies. Click any row to expand.
-              Use the flag icon to report errors or suggest re-inclusion.
+              Papers reviewed and determined not to be word norm studies. Use the flag icon to
+              report errors or suggest re-inclusion.
             </p>
           </div>
 
@@ -104,73 +102,47 @@ export default async function ExcludedPage({
           ) : (
             <ul className="flex flex-col divide-y divide-base-200">
               {papers.map((paper) => (
-                <li key={paper.id} className="-mx-3">
-                  <details className="group">
-                    <summary className="flex items-center justify-between gap-4 py-4 px-3 cursor-pointer hover:bg-base-200/40 rounded-lg transition-colors list-none">
-                      <div className="min-w-0">
-                        <span className="font-medium text-sm leading-snug line-clamp-2">
-                          {paper.title}
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-2 shrink-0">
-                        {paper.year && (
-                          <span className="text-xs text-base-content/50">{paper.year}</span>
-                        )}
-                        <ReportButton
-                          paperId={paper.id}
-                          initialReported={reportedIds.has(paper.id)}
-                        />
-                        <span className="text-base-content/40 group-open:rotate-90 transition-transform text-xs">
-                          ▶
-                        </span>
-                      </div>
-                    </summary>
-
-                    <div className="px-3 pb-5 pt-1 space-y-2 text-sm text-base-content/70">
-                      {paper.authors.length > 0 && (
-                        <p>
-                          <span className="font-medium text-base-content">Authors:</span>{" "}
-                          {paper.authors.join(", ")}
-                        </p>
-                      )}
-                      {paper.year && (
-                        <p>
-                          <span className="font-medium text-base-content">Year:</span> {paper.year}
-                        </p>
-                      )}
-                      {paper.journal && (
-                        <p>
-                          <span className="font-medium text-base-content">Journal:</span>{" "}
-                          <span className="italic">{paper.journal}</span>
-                        </p>
-                      )}
-                      {paper.doi && (
-                        <p>
-                          <span className="font-medium text-base-content">DOI:</span>{" "}
-                          <a
-                            href={`https://doi.org/${paper.doi}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="link link-primary break-all"
-                          >
-                            {paper.doi}
-                          </a>
-                        </p>
-                      )}
+                <li
+                  key={paper.id}
+                  className="py-5 hover:bg-base-200/40 px-3 -mx-3 rounded-lg transition-colors"
+                >
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="min-w-0">
+                      <h2 className="font-semibold text-base leading-snug mb-1">{paper.title}</h2>
                       {paper.abstract && (
-                        <div>
-                          <p className="font-medium text-base-content mb-1">Abstract:</p>
-                          <p className="leading-relaxed">{paper.abstract}</p>
-                        </div>
-                      )}
-                      {paper.reviewNote && (
-                        <p>
-                          <span className="font-medium text-base-content">Note:</span>{" "}
-                          {paper.reviewNote}
+                        <p className="text-sm text-base-content/60 mb-3 line-clamp-2">
+                          {paper.abstract}
                         </p>
                       )}
+                      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-base-content/50">
+                        {paper.year && <span>{paper.year}</span>}
+                        {paper.journal && (
+                          <>
+                            <span>·</span>
+                            <span className="italic">{paper.journal}</span>
+                          </>
+                        )}
+                        {paper.reviewNote && (
+                          <>
+                            <span>·</span>
+                            <span className="text-base-content/40">{paper.reviewNote}</span>
+                          </>
+                        )}
+                      </div>
                     </div>
-                  </details>
+                    <div className="flex items-center gap-1 shrink-0">
+                      <ReportButton
+                        paperId={paper.id}
+                        initialReported={reportedIds.has(paper.id)}
+                      />
+                      <a
+                        href={`/excluded/${paper.id}?from=excluded`}
+                        className="btn btn-outline btn-sm"
+                      >
+                        View
+                      </a>
+                    </div>
+                  </div>
                 </li>
               ))}
             </ul>
