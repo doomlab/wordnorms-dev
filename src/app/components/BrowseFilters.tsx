@@ -73,6 +73,29 @@ export function BrowseFilters({ allLanguages }: { allLanguages: string[] }) {
           placeholder="e.g. concreteness"
           className="input input-bordered input-sm w-full"
         />
+        <div className="flex flex-wrap gap-1 mt-2">
+          {[
+            "age of acquisition",
+            "familiarity",
+            "concreteness",
+            "imageability",
+            "valence",
+            "arousal",
+            "dominance",
+          ].map((kw) => (
+            <button
+              key={kw}
+              onClick={() => handleSearchChange(kw)}
+              className={`badge badge-sm cursor-pointer transition-colors ${
+                q === kw
+                  ? "badge-primary"
+                  : "badge-ghost hover:badge-primary"
+              }`}
+            >
+              {kw}
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* Language */}

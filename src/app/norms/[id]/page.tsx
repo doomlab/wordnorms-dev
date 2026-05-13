@@ -50,7 +50,7 @@ export default async function NormDetailPage({
     <div className="min-h-screen bg-base-100 flex flex-col">
       <Navbar />
 
-      <div className="max-w-3xl w-full mx-auto px-6 py-10">
+      <div className="w-full px-10 py-10">
         <a
           href={from === "favorites" ? "/favorites" : "/"}
           className="text-sm text-base-content/50 hover:text-base-content mb-6 inline-block"

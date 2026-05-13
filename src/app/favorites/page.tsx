@@ -74,7 +74,7 @@ export default async function FavoritesPage({
     <div className="min-h-screen bg-base-100 flex flex-col">
       <Navbar />
 
-      <div className="flex flex-1 max-w-6xl w-full mx-auto px-6 py-8 gap-8">
+      <div className="flex flex-1 w-full px-10 py-8 gap-8">
         <Suspense fallback={<div className="w-56 shrink-0" />}>
           <BrowseFilters allLanguages={allLanguages} />
         </Suspense>
@@ -145,7 +145,10 @@ export default async function FavoritesPage({
                           {ext?.stimuliCount && (
                             <>
                               <span>·</span>
-                              <span>{ext.stimuliCount.toLocaleString()} stimuli</span>
+                              <span>
+                            {ext.stimuliCount.toLocaleString()}{" "}
+                            {ext.stimuliType.length > 0 ? ext.stimuliType.join(", ") : "stimuli"}
+                          </span>
                             </>
                           )}
                           {ext?.normsCollected && ext.normsCollected.length > 0 && (
