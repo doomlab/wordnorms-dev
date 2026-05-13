@@ -84,6 +84,7 @@ export default async function ExcludedPage({
             <h1 className="text-3xl font-bold mb-1">Excluded papers</h1>
             <p className="text-base-content/60 text-sm">
               Papers reviewed and determined not to be word norm studies. Click any row to expand.
+              Use the flag icon to report errors or suggest re-inclusion.
             </p>
           </div>
 

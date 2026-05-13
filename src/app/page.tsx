@@ -110,7 +110,6 @@ export default async function Home({
             <ul className="flex flex-col divide-y divide-base-200">
               {papers.map((paper) => {
                 const ext = paper.extraction
-                const doiUrl = paper.doi ? `https://doi.org/${paper.doi}` : null
                 return (
                   <li
                     key={paper.id}
@@ -165,16 +164,9 @@ export default async function Home({
                           paperId={paper.id}
                           initialFavorited={favoritedIds.has(paper.id)}
                         />
-                        {doiUrl && (
-                          <a
-                            href={doiUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="btn btn-outline btn-sm"
-                          >
-                            View
-                          </a>
-                        )}
+                        <a href={`/norms/${paper.id}`} className="btn btn-outline btn-sm">
+                          View
+                        </a>
                       </div>
                     </div>
                   </li>

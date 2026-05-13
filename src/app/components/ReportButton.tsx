@@ -36,7 +36,11 @@ export function ReportButton({
     e.preventDefault()
     setSubmitting(true)
     try {
-      await submit({ paperId, reason: reason as "WRONG_CLASSIFICATION" | "DUPLICATE" | "OTHER", note: note.trim() || undefined })
+      await submit({
+        paperId,
+        reason: reason as "WRONG_CLASSIFICATION" | "DUPLICATE" | "OTHER",
+        note: note.trim() || undefined,
+      })
       setReported(true)
       dialogRef.current?.close()
       router.refresh()
@@ -51,12 +55,12 @@ export function ReportButton({
     <>
       <button
         onClick={handleOpen}
-        className={`btn btn-ghost btn-sm btn-square text-base ${
-          reported
-            ? "text-warning"
-            : "text-base-content/25 hover:text-base-content/50"
+        className={`btn btn-primary btn-sm btn-square text-base ${
+          reported ? "text-warning" : "text-base-content/25 hover:text-base-content/50"
         }`}
-        title={reported ? "You reported this paper — click to update" : "Report incorrect classification"}
+        title={
+          reported ? "You reported this paper — click to update" : "Report incorrect classification"
+        }
       >
         ⚑
       </button>
@@ -87,8 +91,7 @@ export function ReportButton({
             <div>
               <label className="label py-1">
                 <span className="label-text font-medium">
-                  Note{" "}
-                  <span className="font-normal text-base-content/50">(optional)</span>
+                  Note <span className="font-normal text-base-content/50">(optional)</span>
                 </span>
               </label>
               <textarea
