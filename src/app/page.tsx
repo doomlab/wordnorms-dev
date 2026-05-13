@@ -117,9 +117,16 @@ export default async function Home({
                   >
                     <div className="flex items-start justify-between gap-4">
                       <div className="min-w-0">
-                        <h2 className="font-semibold text-base leading-snug mb-1">
-                          {paper.title}
-                        </h2>
+                        <div className="flex items-center gap-2 mb-1">
+                          <h2 className="font-semibold text-base leading-snug">
+                            {paper.title}
+                          </h2>
+                          {ext?.needsReview && (
+                            <span className="badge badge-warning badge-sm shrink-0">
+                              unverified
+                            </span>
+                          )}
+                        </div>
                         {paper.abstract && (
                           <p className="text-sm text-base-content/60 mb-3 line-clamp-2">
                             {paper.abstract}

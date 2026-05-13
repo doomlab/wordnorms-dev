@@ -4,14 +4,29 @@ import { ExtractButton } from "./ExtractButton"
 export const metadata = { title: "Extraction – Admin" }
 
 export default async function AdminExtractPage() {
-  const [pending, extracted] = await Promise.all([
+  const [needsReview, pending, extracted] = await Promise.all([
+    db.paper.findMany({
+      where: {
+        status: { in: ["ACCEPTED", "ADDED_TO_TRAINING"] },
+        extraction: { needsReview: true },
+      },
+      select: {
+        id: true, title: true, year: true, doi: true,
+        extraction: {
+          select: {
+            language: true, normsCollected: true, confidence: true, extractedBy: true,
+          },
+        },
+      },
+      orderBy: { updatedAt: "desc" },
+    }),
     db.paper.findMany({
       where: { status: "ACCEPTED", extraction: null },
       select: { id: true, title: true, year: true, doi: true },
       orderBy: { updatedAt: "desc" },
     }),
     db.paper.findMany({
-      where: { status: "ADDED_TO_TRAINING" },
+      where: { status: "ADDED_TO_TRAINING", extraction: { needsReview: false } },
       select: {
         id: true, title: true, year: true,
         extraction: {
@@ -32,6 +47,54 @@ export default async function AdminExtractPage() {
       <p className="text-base-content/60 mb-8">
         Extract structured metadata from accepted papers using the LLM pipeline.
       </p>
+
+      {/* Needs review */}
+      {needsReview.length > 0 && (
+        <section className="mb-12">
+          <h2 className="text-xl font-semibold mb-4">
+            Needs review
+            <span className="badge badge-error ml-2">{needsReview.length}</span>
+          </h2>
+          <p className="text-sm text-base-content/60 mb-4">
+            Extraction ran but flagged low confidence or incomplete data.
+          </p>
+          <div className="overflow-x-auto">
+            <table className="table table-zebra">
+              <thead>
+                <tr>
+                  <th>ID</th><th>Title</th><th>Year</th><th>Language</th><th>Norms</th><th>Confidence</th><th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {needsReview.map((p) => {
+                  const e = p.extraction
+                  return (
+                    <tr key={p.id}>
+                      <td className="text-base-content/50">{p.id}</td>
+                      <td className="max-w-xs truncate">{p.title}</td>
+                      <td>{p.year ?? "—"}</td>
+                      <td>{e?.language?.join(", ") ?? "—"}</td>
+                      <td className="max-w-xs truncate">{e?.normsCollected?.join(", ") ?? "—"}</td>
+                      <td>
+                        {e?.confidence != null ? (
+                          <span className="text-warning">
+                            {(e.confidence * 100).toFixed(0)}%
+                          </span>
+                        ) : "—"}
+                      </td>
+                      <td>
+                        <a href={`/norms/${p.id}`} className="btn btn-xs btn-outline" target="_blank">
+                          View
+                        </a>
+                      </td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+          </div>
+        </section>
+      )}
 
       {/* Pending extraction */}
       <section className="mb-12">
@@ -77,7 +140,7 @@ export default async function AdminExtractPage() {
               <thead>
                 <tr>
                   <th>Title</th><th>Language</th><th>N</th>
-                  <th>Stimuli</th><th>Norms</th><th>Confidence</th><th></th>
+                  <th>Stimuli</th><th>Norms</th><th>Confidence</th>
                 </tr>
               </thead>
               <tbody>
@@ -96,11 +159,6 @@ export default async function AdminExtractPage() {
                             {(e.confidence * 100).toFixed(0)}%
                           </span>
                         ) : "—"}
-                      </td>
-                      <td>
-                        {e?.needsReview && (
-                          <span className="badge badge-warning badge-sm">Review</span>
-                        )}
                       </td>
                     </tr>
                   )

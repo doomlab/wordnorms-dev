@@ -90,6 +90,22 @@ def parse_response(raw):
 # DB write
 # ---------------------------------------------------------------------------
 
+def save_extraction_failure(conn, paper_id, reason):
+    """Write a stub extraction with needsReview=True so bulk runs skip this paper."""
+    cur = conn.cursor()
+    cur.execute(
+        """
+        INSERT INTO "PaperExtraction" (
+            "createdAt", "updatedAt", "paperId",
+            language, "stimuliType", "normsCollected",
+            confidence, "needsReview", "extractedBy", "extractedAt"
+        ) VALUES (NOW(), NOW(), %s, %s, %s, %s, NULL, TRUE, %s, NOW())
+        ON CONFLICT ("paperId") DO NOTHING
+        """,
+        (paper_id, [], [], [], reason),
+    )
+
+
 def save_extraction(conn, paper_id, data, extracted_by):
     if data is None:
         return False

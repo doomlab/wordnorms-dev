@@ -46,6 +46,7 @@ model User {
   favorites      UserFavorite[]
   reports        PaperReport[]
   metadataEdits  MetadataEditSuggestion[]
+  extractionEdits ExtractionEditSuggestion[]
 }
 
 model Session {
@@ -85,6 +86,7 @@ model Paper {
   favorites    UserFavorite[]
   reports      PaperReport[]
   metadataEdits MetadataEditSuggestion[]
+  extractionEdits ExtractionEditSuggestion[]
 }
 
 model UserFavorite {
@@ -129,6 +131,27 @@ model MetadataEditSuggestion {
 
   paper     Paper    @relation(fields: [paperId], references: [id], onDelete: Cascade)
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, paperId])
+}
+
+model ExtractionEditSuggestion {
+  id               Int      @id @default(autoincrement())
+  createdAt        DateTime @default(now())
+  paperId          Int
+  userId           Int
+  language         String[]
+  participantCount Int?
+  participantType  String?
+  stimuliType      String[]
+  stimuliCount     Int?
+  normsCollected   String[]
+  instructions     String?
+  note             String?
+  resolved         Boolean  @default(false)
+
+  paper Paper @relation(fields: [paperId], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, paperId])
 }

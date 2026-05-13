@@ -21,7 +21,7 @@ import requests
 from db import get_conn, get_engine
 from extract_core import (
     PROMPT_SYSTEM, build_prompt,
-    extract_pdf_text, parse_response, save_extraction,
+    extract_pdf_text, parse_response, save_extraction, save_extraction_failure,
 )
 
 OLLAMA_URL = "http://localhost:11434/api/chat"
@@ -107,11 +107,15 @@ def main():
                 text = get_pdf_text(row, pdf_dir=args.pdf_dir)
             except Exception as e:
                 print(f"PDF error: {e}")
+                save_extraction_failure(conn, int(row["id"]), "failed:pdf_error")
+                conn.commit()
                 failed += 1
                 continue
 
             if not text or len(text.strip()) < 100:
                 print("no text")
+                save_extraction_failure(conn, int(row["id"]), "skipped:no_text")
+                conn.commit()
                 skipped += 1
                 continue
 
@@ -125,9 +129,13 @@ def main():
                     done += 1
                 else:
                     print("parse failed")
+                    save_extraction_failure(conn, int(row["id"]), "failed:parse_error")
+                    conn.commit()
                     failed += 1
             except Exception as e:
                 print(f"error: {e}")
+                save_extraction_failure(conn, int(row["id"]), "failed:llm_error")
+                conn.commit()
                 failed += 1
 
     finally:

@@ -25,7 +25,7 @@ load_dotenv(Path(__file__).parent.parent / ".env.local")
 from db import get_conn
 from extract_core import (
     PROMPT_SYSTEM, build_prompt,
-    extract_pdf_text, parse_response, save_extraction,
+    extract_pdf_text, parse_response, save_extraction, save_extraction_failure,
 )
 
 GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions"
@@ -83,6 +83,8 @@ def run(paper_id):
 
         if not paper["pdfUrl"]:
             print("No pdfUrl — cannot extract")
+            save_extraction_failure(conn, paper_id, "skipped:no_pdf")
+            conn.commit()
             sys.exit(1)
 
         tmp = download_pdf(paper["pdfUrl"])
@@ -93,6 +95,8 @@ def run(paper_id):
 
         if not text or len(text.strip()) < 100:
             print("Could not extract text from PDF")
+            save_extraction_failure(conn, paper_id, "skipped:no_text")
+            conn.commit()
             sys.exit(1)
 
         raw = call_groq(text)
@@ -100,6 +104,8 @@ def run(paper_id):
 
         if not save_extraction(conn, paper_id, data, EXTRACTED_BY):
             print("Failed to parse model response")
+            save_extraction_failure(conn, paper_id, "failed:parse_error")
+            conn.commit()
             sys.exit(1)
 
         # update paper status to ADDED_TO_TRAINING
