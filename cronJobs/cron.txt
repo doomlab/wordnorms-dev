@@ -1,0 +1,1 @@
+0 0 1 * * cd /path/to/wordnorms-dev && node scripts/sync-model-cards.mjs >> /var/log/wordnorms-sync.log 2>&1
