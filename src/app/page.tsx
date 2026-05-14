@@ -27,7 +27,16 @@ export default async function Home({
   const ctx = await getBlitzContext()
   const userId = ctx.session.userId as number | undefined
 
-  // Build AND clauses for search and decade filters
+  // Prisma has no substring filter for String[] columns — raw query for author matches
+  const authorMatchIds = q
+    ? (
+        await db.$queryRaw<{ id: number }[]>`
+          SELECT id FROM "Paper"
+          WHERE EXISTS (SELECT 1 FROM unnest(authors) AS a WHERE a ILIKE ${`%${q}%`})
+        `
+      ).map((r) => r.id)
+    : []
+
   const andClauses: object[] = []
 
   if (q) {
@@ -36,6 +45,7 @@ export default async function Home({
         { title: { contains: q, mode: "insensitive" } },
         { abstract: { contains: q, mode: "insensitive" } },
         { extraction: { normsCollected: { hasSome: [q] } } },
+        ...(authorMatchIds.length ? [{ id: { in: authorMatchIds } }] : []),
       ],
     })
   }

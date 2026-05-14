@@ -30,6 +30,15 @@ export default async function FavoritesPage({
       : [params.decade]
     : []
 
+  const authorMatchIds = q
+    ? (
+        await db.$queryRaw<{ id: number }[]>`
+          SELECT id FROM "Paper"
+          WHERE EXISTS (SELECT 1 FROM unnest(authors) AS a WHERE a ILIKE ${`%${q}%`})
+        `
+      ).map((r) => r.id)
+    : []
+
   const andClauses: object[] = []
 
   if (q) {
@@ -38,6 +47,7 @@ export default async function FavoritesPage({
         { title: { contains: q, mode: "insensitive" } },
         { abstract: { contains: q, mode: "insensitive" } },
         { extraction: { normsCollected: { hasSome: [q] } } },
+        ...(authorMatchIds.length ? [{ id: { in: authorMatchIds } }] : []),
       ],
     })
   }
