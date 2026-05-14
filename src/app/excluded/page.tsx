@@ -134,6 +134,7 @@ export default async function ExcludedPage({
                       <ReportButton
                         paperId={paper.id}
                         initialReported={reportedIds.has(paper.id)}
+                        isLoggedIn={!!userId}
                       />
                       <a
                         href={`/excluded/${paper.id}?from=excluded`}

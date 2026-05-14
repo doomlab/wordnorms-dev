@@ -66,7 +66,7 @@ export default async function ExcludedDetailPage({
             </div>
           </div>
           <div className="shrink-0 pt-1">
-            <ReportButton paperId={paper.id} initialReported={isReported} />
+            <ReportButton paperId={paper.id} initialReported={isReported} isLoggedIn={!!userId} />
           </div>
         </div>
 
