@@ -1,0 +1,1 @@
+ALTER TABLE "Paper" ADD COLUMN "url" TEXT;

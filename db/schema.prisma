@@ -76,6 +76,7 @@ model Paper {
   abstract     String?
   journal      String?
   pdfUrl       String?
+  url          String?
   modelScore   Float?
   status       PaperStatus       @default(PENDING_REVIEW)
   reviewNote   String?

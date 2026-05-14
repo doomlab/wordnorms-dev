@@ -1,5 +1,6 @@
 import db from "db"
 import { ExtractButton } from "./ExtractButton"
+import { UrlEditor } from "../review/UrlEditor"
 
 export const metadata = { title: "Extraction – Admin" }
 
@@ -22,7 +23,7 @@ export default async function AdminExtractPage() {
     }),
     db.paper.findMany({
       where: { status: "ACCEPTED", extraction: null },
-      select: { id: true, title: true, year: true, doi: true },
+      select: { id: true, title: true, year: true, doi: true, url: true },
       orderBy: { updatedAt: "desc" },
     }),
     db.paper.findMany({
@@ -110,7 +111,7 @@ export default async function AdminExtractPage() {
             <table className="table table-zebra">
               <thead>
                 <tr>
-                  <th>ID</th><th>Title</th><th>Year</th><th></th>
+                  <th>ID</th><th>Title</th><th>Year</th><th>URL</th><th></th>
                 </tr>
               </thead>
               <tbody>
@@ -119,6 +120,7 @@ export default async function AdminExtractPage() {
                     <td className="text-base-content/50">{p.id}</td>
                     <td>{p.title}</td>
                     <td>{p.year ?? "—"}</td>
+                    <td><UrlEditor paperId={p.id} initialUrl={p.url} /></td>
                     <td><ExtractButton paperId={p.id} /></td>
                   </tr>
                 ))}

@@ -57,7 +57,7 @@ export default async function Home({
         ...(andClauses.length ? { AND: andClauses } : {}),
       },
       include: { extraction: true },
-      orderBy: { year: "desc" },
+      orderBy: { year: { sort: "desc", nulls: "last" } },
     }),
     db.paper.findMany({
       where: {
@@ -174,6 +174,16 @@ export default async function Home({
                           paperId={paper.id}
                           initialFavorited={favoritedIds.has(paper.id)}
                         />
+                        {paper.url && (
+                          <a
+                            href={paper.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="btn btn-outline btn-sm"
+                          >
+                            Website
+                          </a>
+                        )}
                         <a href={`/norms/${paper.id}`} className="btn btn-outline btn-sm">
                           View
                         </a>

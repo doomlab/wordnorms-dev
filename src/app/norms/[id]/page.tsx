@@ -93,7 +93,7 @@ export default async function NormDetailPage({
         </div>
 
         {/* Links */}
-        {(doiUrl || paper.pdfUrl) && (
+        {(doiUrl || paper.pdfUrl || paper.url) && (
           <div className="flex flex-wrap gap-2 mb-8">
             {doiUrl && (
               <a
@@ -113,6 +113,16 @@ export default async function NormDetailPage({
                 className="btn btn-outline btn-sm"
               >
                 View PDF
+              </a>
+            )}
+            {paper.url != null && (
+              <a
+                href={paper.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-outline btn-sm"
+              >
+                Visit Website
               </a>
             )}
           </div>
@@ -137,6 +147,19 @@ export default async function NormDetailPage({
                   className="link link-primary break-all"
                 >
                   {paper.doi}
+                </a>
+              </div>
+            )}
+            {paper.url && (
+              <div className="flex gap-3 py-1.5">
+                <span className="w-36 shrink-0 font-medium text-base-content/70">Website</span>
+                <a
+                  href={paper.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="link link-primary break-all"
+                >
+                  {paper.url}
                 </a>
               </div>
             )}

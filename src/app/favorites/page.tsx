@@ -67,7 +67,7 @@ export default async function FavoritesPage({
       },
     },
     include: { paper: { include: { extraction: true } } },
-    orderBy: { createdAt: "desc" },
+    orderBy: { paper: { year: { sort: "desc", nulls: "last" } } },
   })
 
   return (
@@ -161,6 +161,16 @@ export default async function FavoritesPage({
                       </div>
                       <div className="flex items-center gap-1 shrink-0">
                         <FavoriteButton paperId={paper.id} initialFavorited={true} />
+                        {paper.url && (
+                          <a
+                            href={paper.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="btn btn-outline btn-sm"
+                          >
+                            Website
+                          </a>
+                        )}
                         <a href={`/norms/${paper.id}?from=favorites`} className="btn btn-outline btn-sm">
                           View
                         </a>
