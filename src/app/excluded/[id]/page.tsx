@@ -1,5 +1,7 @@
 import { notFound } from "next/navigation"
 import { Navbar } from "../../components/Navbar"
+
+const capFirst = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
 import { ReportButton } from "../../components/ReportButton"
 import { getBlitzContext } from "../../blitz-server"
 import db from "db"
@@ -51,7 +53,7 @@ export default async function ExcludedDetailPage({
 
         <div className="flex items-start justify-between gap-4 mb-6">
           <div>
-            <h1 className="text-2xl font-bold leading-snug mb-2">{paper.title}</h1>
+            <h1 className="text-2xl font-bold leading-snug mb-2">{capFirst(paper.title)}</h1>
             <div className="flex items-center gap-2 flex-wrap">
               <span className="badge badge-error badge-sm">Excluded</span>
               {paper.reviewedBy?.name ? (

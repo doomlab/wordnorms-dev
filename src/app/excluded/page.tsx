@@ -1,5 +1,7 @@
 import { Suspense } from "react"
 import { Navbar } from "../components/Navbar"
+
+const capFirst = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
 import { BrowseFilters } from "../components/BrowseFilters"
 import { ReportButton } from "../components/ReportButton"
 import { DECADE_LABELS } from "../data/datasets"
@@ -108,7 +110,7 @@ export default async function ExcludedPage({
                 >
                   <div className="flex items-start justify-between gap-4">
                     <div className="min-w-0">
-                      <h2 className="font-semibold text-base leading-snug mb-1">{paper.title}</h2>
+                      <h2 className="font-semibold text-base leading-snug mb-1">{capFirst(paper.title)}</h2>
                       {paper.abstract && (
                         <p className="text-sm text-base-content/60 mb-3 line-clamp-2">
                           {paper.abstract}

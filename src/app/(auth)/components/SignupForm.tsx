@@ -40,14 +40,29 @@ export const SignupForm = (props: SignupFormProps) => {
               }
             }}
           >
-            <LabeledTextField name="email" label="Email" placeholder="you@example.com" type="email" />
-            <LabeledTextField name="password" label="Password" placeholder="••••••••" type="password" />
-            <LabeledTextField name="passwordConfirmation" label="Confirm password" placeholder="••••••••" type="password" />
+            <LabeledTextField
+              name="email"
+              label="Email"
+              placeholder="you@example.com"
+              type="email"
+            />
+            <LabeledTextField
+              name="password"
+              label="Password"
+              placeholder="••••••••"
+              type="password"
+            />
+            <LabeledTextField
+              name="passwordConfirmation"
+              label="Confirm password"
+              placeholder="••••••••"
+              type="password"
+            />
           </Form>
 
           <div className="divider mt-4 mb-2" />
           <div className="flex gap-2 justify-center">
-            <Link href="/login" className="btn btn-secondary btn-outline btn-sm">
+            <Link href="/login" className="btn btn-secondary btn-sm">
               Already have an account?
             </Link>
           </div>
