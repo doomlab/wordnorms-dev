@@ -7,6 +7,8 @@ import { DECADE_LABELS } from "./data/datasets"
 import { getBlitzContext } from "./blitz-server"
 import db from "db"
 
+const capFirst = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
+
 export default async function Home({
   searchParams,
 }: {
@@ -119,7 +121,7 @@ export default async function Home({
                       <div className="min-w-0">
                         <div className="flex items-center gap-2 mb-1">
                           <h2 className="font-semibold text-base leading-snug">
-                            {paper.title}
+                            {capFirst(paper.title)}
                           </h2>
                           {ext?.needsReview && (
                             <span className="badge badge-warning badge-sm shrink-0">

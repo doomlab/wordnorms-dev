@@ -6,6 +6,8 @@ import { SuggestExtractionEdits } from "../../components/SuggestExtractionEdits"
 import { getBlitzContext } from "../../blitz-server"
 import db from "db"
 
+const capFirst = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
+
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
   const paper = await db.paper.findUnique({ where: { id: Number(id) }, select: { title: true } })
@@ -79,7 +81,7 @@ export default async function NormDetailPage({
 
         <div className="flex items-start justify-between gap-4 mb-6">
           <div>
-            <h1 className="text-2xl font-bold leading-snug mb-1">{paper.title}</h1>
+            <h1 className="text-2xl font-bold leading-snug mb-1">{capFirst(paper.title)}</h1>
             {ext?.needsReview && (
               <span className="badge badge-warning badge-sm">
                 extraction unverified — data may be incomplete
