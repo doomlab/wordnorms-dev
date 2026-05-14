@@ -14,9 +14,11 @@ const REASONS = [
 export function ReportButton({
   paperId,
   initialReported,
+  isLoggedIn = true,
 }: {
   paperId: number
   initialReported: boolean
+  isLoggedIn?: boolean
 }) {
   const router = useRouter()
   const dialogRef = useRef<HTMLDialogElement>(null)
@@ -49,6 +51,16 @@ export function ReportButton({
     } finally {
       setSubmitting(false)
     }
+  }
+
+  if (!isLoggedIn) {
+    return (
+      <div className="tooltip tooltip-left" data-tip="You must have an account to use this feature">
+        <button disabled className="btn btn-primary btn-sm btn-square text-base text-base-content/25 opacity-40 cursor-not-allowed">
+          ⚑
+        </button>
+      </div>
+    )
   }
 
   return (

@@ -8,9 +8,11 @@ import toggleFavorite from "../(dashboard)/mutations/toggleFavorite"
 export function FavoriteButton({
   paperId,
   initialFavorited,
+  isLoggedIn = true,
 }: {
   paperId: number
   initialFavorited: boolean
+  isLoggedIn?: boolean
 }) {
   const [favorited, setFavorited] = useState(initialFavorited)
   const [toggle] = useMutation(toggleFavorite)
@@ -23,9 +25,18 @@ export function FavoriteButton({
       setFavorited(result.favorited)
       router.refresh()
     } catch {
-      // resolver.authorize() throws if not logged in — redirect to login
       window.location.href = "/login"
     }
+  }
+
+  if (!isLoggedIn) {
+    return (
+      <div className="tooltip tooltip-left" data-tip="You must have an account to use this feature">
+        <button disabled className="btn btn-ghost btn-sm px-2 opacity-40 cursor-not-allowed">
+          <span className="text-lg text-base-content/30">☆</span>
+        </button>
+      </div>
+    )
   }
 
   return (

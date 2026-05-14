@@ -89,8 +89,8 @@ export default async function NormDetailPage({
             )}
           </div>
           <div className="flex items-center gap-1 shrink-0 pt-1">
-            <ReportButton paperId={paper.id} initialReported={isReported} />
-            <FavoriteButton paperId={paper.id} initialFavorited={isFavorited} />
+            <ReportButton paperId={paper.id} initialReported={isReported} isLoggedIn={!!userId} />
+            <FavoriteButton paperId={paper.id} initialFavorited={isFavorited} isLoggedIn={!!userId} />
           </div>
         </div>
 
@@ -194,6 +194,7 @@ export default async function NormDetailPage({
                   paperId={paper.id}
                   ext={ext}
                   hasPriorSuggestion={hasPriorSuggestion}
+                  isLoggedIn={!!userId}
                 />
               </div>
 

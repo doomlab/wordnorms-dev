@@ -171,10 +171,12 @@ export default async function Home({
                         <ReportButton
                           paperId={paper.id}
                           initialReported={reportedIds.has(paper.id)}
+                          isLoggedIn={!!userId}
                         />
                         <FavoriteButton
                           paperId={paper.id}
                           initialFavorited={favoritedIds.has(paper.id)}
+                          isLoggedIn={!!userId}
                         />
                         {paper.url && (
                           <a
