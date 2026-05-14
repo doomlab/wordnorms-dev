@@ -5,41 +5,23 @@
  * and use it straight away.
  */
 
+// import { Mailer } from "integrations/mailer"
+import { createForgotPasswordMsg } from "integrations/emails"
+// import { Amazon } from "integrations/mailer"
+import { ResendMsg } from "integrations/mailer"
+
 type ResetPasswordMailer = {
   to: string
   token: string
 }
 
-export function forgotPasswordMailer({ to, token }: ResetPasswordMailer) {
+export async function forgotPasswordMailer({ to, token }: ResetPasswordMailer) {
   // In production, set APP_ORIGIN to your production server origin
   const origin = process.env.APP_ORIGIN || process.env.BLITZ_DEV_SERVER_ORIGIN
-  const resetUrl = `${origin}/reset-password?token=${token}`
+  const resetUrl = `${origin}/auth/reset-password?token=${token}`
 
-  const msg = {
-    from: "TODO@example.com",
-    to,
-    subject: "Your Password Reset Instructions",
-    html: `
-      <h1>Reset Your Password</h1>
-      <h3>NOTE: You must set up a production email integration in mailers/forgotPasswordMailer.ts</h3>
-
-      <a href="${resetUrl}">
-        Click here to set a new password
-      </a>
-    `,
-  }
-
-  return {
-    async send() {
-      if (process.env.NODE_ENV === "production") {
-        // TODO - send the production email, like this:
-        // await postmark.sendEmail(msg)
-        throw new Error("No production email implementation in mailers/forgotPasswordMailer")
-      } else {
-        // Preview email in the browser
-        const previewEmail = (await import("preview-email")).default
-        await previewEmail(msg)
-      }
-    },
-  }
+  //send the email
+  await ResendMsg(createForgotPasswordMsg(to, resetUrl))
+  // await Amazon(createForgotPasswordMsg(to, resetUrl)) # or amazon
+  // await Mailer(createForgotPasswordMsg(to, resetUrl)) # or gmail
 }
