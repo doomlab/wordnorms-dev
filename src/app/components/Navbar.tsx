@@ -35,10 +35,18 @@ export async function Navbar({ leftLinks, rightExtra, className }: NavbarProps) 
                 tabIndex={0}
                 className="dropdown-content menu bg-base-100 rounded-box z-50 w-44 p-2 shadow-md border border-base-300 mt-1"
               >
-                <li><Link href="/">Search</Link></li>
-                <li><Link href="/excluded">Excluded</Link></li>
-                <li><Link href="/datasets">Datasets</Link></li>
-                <li><Link href="/favorites">★ My Favorites</Link></li>
+                <li>
+                  <Link href="/">Search</Link>
+                </li>
+                <li>
+                  <Link href="/excluded">Excluded</Link>
+                </li>
+                <li>
+                  <Link href="/datasets">Datasets</Link>
+                </li>
+                <li>
+                  <Link href="/favorites">★ My Favorites</Link>
+                </li>
               </ul>
             </div>
             <Link href="/dashboard/profile" className="btn btn-info btn-sm mr-2">
@@ -53,12 +61,24 @@ export async function Navbar({ leftLinks, rightExtra, className }: NavbarProps) 
                   tabIndex={0}
                   className="dropdown-content menu bg-base-100 rounded-box z-50 w-44 p-2 shadow-md border border-base-300 mt-1"
                 >
-                  <li><Link href="/admin">Home</Link></li>
-                  <li><Link href="/admin/review">Review</Link></li>
-                  <li><Link href="/admin/extract">Extraction</Link></li>
-                  <li><Link href="/admin/excluded">Excluded</Link></li>
-                  <li><Link href="/admin/stats">Stats</Link></li>
-                  <li><Link href="/admin/users">Users</Link></li>
+                  <li>
+                    <Link href="/admin">Home</Link>
+                  </li>
+                  <li>
+                    <Link href="/admin/review">Review</Link>
+                  </li>
+                  <li>
+                    <Link href="/admin/extract">Extraction</Link>
+                  </li>
+                  <li>
+                    <Link href="/admin/excluded">Excluded</Link>
+                  </li>
+                  <li>
+                    <Link href="/admin/stats">Stats</Link>
+                  </li>
+                  <li>
+                    <Link href="/admin/users">Users</Link>
+                  </li>
                 </ul>
               </div>
             )}
@@ -67,19 +87,25 @@ export async function Navbar({ leftLinks, rightExtra, className }: NavbarProps) 
         ) : (
           <>
             <div className="dropdown dropdown-end">
-              <div tabIndex={0} role="button" className="btn btn-ghost btn-sm mr-2">
+              <div tabIndex={0} role="button" className="btn btn-primary btn-sm ">
                 Database ▾
               </div>
               <ul
                 tabIndex={0}
                 className="dropdown-content menu bg-base-100 rounded-box z-50 w-44 p-2 shadow-md border border-base-300 mt-1"
               >
-                <li><Link href="/">Search</Link></li>
-                <li><Link href="/excluded">Excluded</Link></li>
-                <li><Link href="/datasets">Datasets</Link></li>
+                <li>
+                  <Link href="/">Search</Link>
+                </li>
+                <li>
+                  <Link href="/excluded">Excluded</Link>
+                </li>
+                <li>
+                  <Link href="/datasets">Datasets</Link>
+                </li>
               </ul>
             </div>
-            <Link href="/login" className="btn btn-primary btn-sm m-2">
+            <Link href="/login" className="btn btn-accent btn-sm m-2">
               Log in
             </Link>
             <Link href="/signup" className="btn btn-secondary btn-sm">

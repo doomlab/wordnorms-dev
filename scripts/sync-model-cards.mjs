@@ -90,6 +90,8 @@ async function main() {
         language: doc.dataset?.language_from_columns ?? null,
         nRows: doc.dataset?.n_rows_csv ?? null,
         flags: parseFlags(doc.variables?.flags),
+        wordColumns: Array.isArray(doc.variables?.word_columns) ? doc.variables.word_columns : [],
+        rawColumns: Array.isArray(doc.variables?.raw_columns) ? doc.variables.raw_columns : [],
       })
     } catch {
       console.warn(`  ⚠ Could not parse ${file.name}`)

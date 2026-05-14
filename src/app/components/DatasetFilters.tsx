@@ -4,15 +4,6 @@ import { useRouter, useSearchParams, usePathname } from "next/navigation"
 import { useCallback, useEffect, useRef, useState } from "react"
 import { DECADE_LABELS } from "../data/datasets"
 
-const QUICK_SEARCHES = [
-  "valence",
-  "arousal",
-  "concreteness",
-  "familiarity",
-  "imageability",
-  "age of acquisition",
-]
-
 export function DatasetFilters({
   allLanguages,
   allFlags,
@@ -86,22 +77,9 @@ export function DatasetFilters({
           type="search"
           value={inputValue}
           onChange={(e) => handleSearchChange(e.target.value)}
-          placeholder="e.g. concreteness"
+          placeholder="title, author, language…"
           className="input input-bordered input-sm w-full"
         />
-        <div className="flex flex-wrap gap-1 mt-2">
-          {QUICK_SEARCHES.map((kw) => (
-            <button
-              key={kw}
-              onClick={() => handleSearchChange(kw)}
-              className={`badge badge-sm cursor-pointer transition-colors ${
-                q === kw ? "badge-primary" : "badge-ghost hover:badge-primary"
-              }`}
-            >
-              {kw}
-            </button>
-          ))}
-        </div>
       </div>
 
       {/* Language */}
@@ -152,17 +130,19 @@ export function DatasetFilters({
           <p className="text-xs font-medium uppercase tracking-wide text-base-content/50 mb-2">
             Norms
           </p>
-          <div className="flex flex-col gap-1.5 max-h-64 overflow-y-auto pr-1">
+          <div className="flex flex-wrap gap-1">
             {allFlags.map(({ key, label }) => (
-              <label key={key} className="flex items-center gap-2 cursor-pointer">
-                <input
-                  type="checkbox"
-                  className="checkbox checkbox-sm checkbox-primary"
-                  checked={selectedFlags.includes(key)}
-                  onChange={(e) => update("flag", key, e.target.checked)}
-                />
-                <span className="text-sm">{label}</span>
-              </label>
+              <button
+                key={key}
+                onClick={() => update("flag", key, !selectedFlags.includes(key))}
+                className={`badge badge-sm cursor-pointer transition-colors ${
+                  selectedFlags.includes(key)
+                    ? "badge-primary"
+                    : "badge-ghost hover:badge-primary"
+                }`}
+              >
+                {label}
+              </button>
             ))}
           </div>
         </div>

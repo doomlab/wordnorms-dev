@@ -1,6 +1,9 @@
 import fs from "fs"
 import path from "path"
+import { Suspense } from "react"
 import { Navbar } from "../components/Navbar"
+import { DatasetFilters } from "../components/DatasetFilters"
+import { DECADE_LABELS } from "../data/datasets"
 
 export const dynamic = "force-dynamic"
 export const metadata = { title: "Datasets – WordNorms" }
@@ -18,17 +21,16 @@ type Card = {
   language: string | null
   nRows: number | null
   flags: string[]
+  wordColumns: string[]
+  rawColumns: string[]
 }
 
-type DataFile = {
-  syncedAt: string
-  cards: Card[]
-}
+type DataFile = { syncedAt: string; cards: Card[] }
 
 const FLAG_LABELS: Record<string, string> = {
   accuracy: "Accuracy",
   ambiguity: "Ambiguity",
-  aoa: "AoA",
+  aoa: "Age of acquisition",
   arousal: "Arousal",
   assoc: "Association",
   category: "Category",
@@ -66,6 +68,19 @@ const FLAG_LABELS: Record<string, string> = {
   visualcomp: "Visual complexity",
 }
 
+// A comma-separated or underscore-suffixed language string like
+// "chinese_simplified_cue, chinese_simplified_response" → ["Chinese"]
+function extractBaseLanguages(raw: string): string[] {
+  const seen = new Set<string>()
+  for (const part of raw.split(",")) {
+    const base = part.trim().split("_")[0].toLowerCase()
+    if (!base) continue
+    const label = base.charAt(0).toUpperCase() + base.slice(1)
+    seen.add(label)
+  }
+  return Array.from(seen)
+}
+
 function loadData(): DataFile | null {
   const p = path.join(process.cwd(), "data", "model-cards", "_data.json")
   if (!fs.existsSync(p)) return null
@@ -76,13 +91,6 @@ function loadData(): DataFile | null {
   }
 }
 
-function displayLanguage(lang: string): string {
-  return lang
-    .split("_")
-    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-    .join(" ")
-}
-
 function capFirst(s: string) {
   return s.charAt(0).toUpperCase() + s.slice(1)
 }
@@ -90,164 +98,206 @@ function capFirst(s: string) {
 export default async function DatasetsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string }>
+  searchParams: Promise<{
+    q?: string
+    lang?: string | string[]
+    decade?: string | string[]
+    flag?: string | string[]
+  }>
 }) {
   const params = await searchParams
+
   const q = params.q?.trim().toLowerCase() || undefined
+  const selectedLanguages = params.lang
+    ? Array.isArray(params.lang) ? params.lang : [params.lang]
+    : []
+  const selectedDecades = params.decade
+    ? Array.isArray(params.decade) ? params.decade : [params.decade]
+    : []
+  const selectedFlags = params.flag
+    ? Array.isArray(params.flag) ? params.flag : [params.flag]
+    : []
 
   const data = loadData()
 
-  return (
-    <div className="min-h-screen bg-base-100 flex flex-col">
-      <Navbar />
-
-      <div className="w-full px-10 py-8">
-        <div className="mb-6">
-          <h1 className="text-3xl font-bold mb-1">Datasets</h1>
-          <p className="text-base-content/60 text-sm">
-            Word norm datasets from the{" "}
-            <a
-              href="https://github.com/SemanticPriming/semanticprimeR"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="link link-primary"
-            >
-              SemanticPrimeR
-            </a>{" "}
-            collection. Search by title, author, language, or norm type.
+  if (!data) {
+    return (
+      <div className="min-h-screen bg-base-100 flex flex-col">
+        <Navbar />
+        <div className="text-center py-16 text-base-content/40">
+          <p className="text-lg">No dataset index found.</p>
+          <p className="text-sm mt-2">
+            Run{" "}
+            <code className="font-mono bg-base-200 px-1 rounded">
+              node scripts/sync-model-cards.mjs
+            </code>{" "}
+            to sync.
           </p>
         </div>
-
-        {!data ? (
-          <div className="text-center py-16 text-base-content/40">
-            <p className="text-lg">No dataset index found.</p>
-            <p className="text-sm mt-2">
-              Run <code className="font-mono bg-base-200 px-1 rounded">node scripts/sync-model-cards.mjs</code> to sync.
-            </p>
-          </div>
-        ) : (
-          <>
-            {/* Search */}
-            <form method="get" className="mb-5 flex gap-2 max-w-lg">
-              <input
-                type="search"
-                name="q"
-                defaultValue={params.q ?? ""}
-                placeholder="Search title, author, language, norm…"
-                className="input input-bordered input-sm flex-1"
-              />
-              <button type="submit" className="btn btn-sm btn-primary">Search</button>
-              {q && (
-                <a href="/datasets" className="btn btn-sm btn-ghost">Clear</a>
-              )}
-            </form>
-
-            <DatasetList data={data} q={q} />
-          </>
-        )}
       </div>
-    </div>
-  )
-}
-
-function DatasetList({ data, q }: { data: DataFile; q: string | undefined }) {
-  const cards = data.cards.filter((card) => {
-    if (!q) return true
-    return (
-      card.citation.title.toLowerCase().includes(q) ||
-      card.citation.author.toLowerCase().includes(q) ||
-      (card.language && displayLanguage(card.language).toLowerCase().includes(q)) ||
-      card.flags.some((f) => (FLAG_LABELS[f] ?? f).toLowerCase().includes(q))
     )
-  })
+  }
+
+  // Compute sidebar options from full card list
+  const allLanguages = Array.from(
+    new Set(data.cards.flatMap((c) => (c.language ? extractBaseLanguages(c.language) : [])))
+  ).sort()
+
+  const allFlagKeys = Array.from(new Set(data.cards.flatMap((c) => c.flags))).sort()
+  const allFlags = allFlagKeys.map((k) => ({ key: k, label: FLAG_LABELS[k] ?? k }))
+
+  // Filter cards
+  let cards = data.cards
+
+  if (q) {
+    cards = cards.filter(
+      (c) =>
+        c.citation.title.toLowerCase().includes(q) ||
+        c.citation.author.toLowerCase().includes(q) ||
+        (c.language && extractBaseLanguages(c.language).some((l) => l.toLowerCase().includes(q))) ||
+        c.flags.some((f) => (FLAG_LABELS[f] ?? f).toLowerCase().includes(q))
+    )
+  }
+
+  if (selectedLanguages.length) {
+    cards = cards.filter((c) => {
+      if (!c.language) return false
+      const cardLangs = extractBaseLanguages(c.language)
+      return selectedLanguages.some((l) => cardLangs.includes(l))
+    })
+  }
+
+  if (selectedDecades.length) {
+    cards = cards.filter((c) => {
+      if (!c.citation.year) return false
+      return selectedDecades.some((decade) => {
+        const range = DECADE_LABELS[decade]
+        return range && c.citation.year! >= range[0] && c.citation.year! <= range[1]
+      })
+    })
+  }
+
+  if (selectedFlags.length) {
+    cards = cards.filter((c) => selectedFlags.every((f) => c.flags.includes(f)))
+  }
+
+  const hasFilters = q || selectedLanguages.length || selectedDecades.length || selectedFlags.length
 
   const syncDate = new Date(data.syncedAt).toLocaleDateString("en-US", {
     month: "long", day: "numeric", year: "numeric",
   })
 
   return (
-    <>
-      <p className="text-sm text-base-content/60 mb-5">
-        <span className="font-semibold text-base-content">{cards.length}</span>{" "}
-        {cards.length === 1 ? "dataset" : "datasets"}
-        {q && " match your search"}
-        <span className="ml-3 text-base-content/40">· synced {syncDate}</span>
-      </p>
+    <div className="min-h-screen bg-base-100 flex flex-col">
+      <Navbar />
 
-      {cards.length === 0 ? (
-        <div className="text-center py-16 text-base-content/40">
-          <p className="text-lg">No results match your search.</p>
-          <a href="/datasets" className="link link-primary text-sm mt-2 inline-block">
-            Clear search
-          </a>
-        </div>
-      ) : (
-        <ul className="flex flex-col divide-y divide-base-200">
-          {cards.map((card) => (
-            <li
-              key={card.bibtex}
-              className="py-5 hover:bg-base-200/40 px-3 -mx-3 rounded-lg transition-colors"
-            >
-              <div className="flex items-start justify-between gap-4">
-                <div className="min-w-0">
-                  <h2 className="font-semibold text-base leading-snug mb-1">
-                    {capFirst(card.citation.title)}
-                  </h2>
-                  {card.citation.author && (
-                    <p className="text-sm text-base-content/60 mb-2 line-clamp-1">
-                      {card.citation.author}
-                    </p>
-                  )}
-                  <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-base-content/50 mb-2">
-                    {card.citation.year && <span>{card.citation.year}</span>}
-                    {card.citation.journal && (
-                      <>
-                        <span>·</span>
-                        <span className="italic">{card.citation.journal}</span>
-                      </>
-                    )}
-                    {card.language && (
-                      <>
-                        <span>·</span>
-                        <span className="font-medium text-base-content/70">
-                          {displayLanguage(card.language)}
-                        </span>
-                      </>
-                    )}
-                    {card.nRows != null && (
-                      <>
-                        <span>·</span>
-                        <span>{card.nRows.toLocaleString()} stimuli</span>
-                      </>
-                    )}
-                  </div>
-                  {card.flags.length > 0 && (
-                    <div className="flex flex-wrap gap-1">
-                      {card.flags.map((f) => (
-                        <span key={f} className="badge badge-sm badge-ghost text-xs">
-                          {FLAG_LABELS[f] ?? f}
-                        </span>
-                      ))}
+      <div className="flex flex-1 w-full px-10 py-8 gap-8">
+        <Suspense fallback={<div className="w-56 shrink-0" />}>
+          <DatasetFilters allLanguages={allLanguages} allFlags={allFlags} />
+        </Suspense>
+
+        <div className="flex-1 min-w-0">
+          <div className="mb-6">
+            <h1 className="text-3xl font-bold mb-1">Datasets</h1>
+            <p className="text-base-content/60 text-sm">
+              Word norm datasets from the{" "}
+              <a
+                href="https://github.com/SemanticPriming/semanticprimeR"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="link link-primary"
+              >
+                SemanticPrimeR
+              </a>{" "}
+              collection, synced {syncDate}.
+            </p>
+          </div>
+
+          <p className="text-sm text-base-content/60 mb-5">
+            <span className="font-semibold text-base-content">{cards.length}</span>{" "}
+            {cards.length === 1 ? "dataset" : "datasets"}
+            {hasFilters && " match your filters"}
+          </p>
+
+          {cards.length === 0 ? (
+            <div className="text-center py-16 text-base-content/40">
+              <p className="text-lg">No results match your filters.</p>
+              <a href="/datasets" className="link link-primary text-sm mt-2 inline-block">
+                Clear filters
+              </a>
+            </div>
+          ) : (
+            <ul className="flex flex-col divide-y divide-base-200">
+              {cards.map((card) => (
+                <li
+                  key={card.bibtex}
+                  className="py-5 hover:bg-base-200/40 px-3 -mx-3 rounded-lg transition-colors"
+                >
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="min-w-0">
+                      <h2 className="font-semibold text-base leading-snug mb-1">
+                        {capFirst(card.citation.title)}
+                      </h2>
+                      {card.citation.author && (
+                        <p className="text-sm text-base-content/60 mb-2 line-clamp-1">
+                          {card.citation.author}
+                        </p>
+                      )}
+                      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-base-content/50 mb-2">
+                        {card.citation.year && <span>{card.citation.year}</span>}
+                        {card.citation.journal && (
+                          <>
+                            <span>·</span>
+                            <span className="italic">{card.citation.journal}</span>
+                          </>
+                        )}
+                        {card.language && (
+                          <>
+                            <span>·</span>
+                            <span className="font-medium text-base-content/70">
+                              {extractBaseLanguages(card.language).join(", ")}
+                            </span>
+                          </>
+                        )}
+                        {card.nRows != null && (
+                          <>
+                            <span>·</span>
+                            <span>{card.nRows.toLocaleString()} stimuli</span>
+                          </>
+                        )}
+                      </div>
+                      {card.flags.length > 0 && (
+                        <div className="flex flex-wrap gap-1">
+                          {card.flags.map((f) => (
+                            <span key={f} className="badge badge-sm badge-ghost text-xs">
+                              {FLAG_LABELS[f] ?? f}
+                            </span>
+                          ))}
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
-                {card.citation.doi && (
-                  <div className="shrink-0">
-                    <a
-                      href={`https://doi.org/${card.citation.doi}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="btn btn-outline btn-sm"
-                    >
-                      DOI
-                    </a>
+                    <div className="flex items-center gap-2 shrink-0">
+                      {card.citation.doi && (
+                        <a
+                          href={`https://doi.org/${card.citation.doi}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="btn btn-outline btn-sm"
+                        >
+                          DOI
+                        </a>
+                      )}
+                      <a href={`/datasets/${card.bibtex}`} className="btn btn-outline btn-sm">
+                        View
+                      </a>
+                    </div>
                   </div>
-                )}
-              </div>
-            </li>
-          ))}
-        </ul>
-      )}
-    </>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </div>
+    </div>
   )
 }

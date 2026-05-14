@@ -1,4 +1,6 @@
 import { Suspense } from "react"
+import fs from "fs"
+import path from "path"
 import { Navbar } from "./components/Navbar"
 import { BrowseFilters } from "./components/BrowseFilters"
 import { FavoriteButton } from "./components/FavoriteButton"
@@ -8,6 +10,23 @@ import { getBlitzContext } from "./blitz-server"
 import db from "db"
 
 const capFirst = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
+
+function loadDatasetDoiMap(): Map<string, string> {
+  const p = path.join(process.cwd(), "data", "model-cards", "_data.json")
+  if (!fs.existsSync(p)) return new Map()
+  try {
+    const { cards } = JSON.parse(fs.readFileSync(p, "utf8")) as {
+      cards: { bibtex: string; citation: { doi: string | null } }[]
+    }
+    const map = new Map<string, string>()
+    for (const c of cards) {
+      if (c.citation.doi) map.set(c.citation.doi.toLowerCase(), c.bibtex)
+    }
+    return map
+  } catch {
+    return new Map()
+  }
+}
 
 export default async function Home({
   searchParams,
@@ -94,6 +113,8 @@ export default async function Home({
     new Set(allPapers.flatMap((p) => p.extraction?.language ?? []))
   ).sort()
 
+  const datasetDoiMap = loadDatasetDoiMap()
+
   return (
     <div className="min-h-screen bg-base-100 flex flex-col">
       <Navbar />
@@ -122,6 +143,9 @@ export default async function Home({
             <ul className="flex flex-col divide-y divide-base-200">
               {papers.map((paper) => {
                 const ext = paper.extraction
+                const datasetBibtex = paper.doi
+                  ? datasetDoiMap.get(paper.doi.toLowerCase())
+                  : undefined
                 return (
                   <li
                     key={paper.id}
@@ -133,10 +157,18 @@ export default async function Home({
                           <h2 className="font-semibold text-base leading-snug">
                             {capFirst(paper.title)}
                           </h2>
-                          {ext?.needsReview && (
-                            <span className="badge badge-warning badge-sm shrink-0">
-                              unverified
+                          {ext && !ext.needsReview && (
+                            <span className="badge badge-success badge-sm shrink-0">
+                              approved
                             </span>
+                          )}
+                          {datasetBibtex && (
+                            <a
+                              href={`/datasets/${datasetBibtex}`}
+                              className="badge badge-primary badge-sm shrink-0"
+                            >
+                              dataset
+                            </a>
                           )}
                         </div>
                         {paper.abstract && (

@@ -1,10 +1,27 @@
 import { notFound } from "next/navigation"
+import fs from "fs"
+import path from "path"
 import { Navbar } from "../../components/Navbar"
 import { FavoriteButton } from "../../components/FavoriteButton"
 import { ReportButton } from "../../components/ReportButton"
 import { SuggestExtractionEdits } from "../../components/SuggestExtractionEdits"
 import { getBlitzContext } from "../../blitz-server"
 import db from "db"
+
+function findDatasetCard(doi: string | null): { bibtex: string; title: string } | null {
+  if (!doi) return null
+  const p = path.join(process.cwd(), "data", "model-cards", "_data.json")
+  if (!fs.existsSync(p)) return null
+  try {
+    const { cards } = JSON.parse(fs.readFileSync(p, "utf8")) as {
+      cards: { bibtex: string; citation: { doi: string | null; title: string } }[]
+    }
+    const card = cards.find((c) => c.citation.doi?.toLowerCase() === doi.toLowerCase())
+    return card ? { bibtex: card.bibtex, title: card.citation.title } : null
+  } catch {
+    return null
+  }
+}
 
 const capFirst = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
 
@@ -48,6 +65,7 @@ export default async function NormDetailPage({
   const ext = paper.extraction
   const doiUrl = paper.doi ? `https://doi.org/${paper.doi}` : null
   const isAiExtracted = ext && ["groq", "ollama"].includes(ext.extractedBy ?? "")
+  const linkedDataset = findDatasetCard(paper.doi)
 
   const [isFavorited, isReported, hasPriorSuggestion] = await Promise.all([
     userId
@@ -82,20 +100,22 @@ export default async function NormDetailPage({
         <div className="flex items-start justify-between gap-4 mb-6">
           <div>
             <h1 className="text-2xl font-bold leading-snug mb-1">{capFirst(paper.title)}</h1>
-            {ext?.needsReview && (
-              <span className="badge badge-warning badge-sm">
-                extraction unverified — data may be incomplete
-              </span>
+            {ext && !ext.needsReview && (
+              <span className="badge badge-success badge-sm">extraction approved</span>
             )}
           </div>
           <div className="flex items-center gap-2 shrink-0 pt-1">
             <ReportButton paperId={paper.id} initialReported={isReported} isLoggedIn={!!userId} />
-            <FavoriteButton paperId={paper.id} initialFavorited={isFavorited} isLoggedIn={!!userId} />
+            <FavoriteButton
+              paperId={paper.id}
+              initialFavorited={isFavorited}
+              isLoggedIn={!!userId}
+            />
           </div>
         </div>
 
         {/* Links */}
-        {(doiUrl || paper.pdfUrl || paper.url) && (
+        {(doiUrl || paper.pdfUrl || paper.url || linkedDataset) && (
           <div className="flex flex-wrap gap-2 mb-8">
             {doiUrl && (
               <a
@@ -125,6 +145,14 @@ export default async function NormDetailPage({
                 className="btn btn-outline btn-sm"
               >
                 Visit Website
+              </a>
+            )}
+            {linkedDataset && (
+              <a
+                href={`/datasets/${linkedDataset.bibtex}`}
+                className="btn btn-ghost btn-outline btn-sm"
+              >
+                View Dataset
               </a>
             )}
           </div>
@@ -219,9 +247,7 @@ export default async function NormDetailPage({
                 <Row
                   label="Participant count"
                   value={
-                    ext.participantCount != null
-                      ? ext.participantCount.toLocaleString()
-                      : undefined
+                    ext.participantCount != null ? ext.participantCount.toLocaleString() : undefined
                   }
                 />
                 {ext.instructions && (
@@ -243,7 +269,9 @@ export default async function NormDetailPage({
                 {paper.extractionEdits.map((edit, i) => (
                   <HistoryEvent
                     key={i}
-                    label={`${edit.user.name ?? "A user"} suggested edits${edit.note ? ` — "${edit.note}"` : ""}`}
+                    label={`${edit.user.name ?? "A user"} suggested edits${
+                      edit.note ? ` — "${edit.note}"` : ""
+                    }`}
                     date={edit.createdAt}
                     resolved={edit.resolved}
                   />
@@ -276,12 +304,8 @@ function HistoryEvent({
       <span className="shrink-0">·</span>
       <span>{label}</span>
       <span className="shrink-0">{formatted}</span>
-      {resolved === true && (
-        <span className="badge badge-success badge-xs">applied</span>
-      )}
-      {resolved === false && (
-        <span className="badge badge-ghost badge-xs">pending</span>
-      )}
+      {resolved === true && <span className="badge badge-success badge-xs">applied</span>}
+      {resolved === false && <span className="badge badge-ghost badge-xs">pending</span>}
     </div>
   )
 }

@@ -1,5 +1,5 @@
 {
-  "syncedAt": "2026-05-14T22:57:29.886Z",
+  "syncedAt": "2026-05-14T23:16:30.846Z",
   "cards": [
     {
       "bibtex": "Li2021",
@@ -15,6 +15,20 @@
       "nRows": 72,
       "flags": [
         "familiar"
+      ],
+      "wordColumns": [
+        "word_chinese_traditional"
+      ],
+      "rawColumns": [
+        "word_chinese_traditional",
+        "translate_word_english",
+        "number_exemplars",
+        "number_exemplars_90_coverage",
+        "coverage_90_percent",
+        "invalid_exemplars_percent",
+        "first_examplar_percent",
+        "familiar_mean",
+        "familiar_sd"
       ]
     },
     {
@@ -35,6 +49,22 @@
         "familiar",
         "typical",
         "valence"
+      ],
+      "wordColumns": [
+        "word_chinese_simplified"
+      ],
+      "rawColumns": [
+        "word_chinese_simplified",
+        "concrete_mean",
+        "concrete_sd",
+        "arousal_mean",
+        "arousal_sd",
+        "familiar_mean",
+        "familiar_sd",
+        "typicality_mean",
+        "typicality_sd",
+        "valence_mean",
+        "valence_sd"
       ]
     },
     {
@@ -57,6 +87,20 @@
         "freq",
         "letters",
         "valence"
+      ],
+      "wordColumns": [
+        "word_german"
+      ],
+      "rawColumns": [
+        "word_german",
+        "familiar_gpt",
+        "familiar_gpt_finetuned",
+        "length",
+        "frequency_multilex",
+        "concrete_gpt",
+        "valence_gpt",
+        "arousal_gpt",
+        "aoa_gpt_finetuned"
       ]
     },
     {
@@ -74,6 +118,17 @@
       "flags": [
         "familiar",
         "freq"
+      ],
+      "wordColumns": [
+        "word_german"
+      ],
+      "rawColumns": [
+        "word_german",
+        "familiar_gpt",
+        "familiar_gpt_finetuned",
+        "frequency_multilex",
+        "ms_spell_check_german",
+        "spell_english"
       ]
     },
     {
@@ -90,6 +145,18 @@
       "nRows": 11010,
       "flags": [
         "familiar"
+      ],
+      "wordColumns": [
+        "word_german"
+      ],
+      "rawColumns": [
+        "word_german",
+        "familiar_mean",
+        "familiar_sd",
+        "familiar_minimum",
+        "familiar_maximum",
+        "n",
+        "familiar_blup"
       ]
     },
     {
@@ -106,6 +173,21 @@
       "nRows": 190500,
       "flags": [
         "freq"
+      ],
+      "wordColumns": [
+        "word_german"
+      ],
+      "rawColumns": [
+        "word_german",
+        "frequency_wffreqcount",
+        "spell_check",
+        "frequency_cumfreqcount",
+        "frequency_subtlex",
+        "frequency_google00",
+        "frequency_google00cum",
+        "frequency_google00pm",
+        "frequency_zipfsubtlex",
+        "frequency_zipfgoogle"
       ]
     },
     {
@@ -123,6 +205,20 @@
       "flags": [
         "aoa",
         "pos"
+      ],
+      "wordColumns": [
+        "word_japanese"
+      ],
+      "rawColumns": [
+        "item_number",
+        "word_japanese",
+        "translate_word_english",
+        "pos",
+        "n",
+        "aoa_mean",
+        "aoa_sd",
+        "aoa_minimum",
+        "aoa_maximum"
       ]
     },
     {
@@ -141,6 +237,22 @@
         "accuracy",
         "orthon",
         "rt"
+      ],
+      "wordColumns": [
+        "word_japanese"
+      ],
+      "rawColumns": [
+        "word_japanese",
+        "item_number",
+        "n",
+        "rt_mean",
+        "rt_sd",
+        "rt_se",
+        "accuracy_mean",
+        "translated_word_english",
+        "orthographic_neighborhood",
+        "phonographic_neighborhood",
+        "old20"
       ]
     },
     {
@@ -159,6 +271,25 @@
         "familiar",
         "nameagree",
         "picture"
+      ],
+      "wordColumns": [
+        "word_galician",
+        "word_galician_form"
+      ],
+      "rawColumns": [
+        "picture_name",
+        "number_responses",
+        "name_agreement_h",
+        "word_galician",
+        "number_modal_response",
+        "word_galician_form",
+        "number_modal_response_galician_form",
+        "number_valid_alternatives",
+        "number_do_not_know",
+        "number_idiosyncratic_responses",
+        "familiar_mean",
+        "familiar_sd",
+        "translate_word_english"
       ]
     },
     {
@@ -173,7 +304,16 @@
       },
       "language": "chinese_simplified_cue, chinese_simplified_response",
       "nRows": 202335,
-      "flags": []
+      "flags": [],
+      "wordColumns": [
+        "word_chinese_simplified_cue",
+        "word_chinese_simplified_response"
+      ],
+      "rawColumns": [
+        "word_chinese_simplified_cue",
+        "word_chinese_simplified_response",
+        "r1.strength"
+      ]
     },
     {
       "bibtex": "Li2024_R123",
@@ -187,7 +327,16 @@
       },
       "language": "chinese_simplified_cue, chinese_simplified_response",
       "nRows": 516639,
-      "flags": []
+      "flags": [],
+      "wordColumns": [
+        "word_chinese_simplified_cue",
+        "word_chinese_simplified_response"
+      ],
+      "rawColumns": [
+        "word_chinese_simplified_cue",
+        "word_chinese_simplified_response",
+        "r123.strength"
+      ]
     },
     {
       "bibtex": "Rami2022",
@@ -207,6 +356,22 @@
         "imagine",
         "pos",
         "visualcomp"
+      ],
+      "wordColumns": [
+        "word_arabic_moroccan"
+      ],
+      "rawColumns": [
+        "pos",
+        "word_arabic_moroccan",
+        "translate_word_english",
+        "visual_complexity_mean",
+        "visual_complexity_sd",
+        "aoa_mean",
+        "aoa_sd",
+        "imagine_mean",
+        "imagine_sd",
+        "frequency_spoken_mean",
+        "frequency_spoken_sd"
       ]
     },
     {
@@ -226,6 +391,30 @@
         "concrete",
         "familiar",
         "valence"
+      ],
+      "wordColumns": [
+        "word_croatian_equivalent",
+        "word_croatian"
+      ],
+      "rawColumns": [
+        "word_croatian_equivalent",
+        "word_croatian",
+        "valence_mean",
+        "valence_sd",
+        "valence_unknown",
+        "valence_n",
+        "arousal_mean",
+        "arousal_sd",
+        "arousal_unknown",
+        "arousal_n",
+        "familiar_mean",
+        "familiar_sd",
+        "familiar_unknown",
+        "familiar_n",
+        "concrete_mean",
+        "concrete_sd",
+        "concrete_unknown",
+        "concrete_n"
       ]
     },
     {
@@ -243,6 +432,26 @@
       "flags": [
         "concrete",
         "pos"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "sentence_id",
+        "word_english",
+        "pos",
+        "index_number",
+        "sentence_english",
+        "concrete_mean",
+        "concrete_sd",
+        "wordnet_synset",
+        "target_lexical_accessibility",
+        "sentence_lexical_accessibility",
+        "lexical_density",
+        "sentence_length",
+        "clauses",
+        "mean_token_per_clause",
+        "syntactic_tree_depth"
       ]
     },
     {
@@ -260,6 +469,26 @@
       "flags": [
         "concrete",
         "pos"
+      ],
+      "wordColumns": [
+        "word_italian"
+      ],
+      "rawColumns": [
+        "sentence_id",
+        "word_italian",
+        "pos",
+        "index_number",
+        "sentence_italian",
+        "concrete_mean",
+        "concrete_sd",
+        "wordnet_synset",
+        "target_lexical_accessibility",
+        "sentence_lexical_accessibility",
+        "lexical_density",
+        "sentence_length",
+        "clauses",
+        "mean_token_per_clause",
+        "syntactic_tree_depth"
       ]
     },
     {
@@ -274,7 +503,18 @@
       },
       "language": "spanish_cue, spanish_response",
       "nRows": 431933,
-      "flags": []
+      "flags": [],
+      "wordColumns": [
+        "word_spanish_cue",
+        "word_spanish_response"
+      ],
+      "rawColumns": [
+        "word_spanish_cue",
+        "word_spanish_response",
+        "r1",
+        "n",
+        "r1.strength"
+      ]
     },
     {
       "bibtex": "Cabana2024_R123",
@@ -288,7 +528,18 @@
       },
       "language": "spanish_cue, spanish_response",
       "nRows": 1059570,
-      "flags": []
+      "flags": [],
+      "wordColumns": [
+        "word_spanish_cue",
+        "word_spanish_response"
+      ],
+      "rawColumns": [
+        "word_spanish_cue",
+        "word_spanish_response",
+        "r123",
+        "n",
+        "r123.strength"
+      ]
     },
     {
       "bibtex": "Coso2023",
@@ -304,6 +555,74 @@
       "nRows": 3022,
       "flags": [
         "emotion"
+      ],
+      "wordColumns": [
+        "word_croatian"
+      ],
+      "rawColumns": [
+        "id_number",
+        "word_croatian",
+        "translate_word_english",
+        "happiness_mean",
+        "anger_mean",
+        "sad_mean",
+        "fear_mean",
+        "disgust_mean",
+        "happiness_sd",
+        "anger_sd",
+        "sad_sd",
+        "fear_sd",
+        "disgust_sd",
+        "happiness_n",
+        "anger_n",
+        "sad_n",
+        "fear_n",
+        "disgust_n",
+        "unknown_happiness_prop",
+        "unknown_anger_prop",
+        "unknown_sadness_prop",
+        "unknown_fear_prop",
+        "unknown_disgust_prop",
+        "happiness_mean_male",
+        "anger_mean_male",
+        "sad_mean_male",
+        "fear_mean_male",
+        "disgust_mean_male",
+        "happiness_sd_male",
+        "anger_sd_male",
+        "sad_sd_male",
+        "fear_sd_male",
+        "disgust_sd_male",
+        "happiness_n_male",
+        "anger_n_male",
+        "sad_n_male",
+        "fear_n_male",
+        "disgust_n_male",
+        "unknown_happiness_prop_male",
+        "unknown_anger_prop_male",
+        "unknown_sadness_prop_male",
+        "unknown_fear_prop_male",
+        "unknown_disgust_prop_male",
+        "happiness_mean_female",
+        "anger_mean_female",
+        "sad_mean_female",
+        "fear_mean_female",
+        "disgust_mean_female",
+        "happiness_sd_female",
+        "anger_sd_female",
+        "sad_sd_female",
+        "fear_sd_female",
+        "disgust_sd_female",
+        "happiness_n_female",
+        "anger_n_female",
+        "sad_n_female",
+        "fear_n_female",
+        "disgust_n_female",
+        "unknown_happiness_prop_female",
+        "unknown_anger_prop_female",
+        "unknown_sadness_prop_female",
+        "unknown_fear_prop_female",
+        "unknown_disgust_prop_female"
       ]
     },
     {
@@ -325,6 +644,27 @@
         "freq",
         "imagine",
         "semantic"
+      ],
+      "wordColumns": [
+        "word_chinese_traditional"
+      ],
+      "rawColumns": [
+        "word_chinese_traditional",
+        "aoa_mean",
+        "familiar_mean",
+        "imagine_mean",
+        "concrete_mean",
+        "semantic_radical_trans_mean",
+        "frequency_log",
+        "number_stroke",
+        "number_word_forms",
+        "number_homophose",
+        "number_meanings",
+        "aoa_raw",
+        "familiar_raw",
+        "imagine_raw",
+        "concrete_raw",
+        "semantic_radical_trans_raw"
       ]
     },
     {
@@ -349,6 +689,33 @@
         "nameagree",
         "picture",
         "rt"
+      ],
+      "wordColumns": [
+        "word_polish_cue",
+        "word_polish_response"
+      ],
+      "rawColumns": [
+        "sheet",
+        "picture_file_name",
+        "word_polish_cue",
+        "word_polish_response",
+        "rt_mean",
+        "rt_sd",
+        "number_types",
+        "max",
+        "n",
+        "h",
+        "h_norm",
+        "name_agreement_percent",
+        "aoa_mean",
+        "frequency_lemma",
+        "frequency_lemma_log",
+        "complexity_index_n",
+        "complexity_index",
+        "imagine_mean",
+        "goodness_depiction",
+        "image_agreement_mean",
+        "familiar_image_mean"
       ]
     },
     {
@@ -365,6 +732,21 @@
       "nRows": 19716,
       "flags": [
         "aoa"
+      ],
+      "wordColumns": [
+        "word_chinese_simplified"
+      ],
+      "rawColumns": [
+        "word_chinese_simplified",
+        "aoa_mean",
+        "aoa_sd",
+        "ratings_n",
+        "percent_male",
+        "percent_female",
+        "age_maximum",
+        "age_minimum",
+        "education_maximum",
+        "education_minimum"
       ]
     },
     {
@@ -383,6 +765,19 @@
         "aoa",
         "familiar",
         "imagine"
+      ],
+      "wordColumns": [
+        "word_french"
+      ],
+      "rawColumns": [
+        "word_french",
+        "translate_word_english",
+        "aoa_mean",
+        "aoa_sd",
+        "familiar_mean",
+        "familiar_sd",
+        "imagine_mean",
+        "imagine_sd"
       ]
     },
     {
@@ -409,6 +804,36 @@
         "pos",
         "sensory",
         "visualcomp"
+      ],
+      "wordColumns": [
+        "word_dutch"
+      ],
+      "rawColumns": [
+        "category",
+        "word_dutch",
+        "pos",
+        "inflected_property",
+        "inflection_category",
+        "modality",
+        "perceptual_strength_mean",
+        "exclusivity_proportion",
+        "auditory_mean",
+        "haptic_mean",
+        "visual_mean",
+        "auditory_sd",
+        "haptic_sd",
+        "visual_sd",
+        "frequency_lg10cd_subtlexnl",
+        "frequency_lg10wf_subtlexnl",
+        "frequency_celex_lem",
+        "inflected_prop_freq_lg10cd_subtlexnl",
+        "aoa_mean_brysbaertetal2014",
+        "concrete_mean_brysbaertetal2014",
+        "known_percent_brysbaertetal2014",
+        "length",
+        "phonemes_dutchpond",
+        "orthographic_neighbours_dutchpond",
+        "phonographic_neighbours_dutchpond"
       ]
     },
     {
@@ -426,6 +851,56 @@
       "flags": [
         "sensory",
         "visualcomp"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "word_english",
+        "auditory_mean",
+        "gustatory_mean",
+        "haptic_mean",
+        "interoceptive_mean",
+        "olfactory_mean",
+        "visual_mean",
+        "foot_leg_mean",
+        "hand_arm_mean",
+        "head_mean",
+        "mouth_mean",
+        "torso_mean",
+        "auditory_sd",
+        "gustatory_sd",
+        "haptic_sd",
+        "interoceptive_sd",
+        "olfactory_sd",
+        "visual_sd",
+        "foot_leg_sd",
+        "hand_arm_sd",
+        "head_sd",
+        "mouth_sd",
+        "torso_sd",
+        "max_strength_perceptual",
+        "minkowski3_perceptual",
+        "exclusivity_perceptual",
+        "dominant_perceptual",
+        "max_strength_action",
+        "minkowski3_action",
+        "exclusivity_action",
+        "dominant_action",
+        "max_strength_sensorimotor",
+        "minkowski3_sensorimotor",
+        "exclusivity_sensorimotor",
+        "dominant_sensorimotor",
+        "n_known_perceptual",
+        "list_n_perceptual",
+        "percent_known_perceptual",
+        "n_known_action",
+        "list_n_action",
+        "percent_known_action",
+        "mean_age_perceptual",
+        "mean_age_action",
+        "list_num_perceptual",
+        "list_num_action"
       ]
     },
     {
@@ -447,6 +922,42 @@
         "imagine",
         "letters",
         "pos"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "word_english",
+        "length",
+        "frequency_mean_log",
+        "familiar_mean_american",
+        "familiar_mean_british",
+        "imagine_mean_british",
+        "aoa_mean_log",
+        "imagine_mean_american",
+        "transparency_mean",
+        "lexeme_meaning_dominance_mean",
+        "length_first_lexeme_mean",
+        "frequency_first_lexeme_mean",
+        "familiar_mean_first_lexeme",
+        "aoa_mean_log_first_lexeme",
+        "imagine_mean_first_lexeme",
+        "bilabial",
+        "labiodental",
+        "dental",
+        "labiovelar",
+        "postalvelolar",
+        "alveolar",
+        "palatal",
+        "palatal_alveolar",
+        "glottal",
+        "velar",
+        "voiced",
+        "length_second_lexeme_mean",
+        "frequency_second_lexeme_mean",
+        "familiar_mean_second_lexeme",
+        "aoa_mean_log_second_lexeme",
+        "imagine_mean_second_lexeme"
       ]
     },
     {
@@ -467,6 +978,20 @@
         "letters",
         "phonemes",
         "pos"
+      ],
+      "wordColumns": [
+        "word_czech"
+      ],
+      "rawColumns": [
+        "translate_word_english",
+        "pos",
+        "aoa_mean",
+        "word_czech",
+        "language",
+        "phonemes",
+        "length",
+        "compound_word",
+        "frequency"
       ]
     },
     {
@@ -487,6 +1012,20 @@
         "letters",
         "phonemes",
         "pos"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "translate_word_english",
+        "pos",
+        "aoa_mean",
+        "word_english",
+        "language",
+        "phonemes",
+        "length",
+        "compound_word",
+        "frequency"
       ]
     },
     {
@@ -507,6 +1046,20 @@
         "letters",
         "phonemes",
         "pos"
+      ],
+      "wordColumns": [
+        "word_farsi"
+      ],
+      "rawColumns": [
+        "translate_word_english",
+        "pos",
+        "aoa_mean",
+        "word_farsi",
+        "language",
+        "phonemes",
+        "length",
+        "compound_word",
+        "frequency"
       ]
     },
     {
@@ -527,6 +1080,20 @@
         "letters",
         "phonemes",
         "pos"
+      ],
+      "wordColumns": [
+        "word_gaelic"
+      ],
+      "rawColumns": [
+        "translate_word_english",
+        "pos",
+        "aoa_mean",
+        "word_gaelic",
+        "language",
+        "phonemes",
+        "length",
+        "compound_word",
+        "frequency"
       ]
     },
     {
@@ -547,6 +1114,20 @@
         "letters",
         "phonemes",
         "pos"
+      ],
+      "wordColumns": [
+        "word_armenian"
+      ],
+      "rawColumns": [
+        "translate_word_english",
+        "pos",
+        "aoa_mean",
+        "word_armenian",
+        "language",
+        "phonemes",
+        "length",
+        "compound_word",
+        "frequency"
       ]
     },
     {
@@ -567,6 +1148,20 @@
         "letters",
         "phonemes",
         "pos"
+      ],
+      "wordColumns": [
+        "word_malay"
+      ],
+      "rawColumns": [
+        "translate_word_english",
+        "pos",
+        "aoa_mean",
+        "word_malay",
+        "language",
+        "phonemes",
+        "length",
+        "compound_word",
+        "frequency"
       ]
     },
     {
@@ -587,6 +1182,22 @@
         "familiar",
         "freq",
         "letters"
+      ],
+      "wordColumns": [
+        "word_serbian"
+      ],
+      "rawColumns": [
+        "word_serbian",
+        "ambiguity_type",
+        "ambiguity_type_fine_grained",
+        "frequency_lemma_2m",
+        "length",
+        "coltheart_n",
+        "familiar_mean",
+        "concrete_mean",
+        "entropy_h",
+        "number_meanings",
+        "redundancy_t"
       ]
     },
     {
@@ -601,7 +1212,23 @@
       },
       "language": "english_1, english_2",
       "nRows": 208515,
-      "flags": []
+      "flags": [],
+      "wordColumns": [
+        "word_english_1",
+        "word_english_2"
+      ],
+      "rawColumns": [
+        "word_english_1",
+        "word_english_2",
+        "root_cosine",
+        "raw_cosine",
+        "affix_cosine",
+        "raw_cosine_2013",
+        "jcn",
+        "lsa",
+        "fsg",
+        "bsg"
+      ]
     },
     {
       "bibtex": "Navarrete2019",
@@ -624,6 +1251,32 @@
         "rt",
         "typical",
         "visualcomp"
+      ],
+      "wordColumns": [
+        "word_italian"
+      ],
+      "rawColumns": [
+        "figure_name",
+        "translate_word_english",
+        "word_italian",
+        "category_english",
+        "category_italian",
+        "image_agreement_proportion",
+        "h",
+        "frequency",
+        "aoa_mean",
+        "aoa_sd",
+        "visual_complexity_mean",
+        "visual_complexity_sd",
+        "familiar_mean",
+        "familiar_sd",
+        "manipulability_mean",
+        "manipulability_sd",
+        "typicality_mean",
+        "typicality_sd",
+        "rt",
+        "rt_sd",
+        "rt_expected_names"
       ]
     },
     {
@@ -642,6 +1295,24 @@
         "modality",
         "sensory",
         "visualcomp"
+      ],
+      "wordColumns": [
+        "word_chinese_traditional",
+        "word_chinese_simplified",
+        "word_pinyin"
+      ],
+      "rawColumns": [
+        "word_chinese_traditional",
+        "word_chinese_simplified",
+        "word_pinyin",
+        "translation_word_english",
+        "gustatory_mean",
+        "visual_strength_mean",
+        "auditory_mean",
+        "olfactory_strength_mean",
+        "haptic_strength_mean",
+        "dominant_modality",
+        "modality_exclusivity"
       ]
     },
     {
@@ -659,6 +1330,19 @@
       "flags": [
         "familiar",
         "rt"
+      ],
+      "wordColumns": [
+        "word_french"
+      ],
+      "rawColumns": [
+        "word_french",
+        "familiar_mean_conceptual",
+        "familiar_sd_conceptual",
+        "familiar_minimum_conceptual",
+        "familiar_maximum_conceptual",
+        "number_of_raters",
+        "rt_mean",
+        "rt_sd"
       ]
     },
     {
@@ -679,6 +1363,24 @@
         "letters",
         "orthon",
         "pos"
+      ],
+      "wordColumns": [
+        "word_italian"
+      ],
+      "rawColumns": [
+        "word_italian",
+        "translate_english_word",
+        "pos",
+        "aoa_mean",
+        "aoa_sd",
+        "length",
+        "frequency_larepubblica",
+        "frequency_itwac",
+        "frequency_subtlex",
+        "orthographic_neighbors",
+        "frequency_mean_orthographic_neighbors",
+        "frequency_maximum_orthographic_neighbors",
+        "old20_subtlex"
       ]
     },
     {
@@ -695,6 +1397,15 @@
       "nRows": 5500,
       "flags": [
         "aoa"
+      ],
+      "wordColumns": [
+        "word_spanish"
+      ],
+      "rawColumns": [
+        "word_spanish",
+        "translate_word_english",
+        "aoa_mean",
+        "aoa_sd"
       ]
     },
     {
@@ -709,7 +1420,18 @@
       },
       "language": "english_cue, english_response",
       "nRows": 483636,
-      "flags": []
+      "flags": [],
+      "wordColumns": [
+        "word_english_cue",
+        "word_english_response"
+      ],
+      "rawColumns": [
+        "word_english_cue",
+        "word_english_response",
+        "r1",
+        "n",
+        "r1.strength"
+      ]
     },
     {
       "bibtex": "DeDeyne2019_R123",
@@ -723,7 +1445,18 @@
       },
       "language": "english_cue, english_response",
       "nRows": 1389711,
-      "flags": []
+      "flags": [],
+      "wordColumns": [
+        "word_english_cue",
+        "word_english_response"
+      ],
+      "rawColumns": [
+        "word_english_cue",
+        "word_english_response",
+        "r123",
+        "n",
+        "r123.strength"
+      ]
     },
     {
       "bibtex": "Asahara2019",
@@ -740,6 +1473,38 @@
       "flags": [
         "familiar",
         "semantic"
+      ],
+      "wordColumns": [
+        "word_japanese_headword",
+        "word_japanese"
+      ],
+      "rawColumns": [
+        "record_id",
+        "entry_id",
+        "record_type",
+        "semantic_top_id",
+        "semantic_mid_id",
+        "semantic_fine_id",
+        "semantic_label_full",
+        "wlsp_id",
+        "paragraph_id",
+        "subparagraph_id",
+        "index_number",
+        "word_japanese_headword",
+        "word_japanese",
+        "reading_kana",
+        "reading_reverse",
+        "familiar_know",
+        "familiar_writing",
+        "familiar_read",
+        "familiar_speak",
+        "familiar_listen",
+        "familiar_production",
+        "familiar_reception",
+        "familiar_written",
+        "familiar_spoken",
+        "bias_production_vs_reception",
+        "bias_written_vs_spoken"
       ]
     },
     {
@@ -761,6 +1526,26 @@
         "emotion",
         "sensory",
         "valence"
+      ],
+      "wordColumns": [],
+      "rawColumns": [
+        "source",
+        "description",
+        "category",
+        "sound_id",
+        "be_classification",
+        "arousal_mean",
+        "arousal_sd",
+        "valence_mean",
+        "valence_sd",
+        "dominance_mean",
+        "dominance_sd",
+        "fear_mean",
+        "fear_sd",
+        "happiness_mean",
+        "happiness_sd",
+        "sad_mean",
+        "sad_sd"
       ]
     },
     {
@@ -780,6 +1565,21 @@
         "concrete",
         "context",
         "valence"
+      ],
+      "wordColumns": [
+        "word_french"
+      ],
+      "rawColumns": [
+        "word_french",
+        "translate_word_english",
+        "concrete_mean",
+        "concrete_sd",
+        "context_mean",
+        "context_sd",
+        "valence_mean",
+        "valence_sd",
+        "arousal_mean",
+        "arousal_sd"
       ]
     },
     {
@@ -803,6 +1603,73 @@
         "syllables",
         "taboo",
         "valence"
+      ],
+      "wordColumns": [
+        "word_dutch"
+      ],
+      "rawColumns": [
+        "word_dutch",
+        "translation_word_english",
+        "arousal_mean",
+        "arousal_sd",
+        "valence_mean",
+        "valence_sd",
+        "taboo_mean",
+        "taboo_sd",
+        "taboo_personal_mean",
+        "taboo_personal_sd",
+        "insulting_mean",
+        "insulting_sd",
+        "length",
+        "syllables",
+        "frequency_pm",
+        "frequency_log10pm",
+        "zipf",
+        "pos",
+        "category",
+        "type",
+        "valence_mean_moors",
+        "arousal_mean_moors",
+        "arousal_mean_women",
+        "arousal_sd_women",
+        "valence_mean_women",
+        "valence_sd_women",
+        "taboo_mean_women",
+        "taboo_sd_women",
+        "taboo_personal_mean_women",
+        "taboo_personal_sd_women",
+        "insulting_mean_women",
+        "insulting_sd_women",
+        "arousal_mean_men",
+        "arousal_sd_men",
+        "valence_mean_men",
+        "valence_sd_men",
+        "taboo_mean_men",
+        "taboo_sd_men",
+        "taboo_personal_mean_men",
+        "taboo_personal_sd_men",
+        "insulting_mean_men",
+        "insulting_sd_men",
+        "arousal_mean_religious",
+        "arousal_sd_religious",
+        "valence_mean_religious",
+        "valence_sd_religious",
+        "taboo_mean_religious",
+        "taboo_sd_religious",
+        "taboo_personal_mean_religious",
+        "taboo_personal_sd_religious",
+        "insulting_mean_religious",
+        "insulting_sd_religious",
+        "arousal_mean_nonreligious",
+        "arousal_sd_nonreligious",
+        "valence_mean_nonreligious",
+        "valence_sd_nonreligious",
+        "taboo_mean_nonreligious",
+        "taboo_sd_nonreligious",
+        "taboo_personal_mean_nonreligious",
+        "taboo_personal_sd_nonreligious",
+        "insulting_mean_nonreligious",
+        "insulting_sd_nonreligious"
       ]
     },
     {
@@ -828,6 +1695,37 @@
         "rt",
         "syllables",
         "visualcomp"
+      ],
+      "wordColumns": [
+        "word_arabic_aralex",
+        "word_arabic",
+        "word_arabic_name_agreement"
+      ],
+      "rawColumns": [
+        "translate_word_english",
+        "word_arabic_aralex",
+        "word_arabic",
+        "word_arabic_name_agreement",
+        "gender",
+        "animate_mean",
+        "reversiveness",
+        "syllables",
+        "phonemes",
+        "frequency_written",
+        "rt_mean",
+        "name_agreement_proportion",
+        "visualcomplexity_mean",
+        "visual_complexity_sd",
+        "image_agreement_mean",
+        "image_agreement_sd",
+        "aoa_mean",
+        "aoa_sd",
+        "imagine_mean",
+        "imagine_sd",
+        "familiar_mean",
+        "familiar_sd",
+        "rationality",
+        "initial_phoneme"
       ]
     },
     {
@@ -847,6 +1745,33 @@
         "concrete",
         "imagine",
         "sensory"
+      ],
+      "wordColumns": [
+        "word_spanish"
+      ],
+      "rawColumns": [
+        "word_spanish",
+        "translte_word_english",
+        "color_mean",
+        "color_sd",
+        "motion_mean",
+        "motion_sd",
+        "grasp_mean",
+        "grasp_sd",
+        "pain_mean",
+        "pain_sd",
+        "sound_mean",
+        "sound_sd",
+        "taste_mean",
+        "taste_sd",
+        "smell_mean",
+        "smell_sd",
+        "boi_mean",
+        "concrete_mean",
+        "imagine_mean",
+        "category",
+        "pc1_scores",
+        "pc2_scores"
       ]
     },
     {
@@ -866,6 +1791,36 @@
         "emotion",
         "pos",
         "valence"
+      ],
+      "wordColumns": [
+        "word_spanish"
+      ],
+      "rawColumns": [
+        "word_spanish",
+        "few_raters",
+        "happiness_mean",
+        "happiness_sd",
+        "happiness_percent_raters",
+        "disgust_mean",
+        "disgust_sd",
+        "disgust_percent_raters",
+        "anger_mean",
+        "anger_sd",
+        "anger_percent_raters",
+        "fear_mean",
+        "fear_sd",
+        "fear_percent_raters",
+        "sad_mean",
+        "sad_sd",
+        "sad_percent_raters",
+        "valence_mean",
+        "valence_sd",
+        "valence_percent_raters",
+        "arousal_mean",
+        "arousal_sd",
+        "arousal_percent_raters",
+        "pos_dominance",
+        "pos_dominance_prop"
       ]
     },
     {
@@ -888,6 +1843,37 @@
         "nameagree",
         "sensory",
         "visualcomp"
+      ],
+      "wordColumns": [
+        "word_thai_intended",
+        "word_thai_modal"
+      ],
+      "rawColumns": [
+        "translate_word_english",
+        "word_thai_intended",
+        "word_thai_modal",
+        "translate_word_thai_romanized",
+        "name_agreement_percent",
+        "name_agreement_h",
+        "name_agreement_k",
+        "dko",
+        "dkn",
+        "total",
+        "modal_category",
+        "category_agreement_percent",
+        "category_agreement_h",
+        "familiar_mean",
+        "familiar_sd",
+        "visual_complexity_mean",
+        "visual_complexity_sd",
+        "grasp_mean",
+        "grasp_sd",
+        "mime_mean",
+        "mime_sd",
+        "image_agreement_mean",
+        "image_agreement_sd",
+        "aoa_mean",
+        "aoa_sd"
       ]
     },
     {
@@ -906,6 +1892,30 @@
         "emotion",
         "intense",
         "sensory"
+      ],
+      "wordColumns": [],
+      "rawColumns": [
+        "image_number",
+        "color_mean",
+        "image_dbname",
+        "infant_age",
+        "infant_ethnicity",
+        "infant_gender",
+        "infant_oldyoung",
+        "image_category",
+        "agreement_percent",
+        "rating_mean",
+        "rating_sd",
+        "intensity_mean",
+        "intensity_sd",
+        "clarity_mean",
+        "clarity_sd",
+        "genuineness_mean",
+        "genuineness_sd",
+        "emotion_mean",
+        "emotion_sd",
+        "strength_mean",
+        "strength_sd"
       ]
     },
     {
@@ -923,6 +1933,18 @@
       "flags": [
         "emotion",
         "valence"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "word_english",
+        "valence_mean",
+        "extremity_mean",
+        "wmotionality_mean",
+        "valence_sd",
+        "extremity_sd",
+        "emotionality_sd"
       ]
     },
     {
@@ -943,6 +1965,47 @@
         "letters",
         "nameagree",
         "rt"
+      ],
+      "wordColumns": [
+        "word_bulgarian"
+      ],
+      "rawColumns": [
+        "image_number",
+        "word_bulgarian",
+        "mc_response_percent_correct",
+        "mc_name_percent_correct",
+        "name_agreement_h",
+        "spell_percent_correct",
+        "spell_h",
+        "proportion_null_response",
+        "rt_mean",
+        "rt_sd",
+        "rt_q25",
+        "rt_median",
+        "rt_q75",
+        "mean_interkeypressinterval_mean",
+        "mean_interkeypressinterval_sd",
+        "mean_interkeypressinterval_q25",
+        "mean_interkeypressinterval_median",
+        "mean_interkeypressinterval_q75",
+        "rt_commonname_mean",
+        "rt_commonname_sd",
+        "rt_commonname_q25",
+        "rt_commonname_median",
+        "rt_commonname_q75",
+        "mean_interkeypressintervalcommonname_mean",
+        "mean_interkeypressintervalcommonname_sd",
+        "mean_interkeypressintervalcommonname_q25",
+        "mean_interkeypressintervalcommonname_median",
+        "mean_interkeypressintervalcommonname_q75",
+        "alt_names",
+        "alt_spells",
+        "image_filesize",
+        "familiar_mean",
+        "complexity_mean",
+        "matchimage_mean",
+        "length",
+        "mc_response_wdlen"
       ]
     },
     {
@@ -963,6 +2026,47 @@
         "letters",
         "nameagree",
         "rt"
+      ],
+      "wordColumns": [
+        "word_german"
+      ],
+      "rawColumns": [
+        "image_number",
+        "word_german",
+        "mc_response_percent_correct",
+        "mc_name_percent_correct",
+        "name_agreement_h",
+        "spell_percent_correct",
+        "spell_h",
+        "proportion_null_response",
+        "rt_mean",
+        "rt_sd",
+        "rt_q25",
+        "rt_median",
+        "rt_q75",
+        "mean_interkeypressinterval_mean",
+        "mean_interkeypressinterval_sd",
+        "mean_interkeypressinterval_q25",
+        "mean_interkeypressinterval_median",
+        "mean_interkeypressinterval_q75",
+        "rt_commonname_mean",
+        "rt_commonname_sd",
+        "rt_commonname_q25",
+        "rt_commonname_median",
+        "rt_commonname_q75",
+        "mean_interkeypressintervalcommonname_mean",
+        "mean_interkeypressintervalcommonname_sd",
+        "mean_interkeypressintervalcommonname_q25",
+        "mean_interkeypressintervalcommonname_median",
+        "mean_interkeypressintervalcommonname_q75",
+        "alt_names",
+        "alt_spells",
+        "image_filesize",
+        "familiar_mean",
+        "complexity_mean",
+        "matchimage_mean",
+        "length",
+        "mc_response_wdlen"
       ]
     },
     {
@@ -983,6 +2087,47 @@
         "letters",
         "nameagree",
         "rt"
+      ],
+      "wordColumns": [
+        "word_greek"
+      ],
+      "rawColumns": [
+        "image_number",
+        "word_greek",
+        "mc_response_percent_correct",
+        "mc_name_percent_correct",
+        "name_agreement_h",
+        "spell_percent_correct",
+        "spell_h",
+        "proportion_null_response",
+        "rt_mean",
+        "rt_sd",
+        "rt_q25",
+        "rt_median",
+        "rt_q75",
+        "mean_interkeypressinterval_mean",
+        "mean_interkeypressinterval_sd",
+        "mean_interkeypressinterval_q25",
+        "mean_interkeypressinterval_median",
+        "mean_interkeypressinterval_q75",
+        "rt_commonname_mean",
+        "rt_commonname_sd",
+        "rt_commonname_q25",
+        "rt_commonname_median",
+        "rt_commonname_q75",
+        "mean_interkeypressintervalcommonname_mean",
+        "mean_interkeypressintervalcommonname_sd",
+        "mean_interkeypressintervalcommonname_q25",
+        "mean_interkeypressintervalcommonname_median",
+        "mean_interkeypressintervalcommonname_q75",
+        "alt_names",
+        "alt_spells",
+        "image_filesize",
+        "familiar_mean",
+        "complexity_mean",
+        "matchimage_mean",
+        "length",
+        "mc_response_wdlen"
       ]
     },
     {
@@ -1003,6 +2148,47 @@
         "letters",
         "nameagree",
         "rt"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "image_number",
+        "word_english",
+        "mc_response_percent_correct",
+        "mc_name_percent_correct",
+        "name_agreement_h",
+        "spell_percent_correct",
+        "spell_h",
+        "proportion_null_response",
+        "rt_mean",
+        "rt_sd",
+        "rt_q25",
+        "rt_median",
+        "rt_q75",
+        "mean_interkeypressinterval_mean",
+        "mean_interkeypressinterval_sd",
+        "mean_interkeypressinterval_q25",
+        "mean_interkeypressinterval_median",
+        "mean_interkeypressinterval_q75",
+        "rt_commonname_mean",
+        "rt_commonname_sd",
+        "rt_commonname_q25",
+        "rt_commonname_median",
+        "rt_commonname_q75",
+        "mean_interkeypressintervalcommonname_mean",
+        "mean_interkeypressintervalcommonname_sd",
+        "mean_interkeypressintervalcommonname_q25",
+        "mean_interkeypressintervalcommonname_median",
+        "mean_interkeypressintervalcommonname_q75",
+        "alt_names",
+        "alt_spells",
+        "image_filesize",
+        "familiar_mean",
+        "complexity_mean",
+        "matchimage_mean",
+        "length",
+        "mc_response_wdlen"
       ]
     },
     {
@@ -1023,6 +2209,47 @@
         "letters",
         "nameagree",
         "rt"
+      ],
+      "wordColumns": [
+        "word_spanish"
+      ],
+      "rawColumns": [
+        "image_number",
+        "word_spanish",
+        "mc_response_percent_correct",
+        "mc_name_percent_correct",
+        "name_agreement_h",
+        "spell_percent_correct",
+        "spell_h",
+        "proportion_null_response",
+        "rt_mean",
+        "rt_sd",
+        "rt_q25",
+        "rt_median",
+        "rt_q75",
+        "mean_interkeypressinterval_mean",
+        "mean_interkeypressinterval_sd",
+        "mean_interkeypressinterval_q25",
+        "mean_interkeypressinterval_median",
+        "mean_interkeypressinterval_q75",
+        "rt_commonname_mean",
+        "rt_commonname_sd",
+        "rt_commonname_q25",
+        "rt_commonname_median",
+        "rt_commonname_q75",
+        "mean_interkeypressintervalcommonname_mean",
+        "mean_interkeypressintervalcommonname_sd",
+        "mean_interkeypressintervalcommonname_q25",
+        "mean_interkeypressintervalcommonname_median",
+        "mean_interkeypressintervalcommonname_q75",
+        "alt_names",
+        "alt_spells",
+        "image_filesize",
+        "familiar_mean",
+        "complexity_mean",
+        "matchimage_mean",
+        "length",
+        "mc_response_wdlen"
       ]
     },
     {
@@ -1043,6 +2270,47 @@
         "letters",
         "nameagree",
         "rt"
+      ],
+      "wordColumns": [
+        "word_finnish"
+      ],
+      "rawColumns": [
+        "image_number",
+        "word_finnish",
+        "mc_response_percent_correct",
+        "mc_name_percent_correct",
+        "name_agreement_h",
+        "spell_percent_correct",
+        "spell_h",
+        "proportion_null_response",
+        "rt_mean",
+        "rt_sd",
+        "rt_q25",
+        "rt_median",
+        "rt_q75",
+        "mean_interkeypressinterval_mean",
+        "mean_interkeypressinterval_sd",
+        "mean_interkeypressinterval_q25",
+        "mean_interkeypressinterval_median",
+        "mean_interkeypressinterval_q75",
+        "rt_commonname_mean",
+        "rt_commonname_sd",
+        "rt_commonname_q25",
+        "rt_commonname_median",
+        "rt_commonname_q75",
+        "mean_interkeypressintervalcommonname_mean",
+        "mean_interkeypressintervalcommonname_sd",
+        "mean_interkeypressintervalcommonname_q25",
+        "mean_interkeypressintervalcommonname_median",
+        "mean_interkeypressintervalcommonname_q75",
+        "alt_names",
+        "alt_spells",
+        "image_filesize",
+        "familiar_mean",
+        "complexity_mean",
+        "matchimage_mean",
+        "length",
+        "mc_response_wdlen"
       ]
     },
     {
@@ -1063,6 +2331,47 @@
         "letters",
         "nameagree",
         "rt"
+      ],
+      "wordColumns": [
+        "word_french"
+      ],
+      "rawColumns": [
+        "image_number",
+        "word_french",
+        "mc_response_percent_correct",
+        "mc_name_percent_correct",
+        "name_agreement_h",
+        "spell_percent_correct",
+        "spell_h",
+        "proportion_null_response",
+        "rt_mean",
+        "rt_sd",
+        "rt_q25",
+        "rt_median",
+        "rt_q75",
+        "mean_interkeypressinterval_mean",
+        "mean_interkeypressinterval_sd",
+        "mean_interkeypressinterval_q25",
+        "mean_interkeypressinterval_median",
+        "mean_interkeypressinterval_q75",
+        "rt_commonname_mean",
+        "rt_commonname_sd",
+        "rt_commonname_q25",
+        "rt_commonname_median",
+        "rt_commonname_q75",
+        "mean_interkeypressintervalcommonname_mean",
+        "mean_interkeypressintervalcommonname_sd",
+        "mean_interkeypressintervalcommonname_q25",
+        "mean_interkeypressintervalcommonname_median",
+        "mean_interkeypressintervalcommonname_q75",
+        "alt_names",
+        "alt_spells",
+        "image_filesize",
+        "familiar_mean",
+        "complexity_mean",
+        "matchimage_mean",
+        "length",
+        "mc_response_wdlen"
       ]
     },
     {
@@ -1083,6 +2392,47 @@
         "letters",
         "nameagree",
         "rt"
+      ],
+      "wordColumns": [
+        "word_icelandic"
+      ],
+      "rawColumns": [
+        "image_number",
+        "word_icelandic",
+        "mc_response_percent_correct",
+        "mc_name_percent_correct",
+        "name_agreement_h",
+        "spell_percent_correct",
+        "spell_h",
+        "proportion_null_response",
+        "rt_mean",
+        "rt_sd",
+        "rt_q25",
+        "rt_median",
+        "rt_q75",
+        "mean_interkeypressinterval_mean",
+        "mean_interkeypressinterval_sd",
+        "mean_interkeypressinterval_q25",
+        "mean_interkeypressinterval_median",
+        "mean_interkeypressinterval_q75",
+        "rt_commonname_mean",
+        "rt_commonname_sd",
+        "rt_commonname_q25",
+        "rt_commonname_median",
+        "rt_commonname_q75",
+        "mean_interkeypressintervalcommonname_mean",
+        "mean_interkeypressintervalcommonname_sd",
+        "mean_interkeypressintervalcommonname_q25",
+        "mean_interkeypressintervalcommonname_median",
+        "mean_interkeypressintervalcommonname_q75",
+        "alt_names",
+        "alt_spells",
+        "image_filesize",
+        "familiar_mean",
+        "complexity_mean",
+        "matchimage_mean",
+        "length",
+        "mc_response_wdlen"
       ]
     },
     {
@@ -1103,6 +2453,47 @@
         "letters",
         "nameagree",
         "rt"
+      ],
+      "wordColumns": [
+        "word_italian"
+      ],
+      "rawColumns": [
+        "image_number",
+        "word_italian",
+        "mc_response_percent_correct",
+        "mc_name_percent_correct",
+        "name_agreement_h",
+        "spell_percent_correct",
+        "spell_h",
+        "proportion_null_response",
+        "rt_mean",
+        "rt_sd",
+        "rt_q25",
+        "rt_median",
+        "rt_q75",
+        "mean_interkeypressinterval_mean",
+        "mean_interkeypressinterval_sd",
+        "mean_interkeypressinterval_q25",
+        "mean_interkeypressinterval_median",
+        "mean_interkeypressinterval_q75",
+        "rt_commonname_mean",
+        "rt_commonname_sd",
+        "rt_commonname_q25",
+        "rt_commonname_median",
+        "rt_commonname_q75",
+        "mean_interkeypressintervalcommonname_mean",
+        "mean_interkeypressintervalcommonname_sd",
+        "mean_interkeypressintervalcommonname_q25",
+        "mean_interkeypressintervalcommonname_median",
+        "mean_interkeypressintervalcommonname_q75",
+        "alt_names",
+        "alt_spells",
+        "image_filesize",
+        "familiar_mean",
+        "complexity_mean",
+        "matchimage_mean",
+        "length",
+        "mc_response_wdlen"
       ]
     },
     {
@@ -1123,6 +2514,47 @@
         "letters",
         "nameagree",
         "rt"
+      ],
+      "wordColumns": [
+        "word_dutch"
+      ],
+      "rawColumns": [
+        "image_number",
+        "word_dutch",
+        "mc_response_percent_correct",
+        "mc_name_percent_correct",
+        "name_agreement_h",
+        "spell_percent_correct",
+        "spell_h",
+        "proportion_null_response",
+        "rt_mean",
+        "rt_sd",
+        "rt_q25",
+        "rt_median",
+        "rt_q75",
+        "mean_interkeypressinterval_mean",
+        "mean_interkeypressinterval_sd",
+        "mean_interkeypressinterval_q25",
+        "mean_interkeypressinterval_median",
+        "mean_interkeypressinterval_q75",
+        "rt_commonname_mean",
+        "rt_commonname_sd",
+        "rt_commonname_q25",
+        "rt_commonname_median",
+        "rt_commonname_q75",
+        "mean_interkeypressintervalcommonname_mean",
+        "mean_interkeypressintervalcommonname_sd",
+        "mean_interkeypressintervalcommonname_q25",
+        "mean_interkeypressintervalcommonname_median",
+        "mean_interkeypressintervalcommonname_q75",
+        "alt_names",
+        "alt_spells",
+        "image_filesize",
+        "familiar_mean",
+        "complexity_mean",
+        "matchimage_mean",
+        "length",
+        "mc_response_wdlen"
       ]
     },
     {
@@ -1143,6 +2575,47 @@
         "letters",
         "nameagree",
         "rt"
+      ],
+      "wordColumns": [
+        "word_norwegian"
+      ],
+      "rawColumns": [
+        "image_number",
+        "word_norwegian",
+        "mc_response_percent_correct",
+        "mc_name_percent_correct",
+        "name_agreement_h",
+        "spell_percent_correct",
+        "spell_h",
+        "proportion_null_response",
+        "rt_mean",
+        "rt_sd",
+        "rt_q25",
+        "rt_median",
+        "rt_q75",
+        "mean_interkeypressinterval_mean",
+        "mean_interkeypressinterval_sd",
+        "mean_interkeypressinterval_q25",
+        "mean_interkeypressinterval_median",
+        "mean_interkeypressinterval_q75",
+        "rt_commonname_mean",
+        "rt_commonname_sd",
+        "rt_commonname_q25",
+        "rt_commonname_median",
+        "rt_commonname_q75",
+        "mean_interkeypressintervalcommonname_mean",
+        "mean_interkeypressintervalcommonname_sd",
+        "mean_interkeypressintervalcommonname_q25",
+        "mean_interkeypressintervalcommonname_median",
+        "mean_interkeypressintervalcommonname_q75",
+        "alt_names",
+        "alt_spells",
+        "image_filesize",
+        "familiar_mean",
+        "complexity_mean",
+        "matchimage_mean",
+        "length",
+        "mc_response_wdlen"
       ]
     },
     {
@@ -1163,6 +2636,47 @@
         "letters",
         "nameagree",
         "rt"
+      ],
+      "wordColumns": [
+        "word_portuguese"
+      ],
+      "rawColumns": [
+        "image_number",
+        "word_portuguese",
+        "mc_response_percent_correct",
+        "mc_name_percent_correct",
+        "name_agreement_h",
+        "spell_percent_correct",
+        "spell_h",
+        "proportion_null_response",
+        "rt_mean",
+        "rt_sd",
+        "rt_q25",
+        "rt_median",
+        "rt_q75",
+        "mean_interkeypressinterval_mean",
+        "mean_interkeypressinterval_sd",
+        "mean_interkeypressinterval_q25",
+        "mean_interkeypressinterval_median",
+        "mean_interkeypressinterval_q75",
+        "rt_commonname_mean",
+        "rt_commonname_sd",
+        "rt_commonname_q25",
+        "rt_commonname_median",
+        "rt_commonname_q75",
+        "mean_interkeypressintervalcommonname_mean",
+        "mean_interkeypressintervalcommonname_sd",
+        "mean_interkeypressintervalcommonname_q25",
+        "mean_interkeypressintervalcommonname_median",
+        "mean_interkeypressintervalcommonname_q75",
+        "alt_names",
+        "alt_spells",
+        "image_filesize",
+        "familiar_mean",
+        "complexity_mean",
+        "matchimage_mean",
+        "length",
+        "mc_response_wdlen"
       ]
     },
     {
@@ -1183,6 +2697,47 @@
         "letters",
         "nameagree",
         "rt"
+      ],
+      "wordColumns": [
+        "word_russian"
+      ],
+      "rawColumns": [
+        "image_number",
+        "word_russian",
+        "mc_response_percent_correct",
+        "mc_name_percent_correct",
+        "name_agreement_h",
+        "spell_percent_correct",
+        "spell_h",
+        "proportion_null_response",
+        "rt_mean",
+        "rt_sd",
+        "rt_q25",
+        "rt_median",
+        "rt_q75",
+        "mean_interkeypressinterval_mean",
+        "mean_interkeypressinterval_sd",
+        "mean_interkeypressinterval_q25",
+        "mean_interkeypressinterval_median",
+        "mean_interkeypressinterval_q75",
+        "rt_commonname_mean",
+        "rt_commonname_sd",
+        "rt_commonname_q25",
+        "rt_commonname_median",
+        "rt_commonname_q75",
+        "mean_interkeypressintervalcommonname_mean",
+        "mean_interkeypressintervalcommonname_sd",
+        "mean_interkeypressintervalcommonname_q25",
+        "mean_interkeypressintervalcommonname_median",
+        "mean_interkeypressintervalcommonname_q75",
+        "alt_names",
+        "alt_spells",
+        "image_filesize",
+        "familiar_mean",
+        "complexity_mean",
+        "matchimage_mean",
+        "length",
+        "mc_response_wdlen"
       ]
     },
     {
@@ -1203,6 +2758,47 @@
         "letters",
         "nameagree",
         "rt"
+      ],
+      "wordColumns": [
+        "word_serbian"
+      ],
+      "rawColumns": [
+        "image_number",
+        "word_serbian",
+        "mc_response_percent_correct",
+        "mc_name_percent_correct",
+        "name_agreement_h",
+        "spell_percent_correct",
+        "spell_h",
+        "proportion_null_response",
+        "rt_mean",
+        "rt_sd",
+        "rt_q25",
+        "rt_median",
+        "rt_q75",
+        "mean_interkeypressinterval_mean",
+        "mean_interkeypressinterval_sd",
+        "mean_interkeypressinterval_q25",
+        "mean_interkeypressinterval_median",
+        "mean_interkeypressinterval_q75",
+        "rt_commonname_mean",
+        "rt_commonname_sd",
+        "rt_commonname_q25",
+        "rt_commonname_median",
+        "rt_commonname_q75",
+        "mean_interkeypressintervalcommonname_mean",
+        "mean_interkeypressintervalcommonname_sd",
+        "mean_interkeypressintervalcommonname_q25",
+        "mean_interkeypressintervalcommonname_median",
+        "mean_interkeypressintervalcommonname_q75",
+        "alt_names",
+        "alt_spells",
+        "image_filesize",
+        "familiar_mean",
+        "complexity_mean",
+        "matchimage_mean",
+        "length",
+        "mc_response_wdlen"
       ]
     },
     {
@@ -1226,6 +2822,39 @@
         "picture",
         "pos",
         "valence"
+      ],
+      "wordColumns": [
+        "word_french"
+      ],
+      "rawColumns": [
+        "word_french",
+        "translate_word_english",
+        "picture_source",
+        "picture_number",
+        "valence_mean",
+        "valence_sd",
+        "arousal_mean",
+        "arousal_sd",
+        "valence_mean_male",
+        "valence_sd_male",
+        "arousal_mean_male",
+        "arousal_sd_male",
+        "valence_mean_female",
+        "valence_sd_female",
+        "arousal_mean_female",
+        "arousal_sd_female",
+        "length",
+        "phonemes",
+        "syllabus",
+        "pos",
+        "frequency_film",
+        "frequency_books",
+        "imagine_mean",
+        "bonin2003",
+        "gilet2012",
+        "niedenthal2004",
+        "ric2013",
+        "syssau2005"
       ]
     },
     {
@@ -1245,6 +2874,16 @@
         "dominate",
         "modality",
         "valence"
+      ],
+      "wordColumns": [
+        "word_dutch"
+      ],
+      "rawColumns": [
+        "word_dutch",
+        "arousal_mean",
+        "dominance_mean",
+        "valence_mean",
+        "modality"
       ]
     },
     {
@@ -1261,6 +2900,19 @@
       "nRows": 14127,
       "flags": [
         "emotion"
+      ],
+      "wordColumns": [
+        "word_french"
+      ],
+      "rawColumns": [
+        "word_french",
+        "polarity",
+        "joy_yesno",
+        "fear_yesno",
+        "sad_yesno",
+        "anger_yesno",
+        "surprise_yesno",
+        "disgust_yesno"
       ]
     },
     {
@@ -1277,6 +2929,24 @@
       "nRows": 2266,
       "flags": [
         "emotion"
+      ],
+      "wordColumns": [
+        "word_spanish"
+      ],
+      "rawColumns": [
+        "word_spanish",
+        "translate_word_english",
+        "happiness_mean",
+        "happiness_sd",
+        "anger_mean",
+        "anger_sd",
+        "sad_mean",
+        "sad_sd",
+        "fear_mean",
+        "fear_sd",
+        "disgust_mean",
+        "disgust_sd",
+        "n"
       ]
     },
     {
@@ -1294,6 +2964,18 @@
       "flags": [
         "arousal",
         "valence"
+      ],
+      "wordColumns": [
+        "word_spanish"
+      ],
+      "rawColumns": [
+        "word_spanish",
+        "valence_mean",
+        "valence_sd",
+        "valence_percent_raters",
+        "arousal_mean",
+        "arousal_sd",
+        "arousal_percent_raters"
       ]
     },
     {
@@ -1316,6 +2998,29 @@
         "imagine",
         "rt",
         "valence"
+      ],
+      "wordColumns": [
+        "word_chinese_simplified"
+      ],
+      "rawColumns": [
+        "word_chinese_simplified",
+        "translate_word_english",
+        "valence_mean",
+        "valence_sd",
+        "arousal_mean",
+        "arousal_sd",
+        "concrete_mean",
+        "concrete_sd",
+        "familiar_mean",
+        "familiar_sd",
+        "imagine_mean",
+        "imagine_sd",
+        "avaliability_mean",
+        "avaliability_sd",
+        "rt_mean",
+        "rt_sd",
+        "accuracy_mean",
+        "accuracy_sd"
       ]
     },
     {
@@ -1332,6 +3037,24 @@
       "nRows": 3259,
       "flags": [
         "aoa"
+      ],
+      "wordColumns": [
+        "word_german"
+      ],
+      "rawColumns": [
+        "word_german",
+        "translate_word_english_british",
+        "translate_word_english_american",
+        "rating_n",
+        "aoa_mean",
+        "aoa_sd",
+        "aoa_minimum",
+        "aoa_maximum",
+        "unknown_n",
+        "aoa_mean_likert",
+        "aoa_sd_likert",
+        "aoa_minimum_likert",
+        "aoa_maximum_likert"
       ]
     },
     {
@@ -1353,6 +3076,28 @@
         "imagine",
         "letters",
         "syllables"
+      ],
+      "wordColumns": [
+        "word_turkish"
+      ],
+      "rawColumns": [
+        "word_turkish",
+        "translate_word_english",
+        "aoa_overall_mean",
+        "aoa_overall_sd",
+        "aoa_mean_children",
+        "aoa_sd_children",
+        "aoa_mean_older",
+        "aoa_sd_young_adults",
+        "aoa_mean_middle_aged",
+        "aoa_sd_middle_aged",
+        "aoa_mean_older_adults",
+        "aoa_sd_older_adults",
+        "imagine_mean",
+        "concrete_mean",
+        "frequency_mean",
+        "syllables",
+        "length"
       ]
     },
     {
@@ -1370,6 +3115,19 @@
       "flags": [
         "aoa",
         "meaning"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "word_english",
+        "meaning",
+        "aoa_mean_testbased",
+        "aoa_mean_rating",
+        "lwv",
+        "cdi",
+        "morr",
+        "floc"
       ]
     },
     {
@@ -1391,6 +3149,28 @@
         "phonemes",
         "pos",
         "syllables"
+      ],
+      "wordColumns": [
+        "word_english",
+        "word_english_alt_spelling"
+      ],
+      "rawColumns": [
+        "word_english",
+        "word_english_alt_spelling",
+        "frequency_pm",
+        "pos_dominance",
+        "length",
+        "phonemes",
+        "syllables",
+        "lemma",
+        "aoa_mean_kuperman",
+        "percent_unknown_kuperman",
+        "aoa_mean_kuperman_lemma",
+        "percent_unknown_kuperman_lemma",
+        "aoa_mean_bird_lemma",
+        "aoa_mean_bristol_lemma",
+        "aoa_mean_cort_lemma",
+        "aoa_mean_schock"
       ]
     },
     {
@@ -1409,6 +3189,25 @@
         "accuracy",
         "concrete",
         "rt"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "word_english",
+        "version_num",
+        "type",
+        "block",
+        "id_number",
+        "rt_clean_mean",
+        "rt_clean_sd",
+        "rt_clean_n",
+        "rt_clean_mean_zscore",
+        "rt_clean_sd_zscore",
+        "rt_clean_n_zscore",
+        "acc_prop",
+        "accuracy_n",
+        "concrete_mean"
       ]
     },
     {
@@ -1431,6 +3230,28 @@
         "orthon",
         "pos",
         "syllables"
+      ],
+      "wordColumns": [
+        "word_spanish"
+      ],
+      "rawColumns": [
+        "word_spanish",
+        "translate_word_english",
+        "imagine_mean",
+        "imagine_sd",
+        "concrete_mean",
+        "concrete_sd",
+        "frequency_s_mean",
+        "frequency_s_sd",
+        "length",
+        "syllables",
+        "syllabic_structure",
+        "pos",
+        "wordform_per_million_frequency",
+        "wordform_per_million_frequency_log10",
+        "frequency_zipf",
+        "orthographic_neighborhood_size",
+        "orthographic_levenshtein_distance"
       ]
     },
     {
@@ -1452,6 +3273,29 @@
         "freq",
         "imagine",
         "valence"
+      ],
+      "wordColumns": [
+        "word_chinese_simplified"
+      ],
+      "rawColumns": [
+        "word_chinese_simplified",
+        "translate_word_english",
+        "valence_mean",
+        "valence_sd",
+        "arousal_mean",
+        "arousal_sd",
+        "familiar_mean",
+        "familiar_sd",
+        "concrete_mean",
+        "concrete_sd",
+        "imagine_mean",
+        "imagine_sd",
+        "frequency_words_per_million",
+        "frequency_log",
+        "frequency_zipf",
+        "strokes_1st_character_n",
+        "strokes_2nd_character_n",
+        "strokes_total_n"
       ]
     },
     {
@@ -1471,6 +3315,28 @@
         "concrete",
         "emotion",
         "valence"
+      ],
+      "wordColumns": [
+        "word_spanish"
+      ],
+      "rawColumns": [
+        "word_spanish",
+        "valence_mean",
+        "valence_sd",
+        "arousal_mean",
+        "arousal_sd",
+        "concrete_mean",
+        "concrete_sd",
+        "happiness_mean",
+        "happiness_sd",
+        "anger_mean",
+        "anger_sd",
+        "sad_mean",
+        "sad_sd",
+        "fear_mean",
+        "fear_sd",
+        "disgust_mean",
+        "disgust_sd"
       ]
     },
     {
@@ -1495,6 +3361,23 @@
         "phonemes",
         "semantic",
         "syllables"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "base_word",
+        "word_english",
+        "aoa_mean",
+        "imagine_mean",
+        "frequency",
+        "length",
+        "phonemes",
+        "syllables",
+        "orthographic_neighborhood",
+        "morphological_family_size_total",
+        "morphological_family_size_semantic_related",
+        "semantic_distance"
       ]
     },
     {
@@ -1519,6 +3402,24 @@
         "phonemes",
         "semantic",
         "syllables"
+      ],
+      "wordColumns": [
+        "word_spanish"
+      ],
+      "rawColumns": [
+        "base_word",
+        "word_spanish",
+        "translate_word_english",
+        "aoa_mean",
+        "imagine_mean",
+        "frequency",
+        "length",
+        "phonemes",
+        "syllables",
+        "orthographic_neighborhood",
+        "morphological_family_size_total",
+        "morphological_family_size_semantic_related",
+        "semantic_distance"
       ]
     },
     {
@@ -1538,6 +3439,26 @@
         "freq",
         "imagine",
         "nameagree",
+        "phonemes",
+        "syllables"
+      ],
+      "wordColumns": [
+        "word_arabic_intended",
+        "word_arabic_modal"
+      ],
+      "rawColumns": [
+        "translate_word_english",
+        "word_arabic_intended",
+        "word_arabic_modal",
+        "translate_english_modal",
+        "name_agreement_mean",
+        "name_agreement_proportion",
+        "familiar_mean",
+        "familiar_sd",
+        "frequency_mean",
+        "frequency_sd",
+        "imagine_mean",
+        "imagine_sd",
         "phonemes",
         "syllables"
       ]
@@ -1563,6 +3484,28 @@
         "letters",
         "picture",
         "syllables"
+      ],
+      "wordColumns": [
+        "word_dutch",
+        "word_dutch_dominant"
+      ],
+      "rawColumns": [
+        "counter",
+        "image_name",
+        "word_dutch",
+        "word_dutch_dominant",
+        "objective_vc",
+        "subjective_vc",
+        "image_agreement_mean",
+        "imagine_mean",
+        "proportion",
+        "h_statistic",
+        "aoa_mean",
+        "frequency_log",
+        "familiar_mean",
+        "length",
+        "syllables",
+        "naming_rt"
       ]
     },
     {
@@ -1579,6 +3522,15 @@
       "nRows": 299,
       "flags": [
         "aoa"
+      ],
+      "wordColumns": [
+        "word_english_translate",
+        "word_afrikaans"
+      ],
+      "rawColumns": [
+        "word_english_translate",
+        "word_afrikaans",
+        "aoa_mean_afrikaans"
       ]
     },
     {
@@ -1600,6 +3552,32 @@
         "imagine",
         "pos",
         "valence"
+      ],
+      "wordColumns": [
+        "word_spanish"
+      ],
+      "rawColumns": [
+        "word_spanish",
+        "translate_word_english",
+        "pos",
+        "valence_mean",
+        "valence_sd",
+        "valence_n",
+        "arousal_mean",
+        "arousal_sd",
+        "arousal_n",
+        "concrete_mean",
+        "concrete_sd",
+        "concrete_n",
+        "imagine_mean",
+        "imagine_sd",
+        "imagine_n",
+        "availability_mean",
+        "availability_sd",
+        "availability_n",
+        "familiar_mean",
+        "familiar_sd",
+        "familiar_n"
       ]
     },
     {
@@ -1616,6 +3594,18 @@
       "nRows": 4640,
       "flags": [
         "aoa"
+      ],
+      "wordColumns": [
+        "word_spanish"
+      ],
+      "rawColumns": [
+        "word_spanish",
+        "aoa_mean",
+        "aoa_sd",
+        "aoa_minimum",
+        "aoa_maximum",
+        "aoa_n",
+        "aoa_zscore"
       ]
     },
     {
@@ -1636,6 +3626,24 @@
         "imagine",
         "phonemes",
         "visualcomp"
+      ],
+      "wordColumns": [
+        "word_arabic",
+        "word_arabic_synonym"
+      ],
+      "rawColumns": [
+        "translate_word_english",
+        "word_arabic",
+        "agreement_mean",
+        "frequency",
+        "imagine_mean",
+        "aoa_mean",
+        "phonemes",
+        "visual_complexity_mean",
+        "word_arabic_synonym",
+        "frequency_synonym",
+        "imagine_mean_synonym",
+        "aoa_mean_synonym"
       ]
     },
     {
@@ -1655,6 +3663,37 @@
         "dominate",
         "familiar",
         "sensory"
+      ],
+      "wordColumns": [
+        "word_spanish"
+      ],
+      "rawColumns": [
+        "word_spanish",
+        "translate_word_english",
+        "dominance_mean",
+        "dominance_sd",
+        "dominance_mean_female",
+        "dominance_sd_female",
+        "dominance_mean_male",
+        "dominance_sd_male",
+        "familiar_mean",
+        "familiar_sd",
+        "familiar_mean_female",
+        "familiar_sd_female",
+        "familiar_mean_male",
+        "familiar_sd_male",
+        "aoa_subjective_mean",
+        "aoa_subjective_sd",
+        "aoa_subjective_mean_female",
+        "aoa_subjective_sd_female",
+        "aoa_subjective_mean_male",
+        "aoa_subjective_sd_male",
+        "sensory_experience_mean",
+        "sensory_experience_sd",
+        "sensory_experience_mean_female",
+        "sensory_experience_sd_female",
+        "sensory_experience_mean_male",
+        "sensory_experience_sd_male"
       ]
     },
     {
@@ -1678,6 +3717,33 @@
         "meaning",
         "semantic",
         "valence"
+      ],
+      "wordColumns": [
+        "word_idiom_german",
+        "word_idiom_english"
+      ],
+      "rawColumns": [
+        "word_idiom_german",
+        "word_idiom_english",
+        "meaning_english",
+        "ambiguity_type",
+        "valence_mean",
+        "valence_sd",
+        "arousal_mean",
+        "arousal_sd",
+        "familiar_mean",
+        "familiar_sd",
+        "semantic_transparency_mean",
+        "semantic_transparency_sd",
+        "figurativeness_mean",
+        "figurativeness_sd",
+        "concrete_mean",
+        "concrete_sd",
+        "knowledge_proportion",
+        "confidence_mean",
+        "confidence_sd",
+        "length",
+        "number_words"
       ]
     },
     {
@@ -1697,6 +3763,31 @@
         "familiar",
         "imagine",
         "letters"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "word_english",
+        "length",
+        "familiar_mean",
+        "familiar_n",
+        "aoa_subjective_mean",
+        "aoa_subjective_n",
+        "transparency_mean",
+        "transparency_n",
+        "lmd_mean",
+        "lmd_n",
+        "imagine_mean",
+        "imagine_n",
+        "ser_mean",
+        "ser_n",
+        "familiar_zscore",
+        "aoa_zscore",
+        "transparency_zscore",
+        "lmd_zscore",
+        "imagine_zscore",
+        "ser_zscore"
       ]
     },
     {
@@ -1718,6 +3809,32 @@
         "imageagree",
         "nameagree",
         "visualcomp"
+      ],
+      "wordColumns": [
+        "word_persian_phonetic",
+        "word_persian"
+      ],
+      "rawColumns": [
+        "word_persian_phonetic",
+        "word_persian",
+        "translate_word_english",
+        "h_mean_middle_age",
+        "h_mean_elderly",
+        "name_agreement_percent_middle_age",
+        "name_agreement_percent_elderly",
+        "image_agreement_percent_middle_age",
+        "image_agreement_percent_elderly",
+        "familiar_mean_middle_age",
+        "familiar_mean_elderly",
+        "aoa_mean_middle_age",
+        "aoa_mean_elderly",
+        "visual_complexity_mean_middle_age",
+        "visual_complexity_mean_elderly",
+        "dont_know_percent_middle_age",
+        "dont_know_percent_elderly",
+        "dont_know_object_middle_age",
+        "dont_know_object_elderly",
+        "frequency"
       ]
     },
     {
@@ -1739,6 +3856,110 @@
         "letters",
         "pos",
         "valence"
+      ],
+      "wordColumns": [
+        "word_polish"
+      ],
+      "rawColumns": [
+        "word_polish",
+        "translate_word_english",
+        "pos",
+        "length",
+        "frequency",
+        "valence_n",
+        "valence_minimum",
+        "valence_maximum",
+        "valence_mean",
+        "valence_sd",
+        "valence_n_female",
+        "valence_minimum_female",
+        "valence_maximum_female",
+        "valence_mean_female",
+        "valence_sd_female",
+        "valence_n_male",
+        "valence_minimum_male",
+        "valence_maximum_male",
+        "valence_mean_male",
+        "valence_sd_male",
+        "arousal_n",
+        "arousal_minimum",
+        "arousal_maximum",
+        "arousal_mean",
+        "arousal_sd",
+        "arousal_n_female",
+        "arousal_minimum_female",
+        "arousal_maximum_female",
+        "arousal_mean_female",
+        "arousal_sd_female",
+        "arousal_n_male",
+        "arousal_minimum_male",
+        "arousal_maximum_male",
+        "arousal_mean_male",
+        "arousal_sd_male",
+        "dominance_n",
+        "dominance_minimum",
+        "dominance_maximum",
+        "dominance_mean",
+        "dominance_sd",
+        "dominance_n_female",
+        "dominance_minimum_female",
+        "dominance_maximum_female",
+        "dominance_mean_female",
+        "dominance_sd_female",
+        "dominance_n_male",
+        "dominance_minimum_male",
+        "dominance_maximum_male",
+        "dominance_mean_male",
+        "dominance_sd_male",
+        "origin_n",
+        "origin_minimum",
+        "origin_maximum",
+        "origin_mean",
+        "origin_sd",
+        "origin_n_female",
+        "origin_minimum_female",
+        "origin_maximum_female",
+        "origin_mean_female",
+        "origin_sd_female",
+        "origin_n_male",
+        "origin_minimum_male",
+        "origin_maximum_male",
+        "origin_mean_male",
+        "origin_sd_male",
+        "significance_n",
+        "significance_minimum",
+        "significance_maximum",
+        "significance_mean",
+        "significance_sd",
+        "significance_n_female",
+        "significance_minimum_female",
+        "significance_maximum_female",
+        "significance_mean_female",
+        "significance_sd_female",
+        "significance_n_male",
+        "significance_minimum_male",
+        "significance_maximum_male",
+        "significance_mean_male",
+        "significance_sd_male",
+        "source_n",
+        "source_minimum",
+        "source_maximum",
+        "source_mean",
+        "source_sd",
+        "source_n_female",
+        "source_minimum_female",
+        "source_maximum_female",
+        "source_mean_female",
+        "source_sd_female",
+        "source_n_male",
+        "source_minimum_male",
+        "source_maximum_male",
+        "source_mean_male",
+        "source_sd_male",
+        "english_meanings_n",
+        "anew_number",
+        "anew_second_meaning_number",
+        "anew_third_meaning_number"
       ]
     },
     {
@@ -1762,6 +3983,50 @@
         "semantic",
         "syllables",
         "valence"
+      ],
+      "wordColumns": [
+        "word_german"
+      ],
+      "rawColumns": [
+        "word_german",
+        "translate_word_english",
+        "pos",
+        "semantic_category",
+        "valence_mean",
+        "valence_se",
+        "valence_sd",
+        "valence_n",
+        "arousal_mean",
+        "arousal_se",
+        "arousal_sd",
+        "arousal_n",
+        "potency_mean",
+        "potency_se",
+        "potency_sd",
+        "potency_n",
+        "authority_mean",
+        "authority_se",
+        "authority_sd",
+        "authority_n",
+        "community_mean",
+        "community_se",
+        "community_sd",
+        "community_n",
+        "cluster",
+        "frequency_leipzig",
+        "frequency_subtlex",
+        "frequency_celex",
+        "orthographic_n_celex",
+        "orthographic_n_sum_celex",
+        "fhn_celex",
+        "frequency_dlex_abs",
+        "frequency_dlex_norm",
+        "orthographic_n_dlex",
+        "orthographic_n_sum_dlex",
+        "fhn_dlex",
+        "frequency_zipf",
+        "syllables",
+        "length"
       ]
     },
     {
@@ -1782,6 +4047,41 @@
         "imagine",
         "letters",
         "valence"
+      ],
+      "wordColumns": [
+        "word_polish"
+      ],
+      "rawColumns": [
+        "translate_word_german",
+        "word_polish",
+        "n_men",
+        "n_women",
+        "n_all",
+        "valence_mean_men",
+        "valence_mean_women",
+        "valence_mean_all",
+        "valence_sd_men",
+        "valence_sd_women",
+        "valence_sd_all",
+        "arousal_mean_men",
+        "arousal_mean_women",
+        "arousal_mean_all",
+        "arousal_sd_men",
+        "arousal_sd_women",
+        "arousal_sd_all",
+        "imagine_mean_men",
+        "imagine_mean_women",
+        "imagine_mean_all",
+        "imagine_sd_men",
+        "imagine_sd_women",
+        "imagine_sd_all",
+        "frequency",
+        "length",
+        "gram",
+        "frequency_subtlex_pl",
+        "frequency_subtlex_pl_cd",
+        "frequency_subtlex_pl_zipf",
+        "frequency_subtlex_pl_avg_zipf_frequency_sn"
       ]
     },
     {
@@ -1804,6 +4104,24 @@
         "phonemes",
         "rt",
         "syllables"
+      ],
+      "wordColumns": [
+        "word_english_acronym"
+      ],
+      "rawColumns": [
+        "word_english_acronym",
+        "aoa_mean",
+        "frequency_mean_subjective",
+        "imagine_mean",
+        "length",
+        "phonemes",
+        "syllables",
+        "neighbors_n",
+        "frequency_objective",
+        "frequency_mean_bigram",
+        "type_of_acronyms",
+        "voiced_feature",
+        "rt_mean"
       ]
     },
     {
@@ -1827,6 +4145,36 @@
         "sensory",
         "syllables",
         "valence"
+      ],
+      "wordColumns": [
+        "word_norwegian"
+      ],
+      "rawColumns": [
+        "word_norwegian",
+        "translate_word_english",
+        "pos",
+        "imagine_category",
+        "imagine_mean",
+        "aoa_subjective_category",
+        "aoa_subjective_mean",
+        "frequency_use_category",
+        "frequency_use",
+        "phonological_neighbors_category",
+        "phonological_neighbors_number",
+        "phonological_neighbors",
+        "length",
+        "sounds",
+        "syllables",
+        "derivation",
+        "compound",
+        "first_sound_fricative",
+        "first_consonant_cluster",
+        "grammatical_gender",
+        "used_plural",
+        "mass_noun",
+        "valence",
+        "transitivity",
+        "multi_word_phrase"
       ]
     },
     {
@@ -1843,6 +4191,15 @@
       "nRows": 1659,
       "flags": [
         "sensory"
+      ],
+      "wordColumns": [
+        "word_french"
+      ],
+      "rawColumns": [
+        "word_french",
+        "translate_word_english",
+        "sensory_mean",
+        "sensory_sd"
       ]
     },
     {
@@ -1859,6 +4216,24 @@
       "nRows": 7039,
       "flags": [
         "aoa",
+        "syllables"
+      ],
+      "wordColumns": [
+        "word_spanish"
+      ],
+      "rawColumns": [
+        "word_spanish",
+        "aoa_mean",
+        "aoa_sd",
+        "aoa_minimum",
+        "aoa_maximum",
+        "aoa_zscore",
+        "oral_freq_log_mean",
+        "written_freq_log_subtlexesp_mean",
+        "written_freq_log_lexesp_mean",
+        "written_freq_log_espal_mean",
+        "lem_cat_espl_maximum",
+        "lem_maximum_code",
         "syllables"
       ]
     },
@@ -1884,6 +4259,52 @@
         "pos",
         "syllables",
         "valence"
+      ],
+      "wordColumns": [
+        "word_french"
+      ],
+      "rawColumns": [
+        "word_french",
+        "translation_word_english",
+        "translation_word_german",
+        "pos",
+        "length",
+        "syllables",
+        "frequency_films",
+        "frequency_books",
+        "humans_yes",
+        "humans_no",
+        "humans_n",
+        "human_difficulty",
+        "nonhumans_yes",
+        "nonhumans_no",
+        "nonhumans_n",
+        "nonhuman_difficulty",
+        "category",
+        "concrete_mean",
+        "concrete_sd",
+        "concrete_n",
+        "concrete_difficulty",
+        "familiar_mean",
+        "familiar_sd",
+        "familiar_n",
+        "familiar_difficulty",
+        "intensity_mean",
+        "intensity_sd",
+        "intensity_n",
+        "intensity_difficulty",
+        "temporal_stability_mean",
+        "temporal_stability_sd",
+        "temporal_stability_n",
+        "temporal_stability_difficulty",
+        "valence_mean",
+        "valence_sd",
+        "valence_n",
+        "valence_difficulty",
+        "visibility_mean",
+        "visibility_sd",
+        "visibility_n",
+        "visibility_difficulty"
       ]
     },
     {
@@ -1907,6 +4328,28 @@
         "nameagree",
         "syllables",
         "visualcomp"
+      ],
+      "wordColumns": [
+        "word_turkish",
+        "word_turkish_modal"
+      ],
+      "rawColumns": [
+        "word_turkish",
+        "translate_word_english",
+        "word_turkish_modal",
+        "name_agreement_proportion",
+        "image_agreement_mean",
+        "image_agreement_sd",
+        "familiar_mean_conceptual",
+        "familiar_sd_conceptual",
+        "aoa_mean",
+        "aoa_sd",
+        "visual_complexity_mean",
+        "visual_complexity_sd",
+        "syllables",
+        "length",
+        "frequency",
+        "frequency_1"
       ]
     },
     {
@@ -1931,6 +4374,39 @@
         "pos",
         "syllables",
         "valence"
+      ],
+      "wordColumns": [
+        "word_french"
+      ],
+      "rawColumns": [
+        "word_french",
+        "translate_word_english",
+        "picture_source",
+        "picture_number",
+        "valence_mean_all",
+        "valence_sd_all",
+        "arousal_mean_all",
+        "arousal_sd_all",
+        "valence_mean_male",
+        "valence_sd_male",
+        "arousal_mean_male",
+        "arousal_sd_male",
+        "valence_mean_female",
+        "valence_sd_female",
+        "arousal_mean_female",
+        "arousal_sd_female",
+        "length",
+        "phonemes",
+        "syllables",
+        "pos",
+        "frequency_films",
+        "frequency_books",
+        "imagine_mean",
+        "bonin2003",
+        "gilet2012",
+        "niedenthal_et_al_2004",
+        "ric_et_al_2013",
+        "syssau_font_2005"
       ]
     },
     {
@@ -1954,6 +4430,36 @@
         "pos",
         "syllables",
         "valence"
+      ],
+      "wordColumns": [
+        "word_german",
+        "word_english"
+      ],
+      "rawColumns": [
+        "word_german",
+        "word_english",
+        "id_number",
+        "valence_mean",
+        "valence_sd",
+        "arousal_mean_anew",
+        "arousal_sd_anew",
+        "arousal_mean_bawl",
+        "arousal_sd_bawl",
+        "dominance_mean",
+        "dominance_sd",
+        "pot_mean",
+        "pot_sd",
+        "imagine_mean",
+        "imagine_sd",
+        "frequency_leipzig",
+        "frequency_subtlex",
+        "length",
+        "syllables",
+        "pos",
+        "n_orth",
+        "hfn",
+        "nf_maximum",
+        "f_sum"
       ]
     },
     {
@@ -1971,6 +4477,19 @@
       "flags": [
         "concrete",
         "freq"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "word_english",
+        "bigram",
+        "concrete_mean",
+        "concrete_sd",
+        "unknown_n",
+        "total_n",
+        "known_proportion",
+        "frequency_subtlex"
       ]
     },
     {
@@ -1991,6 +4510,28 @@
         "familiar",
         "picture",
         "semantic"
+      ],
+      "wordColumns": [
+        "word_english",
+        "word_japanese",
+        "word_katakana"
+      ],
+      "rawColumns": [
+        "word_english",
+        "word_japanese",
+        "translate_japanese",
+        "word_katakana",
+        "picture_naming",
+        "cognate_status",
+        "aoa_mean_japanese_l1",
+        "familiar_mean_english_l2",
+        "concrete_mean_japanese_l1",
+        "number_trans_l1_l2",
+        "number_trans_l2_l1",
+        "number_meaning_l1",
+        "number_meaning_l2",
+        "phonological_similarity",
+        "semantic_similarity"
       ]
     },
     {
@@ -2008,6 +4549,23 @@
       "flags": [
         "aoa",
         "concrete"
+      ],
+      "wordColumns": [
+        "word_dutch"
+      ],
+      "rawColumns": [
+        "word_dutch",
+        "concrete_list",
+        "concrete_mean",
+        "concrete_sd",
+        "concrete_ratings_n",
+        "concrete_unknown_response_n",
+        "concrete_sample_n",
+        "aoa_list",
+        "aoa_sample_n",
+        "aoa_known_probability",
+        "aoa_mean",
+        "aoa_sd"
       ]
     },
     {
@@ -2030,6 +4588,31 @@
         "semantic",
         "syllables",
         "typical"
+      ],
+      "wordColumns": [
+        "word_spanish"
+      ],
+      "rawColumns": [
+        "word_spanish",
+        "translate_word_english",
+        "semantic_category",
+        "domain",
+        "aoa_subjective_mean",
+        "aoa_subjective_sd",
+        "familiar_mean",
+        "familiar_sd",
+        "manip_mean",
+        "manip_sd",
+        "typicality_mean",
+        "typicality_sd",
+        "percent_total_36",
+        "frequency_log",
+        "frequency_espal",
+        "frequency_crea",
+        "frequency_cuetosetal_2012",
+        "length",
+        "syllables",
+        "subjects"
       ]
     },
     {
@@ -2055,6 +4638,58 @@
         "orthon",
         "pos",
         "valence"
+      ],
+      "wordColumns": [
+        "word_italian"
+      ],
+      "rawColumns": [
+        "anew_number",
+        "anew_yesno",
+        "translate_word_english",
+        "word_italian",
+        "pos",
+        "length",
+        "frequency_colfis",
+        "frequency_log_colfis",
+        "frequecy_repub",
+        "log_frequency_repub",
+        "orthographic_neighbors",
+        "frequency_mean_orthographic_neighbors",
+        "n_familiar_imagine_concrete",
+        "familiar_mean",
+        "familiar_sd",
+        "imagine_mean",
+        "imagine_sd",
+        "concrete_mean",
+        "concrete_sd",
+        "n_valence_arousal_dominance",
+        "valence_mean",
+        "valence_sd",
+        "arousal_mean",
+        "arousal_sd",
+        "dominance_mean",
+        "dominance_sd",
+        "n_valence_arousal_dominance_female",
+        "valence_mean_female",
+        "valence_sd_female",
+        "arousal_mean_female",
+        "arousal_sd_female",
+        "dominance_mean_female",
+        "dominance_sd_female",
+        "n_valence_arousal_dominance_male",
+        "valence_mean_male",
+        "valence_sd_male",
+        "arousal_mean_male",
+        "arousal_sd_male",
+        "dominance_mean_male",
+        "dominance_sd_male",
+        "df_compare_gender",
+        "t_valence",
+        "p_valence",
+        "t_arousal",
+        "p_arousal",
+        "t_dominance",
+        "p_dominance"
       ]
     },
     {
@@ -2073,6 +4708,19 @@
         "familiar",
         "picture",
         "visualcomp"
+      ],
+      "wordColumns": [
+        "word_croatian"
+      ],
+      "rawColumns": [
+        "translate_word_english",
+        "word_croatian",
+        "familiar_mean",
+        "familiar_sd",
+        "visual_complexity_mean",
+        "visual_complexity_sd",
+        "naming_latency_mean",
+        "naming_latency_sd"
       ]
     },
     {
@@ -2093,6 +4741,18 @@
         "picture",
         "recognition",
         "sensory"
+      ],
+      "wordColumns": [
+        "word_russian"
+      ],
+      "rawColumns": [
+        "translate_word_english",
+        "word_russian",
+        "frequency_subjective",
+        "image_variability_mean",
+        "boi_mean",
+        "naming_rt",
+        "recognition_rt"
       ]
     },
     {
@@ -2111,6 +4771,15 @@
         "concrete",
         "familiar",
         "imagine"
+      ],
+      "wordColumns": [
+        "word_spanish"
+      ],
+      "rawColumns": [
+        "word_spanish",
+        "familiar_mean",
+        "imagine_mean",
+        "concrete_mean"
       ]
     },
     {
@@ -2130,6 +4799,21 @@
         "concrete",
         "context",
         "valence"
+      ],
+      "wordColumns": [
+        "word_french"
+      ],
+      "rawColumns": [
+        "word_french",
+        "translate_word_english",
+        "valence_mean",
+        "valence_sd",
+        "arousal_mean",
+        "arousal_sd",
+        "context_mean",
+        "context_sd",
+        "concrete_mean",
+        "concrete_sd"
       ]
     },
     {
@@ -2148,6 +4832,75 @@
         "arousal",
         "dominate",
         "valence"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "word_english",
+        "valence_mean",
+        "valence_sd",
+        "valence_n",
+        "arousal_mean",
+        "arousal_sd",
+        "arousal_n",
+        "dominance_mean",
+        "dominance_sd",
+        "dominance_n",
+        "valence_mean_male",
+        "valence_sd_male",
+        "valence_n_male",
+        "valence_mean_female",
+        "valence_sd_female",
+        "valence_n_female",
+        "arousal_mean_male",
+        "arousal_sd_male",
+        "arousal_n_male",
+        "arousal_mean_female",
+        "arousal_sd_female",
+        "arousal_n_female",
+        "dominance_mean_male",
+        "dominance_sd_male",
+        "dominance_n_male",
+        "dominance_mean_female",
+        "dominance_sd_female",
+        "dominance_n_female",
+        "valence_mean_young",
+        "valence_sd_young",
+        "valence_n_young",
+        "valence_mean_old",
+        "valence_sd_old",
+        "valence_n_old",
+        "arousal_mean_young",
+        "arousal_sd_young",
+        "arousal_n_young",
+        "arousal_mean_old",
+        "arousal_sd_old",
+        "arousal_n_old",
+        "dominance_mean_young",
+        "dominance_sd_young",
+        "dominance_n_young",
+        "dominance_mean_old",
+        "dominance_sd_old",
+        "dominance_n_old",
+        "valence_mean_low_education",
+        "valence_sd_low_education",
+        "valence_n_low_education",
+        "valence_mean_high_education",
+        "valence_sd_high_education",
+        "valence_n_high_education",
+        "arousal_mean_low_education",
+        "arousal_sd_low_education",
+        "arousal_n_low_education",
+        "arousal_mean_high_education",
+        "arousal_sd_high_education",
+        "arousal_n_high_education",
+        "dominance_mean_low_education",
+        "dominance_sd_low_education",
+        "dominance_n_low_education",
+        "dominance_mean_high_education",
+        "dominance_sd_high_education",
+        "dominance_n_high_education"
       ]
     },
     {
@@ -2170,6 +4923,54 @@
         "letters",
         "pos",
         "valence"
+      ],
+      "wordColumns": [
+        "word_dutch"
+      ],
+      "rawColumns": [
+        "word_dutch",
+        "translate_word_english",
+        "valence_mean",
+        "valence_sd",
+        "valence_n",
+        "arousal_mean",
+        "arousal_sd",
+        "arousal_n",
+        "dominance_mean",
+        "dominance_sd",
+        "dominance_n",
+        "aoa_mean",
+        "aoa_sd",
+        "aoa_n",
+        "valence_mean_male",
+        "valence_sd_male",
+        "valence_n_male",
+        "arousal_mean_male",
+        "arousal_sd_male",
+        "arousal_n_male",
+        "dominance_mean_male",
+        "dominance_sd_male",
+        "dominance_n_male",
+        "aoa_mean_male",
+        "aoa_sd_male",
+        "aoa_n_male",
+        "valence_mean_male_female",
+        "valence_sd_male_female",
+        "valence_n_male_female",
+        "arousal_mean_male_female",
+        "arousal_sd_male_female",
+        "arousal_n_male_female",
+        "dominance_mean_male_female",
+        "dominance_sd_male_female",
+        "dominance_n_male_female",
+        "aoa_mean_male_female",
+        "aoa_sd_male_female",
+        "aoa_n_male_female",
+        "frequency_log10",
+        "frequency",
+        "length",
+        "percent_n",
+        "pos"
       ]
     },
     {
@@ -2194,6 +4995,28 @@
         "imagine",
         "letters",
         "nameagree"
+      ],
+      "wordColumns": [
+        "word_russian"
+      ],
+      "rawColumns": [
+        "translate_word_english",
+        "word_russian",
+        "category",
+        "aoa_objective_mean_months",
+        "name_agreement_proportion",
+        "name_agreement_h",
+        "image_agreement_mean",
+        "image_agreement_sd",
+        "imagine_mean",
+        "imagine_sd",
+        "familiar_mean",
+        "familiar_sd",
+        "frequency_ljashevskajasharov",
+        "frequency_zasorina",
+        "dominance_egf",
+        "dominance_first",
+        "length"
       ]
     },
     {
@@ -2219,6 +5042,26 @@
         "picture",
         "syllables",
         "visualcomp"
+      ],
+      "wordColumns": [
+        "word_persian_phonetic",
+        "word_persian"
+      ],
+      "rawColumns": [
+        "word_persian_phonetic",
+        "translate_word_english",
+        "naming_rt",
+        "h_statistic",
+        "name_agreement_proportion",
+        "image_agreement_mean",
+        "familiar_mean",
+        "visualcomplexity_mean",
+        "aoa_mean",
+        "frequency",
+        "imagine_mean",
+        "syllables",
+        "phonemes",
+        "word_persian"
       ]
     },
     {
@@ -2233,7 +5076,16 @@
       },
       "language": "italian_1, italian_2",
       "nRows": 14400,
-      "flags": []
+      "flags": [],
+      "wordColumns": [
+        "word_italian_1",
+        "word_italian_2"
+      ],
+      "rawColumns": [
+        "word_italian_1",
+        "word_italian_2",
+        "cosine"
+      ]
     },
     {
       "bibtex": "Juhasz2013",
@@ -2249,6 +5101,13 @@
       "nRows": 5857,
       "flags": [
         "sensory"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "word_english",
+        "sensory_mean"
       ]
     },
     {
@@ -2266,6 +5125,21 @@
       "flags": [
         "imagine",
         "rt"
+      ],
+      "wordColumns": [
+        "word_english",
+        "word_english_past"
+      ],
+      "rawColumns": [
+        "word_english",
+        "word_english_past",
+        "regularity",
+        "consistency",
+        "imagine_mean",
+        "rt_mean",
+        "zscore",
+        "proportion_correct",
+        "proportion_error"
       ]
     },
     {
@@ -2290,6 +5164,29 @@
         "phonemes",
         "semantic",
         "syllables"
+      ],
+      "wordColumns": [
+        "word_english_acronym",
+        "word_english_phrase"
+      ],
+      "rawColumns": [
+        "word_english_acronym",
+        "word_english_phrase",
+        "semantic_related_responses_percent",
+        "voiced",
+        "ambiguity_type",
+        "length",
+        "syllables",
+        "phonemes",
+        "orthographic_neighbors",
+        "imagine_mean",
+        "frequency_rate_mean",
+        "frequency_log_google",
+        "frequency_log_bing",
+        "frequency_log_altavista",
+        "aoa_mean",
+        "frequency_bigram",
+        "frequency_trigram"
       ]
     },
     {
@@ -2312,6 +5209,23 @@
         "freq",
         "letters",
         "valence"
+      ],
+      "wordColumns": [
+        "word_spanish"
+      ],
+      "rawColumns": [
+        "category",
+        "word_spanish",
+        "valence_mean",
+        "valence_sd",
+        "arousal_mean",
+        "arousal_sd",
+        "familiar_mean",
+        "familiar_sd",
+        "concrete_mean",
+        "concrete_sd",
+        "frequency_mean",
+        "length"
       ]
     },
     {
@@ -2329,6 +5243,16 @@
       "flags": [
         "aoa",
         "rt"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "word_english",
+        "aoa_mean",
+        "rt_mean",
+        "aoa_sd",
+        "rt_sd"
       ]
     },
     {
@@ -2346,6 +5270,18 @@
       "flags": [
         "aoa",
         "freq"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "word_english",
+        "occurrence_total",
+        "occurrence_number",
+        "frequency_pm",
+        "aoa_mean",
+        "aoa_sd",
+        "known_percent"
       ]
     },
     {
@@ -2368,6 +5304,28 @@
         "nameagree",
         "typical",
         "visualcomp"
+      ],
+      "wordColumns": [
+        "word_spanish"
+      ],
+      "rawColumns": [
+        "category",
+        "translate_word_english",
+        "word_spanish",
+        "aoa_mean",
+        "aoa_sd",
+        "familiar_mean",
+        "familiar_sd",
+        "manip_mean",
+        "manip_sd",
+        "typicality_mean",
+        "typicality_sd",
+        "visual_complexity_mean",
+        "visual_complexity_sd",
+        "name_agreement_proportion",
+        "name_agreement_h",
+        "name_agreement_percent_modal",
+        "frequency_log"
       ]
     },
     {
@@ -2388,6 +5346,22 @@
         "dominate",
         "imagine",
         "valence"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "word_english",
+        "arousal_mean_lsa",
+        "arousal_mean_norms",
+        "concrete_mean_lsa",
+        "concrete_mean_norms",
+        "dominance_mean_lsa",
+        "dominance_mean_norms",
+        "imagine_mean_lsa",
+        "imagine_mean_norms",
+        "valence_mean_lsa",
+        "valence_mean_norms"
       ]
     },
     {
@@ -2404,6 +5378,16 @@
       "nRows": 3000,
       "flags": [
         "rt"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "word_english",
+        "mean_rt",
+        "rt_sd",
+        "mean_rating",
+        "sd_rating"
       ]
     },
     {
@@ -2421,6 +5405,30 @@
       "flags": [
         "familiar",
         "sensory"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "word_english",
+        "familiar_mean",
+        "pain_mean",
+        "smell_mean",
+        "color_mean",
+        "taste_mean",
+        "sound_mean",
+        "grasp_mean",
+        "motion_mean",
+        "familiar_rt",
+        "pain_rt",
+        "smell_rt",
+        "color_rt",
+        "taste_rt",
+        "sound_rt",
+        "grasp_rt",
+        "motion_rt",
+        "pc1_scores",
+        "pc2_scores"
       ]
     },
     {
@@ -2439,6 +5447,31 @@
         "arousal",
         "dominate",
         "valence"
+      ],
+      "wordColumns": [
+        "word_spanish"
+      ],
+      "rawColumns": [
+        "translate_word_english",
+        "word_spanish",
+        "valence_mean",
+        "valence_sd",
+        "valence_mean_women",
+        "valence_sd_women",
+        "valence_mean_men",
+        "valence_sd_men",
+        "arousal_mean",
+        "arousal_sd",
+        "arousal_mean_women",
+        "arousal_sd_women",
+        "arousal_mean_men",
+        "arousal_sd_men",
+        "dominance_mean",
+        "dominance_sd",
+        "dominance_mean_women",
+        "dominance_sd_women",
+        "dominance_mean_men",
+        "dominance_sd_men"
       ]
     },
     {
@@ -2459,6 +5492,22 @@
         "dominate",
         "imagine",
         "valence"
+      ],
+      "wordColumns": [
+        "word_dutch"
+      ],
+      "rawColumns": [
+        "word_dutch",
+        "arousal_mean",
+        "arousal_sd",
+        "concrete_mean",
+        "concrete_sd",
+        "dominance_mean",
+        "dominance_sd",
+        "imagine_mean",
+        "imagine_sd",
+        "valence_mean",
+        "valence_sd"
       ]
     },
     {
@@ -2483,6 +5532,39 @@
         "nameagree",
         "picture",
         "rt"
+      ],
+      "wordColumns": [
+        "word_japanese_katana",
+        "word_japanese_romanized",
+        "word_japanese_katana_untimed",
+        "word_japanese_romanized_untimed"
+      ],
+      "rawColumns": [
+        "translate_word_english",
+        "word_japanese_katana",
+        "word_japanese_romanized",
+        "snodgrass_concept",
+        "snodgrass_id",
+        "picture_type",
+        "rt_mean_strict",
+        "rt_mean_liberal",
+        "name_agreement_percent_strict",
+        "name_agreement_percent_liberal",
+        "h",
+        "name_agreement_percent_strict_untimed",
+        "name_agreement_percent_liberal_untimed",
+        "untimed_h",
+        "imagine_mean",
+        "vivid_mean",
+        "image_agreement_mean",
+        "image_variability_mean",
+        "familiar_mean",
+        "aoa_mean",
+        "complexity_percent",
+        "mora",
+        "word_japanese_katana_untimed",
+        "word_japanese_romanized_untimed",
+        "translate_word_english_untimed"
       ]
     },
     {
@@ -2500,6 +5582,33 @@
       "flags": [
         "arousal",
         "valence"
+      ],
+      "wordColumns": [
+        "word_french"
+      ],
+      "rawColumns": [
+        "word_french",
+        "valence_mean",
+        "arousal_mean",
+        "valence_number",
+        "arousal_number",
+        "valence_mean_painchaud_2005",
+        "valence_mean_syssau_font_2005",
+        "valence_mean_bonin_etal_2003",
+        "valence_mean_messina_etal_1989",
+        "valence_mean_vikis_freiberg_1976",
+        "valence_mean_bradley_lang_1999",
+        "valence_mean_vo_al_2009",
+        "valence_mean_leleu_1987",
+        "valence_mean_zammuner_1998",
+        "valence_mean_eilola_havelka_2007",
+        "valence_mean_redondo_etal_2007",
+        "valence_mean_niedenthal_etal_2004",
+        "arousal_mean_bradley_lang_1999",
+        "arousal_mean_vo_al_2009",
+        "arousal_mean_leleu_1987",
+        "arousal_mean_eilola_havelka_2007",
+        "arousal_mean_redondo_etal_2007"
       ]
     },
     {
@@ -2521,6 +5630,27 @@
         "nameagree",
         "rt",
         "visualcomp"
+      ],
+      "wordColumns": [
+        "word_english",
+        "word_english_celex"
+      ],
+      "rawColumns": [
+        "word_english",
+        "word_english_celex",
+        "type",
+        "mame_agreement_h_mean",
+        "name_agreement_proportion",
+        "familiar_mean",
+        "familiar_sd",
+        "imagine_mean",
+        "imagine_sd",
+        "visual_complexity_mean",
+        "visual_complexity_sd",
+        "frequency_compound",
+        "frequency_lexeme1",
+        "frequency_lexeme2",
+        "rt_mean"
       ]
     },
     {
@@ -2535,7 +5665,18 @@
       },
       "language": "german_1, german_2",
       "nRows": 2500,
-      "flags": []
+      "flags": [],
+      "wordColumns": [
+        "word_german_1",
+        "word_german_2"
+      ],
+      "rawColumns": [
+        "translate_word_english_1",
+        "translate_word_english_2",
+        "cosine",
+        "word_german_1",
+        "word_german_2"
+      ]
     },
     {
       "bibtex": "Kremer2011_it",
@@ -2549,7 +5690,18 @@
       },
       "language": "italian_1, italian_2",
       "nRows": 2500,
-      "flags": []
+      "flags": [],
+      "wordColumns": [
+        "word_italian_1",
+        "word_italian_2"
+      ],
+      "rawColumns": [
+        "translate_word_english_1",
+        "translate_word_english_2",
+        "cosine",
+        "word_italian_1",
+        "word_italian_2"
+      ]
     },
     {
       "bibtex": "Khanna2011_1",
@@ -2566,6 +5718,18 @@
       "flags": [
         "aoa",
         "rt"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "item_number",
+        "word_english",
+        "definition_phrase",
+        "aoa_mean",
+        "rt_mean",
+        "rt_sd",
+        "item_zscore"
       ]
     },
     {
@@ -2584,6 +5748,20 @@
         "aoa",
         "dominate",
         "rt"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "item_number",
+        "set_number",
+        "word_english",
+        "dominance_definition",
+        "aoa_mean_dominance",
+        "subordinate_definition",
+        "aoa_mean_subordinate",
+        "rt_mean_ldt",
+        "rt_mean_naming"
       ]
     },
     {
@@ -2602,6 +5780,25 @@
         "aoa",
         "familiar",
         "meaning"
+      ],
+      "wordColumns": [
+        "word_italian_idiom"
+      ],
+      "rawColumns": [
+        "word_italian_idiom",
+        "number_words",
+        "meaning_knowledge",
+        "familiar_mean",
+        "familiar_sd",
+        "aoa_mean",
+        "aoa_sd",
+        "predictability",
+        "syntactic_flexibility_mean",
+        "syntactic_flexibility_sd",
+        "literal_plausability_mean",
+        "literal_plausability_sd",
+        "compositionality_mean",
+        "compositionality_sd"
       ]
     },
     {
@@ -2618,6 +5815,24 @@
       "nRows": 1958,
       "flags": [
         "emotion"
+      ],
+      "wordColumns": [
+        "word_german"
+      ],
+      "rawColumns": [
+        "word_german",
+        "happiness_mean",
+        "happiness_sd",
+        "anger_mean",
+        "anger_sd",
+        "sad_mean",
+        "sad_sd",
+        "fear_mean",
+        "fear_sd",
+        "disgust_mean",
+        "disgust_sd",
+        "basic_emo_cat_conservative",
+        "basic_emo_cat_liberal"
       ]
     },
     {
@@ -2635,6 +5850,18 @@
       "flags": [
         "imagine",
         "sensory"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "word_english",
+        "imagine_n",
+        "imagine_mean",
+        "imagine_sd",
+        "boi_n",
+        "boi_mean",
+        "boi_sd"
       ]
     },
     {
@@ -2654,6 +5881,16 @@
         "letters",
         "semantic",
         "valence"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "word_english",
+        "semantic_category",
+        "length",
+        "frequency_celex",
+        "valence_mean"
       ]
     },
     {
@@ -2679,6 +5916,35 @@
         "phonemes",
         "syllables",
         "visualcomp"
+      ],
+      "wordColumns": [
+        "word_russian",
+        "word_russian_name"
+      ],
+      "rawColumns": [
+        "translate_word_english",
+        "translate_word_french",
+        "word_russian",
+        "word_russian_name",
+        "name_agreement_h",
+        "name_agreement_proportion",
+        "image_agreement_mean",
+        "image_agreement_sd",
+        "familiar_mean",
+        "familiar_sd",
+        "aoa_mean",
+        "aoa_sd",
+        "imagine_mean",
+        "imagine_sd",
+        "visual_complexity_mean",
+        "length",
+        "syllables",
+        "phonemes",
+        "frequency_mean",
+        "lexical_code_1_prop",
+        "lexical_code_2_prop",
+        "lexical_code_3_prop",
+        "lexical_code_4_prop"
       ]
     },
     {
@@ -2695,6 +5961,19 @@
       "nRows": 10222,
       "flags": [
         "emotion"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "word_english",
+        "happiness_rank",
+        "happiness_mean",
+        "happiness_sd",
+        "twitter_rank",
+        "google_rank",
+        "nyt_rank",
+        "lyrics_rank"
       ]
     },
     {
@@ -2716,6 +5995,36 @@
         "letters",
         "taboo",
         "valence"
+      ],
+      "wordColumns": [
+        "word_english",
+        "word_finnish"
+      ],
+      "rawColumns": [
+        "word_english",
+        "word_finnish",
+        "length_english",
+        "length_finnish",
+        "familiar_mean_english",
+        "familiar_sd_english",
+        "valence_mean_english",
+        "valence_sd_english",
+        "emotionalcharge_mean_english",
+        "emotionalcharge_sd_english",
+        "offensiveness_mean_english",
+        "offensiveness_sd_english",
+        "concrete_mean_english",
+        "concrete_sd_english",
+        "familiar_mean_finnish",
+        "familiar_sd_finnish",
+        "valence_mean_finnish",
+        "valence_sd_finnish",
+        "emotionalcharge_mean_finnish",
+        "emotionalcharge_sd_finnish",
+        "offensiveness_mean_finnish",
+        "offensiveness_sd_finnish",
+        "concrete_mean_finnish",
+        "concrete_sd_finnish"
       ]
     },
     {
@@ -2738,6 +6047,29 @@
         "imagine",
         "letters",
         "phonemes"
+      ],
+      "wordColumns": [
+        "word_portuguese"
+      ],
+      "rawColumns": [
+        "word_portuguese",
+        "translate_word_english",
+        "cgram",
+        "familiar_mean",
+        "concrete_mean",
+        "imagine_mean",
+        "aoa_mean",
+        "aoa_sd",
+        "length",
+        "silo_n",
+        "phonemes",
+        "silphom_n",
+        "ond",
+        "oup",
+        "phoneme_density",
+        "phonome_up",
+        "frequency",
+        "frequency_log"
       ]
     },
     {
@@ -2758,6 +6090,28 @@
         "familiar",
         "imagine",
         "letters"
+      ],
+      "wordColumns": [
+        "word_italian"
+      ],
+      "rawColumns": [
+        "word_italian",
+        "translate_word_english",
+        "concrete_mean",
+        "concrete_sd",
+        "imagine_mean",
+        "imagine_sd",
+        "familiar_mean",
+        "familiar_sd",
+        "aoa_mean",
+        "aoa_sd",
+        "ca",
+        "casd",
+        "abs",
+        "abssd",
+        "moa_mean",
+        "moa_sd",
+        "length"
       ]
     },
     {
@@ -2781,6 +6135,76 @@
         "letters",
         "picture",
         "rt"
+      ],
+      "wordColumns": [
+        "word_english_us",
+        "word_english_gb"
+      ],
+      "rawColumns": [
+        "file_no",
+        "word_english_us",
+        "word_english_gb",
+        "aoa_mean",
+        "p_n",
+        "familiar_mean",
+        "familiarity_cond",
+        "complexity_mean",
+        "dominance_valid",
+        "us_uk_match",
+        "raw_dom",
+        "dont_know",
+        "missing_name",
+        "raw_valid",
+        "total_miss",
+        "dominance_total_miss",
+        "no_alternatives",
+        "h_statistic",
+        "cobuild_f",
+        "uk_name",
+        "length",
+        "naming_n",
+        "percent_na",
+        "percent_na_timed",
+        "frequency_celex_comb",
+        "frequency_celex_writ",
+        "frequency_celex_spoken",
+        "in",
+        "response1",
+        "response2",
+        "response3",
+        "response4",
+        "response5",
+        "response6",
+        "response7",
+        "response8",
+        "response9",
+        "response10",
+        "response11",
+        "response12",
+        "response13",
+        "response14",
+        "response15",
+        "response16",
+        "response17",
+        "response18",
+        "response19",
+        "response20",
+        "response21",
+        "response22",
+        "response23",
+        "response24",
+        "response25",
+        "rt_mean",
+        "rt_sd",
+        "rt_n",
+        "noresponse_n",
+        "voicekey_fail_n",
+        "environmental_n",
+        "dysfluency_n",
+        "time_out_n",
+        "pass_no_response_n",
+        "non_dominance_n",
+        "missing_data_n"
       ]
     },
     {
@@ -2803,6 +6227,33 @@
         "imagine",
         "nameagree",
         "visualcomp"
+      ],
+      "wordColumns": [
+        "word_spanish"
+      ],
+      "rawColumns": [
+        "word_spanish",
+        "translate_word_english",
+        "name_agreement_h_mean",
+        "name_agreement_proportion",
+        "familiar_mean",
+        "familiar_median",
+        "familiar_sd",
+        "imagine_mean",
+        "imagine_median",
+        "imagine_sd",
+        "visual_complexity_mean",
+        "visual_complexity_median",
+        "visual_complexity_sd",
+        "image_variability_mean",
+        "image_variability_median",
+        "image_variability_sd",
+        "aoa_mean",
+        "aoa_median",
+        "aoa_sd",
+        "association_h",
+        "association_percent_mfn",
+        "association"
       ]
     },
     {
@@ -2824,6 +6275,33 @@
         "letters",
         "syllables",
         "valence"
+      ],
+      "wordColumns": [
+        "word_german"
+      ],
+      "rawColumns": [
+        "word_german",
+        "valence_mean",
+        "valence_sd",
+        "arousal_mean",
+        "arousal_sd",
+        "concrete_mean",
+        "concrete_sd",
+        "frequency",
+        "length",
+        "syllables",
+        "valence_mean_female",
+        "valence_sd_female",
+        "arousal_mean_female",
+        "arousal_sd_female",
+        "concrete_mean_female",
+        "concrete_sd_female",
+        "valence_mean_male",
+        "valence_sd_mean",
+        "arousal_mean_male",
+        "arousal_sd_mean",
+        "concrete_mean_male",
+        "concrete_sd_male"
       ]
     },
     {
@@ -2842,6 +6320,79 @@
         "aoa",
         "category",
         "familiar"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "word_english",
+        "category",
+        "familiar_group",
+        "expected_familiar_group",
+        "aoa_subjective_group",
+        "expected_aoa_s_group",
+        "manip_group",
+        "expected_manip_group",
+        "familiar_n_fma",
+        "familiar_mean_fma",
+        "familiar_sd_fma",
+        "familiar_n_afm",
+        "familiar_mean_afm",
+        "familiar_sd_afm",
+        "familiar_n_maf",
+        "familiar_mean_maf",
+        "familiar_sd_maf",
+        "familiar_n",
+        "familiar_mean",
+        "familiar_sd",
+        "aoa_subjective_n_afm",
+        "aoa_subjective_mean_afm",
+        "aoa_subjective_sd_afm",
+        "aoa_subjective_n_maf",
+        "aoa_subjective_mean_maf",
+        "aoa_subjective_sd_maf",
+        "aoa_subjective_n_fma",
+        "aoa_subjective_mean_fma",
+        "aoa_subjective_sd_fma",
+        "aoa_subjective_n",
+        "aoa_subjective_mean",
+        "aoa_subjective_sd",
+        "manip1_n_maf",
+        "manip1_mean_maf",
+        "manip1_sd_maf",
+        "manip1_n_fma",
+        "manip1_mean_fma",
+        "manip1_sd_fma",
+        "manip1_n_afm",
+        "manip1_mean_afm",
+        "manip1_sd_afm",
+        "manip1_n",
+        "manip1_mean",
+        "manip1_sd",
+        "manip2_n_maf",
+        "manip2_mean_maf",
+        "manip2_sd_maf",
+        "manip2_n_fma",
+        "manip2_mean_fma",
+        "manip2_sd_fma",
+        "manip2_n_afm",
+        "manip2_mean_afm",
+        "manip2_sd_afm",
+        "manip2_n",
+        "manip2_mean",
+        "manip2_sd",
+        "familiar_practice_n",
+        "familiar_practice_mean",
+        "familiar_practice_sd",
+        "aoa_subjective_practice_n",
+        "aoa_subjective_practice_mean",
+        "aoa_subjective_practice_sd",
+        "manip1_practice_n",
+        "manip1_practice_mean",
+        "manip1_practice_sd",
+        "manip2_practice_nn",
+        "manip2_practice_mean",
+        "manip2_practice_sd"
       ]
     },
     {
@@ -2863,6 +6414,22 @@
         "letters",
         "rt",
         "typical"
+      ],
+      "wordColumns": [
+        "word_italian"
+      ],
+      "rawColumns": [
+        "word_italian",
+        "translate_word_english",
+        "aoa_mean_lr",
+        "aoa_mean_objective",
+        "aoa_mean_subjective",
+        "rt_mean",
+        "typicality_mean",
+        "familiar_mean",
+        "frequency_o",
+        "frequency_s",
+        "length"
       ]
     },
     {
@@ -2884,6 +6451,24 @@
         "letters",
         "nameagree",
         "visualcomp"
+      ],
+      "wordColumns": [
+        "word_greek"
+      ],
+      "rawColumns": [
+        "word_greek",
+        "translate_word_english",
+        "category_rossion_2004",
+        "category_snodgrass_1980",
+        "length",
+        "frequency",
+        "observation_n",
+        "name_agreement_proportion",
+        "name_agreement_h",
+        "visual_complexity_mean",
+        "visual_complexity_sd",
+        "aoa_subjective_mean",
+        "aoa_subjective_sd"
       ]
     },
     {
@@ -2903,6 +6488,49 @@
         "picture",
         "pos",
         "valence"
+      ],
+      "wordColumns": [
+        "word_french"
+      ],
+      "rawColumns": [
+        "word_french",
+        "translate_word_english",
+        "emotional_source",
+        "picture_source",
+        "picture_number",
+        "age_rating",
+        "negative_percent_5_years",
+        "negative_percent_girls_5_years",
+        "negative_percent_boys_5_years",
+        "neutral_percent_5_years",
+        "neutral_percent_girls_5_years",
+        "neutral_percent_boys_5_years",
+        "positive_percent_5_years",
+        "positive_percent_girls_5_years",
+        "positive_percent_boys_5_years",
+        "negative_percent_7_years",
+        "negative_percent_girls_7_years",
+        "negative_percent_boys_7_years",
+        "neutral_percent_7_years",
+        "neutral_percent_girls_7_years",
+        "neutral_percent_boys_7_years",
+        "positive_percent_7_years",
+        "positive_percent_girls_7_years",
+        "positive_percent_boys_7_years",
+        "negative_percent_9_years",
+        "negative_percent_girls_9_years",
+        "negative_percent_boys_9_years",
+        "neutral_percent_9_years",
+        "neutral_percent_girls_9_years",
+        "neutral_percent_boys_9_years",
+        "positive_percent_9_years",
+        "positive_percent_girls_9_years",
+        "positive_percent_boys_9_years",
+        "negative_percent_adults",
+        "neutral_percent_adults",
+        "positive_percent_adults",
+        "valence_mean",
+        "valence_sd"
       ]
     },
     {
@@ -2920,6 +6548,18 @@
       "flags": [
         "freq",
         "imagine"
+      ],
+      "wordColumns": [
+        "word_french"
+      ],
+      "rawColumns": [
+        "word_french",
+        "frequency_mean",
+        "frequency_sd",
+        "frequency_stresiduals",
+        "imagine_mean",
+        "imagine_sd",
+        "imagine_stresiduals"
       ]
     },
     {
@@ -2943,6 +6583,29 @@
         "pos",
         "syllables",
         "valence"
+      ],
+      "wordColumns": [
+        "word_german"
+      ],
+      "rawColumns": [
+        "word_german",
+        "pos",
+        "valence_mean",
+        "valence_sd",
+        "arousal_mean",
+        "arousal_sd",
+        "imagine_mean",
+        "imagine_sd",
+        "length",
+        "phonemes",
+        "syllables",
+        "frequency_1mil",
+        "n",
+        "fn",
+        "hfn",
+        "fhfn",
+        "bigmean_token",
+        "account"
       ]
     },
     {
@@ -2960,6 +6623,17 @@
       "flags": [
         "aoa",
         "rt"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "word_english",
+        "aoa_subjective_n",
+        "aoa_subjective_mean",
+        "aoa_subjective_sd",
+        "rt_mean",
+        "rt_sd"
       ]
     },
     {
@@ -2977,6 +6651,16 @@
       "flags": [
         "aoa",
         "freq"
+      ],
+      "wordColumns": [
+        "word_french"
+      ],
+      "rawColumns": [
+        "word_french",
+        "aoa_mean",
+        "aoa_sd",
+        "frequency_mean",
+        "frequency_sd"
       ]
     },
     {
@@ -2994,6 +6678,62 @@
       "flags": [
         "arousal",
         "valence"
+      ],
+      "wordColumns": [],
+      "rawColumns": [
+        "iaps_id",
+        "iaps_description",
+        "set",
+        "iaps_content",
+        "iaps_valence_category",
+        "valence_mean_young_female",
+        "valence_mean_young_male",
+        "valence_mean_old_female",
+        "valence_mean_old_male",
+        "valence_mean_female",
+        "valence_mean_male",
+        "valence_mean_young",
+        "valence_mean_old",
+        "valence_mean",
+        "arousal_mean_young_female",
+        "arousal_mean_young_male",
+        "arousal_mean_old_female",
+        "arousal_mean_old_male",
+        "arousal_mean_female",
+        "arousal_mean_male",
+        "arousal_mean_young",
+        "arousal_mean_old",
+        "arousal_mean",
+        "valence_anova_p_age",
+        "valence_anova_etasquared_age",
+        "valence_anova_significant_age",
+        "valence_anova_p_age_sex",
+        "valence_anova_etasquared_age_sex",
+        "valence_anova_significant_age_sex",
+        "valence_anova_p_sex",
+        "valence_anova_etasquared_sex",
+        "valence_anova_significant_sex",
+        "arousal_anova_p_age",
+        "arousal_anova_etasquared_age",
+        "arousal_anova_significant_age",
+        "arousal_anova_p_age_sex",
+        "arousal_anova_etasquared_age_sex",
+        "arousal_anova_signficant_age_sex",
+        "arousal_anova_p_sex",
+        "arousal_anova_etasquared_sex",
+        "arousal_anova_significant_sex",
+        "percent_hits_young",
+        "percent_hits_old",
+        "percent_hits",
+        "percent_false_alarm_young",
+        "percent_false_alarm_old",
+        "percent_false_alarm",
+        "dprime_young",
+        "dprime_old",
+        "dprime",
+        "response_bias_c_young",
+        "response_bias_c_old",
+        "response_bias_c"
       ]
     },
     {
@@ -3015,6 +6755,117 @@
         "letters",
         "relevance",
         "valence"
+      ],
+      "wordColumns": [
+        "word_german"
+      ],
+      "rawColumns": [
+        "word_german",
+        "translate_word_english",
+        "length",
+        "frequency_per_million",
+        "frequency_class",
+        "valence_mean_young_female",
+        "valence_mean_young_male",
+        "valence_mean_old_female",
+        "valence_mean_old_male",
+        "valence_mean_young",
+        "valence_mean_old",
+        "valence_mean",
+        "arousal_mean_young_female",
+        "arousal_mean_young_male",
+        "arousal_mean_old_female",
+        "arousal_mean_old_male",
+        "arousal_mean_young",
+        "arousal_mean_old",
+        "arousal_mean",
+        "control_mean_young_female",
+        "control_mean_young_male",
+        "control_mean_old_female",
+        "control_mean_old_male",
+        "control_mean_young",
+        "control_mean_old",
+        "control_mean",
+        "imagine_mean_young_female",
+        "imagine_mean_young_male",
+        "imagine_mean_old_female",
+        "imagine_mean_old_male",
+        "imagine_mean_young",
+        "imagine_mean_old",
+        "imagine_mean",
+        "selfrelevance_mean_young_female",
+        "selfrelevance_mean_young_male",
+        "selfrelevance_mean_old_female",
+        "selfrelevance_mean_old_male",
+        "selfrelevance_mean_young",
+        "selfrelevance_mean_old",
+        "selfrelevance_mean",
+        "agerelevance_mean_young_female",
+        "agerelevance_mean_young_male",
+        "agerelevance_mean_old_female",
+        "agerelevance_mean_old_male",
+        "agerelevance_mean_young",
+        "agerelevance_mean_old",
+        "agerelevance_mean",
+        "valence_mean_self",
+        "valence_mean_other",
+        "self_or_other_mean",
+        "self_or_other_sd",
+        "self_or_other_class",
+        "valence_anova_p_age",
+        "valence_anova_etasquared_age",
+        "valence_anova_significant_age",
+        "valence_anova_p_sex",
+        "valence_anova_etasquared_sex",
+        "valence_anova_significant_sex",
+        "valence_anova_p_age_sex",
+        "valence_anova_etasquared_age_sex",
+        "valence_anova_significant_age_sex",
+        "arousal_anova_p_age",
+        "arousal_anova_etasquared_age",
+        "arousal_anova_significant_age",
+        "arousal_anova_p_sex",
+        "arousal_anova_etasquared_sex",
+        "arousal_anova_significant_sex",
+        "arousal_anova_p_age_sex",
+        "arousal_anova_etasquared_age_sex",
+        "arousal_anova_significant_age_sex",
+        "control_anova_p_age",
+        "control_anova_etasquared_age",
+        "control_anova_significant_age",
+        "control_anova_p_sex",
+        "control_anova_etasquared_sex",
+        "control_anova_significant_sex",
+        "control_anova_p_age_sex",
+        "control_anova_etasquared_age_sex",
+        "control_anova_significant_age_sex",
+        "imagine_anova_p_age",
+        "imagine_anova_etasquared_age",
+        "imagine_anova_significant_age",
+        "imagine_anova_p_sex",
+        "imagine_anova_etasquared_sex",
+        "imagine_anova_significant_sex",
+        "imagine_anova_p_age_sex",
+        "imagine_anova_etasquared_age_sex",
+        "imagine_anova_significant_age_sex",
+        "selfrelevance_anova_p_age",
+        "selfrelevance_anova_etasquared_age",
+        "selfrelevance_anova_significant_age",
+        "selfrelevance_anova_p_sex",
+        "selfrelevance_anova_etasquared_sex",
+        "selfrelevance_anova_significant_sex",
+        "selfrelevance_anova_p_age_sex",
+        "selfrelevance_anova_etasquared_age_sex",
+        "selfrelevance_anova_significant_age_sex",
+        "agerelevance_anova_p_age",
+        "agerelevance_anova_etasquared_age",
+        "agerelevance_anova_significant_age",
+        "agerelevance_anova_p_sex",
+        "agerelevance_anova_etasquared_sex",
+        "agerelevance_anova_significant_sex",
+        "agerelevance_anova_p_age_sex",
+        "agerelevance_anova_etasquared_age_sex",
+        "agerelevance_anova_significant_age_sex"
       ]
     },
     {
@@ -3031,6 +6882,21 @@
       "nRows": 464,
       "flags": [
         "aoa"
+      ],
+      "wordColumns": [
+        "word_chinese_simplified"
+      ],
+      "rawColumns": [
+        "comprehension_production",
+        "type",
+        "word_chinese_simplified",
+        "translate_word_pinyin",
+        "translate_word_english",
+        "aoa_percent_12m",
+        "aoa_percent_13m",
+        "aoa_percent_14m",
+        "aoa_percent_15m",
+        "aoa_percent_16m"
       ]
     },
     {
@@ -3047,6 +6913,29 @@
       "nRows": 710,
       "flags": [
         "aoa"
+      ],
+      "wordColumns": [
+        "word_chinese_simplified"
+      ],
+      "rawColumns": [
+        "type",
+        "word_chinese_simplified",
+        "translate_word_pinyin",
+        "translate_word_english",
+        "aoa_percent_17m",
+        "aoa_percent_18m",
+        "aoa_percent_19m",
+        "aoa_percent_20m",
+        "aoa_percent_21m",
+        "aoa_percent_22m",
+        "aoa_percent_23m",
+        "aoa_percent_24m",
+        "aoa_percent_25m",
+        "aoa_percent_26m",
+        "aoa_percent_27m",
+        "aoa_percent_28m",
+        "aoa_percent_29m",
+        "aoa_percent_30m"
       ]
     },
     {
@@ -3063,6 +6952,21 @@
       "nRows": 145,
       "flags": [
         "aoa"
+      ],
+      "wordColumns": [
+        "word_french",
+        "word_english"
+      ],
+      "rawColumns": [
+        "word_french",
+        "word_english",
+        "aoa_mean",
+        "aoa_mean_chalard2003",
+        "aoa_mean_pind2000",
+        "aoa_mean_morrison1997",
+        "aoa_mean_barbarotto2005",
+        "aoa_mean_perez2005",
+        "aoa_mean_alvarez2007"
       ]
     },
     {
@@ -3086,6 +6990,33 @@
         "syllables",
         "taboo",
         "valence"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "rater",
+        "word_english",
+        "type",
+        "length",
+        "syllables",
+        "frequency_kf",
+        "valence_mean_anew",
+        "arousal_mean_anew",
+        "personal_use_mean",
+        "personal_use_sd",
+        "familiar_mean",
+        "familiar_sd",
+        "offensiveness_mean",
+        "offensiveness_sd",
+        "taboo_mean",
+        "taboo_sd",
+        "valence_mean",
+        "valence_sd",
+        "arousal_mean",
+        "arousal_sd",
+        "imagine_mean",
+        "imagine_sd"
       ]
     },
     {
@@ -3106,6 +7037,30 @@
         "familiar",
         "imagine",
         "typical"
+      ],
+      "wordColumns": [
+        "word_dutch"
+      ],
+      "rawColumns": [
+        "word_dutch",
+        "translate_word_english",
+        "familiar_mean",
+        "familiar_sd",
+        "familiar_n",
+        "category",
+        "goodness_mean",
+        "goodness_sd",
+        "goodness_n",
+        "typicality_mean",
+        "typicality_sd",
+        "typicality_n",
+        "dont_know",
+        "n_know_item",
+        "imagine_mean",
+        "imagine_sd",
+        "log(lemmafreq)",
+        "aoa_mean",
+        "percent_known"
       ]
     },
     {
@@ -3120,7 +7075,18 @@
       },
       "language": "dutch_cue, dutch_response",
       "nRows": 480862,
-      "flags": []
+      "flags": [],
+      "wordColumns": [
+        "word_dutch_cue",
+        "word_dutch_response"
+      ],
+      "rawColumns": [
+        "word_dutch_cue",
+        "word_dutch_response",
+        "r1",
+        "n",
+        "r1.strength"
+      ]
     },
     {
       "bibtex": "DeDeyne2008b_R123",
@@ -3134,7 +7100,18 @@
       },
       "language": "dutch_cue, dutch_response",
       "nRows": 1485378,
-      "flags": []
+      "flags": [],
+      "wordColumns": [
+        "word_dutch_cue",
+        "word_dutch_response"
+      ],
+      "rawColumns": [
+        "word_dutch_cue",
+        "word_dutch_response",
+        "r123",
+        "n",
+        "r123.strength"
+      ]
     },
     {
       "bibtex": "Marques2007",
@@ -3156,6 +7133,22 @@
         "imagine",
         "letters",
         "syllables"
+      ],
+      "wordColumns": [
+        "word_portuguese"
+      ],
+      "rawColumns": [
+        "word_portuguese",
+        "translate_word_english",
+        "aoa_mean",
+        "aoa_sd",
+        "syllables",
+        "length",
+        "familiar_mean",
+        "frequency",
+        "frequency_log",
+        "concrete_mean",
+        "imagine_mean"
       ]
     },
     {
@@ -3172,6 +7165,14 @@
       "nRows": 328,
       "flags": [
         "aoa"
+      ],
+      "wordColumns": [
+        "word_spanish"
+      ],
+      "rawColumns": [
+        "word_spanish",
+        "translate_word_english",
+        "aoa_mean"
       ]
     },
     {
@@ -3195,6 +7196,27 @@
         "rt",
         "syllables",
         "visualcomp"
+      ],
+      "wordColumns": [
+        "word_chinese_pinyin",
+        "word_chinese_simplified"
+      ],
+      "rawColumns": [
+        "word_chinese_pinyin",
+        "syllables",
+        "name_agreement_h_mean",
+        "name_agreement_proportion",
+        "concept_agreement_percent",
+        "familiar_mean",
+        "imagine_mean",
+        "visual_complexity_mean",
+        "aoa_mean_subjective",
+        "frequency",
+        "translate_word_english",
+        "rt_mean_exp1",
+        "rt_mean_exp2",
+        "alt",
+        "word_chinese_simplified"
       ]
     },
     {
@@ -3211,6 +7233,23 @@
       "nRows": 519,
       "flags": [
         "imagine"
+      ],
+      "wordColumns": [
+        "word_italian",
+        "word_english"
+      ],
+      "rawColumns": [
+        "word_italian",
+        "word_english",
+        "gramm_cat",
+        "cfv",
+        "imagine_mean",
+        "imagine_sd",
+        "cwfq",
+        "ccfq",
+        "cpfq",
+        "awfq",
+        "asfq"
       ]
     },
     {
@@ -3230,6 +7269,19 @@
         "concrete",
         "familiar",
         "imagine"
+      ],
+      "wordColumns": [
+        "word_chinese_simplified",
+        "word_pinyin"
+      ],
+      "rawColumns": [
+        "word_chinese_simplified",
+        "word_pinyin",
+        "age_of_learning",
+        "aoa_mean",
+        "concrete_mean",
+        "familiar_mean",
+        "imagine_mean"
       ]
     },
     {
@@ -3248,6 +7300,16 @@
         "aoa",
         "familiar",
         "imagine"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "word_english",
+        "aoa_mean_years",
+        "aoa_mean_100_700",
+        "imagine_mean",
+        "familiar_mean"
       ]
     },
     {
@@ -3266,6 +7328,15 @@
         "concrete",
         "familiar",
         "imagine"
+      ],
+      "wordColumns": [
+        "word_spanish"
+      ],
+      "rawColumns": [
+        "word_spanish",
+        "familiar_mean",
+        "imagine_mean",
+        "concrete_mean"
       ]
     },
     {
@@ -3287,6 +7358,21 @@
         "imagine",
         "letters",
         "typical"
+      ],
+      "wordColumns": [
+        "word_spanish"
+      ],
+      "rawColumns": [
+        "word_spanish",
+        "translate_word_english",
+        "typicality_mean",
+        "familiar_mean",
+        "aoa_mean",
+        "imagine_mean",
+        "lexical_availability_mean",
+        "frequency",
+        "length",
+        "type"
       ]
     },
     {
@@ -3305,6 +7391,15 @@
         "familiar",
         "freq",
         "meaning"
+      ],
+      "wordColumns": [
+        "word_french"
+      ],
+      "rawColumns": [
+        "word_french",
+        "frequency_experiential",
+        "meaning_knowledge_mean",
+        "familiar_mean"
       ]
     },
     {
@@ -3323,6 +7418,18 @@
         "aoa",
         "familiar",
         "imagine"
+      ],
+      "wordColumns": [
+        "word_japanese",
+        "word_japanese_latin"
+      ],
+      "rawColumns": [
+        "word_japanese",
+        "word_japanese_latin",
+        "translate_word_english",
+        "imagine_mean",
+        "familiar_mean",
+        "aoa_mean"
       ]
     },
     {
@@ -3339,6 +7446,21 @@
       "nRows": 80,
       "flags": [
         "aoa"
+      ],
+      "wordColumns": [
+        "word_italian"
+      ],
+      "rawColumns": [
+        "word_italian",
+        "translate_word_english",
+        "aoa_mean_subjective",
+        "aoa_mean_subjective_male",
+        "aoa_mean_subjective_female",
+        "aoa_mean_objective",
+        "aoa_exceed_objective",
+        "aoa_youngest_percent_objective",
+        "aoa_oldest_percent_objective",
+        "aoa_regression_estimate_objective"
       ]
     },
     {
@@ -3361,6 +7483,39 @@
         "imagine",
         "typical",
         "visualcomp"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "category",
+        "word_english",
+        "typicality_mean_older",
+        "typicality_sd_older",
+        "familiar_mean_older",
+        "familiar_sd_older",
+        "unknown_percent_older",
+        "frequency_mean_older",
+        "frequency_sd_older",
+        "visual_complexity_mean_older",
+        "visual_complexity_sd_older",
+        "imagine_mean_older",
+        "imagine_sd_older",
+        "aoa_mean_older",
+        "aoa_sd_older",
+        "typicality_mean_younger",
+        "typicality_sd_younger",
+        "familiar_mean_younger",
+        "familiar_sd_younger",
+        "unknown_percent_younger",
+        "frequency_mean_younger",
+        "frequency_sd_younger",
+        "visual_complexity_mean_younger",
+        "visual_complexity_sd_younger",
+        "imagine_mean_younger",
+        "imagine_sd_younger",
+        "aoa_mean_younger",
+        "aoa_sd_younger"
       ]
     },
     {
@@ -3379,6 +7534,23 @@
         "familiar",
         "nameagree",
         "picture"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "picture_number",
+        "equivalence",
+        "word_english",
+        "culture",
+        "age",
+        "n",
+        "familiar_mean",
+        "familiar_sd",
+        "name_agreement_h",
+        "name_agreement_proportion",
+        "concept_agreement_percent",
+        "name_responses_and_raw_frequency_counts"
       ]
     },
     {
@@ -3397,6 +7569,22 @@
         "freq",
         "imagine",
         "pos"
+      ],
+      "wordColumns": [
+        "word_italian"
+      ],
+      "rawColumns": [
+        "word_italian",
+        "translate_word_english",
+        "pos",
+        "percent_cfv",
+        "imagine_mean",
+        "imagine_sd",
+        "frequency_cw",
+        "frequency_cc",
+        "frequency_cp",
+        "frequency_aw",
+        "frequency_as"
       ]
     },
     {
@@ -3415,6 +7603,20 @@
         "aoa",
         "category",
         "freq"
+      ],
+      "wordColumns": [
+        "word_dutch"
+      ],
+      "rawColumns": [
+        "word_dutch",
+        "category",
+        "translate_word_english",
+        "aoa_n",
+        "aoa_mean",
+        "aoa_sd",
+        "percent_known",
+        "source",
+        "frequency_logcelex"
       ]
     },
     {
@@ -3446,6 +7648,44 @@
         "similar",
         "syllables",
         "valence"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "word_english",
+        "aoa_mean",
+        "concrete_mean",
+        "familiar_mean",
+        "imagine_mean",
+        "intensity_mean",
+        "valence_mean",
+        "dict",
+        "frequency_log_avlkb",
+        "length",
+        "syllables",
+        "meaningfulness_mean",
+        "frequency_tl",
+        "frequency_kf",
+        "frequency_avlrf",
+        "associate_number",
+        "context_mean",
+        "ease_definition_mean",
+        "same_initial_letters",
+        "same_initial_letters_log",
+        "same_initial_sound",
+        "ambiguity_mean",
+        "emotionality_pleasantness_mean",
+        "pronounce_mean",
+        "rhyming_mean",
+        "similar_looking_words_mean",
+        "similar_sounding_words_mean",
+        "goodness_mean",
+        "emotionality_goodness_mean",
+        "gender_mean_replication",
+        "gender_ladenness_mean",
+        "familiar_mean_replication",
+        "imagine_mean_replication"
       ]
     },
     {
@@ -3469,6 +7709,27 @@
         "nameagree",
         "rt",
         "visualcomp"
+      ],
+      "wordColumns": [
+        "word_french"
+      ],
+      "rawColumns": [
+        "word_french",
+        "translate_word_english",
+        "source",
+        "name_agreement_proportion",
+        "image_agreement_mean",
+        "image_agreement_sd",
+        "aoa_mean",
+        "aoa_sd",
+        "visualcomplexity_mean",
+        "visual_complexity_sd",
+        "familiar_mean",
+        "familiar_sd",
+        "image_variability_mean",
+        "image_variability_sd",
+        "frequency",
+        "rt_mean"
       ]
     },
     {
@@ -3486,6 +7747,18 @@
       "flags": [
         "imagine",
         "rt"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "word_english",
+        "rt_mean",
+        "rt_sd",
+        "imagine_n",
+        "imagine_mean",
+        "imagine_sd",
+        "toglia_batting_1978"
       ]
     },
     {
@@ -3503,6 +7776,21 @@
       "flags": [
         "familiar",
         "freq"
+      ],
+      "wordColumns": [
+        "word_spanish",
+        "word_fragment"
+      ],
+      "rawColumns": [
+        "word_spanish",
+        "word_fragment",
+        "number_meanings",
+        "frequency_lexesp",
+        "number_letters_given",
+        "ratio_given_letters_to_blanks",
+        "first_or_last_letters_given",
+        "familiar_mean",
+        "difficulty"
       ]
     },
     {
@@ -3521,6 +7809,35 @@
         "concrete",
         "freq",
         "pos"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "word_english",
+        "n",
+        "set_size",
+        "set_size_singles",
+        "frequency_kf",
+        "concrete_mean",
+        "homograph",
+        "pos",
+        "mean_connectivity",
+        "connectivity_strength",
+        "resonance_probability",
+        "resonance_strength",
+        "accessibility_index",
+        "non_responses",
+        "ending_stem_set_size",
+        "ending_stem_strength",
+        "beginning_stem_set_size",
+        "beginning_stem_strength",
+        "ending_fragment_cue",
+        "ending_fragment_set_size",
+        "ending_fragment_strength",
+        "beginning_fragment_cue",
+        "beginning_cue_set_size",
+        "beginning_cue_strength"
       ]
     },
     {
@@ -3535,7 +7852,27 @@
       },
       "language": "english_1, english_2",
       "nRows": 72176,
-      "flags": []
+      "flags": [],
+      "wordColumns": [
+        "word_english_1",
+        "word_english_2"
+      ],
+      "rawColumns": [
+        "word_english_1",
+        "word_english_2",
+        "fsg",
+        "bsg",
+        "msg",
+        "osg",
+        "qss",
+        "qfr",
+        "qcon",
+        "qps",
+        "tss",
+        "tfr",
+        "tcon",
+        "tps"
+      ]
     },
     {
       "bibtex": "Bonin2003",
@@ -3559,6 +7896,36 @@
         "rt",
         "semantic",
         "visualcomp"
+      ],
+      "wordColumns": [
+        "word_french",
+        "word_french_disambiguate"
+      ],
+      "rawColumns": [
+        "word_french",
+        "word_french_disambiguate",
+        "translate_word_english",
+        "semantic_category",
+        "rt_mean_naming",
+        "name_agreement_h",
+        "name_agreement_p",
+        "image_agreement_mean",
+        "image_agreement_sd",
+        "familiar_mean",
+        "familiar_sd",
+        "visualcomplexity_mean",
+        "visual_complexity_sd",
+        "image_variability_mean",
+        "image_variability_sd",
+        "aoa_mean",
+        "aoa_sd",
+        "frequency_brulex",
+        "frequency_frontex",
+        "number_of_modal_names",
+        "dont_know",
+        "dko",
+        "total",
+        "nondominance_names"
       ]
     },
     {
@@ -3575,6 +7942,14 @@
       "nRows": 1019730,
       "flags": [
         "aoa"
+      ],
+      "wordColumns": [
+        "word_dutch"
+      ],
+      "rawColumns": [
+        "word_dutch",
+        "aoa_mean",
+        "known_proportion"
       ]
     },
     {
@@ -3597,6 +7972,23 @@
         "phonemes",
         "syllables",
         "visualcomp"
+      ],
+      "wordColumns": [
+        "word_spanish"
+      ],
+      "rawColumns": [
+        "word_spanish",
+        "translate_word_english",
+        "imagine_mean",
+        "familiar_mean",
+        "aoa_mean",
+        "visual_complexity_mean",
+        "percent_na",
+        "h_statistic",
+        "frequency",
+        "frequency_comp",
+        "phonemes",
+        "syllables"
       ]
     },
     {
@@ -3620,6 +8012,48 @@
         "letters",
         "rt",
         "syllables"
+      ],
+      "wordColumns": [
+        "word_italian"
+      ],
+      "rawColumns": [
+        "word_italian",
+        "translate_word_english",
+        "aoa_mean",
+        "aoa_sd",
+        "familiar_mean",
+        "familiar_sd",
+        "imagine_mean",
+        "imagine_sd",
+        "concrete_mean",
+        "concrete_sd",
+        "frequency_ilc_adult_written",
+        "frequency_colfis_adult_written",
+        "frequency_totfq_child_written",
+        "frequency_compfq_child_written",
+        "frequency_prodfq_child_written",
+        "frequency_spkfq_adult_spoken",
+        "n",
+        "bigram",
+        "syllables",
+        "length",
+        "phonome_stress",
+        "phoneme_voice",
+        "mann",
+        "voiced",
+        "stop",
+        "nasal",
+        "fricative",
+        "affricate",
+        "liquid",
+        "bilabial",
+        "labiodental",
+        "dental",
+        "alveolar",
+        "palatal",
+        "velar",
+        "vowel",
+        "rt_mean"
       ]
     },
     {
@@ -3639,6 +8073,18 @@
         "freq",
         "imagine",
         "pos"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "word_english",
+        "pos",
+        "aoa_mean",
+        "imagine_mean",
+        "aoa_mean_mrc",
+        "imagine_mean_mrc",
+        "frequency"
       ]
     },
     {
@@ -3655,6 +8101,14 @@
       "nRows": 1020213,
       "flags": [
         "aoa"
+      ],
+      "wordColumns": [
+        "word_dutch"
+      ],
+      "rawColumns": [
+        "word_dutch",
+        "aoa_mean",
+        "known_proportion"
       ]
     },
     {
@@ -3673,6 +8127,31 @@
         "aoa",
         "familiar",
         "freq"
+      ],
+      "wordColumns": [
+        "word_italian"
+      ],
+      "rawColumns": [
+        "word_italian",
+        "translate_word_english",
+        "familiar_mean",
+        "familiar_mean_italian",
+        "familiar_mean_american",
+        "familiar_mean_french",
+        "familiar_mean_spansih",
+        "aoa_mean",
+        "aoa_mean_italian",
+        "aoa_mean_american",
+        "aoa_mean_french",
+        "h",
+        "h_italian",
+        "h_american",
+        "h_french",
+        "h_spanish",
+        "frequency",
+        "frequency_american",
+        "frequency_french",
+        "frequency_spanish"
       ]
     },
     {
@@ -3697,6 +8176,28 @@
         "rt",
         "syllables",
         "typical"
+      ],
+      "wordColumns": [
+        "word_italian"
+      ],
+      "rawColumns": [
+        "word_italian",
+        "translate_word_english",
+        "category",
+        "length",
+        "syllables",
+        "frequency",
+        "session",
+        "familiar_mean",
+        "familiar_sd",
+        "typicality_mean",
+        "typicality_sd",
+        "aoa_mean",
+        "aoa_sd",
+        "rt_mean",
+        "name_agreement",
+        "concept_agreement",
+        "h"
       ]
     },
     {
@@ -3718,6 +8219,30 @@
         "familiar",
         "imageagree",
         "nameagree"
+      ],
+      "wordColumns": [
+        "word_spanish",
+        "word_spanish_modal"
+      ],
+      "rawColumns": [
+        "word_spanish",
+        "word_spanish_modal",
+        "translate_word_english",
+        "name_agreement_h",
+        "name_agreement_p",
+        "image_agreement_mean",
+        "image_agreement_sd",
+        "familiar_mean",
+        "familiar_sd",
+        "complexity_mean",
+        "complexity_sd",
+        "variability_mean",
+        "variability_sd",
+        "aoa_mean",
+        "aoa_sd",
+        "f",
+        "verbal_association",
+        "p"
       ]
     },
     {
@@ -3736,6 +8261,15 @@
         "concrete",
         "context",
         "imagine"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "word_english",
+        "concrete_mean",
+        "context_mean",
+        "imagine_mean"
       ]
     },
     {
@@ -3754,6 +8288,17 @@
         "familiar",
         "freq",
         "pronounce"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "word_english",
+        "frequency_kf",
+        "familiar_mean",
+        "familiar_sd",
+        "pronounce_mean",
+        "pronounce_sd"
       ]
     },
     {
@@ -3772,6 +8317,25 @@
         "familiar",
         "freq",
         "imagine"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "word_english",
+        "fk_code",
+        "imagine_mean",
+        "imagine_sd",
+        "imagine_mean_rt",
+        "imagine_sd_rt",
+        "ndist_hal_uninflected",
+        "vdist_hal_uninflected",
+        "nvdd_hal_uninflected",
+        "ndist_hal_inflected",
+        "vdist_hal_inflected",
+        "nvdd_hal_inflected",
+        "frequency_usenet_log",
+        "familiar_mean"
       ]
     },
     {
@@ -3793,6 +8357,22 @@
         "imagine",
         "pos",
         "visualcomp"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "word_english",
+        "frequency_kf",
+        "familiar_mean",
+        "familiar_sd",
+        "aoa_mean",
+        "aoa_sd",
+        "imagine_mean",
+        "imagine_sd",
+        "visual_complexity_mean",
+        "visual_complexity_sd",
+        "pos"
       ]
     },
     {
@@ -3821,6 +8401,37 @@
         "pos",
         "pronounce",
         "syllables"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "word_english",
+        "length",
+        "phonemes",
+        "syllables",
+        "frequency_kfwritten",
+        "number_categories_kf",
+        "number_samples_kf",
+        "frequency_tf",
+        "frequency_brown_verbal",
+        "familiar_mean",
+        "concrete_mean",
+        "imagine_mean",
+        "meaningfulness_mean_colorado",
+        "meaningfulness_mean_pavio",
+        "aoa_mean",
+        "type",
+        "syntactic_category",
+        "pos",
+        "morphemic_status",
+        "contextual_status",
+        "pronunciation_variability",
+        "capitalization",
+        "irregular_plural",
+        "stress_phoneme_transcription",
+        "syllable_phoneme_transcription",
+        "stress_pattern"
       ]
     },
     {
@@ -3840,6 +8451,30 @@
         "concrete",
         "familiar",
         "imagine"
+      ],
+      "wordColumns": [
+        "word_english",
+        "word_welsh"
+      ],
+      "rawColumns": [
+        "word_english",
+        "familiar_mean_english",
+        "familiar_sd_english",
+        "aoa_mean_english",
+        "aoa_sd_english",
+        "concrete_mean_english",
+        "concrete_sd_english",
+        "imagine_mean_english",
+        "imagine_sd_english",
+        "word_welsh",
+        "familiar_mean_welsh",
+        "familiar_sd_welsh",
+        "aoa_mean_welsh",
+        "aoa_sd_welsh",
+        "concrete_mean_welsh",
+        "concrete_sd_welsh",
+        "imagine_mean_welsh",
+        "imagine_sd_welsh"
       ]
     },
     {
@@ -3859,6 +8494,21 @@
         "freq",
         "imageagree",
         "visualcomp"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "word_english",
+        "h",
+        "percent_response",
+        "familiar_mean",
+        "familiar_sd",
+        "visual_complexity_mean",
+        "visual_complexity_sd",
+        "image_agreement_mean",
+        "image_agreement_sd",
+        "frequency"
       ]
     },
     {
@@ -3876,6 +8526,18 @@
       "flags": [
         "aoa",
         "rt"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "word_english",
+        "aoa_mean",
+        "percent_correct_strict",
+        "percent_correct_relaxed",
+        "rt_mean_exp1",
+        "rt_mean_exp2",
+        "quintile_exp1"
       ]
     },
     {
@@ -3892,6 +8554,16 @@
       "nRows": 740,
       "flags": [
         "familiar"
+      ],
+      "wordColumns": [
+        "word_dutch"
+      ],
+      "rawColumns": [
+        "word_dutch",
+        "affective_mean",
+        "affective_sd",
+        "familiar_mean",
+        "familiar_sd"
       ]
     },
     {
@@ -3908,6 +8580,18 @@
       "nRows": 120,
       "flags": [
         "familiar"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "word_english",
+        "name_rank",
+        "familiar_mean_name",
+        "familiar_sd_name",
+        "rank",
+        "familiar_mean",
+        "familiar_sd"
       ]
     },
     {
@@ -3927,6 +8611,24 @@
         "category",
         "freq",
         "imagine"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "word_english",
+        "os_mp",
+        "category",
+        "aoa_adult_mean",
+        "aoa_adult_sd",
+        "aoa_mean_older",
+        "aoa_sd_older",
+        "aoa_mean_young",
+        "aoa_sd_young",
+        "imagine_mean",
+        "imagine_sd",
+        "frequency_kol",
+        "frequency_kf"
       ]
     },
     {
@@ -3949,6 +8651,28 @@
         "meaning",
         "sensory",
         "visualcomp"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "word_english",
+        "blind_sighted",
+        "familiar_mean",
+        "concrete_mean",
+        "meaningfulness_mean",
+        "imagine_mean",
+        "familiar_sd",
+        "concrete_sd",
+        "meaningfulness_sd",
+        "imagine_sd",
+        "visual_percent",
+        "auditory_percent",
+        "tactile_percent",
+        "taste_percent",
+        "spatial_percent",
+        "smell_percent",
+        "associate"
       ]
     },
     {
@@ -3968,6 +8692,18 @@
         "familiar",
         "freq",
         "imagine"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "word_english",
+        "date_entry",
+        "concrete_mean",
+        "imagine_mean",
+        "goodness_mean",
+        "familiar_mean",
+        "frequency"
       ]
     },
     {
@@ -3985,6 +8721,16 @@
       "flags": [
         "familiar",
         "freq"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "fragment",
+        "word_english",
+        "familiar_mean",
+        "frequency",
+        "probability_completion"
       ]
     },
     {
@@ -4003,6 +8749,21 @@
         "emotion",
         "freq",
         "imagine"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "word_english",
+        "pleasant_mean_male",
+        "pleasant_mean_female",
+        "pleasant_mean",
+        "imagine_mean_male",
+        "imagine_mean_female",
+        "imagine_mean",
+        "frequency_mean_male",
+        "frequency_mean_female",
+        "frequency_mean"
       ]
     },
     {
@@ -4023,6 +8784,22 @@
         "imagine",
         "letters",
         "orthon"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "word_english",
+        "imagne_mean",
+        "imagine_sd",
+        "concrete_mean",
+        "concrete_sd",
+        "length",
+        "frequency_kf",
+        "first_order_approximation",
+        "second_order_approximation",
+        "orthographic_neighborhood_ratio",
+        "noun_percent"
       ]
     },
     {
@@ -4044,6 +8821,22 @@
         "freq",
         "imageagree",
         "nameagree"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "word_english",
+        "name_agreement_h",
+        "name_agreement_percent",
+        "image_agreement_h",
+        "image_agreement_percent",
+        "familiar_mean",
+        "familiar_sd",
+        "complexity_mean",
+        "complexity_sd",
+        "frequency_kf",
+        "aoa_mean"
       ]
     },
     {
@@ -4064,6 +8857,22 @@
         "familiar",
         "freq",
         "imagine"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "word_english",
+        "imagine_mean",
+        "imagine_sd",
+        "aoa_mean",
+        "aoa_sd",
+        "familiar_mean",
+        "familiar_sd",
+        "concrete_mean",
+        "concrete_sd",
+        "uncertainty",
+        "frequency_tl"
       ]
     },
     {
@@ -4084,6 +8893,22 @@
         "familiar",
         "imagine",
         "meaning"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "word_english",
+        "number_responses",
+        "meaning",
+        "imagine_mean",
+        "imagine_sd",
+        "aoa_mean",
+        "aoa_sd",
+        "familiar_mean",
+        "familiar_sd",
+        "concrete_mean",
+        "concrete_sd"
       ]
     },
     {
@@ -4101,6 +8926,19 @@
       "flags": [
         "freq",
         "imagine"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "word_english",
+        "imagine_mean",
+        "imagine_sd",
+        "ease_define_mean",
+        "ease_define_sd",
+        "animate_mean",
+        "animate_sd",
+        "frequency_kf"
       ]
     },
     {
@@ -4117,6 +8955,15 @@
       "nRows": 90,
       "flags": [
         "imagine"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "word_english",
+        "imagine_mean_female",
+        "imagine_mean_male",
+        "imagine_mean"
       ]
     },
     {
@@ -4137,6 +8984,22 @@
         "familiar",
         "imagine",
         "meaning"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "word_english",
+        "imagine_mean",
+        "imagine_sd",
+        "concrete_mean",
+        "concrete_sd",
+        "aoa_mean",
+        "aoa_sd",
+        "familiar_mean",
+        "familiar_sd",
+        "meaningfulness_mean",
+        "meaningfulness_sd"
       ]
     },
     {
@@ -4156,6 +9019,20 @@
         "familiar",
         "imagine",
         "meaning"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "word_english",
+        "aoa_mean",
+        "aoa_sd",
+        "imagine_mean",
+        "imagine_sd",
+        "familiar_mean",
+        "familiar_sd",
+        "meaningfulness_mean",
+        "meaningfulness_sd"
       ]
     },
     {
@@ -4173,6 +9050,21 @@
       "flags": [
         "aoa",
         "freq"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "word_english",
+        "aoa_mean_male",
+        "aoa_sd_male",
+        "aoa_mean_female",
+        "aoa_sd_female",
+        "aoa_mean",
+        "aoa_sd",
+        "frequency_tl",
+        "frequency_kf",
+        "frequency_ah"
       ]
     },
     {
@@ -4189,6 +9081,15 @@
       "nRows": 334,
       "flags": [
         "imagine"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "word_english",
+        "imagine_mean",
+        "imagine_sd",
+        "source"
       ]
     },
     {
@@ -4211,6 +9112,27 @@
         "semantic",
         "syllables",
         "typical"
+      ],
+      "wordColumns": [
+        "word_german",
+        "word_english"
+      ],
+      "rawColumns": [
+        "word_german",
+        "word_english",
+        "semantic_category",
+        "exemplar_generation_n_20",
+        "exemplar_generation_prop",
+        "typicality_mean",
+        "typicality_sd",
+        "aoa_mean",
+        "aoa_sd",
+        "familiar_mean",
+        "familiar_sd",
+        "frequency",
+        "frequency_log",
+        "phonemes",
+        "syllables"
       ]
     },
     {
@@ -4229,6 +9151,17 @@
         "assoc",
         "concrete",
         "emotion"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "word_english",
+        "goodness_mean",
+        "pleasant_mean",
+        "emotionality_mean",
+        "concrete_mean",
+        "associative_difficulty_mean"
       ]
     },
     {
@@ -4247,6 +9180,17 @@
         "assoc",
         "emotion",
         "freq"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "word_english",
+        "frequency_lorge",
+        "association_women_mean",
+        "association_men_mean",
+        "pleasant_women_mean",
+        "pleasant_men_mean"
       ]
     },
     {
@@ -4264,6 +9208,15 @@
       "flags": [
         "concrete",
         "meaning"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "word_english",
+        "specificity_mean",
+        "concrete_mean",
+        "meaningfulness_mean"
       ]
     },
     {
@@ -4283,6 +9236,31 @@
         "dominate",
         "freq",
         "valence"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "word_english",
+        "valence_mean",
+        "valence_sd",
+        "arousal_mean",
+        "arousal_sd",
+        "dominance_mean",
+        "dominance_sd",
+        "frequency",
+        "valence_mean_male",
+        "valence_sd_male",
+        "arousal_mean_male",
+        "arousal_sd_male",
+        "dominance_mean_male",
+        "dominance_sd_male",
+        "valence_mean_female",
+        "valence_sd_female",
+        "arousal_mean_female",
+        "arousal_sd_female",
+        "dominance_mean_female",
+        "dominance_sd_female"
       ]
     },
     {
@@ -4302,6 +9280,16 @@
         "concrete",
         "imagine",
         "valence"
+      ],
+      "wordColumns": [
+        "word_german"
+      ],
+      "rawColumns": [
+        "word_german",
+        "concrete_mean",
+        "arousal_mean",
+        "imagine_mean",
+        "valence_mean"
       ]
     },
     {
@@ -4320,6 +9308,26 @@
         "aoa",
         "familiar",
         "meaning"
+      ],
+      "wordColumns": [
+        "word_french"
+      ],
+      "rawColumns": [
+        "word_french",
+        "meaning",
+        "n",
+        "aoa_mean",
+        "aoa_minimum",
+        "aoa_maximum",
+        "aoa_sd",
+        "aoa_certainty_mean",
+        "aoa_certainty_minimum",
+        "aoa_certainty_maximum",
+        "aoa_certainty_sd",
+        "familiar_mean",
+        "familiar_minimum",
+        "familiar_maximum",
+        "familiar_sd"
       ]
     },
     {
@@ -4337,6 +9345,15 @@
       "flags": [
         "familiar",
         "typical"
+      ],
+      "wordColumns": [
+        "word_portuguese"
+      ],
+      "rawColumns": [
+        "word_portuguese",
+        "typicality_mean",
+        "familiar_mean_r",
+        "familiar_mean_s"
       ]
     },
     {
@@ -4354,6 +9371,14 @@
       "flags": [
         "concrete",
         "imagine"
+      ],
+      "wordColumns": [
+        "word_portuguese"
+      ],
+      "rawColumns": [
+        "word_portuguese",
+        "imagine_mean",
+        "concrete_mean"
       ]
     },
     {
@@ -4375,6 +9400,31 @@
         "freq",
         "imagine",
         "pos"
+      ],
+      "wordColumns": [
+        "word_russian"
+      ],
+      "rawColumns": [
+        "word_russian",
+        "pos",
+        "translate_word_english",
+        "n",
+        "valid_n",
+        "percent_known",
+        "aoa_mean",
+        "aoa_sd",
+        "frequency",
+        "frequency_zipf",
+        "concrete_mean_grigoriev2022",
+        "concrete_soloviev2022_1000",
+        "concrete_mean_soloviev2022_500",
+        "imagine_mean_grigoriev2009",
+        "imagine_mean_tsaparina2011",
+        "imagine_mean_pashneva2014",
+        "imagine_mean_akinina2014",
+        "familiar_mean_tsaparina2011",
+        "familiar_mean_grigoriev2010",
+        "familiar_mean_pashneva2014"
       ]
     }
   ]
