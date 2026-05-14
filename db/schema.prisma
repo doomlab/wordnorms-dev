@@ -43,10 +43,11 @@ model User {
   tokens         Token[]
   sessions       Session[]
   papersReviewed Paper[]
-  favorites      UserFavorite[]
-  reports        PaperReport[]
-  metadataEdits  MetadataEditSuggestion[]
-  extractionEdits ExtractionEditSuggestion[]
+  favorites        UserFavorite[]
+  datasetFavorites UserDatasetFavorite[]
+  reports          PaperReport[]
+  metadataEdits    MetadataEditSuggestion[]
+  extractionEdits  ExtractionEditSuggestion[]
 }
 
 model Session {
@@ -99,6 +100,16 @@ model UserFavorite {
   paper     Paper    @relation(fields: [paperId], references: [id], onDelete: Cascade)
 
   @@unique([userId, paperId])
+}
+
+model UserDatasetFavorite {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  userId    Int
+  bibtex    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, bibtex])
 }
 
 model PaperReport {

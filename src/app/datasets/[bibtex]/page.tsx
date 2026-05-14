@@ -2,6 +2,8 @@ import { notFound } from "next/navigation"
 import fs from "fs"
 import path from "path"
 import { Navbar } from "../../components/Navbar"
+import { DatasetFavoriteButton } from "../../components/DatasetFavoriteButton"
+import { getBlitzContext } from "../../blitz-server"
 import db from "db"
 
 export const dynamic = "force-dynamic"
@@ -104,11 +106,14 @@ export default async function DatasetDetailPage({
   const card = loadCard(bibtex)
   if (!card) notFound()
 
+  const ctx = await getBlitzContext()
+  const userId = ctx.session.userId as number | undefined
+
   const doiUrl = card.citation.doi ? `https://doi.org/${card.citation.doi}` : null
   const languages = card.language ? extractBaseLanguages(card.language) : []
   const normColumns = card.rawColumns.filter((c) => !card.wordColumns.includes(c))
 
-  const linkedPaper = card.citation.doi
+  const linkedPaperByDoi = card.citation.doi
     ? await db.paper.findFirst({
         where: {
           doi: { equals: card.citation.doi, mode: "insensitive" },
@@ -117,6 +122,21 @@ export default async function DatasetDetailPage({
         select: { id: true },
       })
     : null
+  const linkedPaper =
+    linkedPaperByDoi ??
+    (await db.paper.findFirst({
+      where: {
+        title: { equals: card.citation.title, mode: "insensitive" },
+        status: { in: ["ACCEPTED", "ADDED_TO_TRAINING"] },
+      },
+      select: { id: true },
+    }))
+
+  const isFavorited = userId
+    ? await db.userDatasetFavorite
+        .findUnique({ where: { userId_bibtex: { userId, bibtex } } })
+        .then(Boolean)
+    : false
 
   return (
     <div className="min-h-screen bg-base-100 flex flex-col">
@@ -132,28 +152,41 @@ export default async function DatasetDetailPage({
 
         <div className="flex items-start justify-between gap-4 mb-6">
           <h1 className="text-2xl font-bold leading-snug">{capFirst(card.citation.title)}</h1>
+          <div className="shrink-0 pt-1">
+            <DatasetFavoriteButton
+              bibtex={bibtex}
+              initialFavorited={isFavorited}
+              isLoggedIn={!!userId}
+            />
+          </div>
         </div>
 
         {/* Links */}
-        {(doiUrl || linkedPaper) && (
-          <div className="flex flex-wrap gap-2 mb-8">
-            {doiUrl && (
-              <a
-                href={doiUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn btn-outline btn-sm"
-              >
-                View DOI
-              </a>
-            )}
-            {linkedPaper && (
-              <a href={`/norms/${linkedPaper.id}`} className="btn btn-ghost btn-outline btn-sm">
-                View Database Entry
-              </a>
-            )}
-          </div>
-        )}
+        <div className="flex flex-wrap gap-2 mb-8">
+          {doiUrl && (
+            <a
+              href={doiUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn btn-outline btn-sm"
+            >
+              View DOI
+            </a>
+          )}
+          <a
+            href={`https://github.com/SemanticPriming/semanticprimeR/releases/download/v0.0.1/${bibtex}.csv`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn btn-outline btn-sm"
+          >
+            Download CSV
+          </a>
+          {linkedPaper && (
+            <a href={`/norms/${linkedPaper.id}`} className="btn btn-ghost btn-outline btn-sm">
+              View Database Entry
+            </a>
+          )}
+        </div>
 
         <div className="divide-y divide-base-200 text-sm">
           {/* Publication */}

@@ -3,7 +3,10 @@ import path from "path"
 import { Suspense } from "react"
 import { Navbar } from "../components/Navbar"
 import { DatasetFilters } from "../components/DatasetFilters"
+import { DatasetFavoriteButton } from "../components/DatasetFavoriteButton"
 import { DECADE_LABELS } from "../data/datasets"
+import { getBlitzContext } from "../blitz-server"
+import db from "db"
 
 export const dynamic = "force-dynamic"
 export const metadata = { title: "Datasets – WordNorms" }
@@ -106,6 +109,8 @@ export default async function DatasetsPage({
   }>
 }) {
   const params = await searchParams
+  const ctx = await getBlitzContext()
+  const userId = ctx.session.userId as number | undefined
 
   const q = params.q?.trim().toLowerCase() || undefined
   const selectedLanguages = params.lang
@@ -118,7 +123,14 @@ export default async function DatasetsPage({
     ? Array.isArray(params.flag) ? params.flag : [params.flag]
     : []
 
-  const data = loadData()
+  const [data, favoritedBibtexSet] = await Promise.all([
+    Promise.resolve(loadData()),
+    userId
+      ? db.userDatasetFavorite
+          .findMany({ where: { userId }, select: { bibtex: true } })
+          .then((rows) => new Set(rows.map((r) => r.bibtex)))
+      : Promise.resolve(new Set<string>()),
+  ])
 
   if (!data) {
     return (
@@ -277,6 +289,11 @@ export default async function DatasetsPage({
                       )}
                     </div>
                     <div className="flex items-center gap-2 shrink-0">
+                      <DatasetFavoriteButton
+                        bibtex={card.bibtex}
+                        initialFavorited={favoritedBibtexSet.has(card.bibtex)}
+                        isLoggedIn={!!userId}
+                      />
                       {card.citation.doi && (
                         <a
                           href={`https://doi.org/${card.citation.doi}`}
@@ -287,6 +304,14 @@ export default async function DatasetsPage({
                           DOI
                         </a>
                       )}
+                      <a
+                        href={`https://github.com/SemanticPriming/semanticprimeR/releases/download/v0.0.1/${card.bibtex}.csv`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="btn btn-outline btn-sm"
+                      >
+                        CSV
+                      </a>
                       <a href={`/datasets/${card.bibtex}`} className="btn btn-outline btn-sm">
                         View
                       </a>

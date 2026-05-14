@@ -11,20 +11,22 @@ import db from "db"
 
 const capFirst = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
 
-function loadDatasetDoiMap(): Map<string, string> {
+function loadDatasetLookup(): { byDoi: Map<string, string>; byTitle: Map<string, string> } {
   const p = path.join(process.cwd(), "data", "model-cards", "_data.json")
-  if (!fs.existsSync(p)) return new Map()
+  if (!fs.existsSync(p)) return { byDoi: new Map(), byTitle: new Map() }
   try {
     const { cards } = JSON.parse(fs.readFileSync(p, "utf8")) as {
-      cards: { bibtex: string; citation: { doi: string | null } }[]
+      cards: { bibtex: string; citation: { doi: string | null; title: string } }[]
     }
-    const map = new Map<string, string>()
+    const byDoi = new Map<string, string>()
+    const byTitle = new Map<string, string>()
     for (const c of cards) {
-      if (c.citation.doi) map.set(c.citation.doi.toLowerCase(), c.bibtex)
+      if (c.citation.doi) byDoi.set(c.citation.doi.toLowerCase(), c.bibtex)
+      byTitle.set(c.citation.title.toLowerCase().trim(), c.bibtex)
     }
-    return map
+    return { byDoi, byTitle }
   } catch {
-    return new Map()
+    return { byDoi: new Map(), byTitle: new Map() }
   }
 }
 
@@ -113,7 +115,7 @@ export default async function Home({
     new Set(allPapers.flatMap((p) => p.extraction?.language ?? []))
   ).sort()
 
-  const datasetDoiMap = loadDatasetDoiMap()
+  const { byDoi: datasetByDoi, byTitle: datasetByTitle } = loadDatasetLookup()
 
   return (
     <div className="min-h-screen bg-base-100 flex flex-col">
@@ -143,9 +145,9 @@ export default async function Home({
             <ul className="flex flex-col divide-y divide-base-200">
               {papers.map((paper) => {
                 const ext = paper.extraction
-                const datasetBibtex = paper.doi
-                  ? datasetDoiMap.get(paper.doi.toLowerCase())
-                  : undefined
+                const datasetBibtex =
+                  (paper.doi ? datasetByDoi.get(paper.doi.toLowerCase()) : undefined) ??
+                  datasetByTitle.get(paper.title.toLowerCase().trim())
                 return (
                   <li
                     key={paper.id}

@@ -1,13 +1,36 @@
 import { redirect } from "next/navigation"
 import { Suspense } from "react"
+import fs from "fs"
+import path from "path"
 import { Navbar } from "../components/Navbar"
 import { FavoriteButton } from "../components/FavoriteButton"
+import { DatasetFavoriteButton } from "../components/DatasetFavoriteButton"
 import { BrowseFilters } from "../components/BrowseFilters"
 import { DECADE_LABELS } from "../data/datasets"
 import { getBlitzContext } from "../blitz-server"
 import db from "db"
 
 const capFirst = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
+
+type DatasetCard = {
+  bibtex: string
+  citation: { author: string; year: number | null; title: string; journal: string | null }
+  language: string | null
+  nRows: number | null
+  flags: string[]
+}
+
+function loadDatasetCards(bibtexKeys: string[]): DatasetCard[] {
+  const p = path.join(process.cwd(), "data", "model-cards", "_data.json")
+  if (!fs.existsSync(p)) return []
+  try {
+    const { cards } = JSON.parse(fs.readFileSync(p, "utf8")) as { cards: DatasetCard[] }
+    const keySet = new Set(bibtexKeys)
+    return cards.filter((c) => keySet.has(c.bibtex))
+  } catch {
+    return []
+  }
+}
 
 export const metadata = { title: "My Favorites – WordNorms" }
 
@@ -61,26 +84,34 @@ export default async function FavoritesPage({
     })
   }
 
-  const allFavorites = await db.userFavorite.findMany({
-    where: { userId },
-    include: { paper: { select: { extraction: { select: { language: true } } } } },
-  })
+  const [allFavorites, favorites, datasetFavoriteRows] = await Promise.all([
+    db.userFavorite.findMany({
+      where: { userId },
+      include: { paper: { select: { extraction: { select: { language: true } } } } },
+    }),
+    db.userFavorite.findMany({
+      where: {
+        userId,
+        paper: {
+          ...(languages.length ? { extraction: { language: { hasSome: languages } } } : {}),
+          ...(andClauses.length ? { AND: andClauses } : {}),
+        },
+      },
+      include: { paper: { include: { extraction: true } } },
+      orderBy: { paper: { year: { sort: "desc", nulls: "last" } } },
+    }),
+    db.userDatasetFavorite.findMany({
+      where: { userId },
+      orderBy: { createdAt: "desc" },
+    }),
+  ])
 
   const allLanguages = Array.from(
     new Set(allFavorites.flatMap((f) => f.paper.extraction?.language ?? []))
   ).sort()
 
-  const favorites = await db.userFavorite.findMany({
-    where: {
-      userId,
-      paper: {
-        ...(languages.length ? { extraction: { language: { hasSome: languages } } } : {}),
-        ...(andClauses.length ? { AND: andClauses } : {}),
-      },
-    },
-    include: { paper: { include: { extraction: true } } },
-    orderBy: { paper: { year: { sort: "desc", nulls: "last" } } },
-  })
+  const datasetFavoriteCards = loadDatasetCards(datasetFavoriteRows.map((r) => r.bibtex))
+  const favoritedBibtexSet = new Set(datasetFavoriteRows.map((r) => r.bibtex))
 
   return (
     <div className="min-h-screen bg-base-100 flex flex-col">
@@ -192,6 +223,63 @@ export default async function FavoritesPage({
                 )
               })}
             </ul>
+          )}
+
+          {/* Dataset favorites */}
+          {datasetFavoriteCards.length > 0 && (
+            <div className="mt-10">
+              <h2 className="text-xl font-bold mb-1">Datasets</h2>
+              <p className="text-base-content/60 text-sm mb-5">
+                <span className="font-semibold text-base-content">{datasetFavoriteCards.length}</span>{" "}
+                {datasetFavoriteCards.length === 1 ? "dataset" : "datasets"}
+              </p>
+              <ul className="flex flex-col divide-y divide-base-200">
+                {datasetFavoriteCards.map((card) => (
+                  <li
+                    key={card.bibtex}
+                    className="py-5 hover:bg-base-200/40 px-3 -mx-3 rounded-lg transition-colors"
+                  >
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="min-w-0">
+                        <h3 className="font-semibold text-base leading-snug mb-1">
+                          {capFirst(card.citation.title)}
+                        </h3>
+                        {card.citation.author && (
+                          <p className="text-sm text-base-content/60 mb-2 line-clamp-1">
+                            {card.citation.author}
+                          </p>
+                        )}
+                        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-base-content/50">
+                          {card.citation.year && <span>{card.citation.year}</span>}
+                          {card.citation.journal && (
+                            <>
+                              <span>·</span>
+                              <span className="italic">{card.citation.journal}</span>
+                            </>
+                          )}
+                          {card.nRows != null && (
+                            <>
+                              <span>·</span>
+                              <span>{card.nRows.toLocaleString()} stimuli</span>
+                            </>
+                          )}
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2 shrink-0">
+                        <DatasetFavoriteButton
+                          bibtex={card.bibtex}
+                          initialFavorited={favoritedBibtexSet.has(card.bibtex)}
+                          isLoggedIn={true}
+                        />
+                        <a href={`/datasets/${card.bibtex}`} className="btn btn-outline btn-sm">
+                          View
+                        </a>
+                      </div>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
           )}
         </div>
       </div>
