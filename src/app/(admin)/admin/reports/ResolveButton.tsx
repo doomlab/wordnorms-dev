@@ -21,7 +21,7 @@ export function ResolveButton({ reportId }: { reportId: number }) {
   }
 
   return (
-    <button onClick={handleResolve} disabled={resolving} className="btn btn-ghost btn-xs">
+    <button onClick={handleResolve} disabled={resolving} className="btn btn-primary btn-xs">
       {resolving ? "…" : "Resolve"}
     </button>
   )

@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation"
 import db from "db"
-import { MetadataActions } from "../MetadataActions"
+import { MetadataForm } from "../MetadataForm"
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
@@ -34,14 +34,7 @@ export default async function AdminMetadataDetailPage({
         ← Back to metadata review
       </a>
 
-      <div className="flex items-start justify-between gap-4 mb-6">
-        <h1 className="text-2xl font-bold leading-snug">{cap(paper.title)}</h1>
-        {paper.modelScore != null && (
-          <span className="badge badge-outline shrink-0 mt-1">
-            Score {paper.modelScore.toFixed(2)}
-          </span>
-        )}
-      </div>
+      <h1 className="text-2xl font-bold leading-snug mb-6">{cap(paper.title)}</h1>
 
       {(paper.doi || paper.pdfUrl) && (
         <div className="flex flex-wrap gap-2 mb-8">
@@ -83,28 +76,21 @@ export default async function AdminMetadataDetailPage({
         )}
 
         <Section title="Extracted Metadata">
-          <Row label="Language" value={ext.language?.join(", ") || undefined} />
-          <Row label="Participants" value={ext.participantCount?.toString()} />
-          <Row label="Participant type" value={ext.participantType ?? undefined} />
-          <Row label="Stimuli type" value={ext.stimuliType?.join(", ") || undefined} />
-          <Row label="Stimuli count" value={ext.stimuliCount?.toString()} />
-          <Row label="Norms collected" value={ext.normsCollected?.join(", ") || undefined} />
-          <Row label="Instructions" value={ext.instructions ?? undefined} />
-          {ext.confidence != null && (
-            <div className="flex gap-3 py-1.5">
-              <span className="w-36 shrink-0 font-medium text-base-content/70">Confidence</span>
-              <span className={ext.confidence < 0.6 ? "text-warning" : "text-success"}>
-                {(ext.confidence * 100).toFixed(0)}%
-              </span>
-            </div>
-          )}
-          <Row label="Extracted by" value={ext.extractedBy ?? undefined} />
+          <MetadataForm
+            paperId={paper.id}
+            extraction={{
+              language: ext.language,
+              participantCount: ext.participantCount,
+              participantType: ext.participantType,
+              stimuliType: ext.stimuliType,
+              stimuliCount: ext.stimuliCount,
+              normsCollected: ext.normsCollected,
+              instructions: ext.instructions,
+              confidence: ext.confidence,
+              extractedBy: ext.extractedBy,
+            }}
+          />
         </Section>
-      </div>
-
-      <div className="border-t border-base-200 pt-8 text-center">
-        <p className="text-sm text-base-content/60 mb-3">Does this metadata look correct?</p>
-        <MetadataActions paperId={paper.id} />
       </div>
     </>
   )
