@@ -12,8 +12,8 @@ export default async function AdminReviewPage() {
     <>
       <h1 className="text-3xl font-bold mb-2">Review Queue</h1>
       <p className="text-base-content/60 mb-8">
-        Papers scored by the model — sorted by relevance score. Accept papers that should go into
-        the model, exclude the rest.
+        Papers scored by the model — sorted by relevance score. Accept papers that are lexical
+        norms, corpora, or linguistic databases. Exclude anything else.
       </p>
 
       <p className="text-sm text-base-content/60 mb-4">
@@ -65,7 +65,7 @@ export default async function AdminReviewPage() {
                     )}
                   </td>
                   <td>
-                    <a href={`/admin/review/${p.id}`} className="btn btn-ghost btn-xs">
+                    <a href={`/admin/review/${p.id}`} className="btn btn-ghost btn-outline btn-xs">
                       View
                     </a>
                   </td>

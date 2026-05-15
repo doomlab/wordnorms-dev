@@ -28,11 +28,11 @@ export function PaperActions({ paperId, isPdf }: { paperId: number; isPdf?: bool
   }
 
   return (
-    <div className="flex gap-2">
-      <button className="btn btn-primary btn-xs" onClick={() => act("ACCEPTED")}>
+    <div className="flex gap-4 justify-center">
+      <button className="btn btn-primary btn-wide" onClick={() => act("ACCEPTED")}>
         Accept
       </button>
-      <button className="btn btn-ghost btn-xs" onClick={() => act("EXCLUDED")}>
+      <button className="btn btn-error btn-wide" onClick={() => act("EXCLUDED")}>
         Exclude
       </button>
     </div>

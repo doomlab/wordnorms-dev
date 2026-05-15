@@ -78,7 +78,7 @@ export default async function AdminReviewDetailPage({
         )}
       </div>
 
-      <div className="border-t border-base-200 pt-6">
+      <div className="border-t border-base-200 pt-8 text-center">
         <p className="text-sm text-base-content/60 mb-3">Should this paper go into the model?</p>
         <PaperActions paperId={paper.id} />
       </div>
