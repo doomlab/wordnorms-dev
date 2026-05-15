@@ -4,18 +4,27 @@ import { PipelineButton } from "./PipelineButton"
 export const metadata = { title: "Admin" }
 
 export default async function AdminPage() {
-  const [counts, pendingExtraction, openReports] = await Promise.all([
+  const [counts, pendingExtraction, openReports, lastRun] = await Promise.all([
     db.paper.groupBy({ by: ["status"], _count: { _all: true } }),
     db.paper.count({ where: { status: "ACCEPTED", extraction: null } }),
     db.paperReport.count({ where: { resolved: false } }),
+    db.pipelineRun.findFirst({ where: { status: "DONE" }, orderBy: { finishedAt: "desc" } }),
   ])
   const byStatus = Object.fromEntries(counts.map((c) => [c.status, c._count._all]))
+
+  const lastRanLabel = lastRun?.finishedAt
+    ? lastRun.finishedAt.toLocaleDateString("en-US", {
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+      })
+    : null
 
   const cards = [
     {
       href: "/admin/review",
       label: "Review Queue",
-      desc: "Papers flagged by the prediction model",
+      desc: "Review papers scored by the model",
       badge: byStatus.PENDING_REVIEW ?? 0,
     },
     {
@@ -37,28 +46,44 @@ export default async function AdminPage() {
       badge: null,
     },
     {
-      href: "/admin/users",
-      label: "Users",
-      desc: "View and manage user accounts",
-      badge: null,
-    },
-    {
       href: "/admin/reports",
       label: "Reports",
       desc: "Papers flagged by users as incorrectly classified",
       badge: openReports,
     },
+    {
+      href: "/admin/users",
+      label: "Users",
+      desc: "View and manage user accounts",
+      badge: null,
+    },
   ]
 
   return (
     <>
-      <div className="flex items-start justify-between mb-2">
-        <h1 className="text-3xl font-bold">Admin Dashboard</h1>
-        <PipelineButton />
-      </div>
+      <h1 className="text-3xl font-bold mb-2">Admin Dashboard</h1>
       <p className="text-base-content/60 mb-8">Manage the curation pipeline and site.</p>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {/* Step 1: Fetch + Predict */}
+        <div className="card card-bordered bg-base-200">
+          <div className="card-body gap-3">
+            <h2 className="card-title">Fetch + Predict</h2>
+            <p className="text-base-content/60 text-sm">
+              Pull new papers from OpenAlex and score them with the model. Run if the review queue
+              is empty or to fetch new papers. The queue is automatically run once a month.
+            </p>
+            <div className="flex items-center justify-between">
+              <PipelineButton />
+              {lastRanLabel ? (
+                <span className="text-base-content/40 text-xs">Last ran {lastRanLabel}</span>
+              ) : (
+                <span className="text-base-content/40 text-xs">Never run</span>
+              )}
+            </div>
+          </div>
+        </div>
+
         {cards.map((c) => (
           <a
             key={c.href}
