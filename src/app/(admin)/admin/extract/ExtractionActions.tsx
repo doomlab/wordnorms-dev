@@ -73,7 +73,11 @@ export function ExtractionActions({
   if (!hasGroqKey) {
     return (
       <p className="text-sm text-base-content/50">
-        Add a <a href="/dashboard/profile" className="link">Groq API key</a> in your profile to run extraction.
+        Add a{" "}
+        <a href="/dashboard/profile" className="link">
+          Groq API key
+        </a>{" "}
+        in your profile to run extraction.
       </p>
     )
   }
@@ -82,7 +86,9 @@ export function ExtractionActions({
     return (
       <div className="flex flex-col items-center gap-2">
         <span className="text-error text-sm">Something went wrong — try again</span>
-        <button className="btn btn-xs btn-ghost" onClick={() => setStatus("idle")}>Retry</button>
+        <button className="btn btn-xs btn-primary" onClick={() => setStatus("idle")}>
+          Retry
+        </button>
       </div>
     )
   }

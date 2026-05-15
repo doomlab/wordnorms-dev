@@ -43,7 +43,9 @@ export async function POST(req: NextRequest) {
   if (tmpPath) args.push("--pdf-path", tmpPath)
 
   return new Promise<NextResponse>((resolve) => {
-    const proc = spawn("python3", [scriptPath, ...args])
+    const proc = spawn("python3", [scriptPath, ...args], {
+      env: { ...process.env, GROQ_API_KEY: user.groqApiKey ?? undefined },
+    })
 
     let output = ""
     proc.stdout.on("data", (d: Buffer) => (output += d.toString()))

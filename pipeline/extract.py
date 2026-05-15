@@ -89,10 +89,15 @@ def run(paper_id, pdf_path=None):
             print("No pdfUrl — cannot extract")
             save_extraction_failure(conn, paper_id, "skipped:no_pdf")
             conn.commit()
-            sys.exit(1)
+            sys.exit(0)
 
         try:
             text = extract_pdf_text(tmp)
+        except Exception as e:
+            print(f"Failed to read PDF: {e}")
+            save_extraction_failure(conn, paper_id, "skipped:bad_pdf")
+            conn.commit()
+            sys.exit(0)
         finally:
             if cleanup:
                 os.unlink(tmp)
@@ -101,7 +106,7 @@ def run(paper_id, pdf_path=None):
             print("Could not extract text from PDF")
             save_extraction_failure(conn, paper_id, "skipped:no_text")
             conn.commit()
-            sys.exit(1)
+            sys.exit(0)
 
         raw = call_groq(text)
         data = parse_response(raw)
