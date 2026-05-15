@@ -1,6 +1,7 @@
 import { resolver } from "@blitzjs/rpc"
 import { z } from "zod"
 import db from "db"
+import { fetchAndStoreCitations } from "src/lib/fetchAndStoreCitations"
 
 const AddPaperFromSuggestion = z.object({
   suggestionId: z.number(),
@@ -43,6 +44,7 @@ export default resolver.pipe(
         openAlexId: rest.openAlexId ?? null,
         pdfUrl: rest.pdfUrl ?? null,
         status: "ACCEPTED",
+        discoverySource: "DIRECT",
       },
     })
 
@@ -50,6 +52,10 @@ export default resolver.pipe(
       where: { id: suggestionId },
       data: { resolved: true },
     })
+
+    if (paper.openAlexId) {
+      await fetchAndStoreCitations(paper.id, paper.openAlexId)
+    }
 
     return { type: "created" as const, paper }
   }

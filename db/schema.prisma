@@ -30,6 +30,11 @@ enum PaperStatus {
   ADDED_TO_TRAINING
 }
 
+enum DiscoverySource {
+  DIRECT
+  CITED
+}
+
 model User {
   id             Int      @id @default(autoincrement())
   createdAt      DateTime @default(now())
@@ -90,11 +95,27 @@ model Paper {
   canonicalPaperId Int?
   canonical        Paper?            @relation("duplicates", fields: [canonicalPaperId], references: [id])
   duplicates       Paper[]           @relation("duplicates")
+  discoverySource  DiscoverySource   @default(DIRECT)
   extraction       PaperExtraction?
   favorites        UserFavorite[]
   reports          PaperReport[]
   metadataEdits    MetadataEditSuggestion[]
   extractionEdits  ExtractionEditSuggestion[]
+  citationsFrom    PaperCitation[]
+}
+
+model PaperCitation {
+  id              Int      @id @default(autoincrement())
+  createdAt       DateTime @default(now())
+  citingPaperId   Int
+  citingPaper     Paper    @relation(fields: [citingPaperId], references: [id], onDelete: Cascade)
+  citedOpenAlexId String
+  title           String?
+  authors         String[]
+  year            Int?
+  journal         String?
+
+  @@unique([citingPaperId, citedOpenAlexId])
 }
 
 model UserFavorite {

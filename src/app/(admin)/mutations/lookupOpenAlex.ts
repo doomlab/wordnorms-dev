@@ -1,9 +1,11 @@
 import { resolver } from "@blitzjs/rpc"
 import { z } from "zod"
+import { fetchAndStoreCitations } from "src/lib/fetchAndStoreCitations"
 
 const LookupOpenAlex = z.object({
   doi: z.string().optional(),
   title: z.string().optional(),
+  paperId: z.number().optional(),
 })
 
 function reconstructAbstract(aii: Record<string, number[]> | null | undefined): string | null {
@@ -42,18 +44,20 @@ const HEADERS = { "User-Agent": "mailto:buchananlab@gmail.com" }
 export default resolver.pipe(
   resolver.zod(LookupOpenAlex),
   resolver.authorize(["ADMIN", "SUPER_ADMIN"]),
-  async ({ doi, title }) => {
+  async ({ doi, title, paperId }) => {
+    let work = null
+
     if (doi) {
       const clean = doi.replace(/^https?:\/\/(dx\.)?doi\.org\//i, "")
       try {
         const res = await fetch(`https://api.openalex.org/works/doi:${encodeURIComponent(clean)}`, {
           headers: HEADERS,
         })
-        if (res.ok) return formatWork(await res.json())
+        if (res.ok) work = formatWork(await res.json())
       } catch {}
     }
 
-    if (title) {
+    if (!work && title) {
       try {
         const res = await fetch(
           `https://api.openalex.org/works?filter=title.search:${encodeURIComponent(title)}&per_page=1`,
@@ -61,11 +65,17 @@ export default resolver.pipe(
         )
         if (res.ok) {
           const data = await res.json()
-          if (data.results?.[0]) return formatWork(data.results[0])
+          if (data.results?.[0]) work = formatWork(data.results[0])
         }
       } catch {}
     }
 
-    return null
+    if (!work) return null
+
+    if (paperId && work.openAlexId) {
+      await fetchAndStoreCitations(paperId, work.openAlexId)
+    }
+
+    return work
   }
 )
