@@ -1,4 +1,5 @@
 import db from "db"
+import { PipelineButton } from "./PipelineButton"
 
 export const metadata = { title: "Admin" }
 
@@ -51,7 +52,10 @@ export default async function AdminPage() {
 
   return (
     <>
-      <h1 className="text-3xl font-bold mb-2">Admin Dashboard</h1>
+      <div className="flex items-start justify-between mb-2">
+        <h1 className="text-3xl font-bold">Admin Dashboard</h1>
+        <PipelineButton />
+      </div>
       <p className="text-base-content/60 mb-8">Manage the curation pipeline and site.</p>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

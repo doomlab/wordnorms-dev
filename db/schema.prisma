@@ -48,6 +48,7 @@ model User {
   reports          PaperReport[]
   metadataEdits    MetadataEditSuggestion[]
   extractionEdits  ExtractionEditSuggestion[]
+  pipelineRuns     PipelineRun[]
 }
 
 model Session {
@@ -198,6 +199,23 @@ model ModelRun {
   f1             Float
   valRebalanced  Boolean  @default(false)
   notes          String?
+}
+
+enum PipelineStatus {
+  RUNNING
+  DONE
+  FAILED
+}
+
+model PipelineRun {
+  id          Int            @id @default(autoincrement())
+  createdAt   DateTime       @default(now())
+  finishedAt  DateTime?
+  status      PipelineStatus @default(RUNNING)
+  step        String?
+  output      String?
+  startedById Int?
+  startedBy   User?          @relation(fields: [startedById], references: [id])
 }
 
 model Token {

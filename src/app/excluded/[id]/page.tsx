@@ -33,11 +33,18 @@ export default async function ExcludedDetailPage({
 
   const doiUrl = paper.doi ? `https://doi.org/${paper.doi}` : null
 
-  const isReported = userId
-    ? await db.paperReport
-        .findUnique({ where: { userId_paperId: { userId, paperId: paper.id } } })
-        .then(Boolean)
-    : false
+  const [isReported, reports] = await Promise.all([
+    userId
+      ? db.paperReport
+          .findUnique({ where: { userId_paperId: { userId, paperId: paper.id } } })
+          .then(Boolean)
+      : Promise.resolve(false),
+    db.paperReport.findMany({
+      where: { paperId: paper.id },
+      select: { reason: true, note: true, resolved: true, createdAt: true, user: { select: { name: true } } },
+      orderBy: { createdAt: "asc" },
+    }),
+  ])
 
   return (
     <div className="min-h-screen bg-base-100 flex flex-col">
@@ -131,8 +138,63 @@ export default async function ExcludedDetailPage({
               <p className="text-base-content/70 leading-relaxed">{paper.reviewNote}</p>
             </Section>
           )}
+
+          {reports.length > 0 && (
+            <Section title="Community feedback">
+              <div className="space-y-2">
+                {reports.map((r, i) => {
+                  const who = r.user.name ?? "A user"
+                  const reasonLabel =
+                    r.reason === "WRONG_CLASSIFICATION"
+                      ? "flagged as incorrectly classified"
+                      : r.reason === "DUPLICATE"
+                        ? "flagged as duplicate"
+                        : "flagged for re-review"
+                  const label = r.note
+                    ? `${who} ${reasonLabel} — "${r.note}"`
+                    : `${who} ${reasonLabel}`
+                  return (
+                    <HistoryEvent
+                      key={i}
+                      label={label}
+                      date={r.createdAt}
+                      resolved={r.resolved}
+                    />
+                  )
+                })}
+              </div>
+            </Section>
+          )}
         </div>
       </div>
+    </div>
+  )
+}
+
+function HistoryEvent({
+  label,
+  date,
+  resolved,
+}: {
+  label: string
+  date: Date
+  resolved: boolean
+}) {
+  const formatted = date.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  })
+  return (
+    <div className="flex items-baseline gap-2 text-xs text-base-content/40">
+      <span className="shrink-0">·</span>
+      <span>{label}</span>
+      <span className="shrink-0">{formatted}</span>
+      {resolved ? (
+        <span className="badge badge-success badge-xs">reviewed</span>
+      ) : (
+        <span className="badge badge-ghost badge-xs">pending</span>
+      )}
     </div>
   )
 }
