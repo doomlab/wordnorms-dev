@@ -10,8 +10,17 @@ const STEP_LABEL: Record<string, string> = {
   predict: "Scoring papers…",
 }
 
-export function PipelineButton() {
-  const [status, setStatus] = useState<RunStatus>("idle")
+export function PipelineButton({
+  activeRunId,
+  activeStep,
+}: {
+  activeRunId: number | null
+  activeStep: string | null
+}) {
+  const [status, setStatus] = useState<RunStatus>(() => {
+    if (!activeRunId) return "idle"
+    return (activeStep as RunStatus) ?? "fetch"
+  })
   const router = useRouter()
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
@@ -21,8 +30,6 @@ export function PipelineButton() {
       pollRef.current = null
     }
   }
-
-  useEffect(() => () => stopPolling(), [])
 
   const startPolling = (runId: number) => {
     pollRef.current = setInterval(async () => {
@@ -45,6 +52,13 @@ export function PipelineButton() {
       }
     }, 2000)
   }
+
+  // Resume polling if there's already a running job when the page loads
+  useEffect(() => {
+    if (activeRunId) startPolling(activeRunId)
+    return stopPolling
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const run = async () => {
     setStatus("fetch")

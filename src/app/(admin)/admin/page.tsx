@@ -4,11 +4,12 @@ import { PipelineButton } from "./PipelineButton"
 export const metadata = { title: "Admin" }
 
 export default async function AdminPage() {
-  const [counts, pendingExtraction, openReports, lastRun] = await Promise.all([
+  const [counts, pendingExtraction, openReports, lastRun, activeRun] = await Promise.all([
     db.paper.groupBy({ by: ["status"], _count: { _all: true } }),
     db.paper.count({ where: { status: "ACCEPTED", extraction: null } }),
     db.paperReport.count({ where: { resolved: false } }),
     db.pipelineRun.findFirst({ where: { status: "DONE" }, orderBy: { finishedAt: "desc" } }),
+    db.pipelineRun.findFirst({ where: { status: "RUNNING" }, orderBy: { createdAt: "desc" } }),
   ])
   const byStatus = Object.fromEntries(counts.map((c) => [c.status, c._count._all]))
 
@@ -20,13 +21,9 @@ export default async function AdminPage() {
       })
     : null
 
+  const pendingReview = byStatus.PENDING_REVIEW ?? 0
+
   const cards = [
-    {
-      href: "/admin/review",
-      label: "Review Queue",
-      desc: "Review papers scored by the model.",
-      badge: byStatus.PENDING_REVIEW ?? 0,
-    },
     {
       href: "/admin/extract",
       label: "Extraction",
@@ -75,7 +72,7 @@ export default async function AdminPage() {
               process can be slow, so check back later to see results.
             </p>
             <div className="flex items-center justify-between">
-              <PipelineButton />
+              <PipelineButton activeRunId={activeRun?.id ?? null} activeStep={activeRun?.step ?? null} />
               {lastRanLabel ? (
                 <span className="text-base-content/40 text-xs">Last ran {lastRanLabel}</span>
               ) : (
@@ -84,6 +81,22 @@ export default async function AdminPage() {
             </div>
           </div>
         </div>
+
+        {/* Step 2: Review */}
+        <a href="/admin/review" className="card card-bordered bg-base-200 hover:bg-base-300 transition-colors">
+          <div className="card-body gap-3">
+            <div className="flex items-center justify-between">
+              <h2 className="card-title">Review</h2>
+              {pendingReview > 0 && (
+                <span className="badge badge-warning">{pendingReview}</span>
+              )}
+            </div>
+            <p className="text-base-content/60 text-sm">
+              For each paper, decide: should it go into the model or not? Accept relevant papers
+              and exclude the rest.
+            </p>
+          </div>
+        </a>
 
         {cards.map((c) => (
           <a
