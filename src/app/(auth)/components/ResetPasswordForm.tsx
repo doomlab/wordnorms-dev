@@ -13,49 +13,40 @@ export function ResetPasswordForm() {
   const [resetPasswordMutation, { isSuccess }] = useMutation(resetPassword)
 
   return (
-    <div>
-      <h1>Set a New Password</h1>
+    <div className="flex flex-1 items-center justify-center px-4 py-12">
+      <div className="card w-full max-w-sm bg-base-200 shadow-sm">
+        <div className="card-body gap-0">
+          <h1 className="text-2xl font-bold mb-6">Set a new password</h1>
 
-      {isSuccess ? (
-        <div>
-          <h2>Password Reset Successfully</h2>
-          <p>
-            Go to the <Link href="/">homepage</Link>
-          </p>
+          {isSuccess ? (
+            <div className="text-center py-4">
+              <p className="text-base-content/70 mb-4">Your password has been reset. You are now logged in.</p>
+              <Link href="/" className="btn btn-primary btn-sm">
+                Go to browse
+              </Link>
+            </div>
+          ) : (
+            <Form
+              submitText="Reset password"
+              schema={ResetPassword}
+              initialValues={{ password: "", passwordConfirmation: "", token }}
+              onSubmit={async (values) => {
+                try {
+                  await resetPasswordMutation({ ...values, token })
+                } catch (error: any) {
+                  if (error.name === "ResetPasswordError") {
+                    return { [FORM_ERROR]: error.message }
+                  }
+                  return { [FORM_ERROR]: "Sorry, we had an unexpected error. Please try again." }
+                }
+              }}
+            >
+              <LabeledTextField name="password" label="New password" type="password" placeholder="••••••••" />
+              <LabeledTextField name="passwordConfirmation" label="Confirm new password" type="password" placeholder="••••••••" />
+            </Form>
+          )}
         </div>
-      ) : (
-        <Form
-          submitText="Reset Password"
-          schema={ResetPassword}
-          initialValues={{
-            password: "",
-            passwordConfirmation: "",
-            token,
-          }}
-          onSubmit={async (values) => {
-            try {
-              await resetPasswordMutation({ ...values, token })
-            } catch (error: any) {
-              if (error.name === "ResetPasswordError") {
-                return {
-                  [FORM_ERROR]: error.message,
-                }
-              } else {
-                return {
-                  [FORM_ERROR]: "Sorry, we had an unexpected error. Please try again.",
-                }
-              }
-            }
-          }}
-        >
-          <LabeledTextField name="password" label="New Password" type="password" />
-          <LabeledTextField
-            name="passwordConfirmation"
-            label="Confirm New Password"
-            type="password"
-          />
-        </Form>
-      )}
+      </div>
     </div>
   )
 }

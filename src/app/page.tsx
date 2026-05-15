@@ -159,11 +159,7 @@ export default async function Home({
                           <h2 className="font-semibold text-base leading-snug">
                             {capFirst(paper.title)}
                           </h2>
-                          {ext && !ext.needsReview && (
-                            <span className="badge badge-success badge-sm shrink-0">
-                              approved
-                            </span>
-                          )}
+
                           {datasetBibtex && (
                             <a
                               href={`/datasets/${datasetBibtex}`}

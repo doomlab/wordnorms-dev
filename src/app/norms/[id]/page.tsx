@@ -109,9 +109,7 @@ export default async function NormDetailPage({
         <div className="flex items-start justify-between gap-4 mb-6">
           <div>
             <h1 className="text-2xl font-bold leading-snug mb-1">{capFirst(paper.title)}</h1>
-            {ext && !ext.needsReview && (
-              <span className="badge badge-success badge-sm">extraction approved</span>
-            )}
+
           </div>
           <div className="flex items-center gap-2 shrink-0 pt-1">
             <ReportButton paperId={paper.id} initialReported={isReported} isLoggedIn={!!userId} />

@@ -3,6 +3,8 @@ import db from "db"
 import { SecurePassword } from "@blitzjs/auth/secure-password"
 import { email, password } from "../validations"
 import { z } from "zod"
+import { ResendMsg } from "integrations/mailer"
+import { createSignUpMsg } from "integrations/emails"
 
 const SignupInput = z.object({ email, password })
 import { Role } from "types"
@@ -14,6 +16,8 @@ export default resolver.pipe(resolver.zod(SignupInput), async ({ email, password
   })
 
   await ctx.session.$create({ userId: user.id, role: "USER" as Role })
+
+  await ResendMsg(createSignUpMsg(email)).catch(() => {})
 
   return { userId: ctx.session.userId, ...user }
 })
