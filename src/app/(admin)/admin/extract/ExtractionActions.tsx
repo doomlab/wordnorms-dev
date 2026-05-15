@@ -17,7 +17,7 @@ export function ExtractionActions({
   hasGroqKey: boolean
 }) {
   const [file, setFile] = useState<File | null>(null)
-  const [status, setStatus] = useState<"idle" | "loading" | "done" | "error">("idle")
+  const [status, setStatus] = useState<"idle" | "loading" | "done" | "skipped" | "error">("idle")
   const [approve] = useMutation(approveExtraction)
   const router = useRouter()
 

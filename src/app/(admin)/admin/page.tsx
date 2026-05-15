@@ -4,10 +4,19 @@ import { PipelineButton } from "./PipelineButton"
 export const metadata = { title: "Admin" }
 
 export default async function AdminPage() {
-  const [counts, pendingExtraction, pendingMetadata, openReports, lastRun, activeRun] =
+  const [counts, extractionNew, extractionNoPdf, pendingMetadata, openReports, lastRun, activeRun] =
     await Promise.all([
       db.paper.groupBy({ by: ["status"], _count: { _all: true } }),
-      db.paper.count({ where: { status: "ACCEPTED", extraction: null } }),
+      db.paper.count({ where: { status: "ACCEPTED", extraction: null, pdfUrl: { not: null } } }),
+      db.paper.count({
+        where: {
+          status: "ACCEPTED",
+          OR: [
+            { extraction: { is: null }, pdfUrl: null },
+            { extraction: { needsReview: true, confidence: null } },
+          ],
+        },
+      }),
       db.paperExtraction.count({ where: { verifiedAt: null, paper: { status: "ACCEPTED" } } }),
       db.paperReport.count({ where: { resolved: false } }),
       db.pipelineRun.findFirst({ where: { status: "DONE" }, orderBy: { finishedAt: "desc" } }),
@@ -30,12 +39,6 @@ export default async function AdminPage() {
   const pendingReview = byStatus.PENDING_REVIEW ?? 0
 
   const cards = [
-    {
-      href: "/admin/extract",
-      label: "Extraction",
-      desc: "Extract metadata from accepted papers",
-      badge: pendingExtraction,
-    },
     {
       href: "/admin/metadata",
       label: "Metadata Review",
@@ -107,6 +110,27 @@ export default async function AdminPage() {
               For each paper, decide: should it go into the model or not? Accept relevant papers and
               exclude the rest.
             </p>
+          </div>
+        </a>
+
+        {/* Extraction card with two bucket counts */}
+        <a
+          href="/admin/extract"
+          className="card card-bordered bg-base-200 hover:bg-base-300 transition-colors"
+        >
+          <div className="card-body">
+            <div className="flex items-center justify-between">
+              <h2 className="card-title">Extraction</h2>
+              <div className="flex gap-1.5">
+                {extractionNew > 0 && (
+                  <span className="badge badge-warning">{extractionNew} new</span>
+                )}
+                {extractionNoPdf > 0 && (
+                  <span className="badge badge-ghost">{extractionNoPdf} no PDF</span>
+                )}
+              </div>
+            </div>
+            <p className="text-base-content/60 text-sm">Extract metadata from accepted papers</p>
           </div>
         </a>
 

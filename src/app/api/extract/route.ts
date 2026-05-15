@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "paperId and file required" }, { status: 400 })
     }
     tmpPath = path.join(os.tmpdir(), `paper-${paperId}-${Date.now()}.pdf`)
-    await fs.writeFile(tmpPath, Buffer.from(await file.arrayBuffer()))
+    await fs.writeFile(tmpPath, new Uint8Array(await file.arrayBuffer()))
   } else {
     const body = await req.json()
     paperId = body.paperId
@@ -55,7 +55,8 @@ export async function POST(req: NextRequest) {
       if (tmpPath) await fs.unlink(tmpPath).catch(() => {})
       console.log(`[extract] paper=${paperId} exit=${code} output=${output}`)
       if (code === 0) {
-        resolve(NextResponse.json({ ok: true, output }))
+        const skipped = /skipped:/.test(output)
+        resolve(NextResponse.json({ ok: true, skipped, output }))
       } else {
         resolve(NextResponse.json({ ok: false, output }, { status: 500 }))
       }
