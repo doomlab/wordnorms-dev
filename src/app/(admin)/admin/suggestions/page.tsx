@@ -1,5 +1,4 @@
 import db from "db"
-import { ResolveArticleSuggestionButton } from "./ResolveArticleSuggestionButton"
 
 export const metadata = { title: "Article Suggestions – Admin" }
 
@@ -47,7 +46,7 @@ export default async function AdminArticleSuggestionsPage({
                 <th>Suggested by</th>
                 <th>Note</th>
                 <th>Date</th>
-                {!showResolved && <th></th>}
+                <th></th>
               </tr>
             </thead>
             <tbody>
@@ -89,11 +88,14 @@ export default async function AdminArticleSuggestionsPage({
                   <td className="text-xs text-base-content/50 whitespace-nowrap">
                     {new Date(s.createdAt).toLocaleDateString()}
                   </td>
-                  {!showResolved && (
-                    <td>
-                      <ResolveArticleSuggestionButton suggestionId={s.id} />
-                    </td>
-                  )}
+                  <td>
+                    <a
+                      href={`/admin/suggestions/${s.id}`}
+                      className="btn btn-ghost btn-outline btn-xs"
+                    >
+                      Review
+                    </a>
+                  </td>
                 </tr>
               ))}
             </tbody>
