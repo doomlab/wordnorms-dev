@@ -38,12 +38,17 @@ export function ForgotPasswordForm() {
                   }
                 }}
               >
-                <LabeledTextField name="email" label="Email" placeholder="you@example.com" type="email" />
+                <LabeledTextField
+                  name="email"
+                  label="Email"
+                  placeholder="you@example.com"
+                  type="email"
+                />
               </Form>
 
               <div className="divider mt-4 mb-2" />
               <div className="flex justify-center">
-                <Link href="/login" className="btn btn-ghost btn-sm">
+                <Link href="/login" className="btn btn-secondary btn-sm">
                   Back to log in
                 </Link>
               </div>
