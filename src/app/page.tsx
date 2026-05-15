@@ -84,6 +84,7 @@ export default async function Home({
     db.paper.findMany({
       where: {
         status: "ACCEPTED",
+        canonicalPaperId: null,
         extraction: languages.length
           ? { language: { hasSome: languages } }
           : { isNot: null },
@@ -95,6 +96,7 @@ export default async function Home({
     db.paper.findMany({
       where: {
         status: "ACCEPTED",
+        canonicalPaperId: null,
         extraction: { isNot: null },
       },
       select: { extraction: { select: { language: true } } },

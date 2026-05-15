@@ -51,6 +51,7 @@ export default async function ExcludedPage({
     db.paper.findMany({
       where: {
         status: "EXCLUDED",
+        canonicalPaperId: null,
         ...(andClauses.length ? { AND: andClauses } : {}),
       },
       select: {
