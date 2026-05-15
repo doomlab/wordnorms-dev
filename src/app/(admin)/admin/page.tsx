@@ -47,22 +47,16 @@ export default async function AdminPage() {
       badge: pendingMetadata,
     },
     {
-      href: "/admin/stats",
-      label: "Pipeline Stats",
-      desc: "Model performance and validation metrics",
-      badge: null,
-    },
-    {
       href: "/admin/reports",
       label: "Reports",
       desc: "Papers flagged by users as incorrectly classified",
       badge: openReports,
     },
     {
-      href: "/admin/users",
-      label: "Users",
-      desc: "View and manage user accounts",
-      badge: null,
+      href: "/admin/suggestions",
+      label: "Article Suggestions",
+      desc: "Papers suggested by users that aren't in the database yet",
+      badge: openSuggestions,
     },
     {
       href: "/admin/duplicates",
@@ -71,10 +65,16 @@ export default async function AdminPage() {
       badge: null,
     },
     {
-      href: "/admin/suggestions",
-      label: "Article Suggestions",
-      desc: "Papers suggested by users that aren't in the database yet",
-      badge: openSuggestions,
+      href: "/admin/stats",
+      label: "Pipeline Stats",
+      desc: "Model performance and validation metrics",
+      badge: null,
+    },
+    {
+      href: "/admin/users",
+      label: "Users",
+      desc: "View and manage user accounts",
+      badge: null,
     },
   ]
 

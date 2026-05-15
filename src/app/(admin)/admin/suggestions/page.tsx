@@ -23,7 +23,7 @@ export default async function AdminArticleSuggestionsPage({
         <h1 className="text-3xl font-bold">Article Suggestions</h1>
         <a
           href={showResolved ? "/admin/suggestions" : "/admin/suggestions?resolved=1"}
-          className="btn btn-ghost btn-sm"
+          className="btn btn-ghost btn-outline btn-sm"
         >
           {showResolved ? "Show open" : "Show resolved"}
         </a>
@@ -82,9 +82,7 @@ export default async function AdminArticleSuggestionsPage({
                   <td className="text-sm text-base-content/70">
                     {s.year ?? <span className="text-base-content/30">—</span>}
                   </td>
-                  <td className="text-sm text-base-content/60">
-                    {s.user.name ?? s.user.email}
-                  </td>
+                  <td className="text-sm text-base-content/60">{s.user.name ?? s.user.email}</td>
                   <td className="text-sm text-base-content/60 max-w-xs">
                     {s.note ?? <span className="text-base-content/30">—</span>}
                   </td>
