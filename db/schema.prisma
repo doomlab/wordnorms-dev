@@ -114,6 +114,7 @@ model PaperCitation {
   authors         String[]
   year            Int?
   journal         String?
+  reviewed        Boolean  @default(false)
 
   @@unique([citingPaperId, citedOpenAlexId])
 }

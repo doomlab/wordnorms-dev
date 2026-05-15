@@ -4,7 +4,7 @@ import { PipelineButton } from "./PipelineButton"
 export const metadata = { title: "Admin" }
 
 export default async function AdminPage() {
-  const [counts, extractionNew, extractionNoPdf, pendingMetadata, openReports, lastRun, activeRun, openSuggestions] =
+  const [counts, extractionNew, extractionNoPdf, pendingMetadata, openReports, lastRun, activeRun, openSuggestions, unmatchedCitations] =
     await Promise.all([
       db.paper.groupBy({ by: ["status"], _count: { _all: true } }),
       db.paper.count({ where: { status: "ACCEPTED", extraction: null, pdfUrl: { not: null } } }),
@@ -22,6 +22,12 @@ export default async function AdminPage() {
       db.pipelineRun.findFirst({ where: { status: "DONE" }, orderBy: { finishedAt: "desc" } }),
       db.pipelineRun.findFirst({ where: { status: "RUNNING" }, orderBy: { createdAt: "desc" } }),
       db.articleSuggestion.count({ where: { resolved: false } }),
+      db.$queryRaw<[{ count: bigint }]>`
+        SELECT COUNT(*)::int AS count FROM "PaperCitation" pc
+        WHERE NOT EXISTS (
+          SELECT 1 FROM "Paper" p WHERE p."openAlexId" = pc."citedOpenAlexId"
+        )
+      `.then((r) => Number(r[0]?.count ?? 0)),
     ])
   const byStatus = Object.fromEntries(counts.map((c) => [c.status, c._count._all]))
 
@@ -57,6 +63,12 @@ export default async function AdminPage() {
       label: "Article Suggestions",
       desc: "Papers suggested by users that aren't in the database yet",
       badge: openSuggestions,
+    },
+    {
+      href: "/admin/citations",
+      label: "Citation Review",
+      desc: "Cited papers not yet in the database — review and pull any that belong",
+      badge: unmatchedCitations,
     },
     {
       href: "/admin/duplicates",

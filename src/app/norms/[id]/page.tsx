@@ -66,6 +66,9 @@ export default async function NormDetailPage({
         },
         orderBy: { createdAt: "asc" },
       },
+      citationsFrom: {
+        select: { citedOpenAlexId: true, title: true, year: true, journal: true },
+      },
     },
   })
 
@@ -75,6 +78,17 @@ export default async function NormDetailPage({
   const doiUrl = paper.doi ? `https://doi.org/${paper.doi}` : null
   const isAiExtracted = ext && ["groq", "ollama"].includes(ext.extractedBy ?? "")
   const linkedDataset = findDatasetCard(paper.doi, paper.title)
+
+  // Resolve which cited papers are in the DB
+  const citedIds = paper.citationsFrom.map((c) => c.citedOpenAlexId)
+  const matchedCitations =
+    citedIds.length > 0
+      ? await db.paper.findMany({
+          where: { openAlexId: { in: citedIds }, status: "ACCEPTED" },
+          select: { id: true, openAlexId: true, title: true, year: true, journal: true },
+        })
+      : []
+  const matchedById = new Map(matchedCitations.map((p) => [p.openAlexId, p]))
 
   const [isFavorited, isReported, hasPriorSuggestion] = await Promise.all([
     userId
@@ -292,6 +306,33 @@ export default async function NormDetailPage({
                 ))}
               </div>
             </div>
+          )}
+          {matchedCitations.length > 0 && (
+            <Section title="Referenced in WordNorms">
+              <div className="space-y-1">
+                {paper.citationsFrom
+                  .filter((c) => matchedById.has(c.citedOpenAlexId))
+                  .map((c) => {
+                    const matched = matchedById.get(c.citedOpenAlexId)!
+                    return (
+                      <a
+                        key={c.citedOpenAlexId}
+                        href={`/norms/${matched.id}`}
+                        className="flex gap-3 py-1.5 hover:text-primary group"
+                      >
+                        <span className="flex-1 text-sm group-hover:underline">
+                          {capFirst(matched.title)}
+                        </span>
+                        {matched.year && (
+                          <span className="text-sm text-base-content/40 shrink-0">
+                            {matched.year}
+                          </span>
+                        )}
+                      </a>
+                    )
+                  })}
+              </div>
+            </Section>
           )}
         </div>
       </div>
