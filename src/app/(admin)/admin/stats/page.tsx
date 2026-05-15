@@ -7,9 +7,10 @@ function pct(n: number) {
 }
 
 export default async function AdminStatsPage() {
-  const [counts, extracted, runs] = await Promise.all([
+  const [counts, extracted, metadataApproved, runs] = await Promise.all([
     db.paper.groupBy({ by: ["status"], _count: { _all: true } }),
     db.paper.count({ where: { status: "ACCEPTED", extraction: { isNot: null } } }),
+    db.paperExtraction.count({ where: { verifiedAt: { not: null }, paper: { status: "ACCEPTED" } } }),
     db.modelRun.findMany({ orderBy: { createdAt: "desc" }, take: 20 }),
   ])
 
@@ -26,6 +27,7 @@ export default async function AdminStatsPage() {
     { label: "Accepted", value: accepted, style: "text-success" },
     { label: "Extracted", value: extracted, style: "text-info" },
     { label: "Excluded", value: excluded, style: "text-error" },
+    { label: "Metadata approved", value: metadataApproved, style: "text-primary" },
   ]
 
   const latest = runs[0]
@@ -48,7 +50,7 @@ export default async function AdminStatsPage() {
       </div>
 
       {acceptRate !== null && (
-        <div className="card card-bordered bg-base-200 max-w-sm mb-12">
+        <div className="card card-bordered bg-base-200 mb-12">
           <div className="card-body py-4 px-5">
             <p className="text-sm text-base-content/60">Admin accept rate (reviewed papers)</p>
             <p className="text-3xl font-bold">{acceptRate}%</p>
