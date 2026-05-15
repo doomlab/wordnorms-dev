@@ -48,7 +48,8 @@ model User {
   reports          PaperReport[]
   metadataEdits    MetadataEditSuggestion[]
   extractionEdits  ExtractionEditSuggestion[]
-  pipelineRuns     PipelineRun[]
+  pipelineRuns       PipelineRun[]
+  extractionsVerified PaperExtraction[]
 }
 
 model Session {
@@ -183,9 +184,12 @@ model PaperExtraction {
   normsCollected   String[]
   instructions     String?
   confidence       Float?
-  needsReview      Boolean  @default(false)
+  needsReview      Boolean   @default(false)
   extractedBy      String?
   extractedAt      DateTime
+  verifiedAt       DateTime?
+  verifiedById     Int?
+  verifiedBy       User?     @relation(fields: [verifiedById], references: [id])
 }
 
 model ModelRun {

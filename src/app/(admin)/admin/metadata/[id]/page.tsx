@@ -1,52 +1,37 @@
 import { notFound } from "next/navigation"
 import db from "db"
-import { ExtractionActions } from "../ExtractionActions"
+import { MetadataActions } from "../MetadataActions"
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
   const paper = await db.paper.findUnique({ where: { id: Number(id) }, select: { title: true } })
-  return { title: paper ? `${paper.title} – Extract` : "Extract – Admin" }
+  return { title: paper ? `${paper.title} – Metadata Review` : "Metadata Review – Admin" }
 }
 
 const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
 
-export default async function AdminExtractDetailPage({
+export default async function AdminMetadataDetailPage({
   params,
-  searchParams,
 }: {
   params: Promise<{ id: string }>
-  searchParams: Promise<{ from?: string }>
 }) {
   const { id } = await params
-  const { from } = await searchParams
-
   const paper = await db.paper.findUnique({
-    where: { id: Number(id), status: "ACCEPTED" },
+    where: { id: Number(id), status: "ACCEPTED", extraction: { isNot: null, verifiedAt: null } },
     include: { extraction: true },
   })
 
   if (!paper) notFound()
 
-  const state: "new" | "no-pdf" | "needs-review" =
-    paper.extraction
-      ? paper.extraction.needsReview && paper.extraction.confidence == null
-        ? "no-pdf"
-        : paper.extraction.needsReview
-        ? "needs-review"
-        : "needs-review"
-      : paper.pdfUrl
-      ? "new"
-      : "no-pdf"
-
-  const backHref = from ? `/admin/extract?tab=${from}` : "/admin/extract"
+  const ext = paper.extraction!
 
   return (
     <>
       <a
-        href={backHref}
+        href="/admin/metadata"
         className="text-sm text-base-content/50 hover:text-base-content mb-6 inline-block"
       >
-        ← Back to extraction
+        ← Back to metadata review
       </a>
 
       <div className="flex items-start justify-between gap-4 mb-6">
@@ -97,29 +82,29 @@ export default async function AdminExtractDetailPage({
           </Section>
         )}
 
-        {paper.extraction && (
-          <Section title="Extracted Data">
-            <Row label="Language" value={paper.extraction.language?.join(", ") || undefined} />
-            <Row label="Participants" value={paper.extraction.participantCount?.toString()} />
-            <Row label="Participant type" value={paper.extraction.participantType ?? undefined} />
-            <Row label="Stimuli type" value={paper.extraction.stimuliType?.join(", ") || undefined} />
-            <Row label="Stimuli count" value={paper.extraction.stimuliCount?.toString()} />
-            <Row label="Norms collected" value={paper.extraction.normsCollected?.join(", ") || undefined} />
-            <Row label="Instructions" value={paper.extraction.instructions ?? undefined} />
-            {paper.extraction.confidence != null && (
-              <div className="flex gap-3 py-1.5">
-                <span className="w-36 shrink-0 font-medium text-base-content/70">Confidence</span>
-                <span className={paper.extraction.confidence < 0.6 ? "text-warning" : "text-success"}>
-                  {(paper.extraction.confidence * 100).toFixed(0)}%
-                </span>
-              </div>
-            )}
-          </Section>
-        )}
+        <Section title="Extracted Metadata">
+          <Row label="Language" value={ext.language?.join(", ") || undefined} />
+          <Row label="Participants" value={ext.participantCount?.toString()} />
+          <Row label="Participant type" value={ext.participantType ?? undefined} />
+          <Row label="Stimuli type" value={ext.stimuliType?.join(", ") || undefined} />
+          <Row label="Stimuli count" value={ext.stimuliCount?.toString()} />
+          <Row label="Norms collected" value={ext.normsCollected?.join(", ") || undefined} />
+          <Row label="Instructions" value={ext.instructions ?? undefined} />
+          {ext.confidence != null && (
+            <div className="flex gap-3 py-1.5">
+              <span className="w-36 shrink-0 font-medium text-base-content/70">Confidence</span>
+              <span className={ext.confidence < 0.6 ? "text-warning" : "text-success"}>
+                {(ext.confidence * 100).toFixed(0)}%
+              </span>
+            </div>
+          )}
+          <Row label="Extracted by" value={ext.extractedBy ?? undefined} />
+        </Section>
       </div>
 
       <div className="border-t border-base-200 pt-8 text-center">
-        <ExtractionActions paperId={paper.id} state={state} hasExtraction={!!paper.extraction} />
+        <p className="text-sm text-base-content/60 mb-3">Does this metadata look correct?</p>
+        <MetadataActions paperId={paper.id} />
       </div>
     </>
   )

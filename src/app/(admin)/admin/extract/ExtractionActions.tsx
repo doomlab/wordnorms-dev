@@ -7,7 +7,15 @@ import approveExtraction from "../../mutations/approveExtraction"
 
 type State = "new" | "no-pdf" | "needs-review"
 
-export function ExtractionActions({ paperId, state }: { paperId: number; state: State }) {
+export function ExtractionActions({
+  paperId,
+  state,
+  hasExtraction,
+}: {
+  paperId: number
+  state: State
+  hasExtraction: boolean
+}) {
   const [file, setFile] = useState<File | null>(null)
   const [status, setStatus] = useState<"idle" | "loading" | "done" | "error">("idle")
   const [approve] = useMutation(approveExtraction)
@@ -85,24 +93,38 @@ export function ExtractionActions({ paperId, state }: { paperId: number; state: 
 
   if (state === "no-pdf") {
     return (
-      <div className="flex flex-col items-center gap-3">
-        <p className="text-sm text-base-content/60">Upload a PDF to extract.</p>
-        <div className="flex gap-2 items-center">
-          <input
-            type="file"
-            accept=".pdf,application/pdf"
-            className="file-input file-input-bordered file-input-sm w-72"
-            onChange={(e) => setFile(e.target.files?.[0] ?? null)}
-            disabled={status === "loading"}
-          />
-          <button
-            className="btn btn-primary"
-            onClick={extractFromFile}
-            disabled={status === "loading" || !file}
-          >
-            {status === "loading" ? <span className="loading loading-spinner" /> : "Extract"}
-          </button>
+      <div className="flex flex-col items-center gap-4">
+        <div className="flex flex-col items-center gap-2">
+          <p className="text-sm text-base-content/60">Upload a PDF to extract.</p>
+          <div className="flex gap-2 items-center">
+            <input
+              type="file"
+              accept=".pdf,application/pdf"
+              className="file-input file-input-bordered file-input-sm w-72"
+              onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+              disabled={status === "loading"}
+            />
+            <button
+              className="btn btn-primary"
+              onClick={extractFromFile}
+              disabled={status === "loading" || !file}
+            >
+              {status === "loading" ? <span className="loading loading-spinner" /> : "Extract"}
+            </button>
+          </div>
         </div>
+        {hasExtraction && (
+          <div className="divider text-xs text-base-content/40 w-64 mx-auto">or</div>
+        )}
+        {hasExtraction && (
+          <button
+            className="btn btn-ghost btn-outline btn-sm"
+            onClick={handleApprove}
+            disabled={status === "loading"}
+          >
+            Approve without PDF
+          </button>
+        )}
       </div>
     )
   }

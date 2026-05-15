@@ -4,9 +4,10 @@ import { PipelineButton } from "./PipelineButton"
 export const metadata = { title: "Admin" }
 
 export default async function AdminPage() {
-  const [counts, pendingExtraction, openReports, lastRun, activeRun] = await Promise.all([
+  const [counts, pendingExtraction, pendingMetadata, openReports, lastRun, activeRun] = await Promise.all([
     db.paper.groupBy({ by: ["status"], _count: { _all: true } }),
     db.paper.count({ where: { status: "ACCEPTED", extraction: null } }),
+    db.paperExtraction.count({ where: { verifiedAt: null, paper: { status: "ACCEPTED" } } }),
     db.paperReport.count({ where: { resolved: false } }),
     db.pipelineRun.findFirst({ where: { status: "DONE" }, orderBy: { finishedAt: "desc" } }),
     db.pipelineRun.findFirst({ where: { status: "RUNNING" }, orderBy: { createdAt: "desc" } }),
@@ -35,9 +36,15 @@ export default async function AdminPage() {
       badge: pendingExtraction,
     },
     {
+      href: "/admin/metadata",
+      label: "Metadata Review",
+      desc: "Verify extracted metadata looks correct before publishing",
+      badge: pendingMetadata,
+    },
+    {
       href: "/admin/excluded",
       label: "Excluded",
-      desc: "Papers rejected or added to training",
+      desc: "Papers rejected from the model",
       badge: null,
     },
     {
