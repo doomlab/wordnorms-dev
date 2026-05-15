@@ -1,5 +1,4 @@
 import db from "db"
-import { CitationActions } from "./CitationActions"
 
 export const metadata = { title: "Citation Review – Admin" }
 
@@ -69,7 +68,7 @@ export default async function CitationsPage({
         <span className="text-base-content/50 text-sm">{total} unmatched</span>
       </div>
       <p className="text-base-content/60 mb-6 text-sm">
-        Papers cited by accepted papers that are not yet in the database. Pull any that belong.
+        Papers cited by accepted papers that are not yet in the database. Add any that belong.
       </p>
 
       <div className="flex gap-2 mb-6">
@@ -108,12 +107,17 @@ export default async function CitationsPage({
               </thead>
               <tbody>
                 {paginated.map((g) => (
-                  <tr key={g.citedOpenAlexId} className={`hover:bg-base-200 ${g.reviewed ? "opacity-50" : ""}`}>
+                  <tr
+                    key={g.citedOpenAlexId}
+                    className={`hover:bg-base-200 ${g.reviewed ? "opacity-50" : ""}`}
+                  >
                     <td className="text-sm align-top py-3">
                       {g.title ?? <span className="text-base-content/30 italic">no title</span>}
                     </td>
                     <td className="text-sm text-base-content/60 align-top py-3">{g.year ?? "—"}</td>
-                    <td className="text-sm text-base-content/60 italic align-top py-3">{g.journal ?? "—"}</td>
+                    <td className="text-sm text-base-content/60 italic align-top py-3">
+                      {g.journal ?? "—"}
+                    </td>
                     <td className="align-top py-3">
                       <div className="flex flex-col gap-0.5">
                         {g.citedBy.slice(0, 3).map((p) => (
@@ -134,14 +138,12 @@ export default async function CitationsPage({
                       </div>
                     </td>
                     <td className="align-top py-3">
-                      <CitationActions
-                        citedOpenAlexId={g.citedOpenAlexId}
-                        title={g.title ?? "Untitled"}
-                        authors={g.authors}
-                        year={g.year}
-                        journal={g.journal}
-                        reviewed={g.reviewed}
-                      />
+                      <a
+                        href={`/admin/citations/${g.citedOpenAlexId}`}
+                        className="btn btn-outline btn-xs"
+                      >
+                        Review
+                      </a>
                     </td>
                   </tr>
                 ))}
@@ -152,7 +154,10 @@ export default async function CitationsPage({
           {totalPages > 1 && (
             <div className="flex justify-center gap-2 mt-8">
               {page > 1 && (
-                <a href={`?show=${show ?? "pending"}&page=${page - 1}`} className="btn btn-sm btn-ghost">
+                <a
+                  href={`?show=${show ?? "pending"}&page=${page - 1}`}
+                  className="btn btn-sm btn-ghost"
+                >
                   ← Prev
                 </a>
               )}
@@ -160,7 +165,10 @@ export default async function CitationsPage({
                 {page} / {totalPages}
               </span>
               {page < totalPages && (
-                <a href={`?show=${show ?? "pending"}&page=${page + 1}`} className="btn btn-sm btn-ghost">
+                <a
+                  href={`?show=${show ?? "pending"}&page=${page + 1}`}
+                  className="btn btn-sm btn-ghost"
+                >
                   Next →
                 </a>
               )}

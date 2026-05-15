@@ -17,7 +17,10 @@ export default resolver.pipe(
     })
   ),
   resolver.authorize(["ADMIN", "SUPER_ADMIN"]),
-  async ({ paperId, ...data }) => {
-    return db.paper.update({ where: { id: paperId }, data })
+  async ({ paperId, openAlexId, ...data }) => {
+    return db.paper.update({
+      where: { id: paperId },
+      data: { ...data, openAlexId: openAlexId?.replace("https://openalex.org/", "") ?? null },
+    })
   }
 )

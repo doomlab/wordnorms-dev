@@ -41,7 +41,7 @@ export default resolver.pipe(
         doi: rest.doi ?? null,
         journal: rest.journal ?? null,
         abstract: rest.abstract ?? null,
-        openAlexId: rest.openAlexId ?? null,
+        openAlexId: rest.openAlexId?.replace("https://openalex.org/", "") ?? null,
         pdfUrl: rest.pdfUrl ?? null,
         status: "ACCEPTED",
         discoverySource: "DIRECT",
