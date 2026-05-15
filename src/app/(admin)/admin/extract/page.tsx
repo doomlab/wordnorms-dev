@@ -11,14 +11,12 @@ export default async function AdminExtractPage({
 }) {
   const { tab = "new" } = await searchParams
 
-  const [hasPdf, noPdf, needsReview] = await Promise.all([
-    // New: accepted, has a PDF, never extracted
+  const [hasPdf, noPdf] = await Promise.all([
     db.paper.findMany({
       where: { status: "ACCEPTED", extraction: null, pdfUrl: { not: null } },
       select: { id: true, title: true, authors: true, year: true, modelScore: true },
       orderBy: { updatedAt: "desc" },
     }),
-    // No PDF: never extracted + no URL, OR extraction failed (needsReview + no confidence)
     db.paper.findMany({
       where: {
         status: "ACCEPTED",
@@ -30,28 +28,11 @@ export default async function AdminExtractPage({
       select: { id: true, title: true, authors: true, year: true, modelScore: true },
       orderBy: { updatedAt: "desc" },
     }),
-    // Needs review: extraction ran and has a confidence score, but flagged for human review
-    db.paper.findMany({
-      where: {
-        status: "ACCEPTED",
-        extraction: { needsReview: true, confidence: { not: null } },
-      },
-      select: {
-        id: true,
-        title: true,
-        authors: true,
-        year: true,
-        modelScore: true,
-        extraction: { select: { confidence: true } },
-      },
-      orderBy: { updatedAt: "desc" },
-    }),
   ])
 
   const tabs = [
     { key: "new", label: "New", count: hasPdf.length },
     { key: "no-pdf", label: "No PDF", count: noPdf.length },
-    { key: "needs-review", label: "Needs Review", count: needsReview.length },
   ]
 
   return (
@@ -71,9 +52,7 @@ export default async function AdminExtractPage({
           >
             {t.label}
             {t.count > 0 && (
-              <span
-                className={`badge badge-sm ml-2 ${tab === t.key ? "badge-neutral" : "badge-ghost"}`}
-              >
+              <span className={`badge badge-sm ml-2 ${tab === t.key ? "badge-neutral" : "badge-ghost"}`}>
                 {t.count}
               </span>
             )}
@@ -81,86 +60,21 @@ export default async function AdminExtractPage({
         ))}
       </div>
 
-      {tab === "new" &&
-        (hasPdf.length === 0 ? (
+      {tab === "new" && (
+        hasPdf.length === 0 ? (
           <p className="text-base-content/40">No papers waiting for extraction.</p>
         ) : (
           <PaperTable rows={hasPdf} tab="new" />
-        ))}
+        )
+      )}
 
-      {tab === "no-pdf" &&
-        (noPdf.length === 0 ? (
+      {tab === "no-pdf" && (
+        noPdf.length === 0 ? (
           <p className="text-base-content/40">No papers missing a PDF.</p>
         ) : (
-          <>
-            <PaperTable rows={noPdf} tab="no-pdf" />
-          </>
-        ))}
-
-      {tab === "needs-review" &&
-        (needsReview.length === 0 ? (
-          <p className="text-base-content/40">No extractions flagged for review.</p>
-        ) : (
-          <>
-            <p className="text-sm text-base-content/60 mb-4">
-              Extraction ran but confidence was low. Review each paper and approve or re-extract.
-            </p>
-            <div className="overflow-x-auto">
-              <table className="table table-zebra">
-                <thead>
-                  <tr>
-                    <th>Title</th>
-                    <th>Authors</th>
-                    <th>Year</th>
-                    <th>Score</th>
-                    <th>Confidence</th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {needsReview.map((p) => (
-                    <tr key={p.id}>
-                      <td className="max-w-sm">
-                        <p className="font-medium line-clamp-2">{cap(p.title)}</p>
-                      </td>
-                      <td className="text-sm text-base-content/70 max-w-xs">
-                        {p.authors.slice(0, 3).join(", ")}
-                        {p.authors.length > 3 && " et al."}
-                      </td>
-                      <td>{p.year ?? "—"}</td>
-                      <td>
-                        {p.modelScore != null ? (
-                          <span className="badge badge-outline badge-sm">
-                            {p.modelScore.toFixed(2)}
-                          </span>
-                        ) : (
-                          "—"
-                        )}
-                      </td>
-                      <td>
-                        {p.extraction?.confidence != null ? (
-                          <span className="text-warning">
-                            {(p.extraction.confidence * 100).toFixed(0)}%
-                          </span>
-                        ) : (
-                          "—"
-                        )}
-                      </td>
-                      <td>
-                        <a
-                          href={`/admin/extract/${p.id}`}
-                          className="btn btn-ghost btn-outline btn-xs"
-                        >
-                          View
-                        </a>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </>
-        ))}
+          <PaperTable rows={noPdf} tab="no-pdf" />
+        )
+      )}
     </>
   )
 }
@@ -200,15 +114,10 @@ function PaperTable({ rows, tab }: { rows: PaperRow[]; tab: string }) {
               <td>
                 {p.modelScore != null ? (
                   <span className="badge badge-outline badge-sm">{p.modelScore.toFixed(2)}</span>
-                ) : (
-                  "—"
-                )}
+                ) : "—"}
               </td>
               <td>
-                <a
-                  href={`/admin/extract/${p.id}?from=${tab}`}
-                  className="btn btn-ghost btn-outline btn-xs"
-                >
+                <a href={`/admin/extract/${p.id}?from=${tab}`} className="btn btn-ghost btn-outline btn-xs">
                   View
                 </a>
               </td>

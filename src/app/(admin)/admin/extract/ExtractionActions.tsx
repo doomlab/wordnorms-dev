@@ -8,19 +8,38 @@ import approveExtraction from "../../mutations/approveExtraction"
 type State = "new" | "no-pdf" | "needs-review"
 
 export function ExtractionActions({ paperId, state }: { paperId: number; state: State }) {
-  const [url, setUrl] = useState("")
+  const [file, setFile] = useState<File | null>(null)
   const [status, setStatus] = useState<"idle" | "loading" | "done" | "error">("idle")
   const [approve] = useMutation(approveExtraction)
   const router = useRouter()
 
-  const extract = async (pdfUrl?: string) => {
+  const extract = async () => {
     setStatus("loading")
     try {
       const res = await fetch("/api/extract", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ paperId, ...(pdfUrl ? { pdfUrl } : {}) }),
+        body: JSON.stringify({ paperId }),
       })
+      if (res.ok) {
+        router.push("/admin/extract")
+        router.refresh()
+      } else {
+        setStatus("error")
+      }
+    } catch {
+      setStatus("error")
+    }
+  }
+
+  const extractFromFile = async () => {
+    if (!file) return
+    setStatus("loading")
+    try {
+      const form = new FormData()
+      form.append("paperId", String(paperId))
+      form.append("file", file)
+      const res = await fetch("/api/extract", { method: "POST", body: form })
       if (res.ok) {
         router.push("/admin/extract")
         router.refresh()
@@ -56,7 +75,7 @@ export function ExtractionActions({ paperId, state }: { paperId: number; state: 
     return (
       <button
         className="btn btn-primary btn-wide"
-        onClick={() => extract()}
+        onClick={extract}
         disabled={status === "loading"}
       >
         {status === "loading" ? <span className="loading loading-spinner" /> : "Extract"}
@@ -67,20 +86,19 @@ export function ExtractionActions({ paperId, state }: { paperId: number; state: 
   if (state === "no-pdf") {
     return (
       <div className="flex flex-col items-center gap-3">
-        <p className="text-sm text-base-content/60">Paste a direct PDF link to extract.</p>
-        <div className="flex gap-2">
+        <p className="text-sm text-base-content/60">Upload a PDF to extract.</p>
+        <div className="flex gap-2 items-center">
           <input
-            type="url"
-            placeholder="PDF URL"
-            className="input input-bordered w-72"
-            value={url}
-            onChange={(e) => setUrl(e.target.value)}
+            type="file"
+            accept=".pdf,application/pdf"
+            className="file-input file-input-bordered file-input-sm w-72"
+            onChange={(e) => setFile(e.target.files?.[0] ?? null)}
             disabled={status === "loading"}
           />
           <button
             className="btn btn-primary"
-            onClick={() => extract(url)}
-            disabled={status === "loading" || !url.trim()}
+            onClick={extractFromFile}
+            disabled={status === "loading" || !file}
           >
             {status === "loading" ? <span className="loading loading-spinner" /> : "Extract"}
           </button>

@@ -75,23 +75,27 @@ def download_pdf(pdf_url):
         return f.name
 
 
-def run(paper_id):
+def run(paper_id, pdf_path=None):
     conn = get_conn()
     try:
         paper = get_paper(conn, paper_id)
         print(f"Extracting: [{paper['id']}] {paper['title'][:70]}")
 
-        if not paper["pdfUrl"]:
+        if pdf_path:
+            tmp, cleanup = pdf_path, False
+        elif paper["pdfUrl"]:
+            tmp, cleanup = download_pdf(paper["pdfUrl"]), True
+        else:
             print("No pdfUrl — cannot extract")
             save_extraction_failure(conn, paper_id, "skipped:no_pdf")
             conn.commit()
             sys.exit(1)
 
-        tmp = download_pdf(paper["pdfUrl"])
         try:
             text = extract_pdf_text(tmp)
         finally:
-            os.unlink(tmp)
+            if cleanup:
+                os.unlink(tmp)
 
         if not text or len(text.strip()) < 100:
             print("Could not extract text from PDF")
@@ -119,8 +123,9 @@ def run(paper_id):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--paper-id", type=int, required=True)
+    parser.add_argument("--pdf-path", default=None)
     args = parser.parse_args()
-    run(args.paper_id)
+    run(args.paper_id, args.pdf_path)
 
 
 if __name__ == "__main__":
