@@ -44,9 +44,7 @@ export function SuggestExtractionEdits({
   const [done, setDone] = useState(hasPriorSuggestion)
 
   const [language, setLanguage] = useState(toList(ext.language))
-  const [participantCount, setParticipantCount] = useState(
-    ext.participantCount?.toString() ?? ""
-  )
+  const [participantCount, setParticipantCount] = useState(ext.participantCount?.toString() ?? "")
   const [participantType, setParticipantType] = useState(ext.participantType ?? "")
   const [stimuliType, setStimuliType] = useState(toList(ext.stimuliType))
   const [stimuliCount, setStimuliCount] = useState(ext.stimuliCount?.toString() ?? "")
@@ -82,7 +80,10 @@ export function SuggestExtractionEdits({
   if (!isLoggedIn) {
     return (
       <div className="tooltip tooltip-left" data-tip="You must have an account to use this feature">
-        <button disabled className="btn btn-ghost btn-sm text-base-content/25 opacity-40 cursor-not-allowed">
+        <button
+          disabled
+          className="btn btn-primary btn-sm text-base-content/25 opacity-40 cursor-not-allowed"
+        >
           Suggest edits
         </button>
       </div>
@@ -93,7 +94,7 @@ export function SuggestExtractionEdits({
     <>
       <button
         onClick={() => dialogRef.current?.showModal()}
-        className="btn btn-ghost btn-sm text-base-content/50 hover:text-base-content"
+        className="btn btn-primary btn-sm text-base-content/50 hover:text-base-content"
       >
         {done ? "Edit suggestion submitted ✓" : "Suggest edits"}
       </button>
