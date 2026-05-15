@@ -83,6 +83,8 @@ export function SuggestionReview({
     stimuliCount: values.stimuliCount ? parseInt(values.stimuliCount) : null,
     normsCollected: values.normsCollected.split(",").map((s) => s.trim()).filter(Boolean),
     instructions: values.instructions || null,
+    licenseUrl: null,
+    dataSource: null,
   })
 
   const handleApply = async () => {

@@ -34,7 +34,7 @@ function loadDatasetLookup(): { byDoi: Map<string, string>; byTitle: Map<string,
 export default async function Home({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string; lang?: string | string[]; decade?: string | string[] }>
+  searchParams: Promise<{ q?: string; lang?: string | string[]; decade?: string | string[]; stimuli?: string | string[] }>
 }) {
   const params = await searchParams
 
@@ -44,6 +44,11 @@ export default async function Home({
     ? Array.isArray(params.decade)
       ? params.decade
       : [params.decade]
+    : []
+  const stimuliTypes = params.stimuli
+    ? Array.isArray(params.stimuli)
+      ? params.stimuli
+      : [params.stimuli]
     : []
 
   const ctx = await getBlitzContext()
@@ -86,9 +91,13 @@ export default async function Home({
       where: {
         status: "ACCEPTED",
         canonicalPaperId: null,
-        extraction: languages.length
-          ? { language: { hasSome: languages } }
-          : { isNot: null },
+        extraction:
+          languages.length || stimuliTypes.length
+            ? {
+                ...(languages.length ? { language: { hasSome: languages } } : {}),
+                ...(stimuliTypes.length ? { stimuliType: { hasSome: stimuliTypes } } : {}),
+              }
+            : { isNot: null },
         ...(andClauses.length ? { AND: andClauses } : {}),
       },
       include: { extraction: true },
@@ -100,7 +109,7 @@ export default async function Home({
         canonicalPaperId: null,
         extraction: { isNot: null },
       },
-      select: { extraction: { select: { language: true } } },
+      select: { extraction: { select: { language: true, stimuliType: true } } },
     }),
     userId
       ? db.userFavorite
@@ -118,6 +127,10 @@ export default async function Home({
     new Set(allPapers.flatMap((p) => p.extraction?.language ?? []))
   ).sort()
 
+  const allStimuliTypes = Array.from(
+    new Set(allPapers.flatMap((p) => p.extraction?.stimuliType ?? []))
+  ).sort()
+
   const { byDoi: datasetByDoi, byTitle: datasetByTitle } = loadDatasetLookup()
 
   return (
@@ -126,7 +139,7 @@ export default async function Home({
 
       <div className="flex flex-1 w-full px-10 py-8 gap-8">
         <Suspense fallback={<div className="w-56 shrink-0" />}>
-          <BrowseFilters allLanguages={allLanguages} />
+          <BrowseFilters allLanguages={allLanguages} allStimuliTypes={allStimuliTypes} />
         </Suspense>
 
         <div className="flex-1 min-w-0">

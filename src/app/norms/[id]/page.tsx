@@ -243,6 +243,27 @@ export default async function NormDetailPage({
                     ext.participantCount != null ? ext.participantCount.toLocaleString() : undefined
                   }
                 />
+                {ext.dataSource && (
+                  <div className="flex gap-3 py-1.5">
+                    <span className="w-36 shrink-0 font-medium text-base-content/70">Data source</span>
+                    <span className="text-base-content/80">
+                      {ext.dataSource === "ai" ? "AI generated" : "Human collected"}
+                    </span>
+                  </div>
+                )}
+                {ext.licenseUrl && (
+                  <div className="flex gap-3 py-1.5">
+                    <span className="w-36 shrink-0 font-medium text-base-content/70">License</span>
+                    <a
+                      href={ext.licenseUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="link link-primary break-all"
+                    >
+                      {ext.licenseUrl}
+                    </a>
+                  </div>
+                )}
                 {ext.instructions && (
                   <div className="py-1.5">
                     <span className="font-medium text-base-content/70 block mb-1">

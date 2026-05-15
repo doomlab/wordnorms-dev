@@ -14,6 +14,8 @@ type ExtractionData = {
   stimuliCount: number | null
   normsCollected: string[]
   instructions: string | null
+  licenseUrl: string | null
+  dataSource: string | null
   confidence: number | null
   extractedBy: string | null
 }
@@ -38,6 +40,8 @@ export function MetadataForm({
     stimuliCount: extraction.stimuliCount?.toString() ?? "",
     normsCollected: extraction.normsCollected.join(", "),
     instructions: extraction.instructions ?? "",
+    licenseUrl: extraction.licenseUrl ?? "",
+    dataSource: (extraction.dataSource ?? "") as "" | "ai" | "human",
   })
 
   const toPayload = () => ({
@@ -49,6 +53,8 @@ export function MetadataForm({
     stimuliCount: fields.stimuliCount ? parseInt(fields.stimuliCount) : null,
     normsCollected: fields.normsCollected.split(",").map((s) => s.trim()).filter(Boolean),
     instructions: fields.instructions || null,
+    licenseUrl: fields.licenseUrl || null,
+    dataSource: (fields.dataSource || null) as "ai" | "human" | null,
   })
 
   const set =
@@ -151,6 +157,30 @@ export function MetadataForm({
           onChange={set("instructions")}
           disabled={busy}
         />
+      </Field>
+      <Field label="License URL">
+        <input
+          className="input input-bordered input-sm w-full"
+          type="url"
+          placeholder="https://creativecommons.org/licenses/…"
+          value={fields.licenseUrl}
+          onChange={set("licenseUrl")}
+          disabled={busy}
+        />
+      </Field>
+      <Field label="Data source">
+        <select
+          className="select select-bordered select-sm w-full"
+          value={fields.dataSource}
+          onChange={(e) =>
+            setFields((f) => ({ ...f, dataSource: e.target.value as "" | "ai" | "human" }))
+          }
+          disabled={busy}
+        >
+          <option value="">— Unknown —</option>
+          <option value="human">Human collected</option>
+          <option value="ai">AI generated</option>
+        </select>
       </Field>
 
       {extraction.confidence != null && (

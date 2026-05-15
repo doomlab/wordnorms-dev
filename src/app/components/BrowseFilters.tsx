@@ -4,7 +4,13 @@ import { useRouter, useSearchParams, usePathname } from "next/navigation"
 import { useCallback, useEffect, useRef, useState } from "react"
 import { DECADE_LABELS } from "../data/datasets"
 
-export function BrowseFilters({ allLanguages }: { allLanguages: string[] }) {
+export function BrowseFilters({
+  allLanguages,
+  allStimuliTypes = [],
+}: {
+  allLanguages: string[]
+  allStimuliTypes?: string[]
+}) {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -12,6 +18,7 @@ export function BrowseFilters({ allLanguages }: { allLanguages: string[] }) {
   const q = searchParams.get("q") ?? ""
   const selectedLanguages = searchParams.getAll("lang")
   const selectedDecades = searchParams.getAll("decade")
+  const selectedStimuliTypes = searchParams.getAll("stimuli")
 
   const [inputValue, setInputValue] = useState(q)
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -46,7 +53,7 @@ export function BrowseFilters({ allLanguages }: { allLanguages: string[] }) {
     debounceRef.current = setTimeout(() => update("q", value), 400)
   }
 
-  const hasFilters = q || selectedLanguages.length || selectedDecades.length
+  const hasFilters = q || selectedLanguages.length || selectedDecades.length || selectedStimuliTypes.length
 
   return (
     <aside className="w-56 shrink-0">
@@ -98,13 +105,35 @@ export function BrowseFilters({ allLanguages }: { allLanguages: string[] }) {
         </div>
       </div>
 
+      {/* Stimuli Type */}
+      {allStimuliTypes.length > 0 && (
+        <div className="mb-6">
+          <p className="text-xs font-medium uppercase tracking-wide text-base-content/50 mb-2">
+            Stimuli Type
+          </p>
+          <div className="flex flex-col gap-1.5">
+            {allStimuliTypes.map((st) => (
+              <label key={st} className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  className="checkbox checkbox-sm checkbox-primary"
+                  checked={selectedStimuliTypes.includes(st)}
+                  onChange={(e) => update("stimuli", st, e.target.checked)}
+                />
+                <span className="text-sm capitalize">{st}</span>
+              </label>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Language */}
       {allLanguages.length > 0 && (
         <div className="mb-6">
           <p className="text-xs font-medium uppercase tracking-wide text-base-content/50 mb-2">
             Language
           </p>
-          <div className="flex flex-col gap-1.5">
+          <div className="flex flex-col gap-1.5 max-h-48 overflow-y-auto pr-1">
             {allLanguages.map((lang) => (
               <label key={lang} className="flex items-center gap-2 cursor-pointer">
                 <input

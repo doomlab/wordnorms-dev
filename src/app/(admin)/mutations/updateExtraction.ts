@@ -13,6 +13,8 @@ export default resolver.pipe(
       stimuliCount: z.number().nullable(),
       normsCollected: z.array(z.string()),
       instructions: z.string().nullable(),
+      licenseUrl: z.string().nullable(),
+      dataSource: z.enum(["ai", "human"]).nullable(),
     })
   ),
   resolver.authorize(["ADMIN", "SUPER_ADMIN"]),

@@ -37,7 +37,7 @@ export const metadata = { title: "My Favorites – WordNorms" }
 export default async function FavoritesPage({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string; lang?: string | string[]; decade?: string | string[] }>
+  searchParams: Promise<{ q?: string; lang?: string | string[]; decade?: string | string[]; stimuli?: string | string[] }>
 }) {
   const ctx = await getBlitzContext()
   if (!ctx.session.userId) redirect("/login")
@@ -51,6 +51,11 @@ export default async function FavoritesPage({
     ? Array.isArray(params.decade)
       ? params.decade
       : [params.decade]
+    : []
+  const stimuliTypes = params.stimuli
+    ? Array.isArray(params.stimuli)
+      ? params.stimuli
+      : [params.stimuli]
     : []
 
   const authorMatchIds = q
@@ -87,13 +92,20 @@ export default async function FavoritesPage({
   const [allFavorites, favorites, datasetFavoriteRows] = await Promise.all([
     db.userFavorite.findMany({
       where: { userId },
-      include: { paper: { select: { extraction: { select: { language: true } } } } },
+      include: { paper: { select: { extraction: { select: { language: true, stimuliType: true } } } } },
     }),
     db.userFavorite.findMany({
       where: {
         userId,
         paper: {
-          ...(languages.length ? { extraction: { language: { hasSome: languages } } } : {}),
+          ...(languages.length || stimuliTypes.length
+            ? {
+                extraction: {
+                  ...(languages.length ? { language: { hasSome: languages } } : {}),
+                  ...(stimuliTypes.length ? { stimuliType: { hasSome: stimuliTypes } } : {}),
+                },
+              }
+            : {}),
           ...(andClauses.length ? { AND: andClauses } : {}),
         },
       },
@@ -110,6 +122,10 @@ export default async function FavoritesPage({
     new Set(allFavorites.flatMap((f) => f.paper.extraction?.language ?? []))
   ).sort()
 
+  const allStimuliTypes = Array.from(
+    new Set(allFavorites.flatMap((f) => f.paper.extraction?.stimuliType ?? []))
+  ).sort()
+
   const datasetFavoriteCards = loadDatasetCards(datasetFavoriteRows.map((r) => r.bibtex))
   const favoritedBibtexSet = new Set(datasetFavoriteRows.map((r) => r.bibtex))
 
@@ -119,7 +135,7 @@ export default async function FavoritesPage({
 
       <div className="flex flex-1 w-full px-10 py-8 gap-8">
         <Suspense fallback={<div className="w-56 shrink-0" />}>
-          <BrowseFilters allLanguages={allLanguages} />
+          <BrowseFilters allLanguages={allLanguages} allStimuliTypes={allStimuliTypes} />
         </Suspense>
 
         <div className="flex-1 min-w-0">

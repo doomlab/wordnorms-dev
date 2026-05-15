@@ -86,6 +86,8 @@ export default async function AdminMetadataDetailPage({
               stimuliCount: ext.stimuliCount,
               normsCollected: ext.normsCollected,
               instructions: ext.instructions,
+              licenseUrl: ext.licenseUrl,
+              dataSource: ext.dataSource,
               confidence: ext.confidence,
               extractedBy: ext.extractedBy,
             }}
