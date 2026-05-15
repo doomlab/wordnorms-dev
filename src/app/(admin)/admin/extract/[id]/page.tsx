@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation"
 import db from "db"
+import { getBlitzContext } from "../../../../blitz-server"
 import { ExtractionActions } from "../ExtractionActions"
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
@@ -19,13 +20,21 @@ export default async function AdminExtractDetailPage({
 }) {
   const { id } = await params
   const { from } = await searchParams
+  const ctx = await getBlitzContext()
 
-  const paper = await db.paper.findUnique({
-    where: { id: Number(id), status: "ACCEPTED" },
-    include: { extraction: true },
-  })
+  const [paper, admin] = await Promise.all([
+    db.paper.findUnique({
+      where: { id: Number(id), status: "ACCEPTED" },
+      include: { extraction: true },
+    }),
+    db.user.findUnique({
+      where: { id: ctx.session.userId as number },
+      select: { groqApiKey: true },
+    }),
+  ])
 
   if (!paper) notFound()
+  const hasGroqKey = !!admin?.groqApiKey
 
   const state: "new" | "no-pdf" | "needs-review" =
     paper.extraction
@@ -119,7 +128,7 @@ export default async function AdminExtractDetailPage({
       </div>
 
       <div className="border-t border-base-200 pt-8 text-center">
-        <ExtractionActions paperId={paper.id} state={state} />
+        <ExtractionActions paperId={paper.id} state={state} hasGroqKey={hasGroqKey} />
       </div>
     </>
   )

@@ -10,9 +10,11 @@ type State = "new" | "no-pdf" | "needs-review"
 export function ExtractionActions({
   paperId,
   state,
+  hasGroqKey,
 }: {
   paperId: number
   state: State
+  hasGroqKey: boolean
 }) {
   const [file, setFile] = useState<File | null>(null)
   const [status, setStatus] = useState<"idle" | "loading" | "done" | "error">("idle")
@@ -66,6 +68,14 @@ export function ExtractionActions({
     } catch {
       setStatus("error")
     }
+  }
+
+  if (!hasGroqKey) {
+    return (
+      <p className="text-sm text-base-content/50">
+        Add a <a href="/dashboard/profile" className="link">Groq API key</a> in your profile to run extraction.
+      </p>
+    )
   }
 
   if (status === "error") {

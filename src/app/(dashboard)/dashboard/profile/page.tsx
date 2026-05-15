@@ -3,6 +3,7 @@ import { getBlitzContext } from "../../../blitz-server"
 import db from "db"
 import { ProfileForm } from "./ProfileForm"
 import { ChangePasswordForm } from "./ChangePasswordForm"
+import { GroqKeyForm } from "./GroqKeyForm"
 
 export const metadata = { title: "Profile" }
 
@@ -12,8 +13,10 @@ export default async function ProfilePage() {
 
   const user = await db.user.findUniqueOrThrow({
     where: { id: ctx.session.userId },
-    select: { email: true, name: true, institution: true },
+    select: { email: true, name: true, institution: true, role: true, groqApiKey: true },
   })
+
+  const isAdmin = user.role === "ADMIN" || user.role === "SUPER_ADMIN"
 
   return (
     <div>
@@ -34,6 +37,15 @@ export default async function ProfilePage() {
             <ChangePasswordForm />
           </div>
         </div>
+
+        {isAdmin && (
+          <div className="card bg-base-200 shadow-sm">
+            <div className="card-body">
+              <h2 className="card-title text-lg mb-1">Groq API key</h2>
+              <GroqKeyForm hasKey={!!user.groqApiKey} />
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )

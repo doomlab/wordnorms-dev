@@ -12,6 +12,14 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
 
+  const user = await db.user.findUnique({
+    where: { id: ctx.session.userId as number },
+    select: { groqApiKey: true },
+  })
+  if (!user?.groqApiKey) {
+    return NextResponse.json({ error: "Groq API key required" }, { status: 403 })
+  }
+
   const scriptPath = path.join(process.cwd(), "pipeline", "extract.py")
   let paperId: number
   let tmpPath: string | null = null

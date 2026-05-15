@@ -1,4 +1,5 @@
 import db from "db"
+import { getBlitzContext } from "../../../blitz-server"
 
 export const metadata = { title: "Extraction – Admin" }
 
@@ -10,8 +11,9 @@ export default async function AdminExtractPage({
   searchParams: Promise<{ tab?: string }>
 }) {
   const { tab = "new" } = await searchParams
+  const ctx = await getBlitzContext()
 
-  const [hasPdf, noPdf] = await Promise.all([
+  const [hasPdf, noPdf, admin] = await Promise.all([
     db.paper.findMany({
       where: { status: "ACCEPTED", extraction: null, pdfUrl: { not: null } },
       select: { id: true, title: true, authors: true, year: true, doi: true },
@@ -28,7 +30,13 @@ export default async function AdminExtractPage({
       select: { id: true, title: true, authors: true, year: true, doi: true },
       orderBy: { updatedAt: "desc" },
     }),
+    db.user.findUnique({
+      where: { id: ctx.session.userId as number },
+      select: { groqApiKey: true },
+    }),
   ])
+
+  const hasGroqKey = !!admin?.groqApiKey
 
   const tabs = [
     { key: "new", label: "New", count: hasPdf.length },
@@ -38,9 +46,18 @@ export default async function AdminExtractPage({
   return (
     <>
       <h1 className="text-3xl font-bold mb-2">Extraction</h1>
-      <p className="text-base-content/60 mb-8">
+      <p className="text-base-content/60 mb-4">
         Extract structured metadata from accepted papers using the LLM pipeline.
       </p>
+
+      {!hasGroqKey && (
+        <div className="alert alert-warning mb-8">
+          <span>
+            A Groq API key is required to run extractions.{" "}
+            <a href="/dashboard/profile" className="link font-medium">Add one in your profile.</a>
+          </span>
+        </div>
+      )}
 
       <div role="tablist" className="tabs tabs-bordered mb-8">
         {tabs.map((t) => (

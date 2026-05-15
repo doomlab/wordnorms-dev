@@ -39,6 +39,7 @@ model User {
   email          String   @unique
   hashedPassword String?
   role           Role     @default(USER)
+  groqApiKey     String?
 
   tokens         Token[]
   sessions       Session[]

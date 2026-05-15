@@ -10,12 +10,24 @@ export async function POST() {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
 
-  const run = await db.pipelineRun.create({
-    data: { startedById: ctx.session.userId as number | undefined },
-  })
+  const [admin, run] = await Promise.all([
+    db.user.findUnique({
+      where: { id: ctx.session.userId as number },
+      select: { groqApiKey: true },
+    }),
+    db.pipelineRun.create({
+      data: { startedById: ctx.session.userId as number | undefined },
+    }),
+  ])
 
   const scriptPath = path.join(process.cwd(), "pipeline", "run_pipeline.py")
+  if (!admin?.groqApiKey) {
+    await db.pipelineRun.delete({ where: { id: run.id } })
+    return NextResponse.json({ error: "Groq API key required" }, { status: 403 })
+  }
+
   const proc = spawn("python3", [scriptPath, "--run-id", String(run.id)], {
+    env: { ...process.env, GROQ_API_KEY: admin.groqApiKey },
     detached: true,
     stdio: "ignore",
   })
