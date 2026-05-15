@@ -202,7 +202,7 @@ export function SuggestExtractionEdits({
             <div className="modal-action mt-0">
               <button
                 type="button"
-                className="btn btn-ghost"
+                className="btn btn-ghost btn-outline"
                 onClick={() => dialogRef.current?.close()}
               >
                 Cancel
