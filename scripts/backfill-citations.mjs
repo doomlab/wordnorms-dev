@@ -78,7 +78,7 @@ async function main() {
     where: {
       status: { in: ["ACCEPTED", "ADDED_TO_TRAINING"] },
       openAlexId: { not: null },
-      citationsFrom: { none: {} },
+      citationsFetchedAt: null,
     },
     select: { id: true, title: true, openAlexId: true },
     take: BATCH_SIZE,
@@ -101,6 +101,7 @@ async function main() {
       const refIds = await fetchReferencedIds(paper.openAlexId)
       if (refIds.length === 0) {
         console.log("no references found")
+        await db.paper.update({ where: { id: paper.id }, data: { citationsFetchedAt: new Date() } })
         await sleep(DELAY_MS)
         continue
       }
@@ -108,6 +109,7 @@ async function main() {
       const citations = await fetchCitationMetadata(refIds)
       if (citations.length === 0) {
         console.log(`${refIds.length} refs but metadata fetch returned 0`)
+        await db.paper.update({ where: { id: paper.id }, data: { citationsFetchedAt: new Date() } })
         await sleep(DELAY_MS)
         continue
       }
@@ -116,6 +118,7 @@ async function main() {
         data: citations.map((c) => ({ citingPaperId: paper.id, ...c })),
         skipDuplicates: true,
       })
+      await db.paper.update({ where: { id: paper.id }, data: { citationsFetchedAt: new Date() } })
 
       totalStored += result.count
       console.log(`stored ${result.count} of ${refIds.length} refs`)

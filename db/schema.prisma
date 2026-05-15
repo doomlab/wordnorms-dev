@@ -92,10 +92,11 @@ model Paper {
   isValidation     Boolean           @default(false)
   reviewedBy       User?             @relation(fields: [reviewedById], references: [id])
   reviewedById     Int?
-  canonicalPaperId Int?
-  canonical        Paper?            @relation("duplicates", fields: [canonicalPaperId], references: [id])
-  duplicates       Paper[]           @relation("duplicates")
-  discoverySource  DiscoverySource   @default(DIRECT)
+  canonicalPaperId    Int?
+  canonical           Paper?            @relation("duplicates", fields: [canonicalPaperId], references: [id])
+  duplicates          Paper[]           @relation("duplicates")
+  discoverySource     DiscoverySource   @default(DIRECT)
+  citationsFetchedAt  DateTime?
   extraction       PaperExtraction?
   favorites        UserFavorite[]
   reports          PaperReport[]

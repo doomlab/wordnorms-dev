@@ -18,7 +18,6 @@ function formatCitation(work: any) {
 }
 
 export async function fetchAndStoreCitations(paperId: number, openAlexId: string): Promise<number> {
-  // Fetch the paper's referenced_works from OpenAlex
   let referencedIds: string[] = []
   try {
     const res = await fetch(
@@ -35,9 +34,15 @@ export async function fetchAndStoreCitations(paperId: number, openAlexId: string
     return 0
   }
 
-  if (referencedIds.length === 0) return 0
+  // Always stamp the timestamp — even if there are no references
+  const stamp = () =>
+    db.paper.update({ where: { id: paperId }, data: { citationsFetchedAt: new Date() } })
 
-  // Batch fetch metadata for all referenced works
+  if (referencedIds.length === 0) {
+    await stamp()
+    return 0
+  }
+
   const citations: ReturnType<typeof formatCitation>[] = []
   for (let i = 0; i < referencedIds.length; i += BATCH_SIZE) {
     const chunk = referencedIds.slice(i, i + BATCH_SIZE)
@@ -55,14 +60,15 @@ export async function fetchAndStoreCitations(paperId: number, openAlexId: string
     } catch {}
   }
 
-  if (citations.length === 0) return 0
-
-  const result = await db.paperCitation.createMany({
-    data: citations
-      .filter((c) => c.citedOpenAlexId)
-      .map((c) => ({ citingPaperId: paperId, ...c })),
-    skipDuplicates: true,
-  })
+  const [result] = await Promise.all([
+    citations.length > 0
+      ? db.paperCitation.createMany({
+          data: citations.filter((c) => c.citedOpenAlexId).map((c) => ({ citingPaperId: paperId, ...c })),
+          skipDuplicates: true,
+        })
+      : Promise.resolve({ count: 0 }),
+    stamp(),
+  ])
 
   return result.count
 }

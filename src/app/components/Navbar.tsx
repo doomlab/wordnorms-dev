@@ -45,6 +45,9 @@ export async function Navbar({ leftLinks, rightExtra, className }: NavbarProps) 
                   <Link href="/datasets">Datasets</Link>
                 </li>
                 <li>
+                  <Link href="/visualizations">Visualizations</Link>
+                </li>
+                <li>
                   <Link href="/favorites">★ My Favorites</Link>
                 </li>
               </ul>
@@ -117,6 +120,9 @@ export async function Navbar({ leftLinks, rightExtra, className }: NavbarProps) 
                 </li>
                 <li>
                   <Link href="/datasets">Datasets</Link>
+                </li>
+                <li>
+                  <Link href="/visualizations">Visualizations</Link>
                 </li>
               </ul>
             </div>
