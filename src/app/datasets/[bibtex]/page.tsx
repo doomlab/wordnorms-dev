@@ -117,7 +117,7 @@ export default async function DatasetDetailPage({
     ? await db.paper.findFirst({
         where: {
           doi: { equals: card.citation.doi, mode: "insensitive" },
-          status: { in: ["ACCEPTED", "ADDED_TO_TRAINING"] },
+          status: "ACCEPTED",
         },
         select: { id: true },
       })
@@ -127,7 +127,7 @@ export default async function DatasetDetailPage({
     (await db.paper.findFirst({
       where: {
         title: { equals: card.citation.title, mode: "insensitive" },
-        status: { in: ["ACCEPTED", "ADDED_TO_TRAINING"] },
+        status: "ACCEPTED",
       },
       select: { id: true },
     }))

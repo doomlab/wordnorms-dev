@@ -11,10 +11,8 @@ const REASON_LABELS: Record<string, string> = {
 
 const STATUS_LABELS: Record<string, string> = {
   ACCEPTED: "Included",
-  ADDED_TO_TRAINING: "Included",
   EXCLUDED: "Excluded",
   PENDING_REVIEW: "Pending",
-  PENDING_PDF: "Pending PDF",
 }
 
 export default async function AdminReportsPage() {

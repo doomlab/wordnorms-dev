@@ -4,19 +4,16 @@ export const metadata = { title: "Excluded – Admin" }
 
 export default async function AdminExcludedPage() {
   const papers = await db.paper.findMany({
-    where: { status: { in: ["EXCLUDED", "ADDED_TO_TRAINING"] } },
+    where: { status: "EXCLUDED" },
     include: { reviewedBy: { select: { email: true } } },
     orderBy: { updatedAt: "desc" },
   })
-
-  const excluded = papers.filter((p) => p.status === "EXCLUDED")
-  const training = papers.filter((p) => p.status === "ADDED_TO_TRAINING")
 
   return (
     <>
       <h1 className="text-3xl font-bold mb-2">Excluded Papers</h1>
       <p className="text-base-content/60 mb-8">
-        {excluded.length} excluded · {training.length} added to training
+        {papers.length} paper{papers.length !== 1 ? "s" : ""} excluded from the model.
       </p>
 
       <div className="overflow-x-auto">
@@ -25,7 +22,6 @@ export default async function AdminExcludedPage() {
             <tr>
               <th>Title</th>
               <th>Year</th>
-              <th>Status</th>
               <th>Reviewed by</th>
               <th>Note</th>
             </tr>
@@ -33,7 +29,7 @@ export default async function AdminExcludedPage() {
           <tbody>
             {papers.length === 0 && (
               <tr>
-                <td colSpan={5} className="text-center text-base-content/40 py-10">
+                <td colSpan={4} className="text-center text-base-content/40 py-10">
                   No excluded papers yet.
                 </td>
               </tr>
@@ -57,15 +53,6 @@ export default async function AdminExcludedPage() {
                   )}
                 </td>
                 <td>{p.year ?? "—"}</td>
-                <td>
-                  <span
-                    className={`badge badge-sm ${
-                      p.status === "EXCLUDED" ? "badge-error" : "badge-warning"
-                    }`}
-                  >
-                    {p.status === "EXCLUDED" ? "Excluded" : "Training"}
-                  </span>
-                </td>
                 <td className="text-sm text-base-content/60">
                   {p.reviewedBy?.email ?? "—"}
                 </td>

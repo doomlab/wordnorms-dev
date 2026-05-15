@@ -83,7 +83,7 @@ export default async function Home({
   const [papers, allPapers, favoritedIds, reportedIds] = await Promise.all([
     db.paper.findMany({
       where: {
-        status: { in: ["ACCEPTED", "ADDED_TO_TRAINING"] },
+        status: "ACCEPTED",
         extraction: languages.length
           ? { language: { hasSome: languages } }
           : { isNot: null },
@@ -94,7 +94,7 @@ export default async function Home({
     }),
     db.paper.findMany({
       where: {
-        status: { in: ["ACCEPTED", "ADDED_TO_TRAINING"] },
+        status: "ACCEPTED",
         extraction: { isNot: null },
       },
       select: { extraction: { select: { language: true } } },

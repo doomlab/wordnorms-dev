@@ -4,7 +4,7 @@ import { useMutation } from "@blitzjs/rpc"
 import { useRouter } from "next/navigation"
 import reviewPaper from "../../mutations/reviewPaper"
 
-export function PaperActions({ paperId, isPdf }: { paperId: number; isPdf?: boolean }) {
+export function PaperActions({ paperId }: { paperId: number }) {
   const [review] = useMutation(reviewPaper)
   const router = useRouter()
 
@@ -12,19 +12,6 @@ export function PaperActions({ paperId, isPdf }: { paperId: number; isPdf?: bool
     await review({ paperId, status: status as any })
     router.push("/admin/review")
     router.refresh()
-  }
-
-  if (isPdf) {
-    return (
-      <div className="flex gap-2">
-        <button className="btn btn-success btn-xs" onClick={() => act("ACCEPTED")}>
-          Extract
-        </button>
-        <button className="btn btn-ghost btn-xs" onClick={() => act("ADDED_TO_TRAINING")}>
-          Add to training
-        </button>
-      </div>
-    )
   }
 
   return (

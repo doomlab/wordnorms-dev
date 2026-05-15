@@ -53,7 +53,7 @@ export default async function NormDetailPage({
   const userId = ctx.session.userId as number | undefined
 
   const paper = await db.paper.findUnique({
-    where: { id: Number(id), status: { in: ["ACCEPTED", "ADDED_TO_TRAINING"] } },
+    where: { id: Number(id), status: "ACCEPTED" },
     include: {
       extraction: true,
       reviewedBy: { select: { name: true } },

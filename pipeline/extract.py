@@ -108,14 +108,6 @@ def run(paper_id):
             conn.commit()
             sys.exit(1)
 
-        # update paper status to ADDED_TO_TRAINING
-        cur = conn.cursor()
-        cur.execute(
-            'UPDATE "Paper" SET status = \'ADDED_TO_TRAINING\'::"PaperStatus" WHERE id = %s',
-            (paper_id,),
-        )
-        conn.commit()
-
         confidence = (data or {}).get("confidence")
         needs_review = confidence is not None and confidence < 0.6
         print(f"Done (confidence={confidence}{'  ⚑ flagged for review' if needs_review else ''})")
