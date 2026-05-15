@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation"
 import db from "db"
 import { PaperMetadataForm } from "./PaperMetadataForm"
+import { FetchCitationsButton } from "./FetchCitationsButton"
 import { StatusBadge } from "src/app/components/StatusBadge"
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
@@ -32,6 +33,7 @@ export default async function AdminEditPaperPage({
       pdfUrl: true,
       openAlexId: true,
       status: true,
+      _count: { select: { citationsFrom: true } },
     },
   })
 
@@ -56,6 +58,12 @@ export default async function AdminEditPaperPage({
       <p className="text-base-content/60 mb-8 text-sm">
         Direct edits to bibliographic data. Changes take effect immediately.
       </p>
+
+      {paper.openAlexId && paper._count.citationsFrom === 0 && (
+        <div className="mb-6">
+          <FetchCitationsButton paperId={paper.id} />
+        </div>
+      )}
 
       <PaperMetadataForm paper={paper} backHref={backHref} />
     </>
