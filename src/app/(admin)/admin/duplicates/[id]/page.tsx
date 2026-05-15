@@ -2,6 +2,7 @@ import { notFound } from "next/navigation"
 import db from "db"
 import { UnmergeButton } from "../UnmergeButton"
 import { TransferExtractionPanel } from "../TransferExtractionPanel"
+import { StatusBadge } from "src/app/components/StatusBadge"
 import type { PaperExtraction } from "@prisma/client"
 
 function cap(s: string) {
@@ -144,7 +145,7 @@ function PaperCard({
             ) : null}
           </Row>
           <Row label="Status">
-            <span className="badge badge-ghost badge-xs">{paper.status}</span>
+            <StatusBadge status={paper.status} size="xs" />
           </Row>
           {paper.pdfUrl && (
             <div className="pt-1">

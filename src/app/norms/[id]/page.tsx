@@ -51,6 +51,7 @@ export default async function NormDetailPage({
   const { from } = await searchParams
   const ctx = await getBlitzContext()
   const userId = ctx.session.userId as number | undefined
+  const role = ctx.session.role
 
   const paper = await db.paper.findUnique({
     where: { id: Number(id), status: "ACCEPTED" },
@@ -150,6 +151,14 @@ export default async function NormDetailPage({
                 className="btn btn-ghost btn-outline btn-sm"
               >
                 View Dataset
+              </a>
+            )}
+            {(role === "ADMIN" || role === "SUPER_ADMIN") && (
+              <a
+                href={`/admin/papers/${paper.id}?from=/norms/${paper.id}`}
+                className="btn btn-ghost btn-outline btn-sm"
+              >
+                Edit paper
               </a>
             )}
           </div>

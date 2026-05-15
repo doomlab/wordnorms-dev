@@ -1,4 +1,5 @@
 import db from "db"
+import { StatusBadge } from "src/app/components/StatusBadge"
 
 export const metadata = { title: "Reports – Admin" }
 
@@ -106,9 +107,7 @@ async function ClassificationReports() {
                 )}
               </td>
               <td>
-                <span className={`badge badge-sm ${r.paper.status === "EXCLUDED" ? "badge-error" : "badge-success"}`}>
-                  {STATUS_LABELS[r.paper.status] ?? r.paper.status}
-                </span>
+                <StatusBadge status={r.paper.status} />
               </td>
               <td className="text-sm text-base-content/60">{r.user.email}</td>
               <td className="text-sm">{REASON_LABELS[r.reason] ?? r.reason}</td>

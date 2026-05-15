@@ -49,7 +49,7 @@ export function MergeActions({ idA, idB }: { idA: number; idB: number }) {
         >
           {pending === idB ? "Merging…" : `Keep B (#${idB})`}
         </button>
-        <a href="/admin/duplicates" className="btn btn-ghost">
+        <a href="/admin/duplicates" className="btn btn-ghost btn-outline">
           Cancel
         </a>
       </div>

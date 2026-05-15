@@ -38,30 +38,34 @@ export default async function AdminReviewDetailPage({
         )}
       </div>
 
-      {(paper.doi || paper.pdfUrl) && (
-        <div className="flex flex-wrap gap-2 mb-8">
-          {paper.doi && (
-            <a
-              href={`https://doi.org/${paper.doi}`}
-              target="_blank"
-              rel="noreferrer"
-              className="btn btn-outline btn-sm"
-            >
-              View DOI
-            </a>
-          )}
-          {paper.pdfUrl && (
-            <a
-              href={paper.pdfUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="btn btn-outline btn-sm"
-            >
-              View PDF
-            </a>
-          )}
-        </div>
-      )}
+      <div className="flex flex-wrap gap-2 mb-8">
+        {paper.doi && (
+          <a
+            href={`https://doi.org/${paper.doi}`}
+            target="_blank"
+            rel="noreferrer"
+            className="btn btn-outline btn-sm"
+          >
+            View DOI
+          </a>
+        )}
+        {paper.pdfUrl && (
+          <a
+            href={paper.pdfUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="btn btn-outline btn-sm"
+          >
+            View PDF
+          </a>
+        )}
+        <a
+          href={`/admin/papers/${paper.id}?from=/admin/review/${paper.id}`}
+          className="btn btn-ghost btn-outline btn-sm"
+        >
+          Edit paper
+        </a>
+      </div>
 
       <div className="divide-y divide-base-200 text-sm mb-10">
         <Section title="Publication">

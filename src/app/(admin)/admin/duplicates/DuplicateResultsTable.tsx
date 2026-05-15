@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation"
 import { useState } from "react"
+import { StatusBadge } from "src/app/components/StatusBadge"
 
 type ResultPaper = {
   id: number
@@ -112,7 +113,7 @@ export function DuplicateResultsTable({ papers }: { papers: ResultPaper[] }) {
                   <td>{p.year ?? "—"}</td>
                   <td className="font-mono text-xs">{p.doi ?? "—"}</td>
                   <td>
-                    <span className="badge badge-ghost badge-xs">{p.status}</span>
+                    <StatusBadge status={p.status} size="xs" />
                   </td>
                 </tr>
               )

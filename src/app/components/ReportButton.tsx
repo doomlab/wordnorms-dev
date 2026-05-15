@@ -56,7 +56,10 @@ export function ReportButton({
   if (!isLoggedIn) {
     return (
       <div className="tooltip tooltip-left" data-tip="You must have an account to use this feature">
-        <button disabled className="btn btn-primary btn-sm btn-square text-base text-base-content/25 opacity-40 cursor-not-allowed">
+        <button
+          disabled
+          className="btn btn-primary btn-sm btn-square text-base text-base-content/25 opacity-40 cursor-not-allowed"
+        >
           ⚑
         </button>
       </div>
@@ -118,7 +121,7 @@ export function ReportButton({
             <div className="modal-action mt-0">
               <button
                 type="button"
-                className="btn btn-ghost"
+                className="btn btn-ghost btn-outline"
                 onClick={() => dialogRef.current?.close()}
               >
                 Cancel

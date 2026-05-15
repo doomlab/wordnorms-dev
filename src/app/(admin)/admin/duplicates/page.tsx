@@ -1,6 +1,7 @@
 import db from "db"
 import { MergeActions } from "./MergeActions"
 import { DuplicateResultsTable } from "./DuplicateResultsTable"
+import { StatusBadge } from "src/app/components/StatusBadge"
 
 export const metadata = { title: "Duplicates – Admin" }
 
@@ -264,7 +265,7 @@ function PaperCard({
         </div>
 
         <div className="mt-2">
-          <span className="badge badge-ghost badge-sm">{paper.status}</span>
+          <StatusBadge status={paper.status} />
           {paper.canonicalPaperId && (
             <span className="badge badge-warning badge-sm ml-1">already a duplicate</span>
           )}

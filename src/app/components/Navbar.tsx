@@ -77,13 +77,16 @@ export async function Navbar({ leftLinks, rightExtra, className }: NavbarProps) 
                     <Link href="/admin/reports">Reports</Link>
                   </li>
                   <li>
+                    <Link href="/admin/duplicates">Duplicates</Link>
+                  </li>
+                  <li>
+                    <Link href="/admin/papers">Papers</Link>
+                  </li>
+                  <li>
                     <Link href="/admin/stats">Stats</Link>
                   </li>
                   <li>
                     <Link href="/admin/users">Users</Link>
-                  </li>
-                  <li>
-                    <Link href="/admin/duplicates">Duplicates</Link>
                   </li>
                 </ul>
               </div>
