@@ -144,3 +144,39 @@ ${emailFooter(origin)}
     `,
   }
 }
+
+export function createDatasetSuggestionMsg({
+  datasetUrl,
+  doi,
+  contactEmail,
+  note,
+}: {
+  datasetUrl: string
+  doi?: string
+  contactEmail?: string
+  note?: string
+}) {
+  const origin = process.env.APP_ORIGIN || process.env.BLITZ_DEV_SERVER_ORIGIN
+  const rows = [
+    `<tr><td style="padding:4px 12px 4px 0;font-weight:bold;vertical-align:top">Dataset URL</td><td style="padding:4px 0"><a href="${datasetUrl}">${datasetUrl}</a></td></tr>`,
+    doi ? `<tr><td style="padding:4px 12px 4px 0;font-weight:bold;vertical-align:top">DOI</td><td style="padding:4px 0">${doi}</td></tr>` : "",
+    contactEmail ? `<tr><td style="padding:4px 12px 4px 0;font-weight:bold;vertical-align:top">Contact</td><td style="padding:4px 0">${contactEmail}</td></tr>` : "",
+    note ? `<tr><td style="padding:4px 12px 4px 0;font-weight:bold;vertical-align:top">Note</td><td style="padding:4px 0">${note}</td></tr>` : "",
+  ].filter(Boolean).join("")
+
+  return {
+    from: "WordNorms <noreply@wordnorms.com>",
+    to: "buchananlab@gmail.com",
+    replyTo: contactEmail ?? "buchananlab@gmail.com",
+    subject: "New Dataset Suggestion – WordNorms",
+    html: `
+<html><body>
+<center><img src="${origin}/images/bannerWN_white.jpg" alt="WordNorms" style="max-width:600px;width:100%"></center>
+<h3>New Dataset Suggestion</h3>
+<p>Someone suggested a dataset via the WordNorms datasets page.</p>
+<table style="border-collapse:collapse;margin-top:12px">${rows}</table>
+${emailFooter(origin)}
+</body></html>
+    `,
+  }
+}

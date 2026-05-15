@@ -4,6 +4,7 @@ import { Suspense } from "react"
 import { Navbar } from "../components/Navbar"
 import { DatasetFilters } from "../components/DatasetFilters"
 import { DatasetFavoriteButton } from "../components/DatasetFavoriteButton"
+import { SuggestDatasetButton } from "../components/SuggestDatasetButton"
 import { DECADE_LABELS } from "../data/datasets"
 import { getBlitzContext } from "../blitz-server"
 import db from "db"
@@ -225,11 +226,14 @@ export default async function DatasetsPage({
             </p>
           </div>
 
-          <p className="text-sm text-base-content/60 mb-5">
-            <span className="font-semibold text-base-content">{cards.length}</span>{" "}
-            {cards.length === 1 ? "dataset" : "datasets"}
-            {hasFilters && " match your filters"}
-          </p>
+          <div className="flex items-center justify-between mb-5">
+            <p className="text-sm text-base-content/60">
+              <span className="font-semibold text-base-content">{cards.length}</span>{" "}
+              {cards.length === 1 ? "dataset" : "datasets"}
+              {hasFilters && " match your filters"}
+            </p>
+            <SuggestDatasetButton />
+          </div>
 
           {cards.length === 0 ? (
             <div className="text-center py-16 text-base-content/40">
