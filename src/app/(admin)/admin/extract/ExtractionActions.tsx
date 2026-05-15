@@ -30,8 +30,20 @@ export function ExtractionActions({
         body: JSON.stringify({ paperId }),
       })
       if (res.ok) {
-        router.push("/admin/extract")
-        router.refresh()
+        const data = await res.json()
+        if (data.skipped) {
+          setStatus("skipped")
+          setTimeout(() => {
+            router.refresh()
+            router.push("/admin/extract?tab=no-pdf")
+          }, 2500)
+        } else {
+          setStatus("done")
+          setTimeout(() => {
+            router.refresh()
+            router.push("/admin/extract")
+          }, 2000)
+        }
       } else {
         setStatus("error")
       }
@@ -49,8 +61,17 @@ export function ExtractionActions({
       form.append("file", file)
       const res = await fetch("/api/extract", { method: "POST", body: form })
       if (res.ok) {
-        router.push("/admin/extract")
-        router.refresh()
+        const data = await res.json()
+        if (data.skipped) {
+          setStatus("skipped")
+          setTimeout(() => {
+            router.refresh()
+            router.push("/admin/extract?tab=no-pdf")
+          }, 2500)
+        } else {
+          router.refresh()
+          router.push("/admin/extract")
+        }
       } else {
         setStatus("error")
       }
@@ -79,6 +100,28 @@ export function ExtractionActions({
         </a>{" "}
         in your profile to run extraction.
       </p>
+    )
+  }
+
+  if (status === "done") {
+    return (
+      <div className="toast toast-end toast-bottom">
+        <div className="alert alert-success shadow-lg max-w-sm">
+          <span className="text-sm">Extraction complete — redirecting to review.</span>
+        </div>
+      </div>
+    )
+  }
+
+  if (status === "skipped") {
+    return (
+      <div className="toast toast-end toast-bottom">
+        <div className="alert alert-warning shadow-lg max-w-sm">
+          <span className="text-sm">
+            Couldn&apos;t read the PDF — paper moved to the <strong>No PDF</strong> tab.
+          </span>
+        </div>
+      </div>
     )
   }
 

@@ -63,6 +63,12 @@ export default async function AdminPage() {
       desc: "View and manage user accounts",
       badge: null,
     },
+    {
+      href: "/admin/duplicates",
+      label: "Duplicates",
+      desc: "Find and merge duplicate paper entries (e.g. preprint + published version)",
+      badge: null,
+    },
   ]
 
   return (

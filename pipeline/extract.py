@@ -123,6 +123,7 @@ def run(paper_id, pdf_path=None):
             conn.commit()
             sys.exit(1)
 
+        conn.commit()
         confidence = (data or {}).get("confidence")
         needs_review = confidence is not None and confidence < 0.6
         print(f"Done (confidence={confidence}{'  ⚑ flagged for review' if needs_review else ''})")

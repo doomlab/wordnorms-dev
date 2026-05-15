@@ -69,28 +69,31 @@ model Session {
 }
 
 model Paper {
-  id           Int               @id @default(autoincrement())
-  createdAt    DateTime          @default(now())
-  updatedAt    DateTime          @updatedAt
-  title        String
-  authors      String[]
-  year         Int?
-  doi          String?           @unique
-  openAlexId   String?           @unique
-  abstract     String?
-  journal      String?
-  pdfUrl       String?
-  modelScore   Float?
-  status       PaperStatus       @default(PENDING_REVIEW)
-  reviewNote   String?
-  isValidation Boolean           @default(false)
-  reviewedBy   User?             @relation(fields: [reviewedById], references: [id])
-  reviewedById Int?
-  extraction   PaperExtraction?
-  favorites    UserFavorite[]
-  reports      PaperReport[]
-  metadataEdits MetadataEditSuggestion[]
-  extractionEdits ExtractionEditSuggestion[]
+  id               Int               @id @default(autoincrement())
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  title            String
+  authors          String[]
+  year             Int?
+  doi              String?           @unique
+  openAlexId       String?           @unique
+  abstract         String?
+  journal          String?
+  pdfUrl           String?
+  modelScore       Float?
+  status           PaperStatus       @default(PENDING_REVIEW)
+  reviewNote       String?
+  isValidation     Boolean           @default(false)
+  reviewedBy       User?             @relation(fields: [reviewedById], references: [id])
+  reviewedById     Int?
+  canonicalPaperId Int?
+  canonical        Paper?            @relation("duplicates", fields: [canonicalPaperId], references: [id])
+  duplicates       Paper[]           @relation("duplicates")
+  extraction       PaperExtraction?
+  favorites        UserFavorite[]
+  reports          PaperReport[]
+  metadataEdits    MetadataEditSuggestion[]
+  extractionEdits  ExtractionEditSuggestion[]
 }
 
 model UserFavorite {
