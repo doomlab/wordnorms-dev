@@ -24,7 +24,7 @@ export default async function AdminPage() {
     {
       href: "/admin/review",
       label: "Review Queue",
-      desc: "Review papers scored by the model",
+      desc: "Review papers scored by the model.",
       badge: byStatus.PENDING_REVIEW ?? 0,
     },
     {
@@ -71,7 +71,8 @@ export default async function AdminPage() {
             <h2 className="card-title">Fetch + Predict</h2>
             <p className="text-base-content/60 text-sm">
               Pull new papers from OpenAlex and score them with the model. Run if the review queue
-              is empty or to fetch new papers. The queue is automatically run once a month.
+              is empty or to fetch new papers. The queue is automatically run once a month. The
+              process can be slow, so check back later to see results.
             </p>
             <div className="flex items-center justify-between">
               <PipelineButton />
