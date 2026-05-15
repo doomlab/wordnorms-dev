@@ -21,7 +21,7 @@ export function UnmergeButton({
     try {
       await unmerge({ paperId })
       if (redirectTo) {
-        router.push(redirectTo)
+        router.push(redirectTo as any)
       }
       router.refresh()
     } finally {

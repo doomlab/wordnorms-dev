@@ -35,7 +35,9 @@ export function MetadataReportActions({
     return (
       <div className="flex flex-col items-center gap-2">
         <span className="text-error text-sm">Something went wrong</span>
-        <button className="btn btn-xs btn-ghost" onClick={() => setError(false)}>Retry</button>
+        <button className="btn btn-xs btn-ghost btn-outline" onClick={() => setError(false)}>
+          Retry
+        </button>
       </div>
     )
   }

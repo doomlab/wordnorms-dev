@@ -55,8 +55,7 @@ export default async function NormDetailPage({
   const paper = await db.paper.findUnique({
     where: { id: Number(id), status: "ACCEPTED" },
     include: {
-      extraction: true,
-      reviewedBy: { select: { name: true } },
+      extraction: { include: { verifiedBy: { select: { name: true } } } },
       extractionEdits: {
         select: {
           createdAt: true,
@@ -193,13 +192,13 @@ export default async function NormDetailPage({
                   <h2 className="text-xs font-semibold uppercase tracking-wider text-base-content/40">
                     Extracted information
                   </h2>
-                  {isAiExtracted && !paper.reviewedBy ? (
+                  {ext?.verifiedAt ? (
+                    <span className="badge badge-ghost badge-sm text-base-content/50">
+                      Reviewed by {ext.verifiedBy?.name ?? "admin"}
+                    </span>
+                  ) : isAiExtracted ? (
                     <span className="badge badge-ghost badge-sm text-base-content/40">
                       AI extracted
-                    </span>
-                  ) : paper.reviewedBy?.name ? (
-                    <span className="badge badge-ghost badge-sm text-base-content/50">
-                      Reviewed by {paper.reviewedBy.name}
                     </span>
                   ) : null}
                 </div>

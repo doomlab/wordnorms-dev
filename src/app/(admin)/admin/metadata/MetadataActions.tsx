@@ -25,7 +25,9 @@ export function MetadataActions({ paperId }: { paperId: number }) {
     return (
       <div className="flex flex-col items-center gap-2">
         <span className="text-error text-sm">Something went wrong</span>
-        <button className="btn btn-xs btn-ghost" onClick={() => setStatus("idle")}>Retry</button>
+        <button className="btn btn-xs btn-ghost btn-outline" onClick={() => setStatus("idle")}>
+          Retry
+        </button>
       </div>
     )
   }
