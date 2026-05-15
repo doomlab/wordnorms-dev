@@ -10,6 +10,7 @@ export function PaperActions({ paperId, isPdf }: { paperId: number; isPdf?: bool
 
   const act = async (status: string) => {
     await review({ paperId, status: status as any })
+    router.push("/admin/review")
     router.refresh()
   }
 
@@ -28,14 +29,11 @@ export function PaperActions({ paperId, isPdf }: { paperId: number; isPdf?: bool
 
   return (
     <div className="flex gap-2">
-      <button className="btn btn-primary btn-xs" onClick={() => act("PENDING_PDF")}>
+      <button className="btn btn-primary btn-xs" onClick={() => act("ACCEPTED")}>
         Accept
       </button>
       <button className="btn btn-ghost btn-xs" onClick={() => act("EXCLUDED")}>
         Exclude
-      </button>
-      <button className="btn btn-ghost btn-xs" onClick={() => act("ADDED_TO_TRAINING")}>
-        Add to training
       </button>
     </div>
   )
