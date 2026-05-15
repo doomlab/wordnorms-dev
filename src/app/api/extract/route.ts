@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { spawn } from "child_process"
 import path from "path"
+import db from "db"
 import { getBlitzContext } from "../../blitz-server"
 
 export async function POST(req: NextRequest) {
@@ -9,8 +10,12 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
 
-  const { paperId } = await req.json()
+  const { paperId, pdfUrl } = await req.json()
   if (!paperId) return NextResponse.json({ error: "paperId required" }, { status: 400 })
+
+  if (pdfUrl) {
+    await db.paper.update({ where: { id: paperId }, data: { pdfUrl } })
+  }
 
   const scriptPath = path.join(process.cwd(), "pipeline", "extract.py")
 

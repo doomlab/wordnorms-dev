@@ -1,174 +1,256 @@
 import db from "db"
 import { ExtractButton } from "./ExtractButton"
-
+import { AddPdfUrl } from "./AddPdfUrl"
 
 export const metadata = { title: "Extraction – Admin" }
 
-export default async function AdminExtractPage() {
-  const [needsReview, pending, extracted] = await Promise.all([
+const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
+
+export default async function AdminExtractPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ tab?: string }>
+}) {
+  const { tab = "new" } = await searchParams
+
+  const [hasPdf, noPdf, needsReview] = await Promise.all([
+    // New: accepted, has a PDF, never extracted
+    db.paper.findMany({
+      where: { status: "ACCEPTED", extraction: null, pdfUrl: { not: null } },
+      select: { id: true, title: true, year: true, doi: true, pdfUrl: true },
+      orderBy: { updatedAt: "desc" },
+    }),
+    // No PDF: never extracted + no URL, OR extraction failed (needsReview + no confidence)
     db.paper.findMany({
       where: {
         status: { in: ["ACCEPTED", "ADDED_TO_TRAINING"] },
-        extraction: { needsReview: true },
+        OR: [
+          { extraction: { is: null }, pdfUrl: null },
+          { extraction: { needsReview: true, confidence: null } },
+        ],
       },
       select: {
-        id: true, title: true, year: true, doi: true,
-        extraction: {
-          select: {
-            language: true, normsCollected: true, confidence: true, extractedBy: true,
-          },
-        },
+        id: true,
+        title: true,
+        year: true,
+        doi: true,
+        pdfUrl: true,
+        extraction: { select: { needsReview: true } },
       },
       orderBy: { updatedAt: "desc" },
     }),
+    // Needs review: extraction ran and has a confidence score, but flagged for human review
     db.paper.findMany({
-      where: { status: "ACCEPTED", extraction: null },
-      select: { id: true, title: true, year: true, doi: true },
-      orderBy: { updatedAt: "desc" },
-    }),
-    db.paper.findMany({
-      where: { status: "ADDED_TO_TRAINING", extraction: { needsReview: false } },
+      where: {
+        status: { in: ["ACCEPTED", "ADDED_TO_TRAINING"] },
+        extraction: { needsReview: true, confidence: { not: null } },
+      },
       select: {
-        id: true, title: true, year: true,
+        id: true,
+        title: true,
+        year: true,
+        doi: true,
         extraction: {
-          select: {
-            language: true, participantCount: true, stimuliType: true,
-            normsCollected: true, confidence: true, needsReview: true, extractedBy: true,
-          },
+          select: { language: true, normsCollected: true, confidence: true, extractedBy: true },
         },
       },
       orderBy: { updatedAt: "desc" },
-      take: 50,
     }),
   ])
+
+  const tabs = [
+    { key: "new", label: "New", count: hasPdf.length },
+    { key: "no-pdf", label: "No PDF", count: noPdf.length },
+    { key: "needs-review", label: "Needs Review", count: needsReview.length },
+  ]
 
   return (
     <>
       <h1 className="text-3xl font-bold mb-2">Extraction</h1>
-      <p className="text-base-content/60 mb-8">
-        Extract structured metadata from accepted papers using the LLM pipeline.
-      </p>
 
-      {/* Needs review */}
-      {needsReview.length > 0 && (
-        <section className="mb-12">
-          <h2 className="text-xl font-semibold mb-4">
-            Needs review
-            <span className="badge badge-error ml-2">{needsReview.length}</span>
-          </h2>
-          <p className="text-sm text-base-content/60 mb-4">
-            Extraction ran but flagged low confidence or incomplete data.
-          </p>
-          <div className="overflow-x-auto">
-            <table className="table table-zebra">
-              <thead>
-                <tr>
-                  <th>ID</th><th>Title</th><th>Year</th><th>Language</th><th>Norms</th><th>Confidence</th><th></th>
-                </tr>
-              </thead>
-              <tbody>
-                {needsReview.map((p) => {
-                  const e = p.extraction
-                  return (
-                    <tr key={p.id}>
-                      <td className="text-base-content/50">{p.id}</td>
-                      <td className="max-w-xs truncate">{p.title}</td>
-                      <td>{p.year ?? "—"}</td>
-                      <td>{e?.language?.join(", ") ?? "—"}</td>
-                      <td className="max-w-xs truncate">{e?.normsCollected?.join(", ") ?? "—"}</td>
-                      <td>
-                        {e?.confidence != null ? (
-                          <span className="text-warning">
-                            {(e.confidence * 100).toFixed(0)}%
-                          </span>
-                        ) : "—"}
-                      </td>
-                      <td>
-                        <a href={`/norms/${p.id}`} className="btn btn-xs btn-outline" target="_blank">
-                          View
-                        </a>
-                      </td>
-                    </tr>
-                  )
-                })}
-              </tbody>
-            </table>
-          </div>
-        </section>
-      )}
+      <div role="tablist" className="tabs tabs-bordered mb-8">
+        {tabs.map((t) => (
+          <a
+            key={t.key}
+            href={`?tab=${t.key}`}
+            role="tab"
+            className={`tab ${tab === t.key ? "tab-active" : ""}`}
+          >
+            {t.label}
+            {t.count > 0 && (
+              <span
+                className={`badge badge-sm ml-2 ${tab === t.key ? "badge-neutral" : "badge-ghost"}`}
+              >
+                {t.count}
+              </span>
+            )}
+          </a>
+        ))}
+      </div>
 
-      {/* Pending extraction */}
-      <section className="mb-12">
-        <h2 className="text-xl font-semibold mb-4">
-          Pending extraction
-          <span className="badge badge-warning ml-2">{pending.length}</span>
-        </h2>
-
-        {pending.length === 0 ? (
+      {tab === "new" &&
+        (hasPdf.length === 0 ? (
           <p className="text-base-content/40">No papers waiting for extraction.</p>
         ) : (
           <div className="overflow-x-auto">
             <table className="table table-zebra">
               <thead>
                 <tr>
-                  <th>ID</th><th>Title</th><th>Year</th><th></th>
+                  <th>Title</th>
+                  <th>Year</th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody>
-                {pending.map((p) => (
+                {hasPdf.map((p) => (
                   <tr key={p.id}>
-                    <td className="text-base-content/50">{p.id}</td>
-                    <td>{p.title}</td>
+                    <td>
+                      <p className="font-medium line-clamp-1">{cap(p.title)}</p>
+                      {p.doi && (
+                        <a
+                          href={`https://doi.org/${p.doi}`}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="link link-primary text-xs"
+                        >
+                          {p.doi}
+                        </a>
+                      )}
+                    </td>
                     <td>{p.year ?? "—"}</td>
-                    <td><ExtractButton paperId={p.id} /></td>
+                    <td>
+                      <div className="flex gap-2 items-center">
+                        {p.pdfUrl && (
+                          <a
+                            href={p.pdfUrl}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="btn btn-xs btn-ghost btn-outline"
+                          >
+                            PDF
+                          </a>
+                        )}
+                        <ExtractButton paperId={p.id} />
+                      </div>
+                    </td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-        )}
-      </section>
+        ))}
 
-      {/* Recently extracted */}
-      <section>
-        <h2 className="text-xl font-semibold mb-4">Recently extracted</h2>
-
-        {extracted.length === 0 ? (
-          <p className="text-base-content/40">No extractions yet.</p>
+      {tab === "no-pdf" &&
+        (noPdf.length === 0 ? (
+          <p className="text-base-content/40">No papers missing a PDF.</p>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="table table-zebra">
-              <thead>
-                <tr>
-                  <th>Title</th><th>Language</th><th>N</th>
-                  <th>Stimuli</th><th>Norms</th><th>Confidence</th>
-                </tr>
-              </thead>
-              <tbody>
-                {extracted.map((p) => {
-                  const e = p.extraction
-                  return (
+          <>
+            <p className="text-sm text-base-content/60 mb-4">
+              No usable PDF for these papers. Paste a direct PDF link to extract.
+            </p>
+            <div className="overflow-x-auto">
+              <table className="table table-zebra">
+                <thead>
+                  <tr>
+                    <th>Title</th>
+                    <th>Year</th>
+                    <th>DOI</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {noPdf.map((p) => (
                     <tr key={p.id}>
-                      <td className="max-w-xs truncate">{p.title}</td>
-                      <td>{e?.language?.join(", ") ?? "—"}</td>
-                      <td>{e?.participantCount ?? "—"}</td>
-                      <td>{e?.stimuliType?.join(", ") ?? "—"}</td>
-                      <td className="max-w-xs truncate">{e?.normsCollected?.join(", ") ?? "—"}</td>
+                      <td className="max-w-sm">
+                        <p className="font-medium line-clamp-1">{cap(p.title)}</p>
+                        {p.extraction?.needsReview && (
+                          <span className="text-xs text-warning">prev. extraction failed</span>
+                        )}
+                      </td>
+                      <td>{p.year ?? "—"}</td>
                       <td>
-                        {e?.confidence != null ? (
-                          <span className={e.confidence < 0.6 ? "text-warning" : "text-success"}>
-                            {(e.confidence * 100).toFixed(0)}%
-                          </span>
-                        ) : "—"}
+                        {p.doi ? (
+                          <a
+                            href={`https://doi.org/${p.doi}`}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="link link-primary text-xs"
+                          >
+                            {p.doi}
+                          </a>
+                        ) : (
+                          "—"
+                        )}
+                      </td>
+                      <td>
+                        <AddPdfUrl paperId={p.id} />
                       </td>
                     </tr>
-                  )
-                })}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </section>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
+        ))}
+
+      {tab === "needs-review" &&
+        (needsReview.length === 0 ? (
+          <p className="text-base-content/40">No extractions flagged for review.</p>
+        ) : (
+          <>
+            <p className="text-sm text-base-content/60 mb-4">
+              Extraction ran but confidence was low. Check the data and approve or re-extract.
+            </p>
+            <div className="overflow-x-auto">
+              <table className="table table-zebra">
+                <thead>
+                  <tr>
+                    <th>Title</th>
+                    <th>Year</th>
+                    <th>Language</th>
+                    <th>Norms</th>
+                    <th>Confidence</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {needsReview.map((p) => {
+                    const e = p.extraction
+                    return (
+                      <tr key={p.id}>
+                        <td className="max-w-sm">
+                          <p className="font-medium line-clamp-1">{cap(p.title)}</p>
+                        </td>
+                        <td>{p.year ?? "—"}</td>
+                        <td>{e?.language?.join(", ") ?? "—"}</td>
+                        <td className="max-w-xs truncate">
+                          {e?.normsCollected?.join(", ") ?? "—"}
+                        </td>
+                        <td>
+                          {e?.confidence != null ? (
+                            <span className="text-warning">{(e.confidence * 100).toFixed(0)}%</span>
+                          ) : (
+                            "—"
+                          )}
+                        </td>
+                        <td>
+                          <a
+                            href={`/norms/${p.id}`}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="btn btn-xs btn-ghost btn-outline"
+                          >
+                            View
+                          </a>
+                        </td>
+                      </tr>
+                    )
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </>
+        ))}
     </>
   )
 }
