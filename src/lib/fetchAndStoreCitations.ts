@@ -41,10 +41,9 @@ export async function fetchAndStoreCitations(paperId: number, openAlexId: string
   const citations: ReturnType<typeof formatCitation>[] = []
   for (let i = 0; i < referencedIds.length; i += BATCH_SIZE) {
     const chunk = referencedIds.slice(i, i + BATCH_SIZE)
-    const filter = chunk.map((id) => `openalex:${id}`).join("|")
     try {
       const res = await fetch(
-        `https://api.openalex.org/works?filter=ids.openalex:${encodeURIComponent(filter)}&per_page=${BATCH_SIZE}&select=id,title,authorships,publication_year,primary_location`,
+        `https://api.openalex.org/works?filter=ids.openalex:${chunk.join("|")}&per_page=${BATCH_SIZE}&select=id,title,authorships,publication_year,primary_location`,
         { headers: HEADERS }
       )
       if (res.ok) {

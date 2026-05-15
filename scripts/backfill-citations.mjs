@@ -15,14 +15,14 @@
 
 import { PrismaClient } from "@prisma/client"
 
-const args = Object.fromEntries(
-  process.argv
-    .slice(2)
-    .join(" ")
-    .matchAll(/--(\w[\w-]*)(?:\s+(\S+))?/g),
-  // eslint-disable-next-line no-unused-vars
-  ([_, k, v]) => [k, v ?? true]
-)
+const args = {}
+for (let i = 2; i < process.argv.length; i++) {
+  if (process.argv[i].startsWith("--")) {
+    const key = process.argv[i].slice(2)
+    const next = process.argv[i + 1]
+    args[key] = next && !next.startsWith("--") ? process.argv[++i] : true
+  }
+}
 
 const BATCH_SIZE = parseInt(args["batch-size"] ?? "50", 10)
 const DELAY_MS = parseInt(args["delay"] ?? "1000", 10)
@@ -51,9 +51,8 @@ async function fetchCitationMetadata(ids) {
   const results = []
   for (let i = 0; i < ids.length; i += OPENALEX_BATCH) {
     const chunk = ids.slice(i, i + OPENALEX_BATCH)
-    const filter = chunk.map((id) => `openalex:${id}`).join("|")
     const res = await fetch(
-      `https://api.openalex.org/works?filter=ids.openalex:${encodeURIComponent(filter)}&per_page=${OPENALEX_BATCH}&select=id,title,authorships,publication_year,primary_location`,
+      `https://api.openalex.org/works?filter=ids.openalex:${chunk.join("|")}&per_page=${OPENALEX_BATCH}&select=id,title,authorships,publication_year,primary_location`,
       { headers: HEADERS }
     )
     if (!res.ok) continue
