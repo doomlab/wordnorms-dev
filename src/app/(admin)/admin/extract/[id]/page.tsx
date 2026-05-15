@@ -119,7 +119,7 @@ export default async function AdminExtractDetailPage({
       </div>
 
       <div className="border-t border-base-200 pt-8 text-center">
-        <ExtractionActions paperId={paper.id} state={state} hasExtraction={!!paper.extraction} />
+        <ExtractionActions paperId={paper.id} state={state} />
       </div>
     </>
   )

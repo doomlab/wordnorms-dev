@@ -10,11 +10,9 @@ type State = "new" | "no-pdf" | "needs-review"
 export function ExtractionActions({
   paperId,
   state,
-  hasExtraction,
 }: {
   paperId: number
   state: State
-  hasExtraction: boolean
 }) {
   const [file, setFile] = useState<File | null>(null)
   const [status, setStatus] = useState<"idle" | "loading" | "done" | "error">("idle")
@@ -113,18 +111,6 @@ export function ExtractionActions({
             </button>
           </div>
         </div>
-        {hasExtraction && (
-          <div className="divider text-xs text-base-content/40 w-64 mx-auto">or</div>
-        )}
-        {hasExtraction && (
-          <button
-            className="btn btn-ghost btn-outline btn-sm"
-            onClick={handleApprove}
-            disabled={status === "loading"}
-          >
-            Approve without PDF
-          </button>
-        )}
       </div>
     )
   }
