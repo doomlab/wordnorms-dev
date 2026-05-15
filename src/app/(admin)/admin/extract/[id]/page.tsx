@@ -27,10 +27,12 @@ export default async function AdminExtractDetailPage({
       where: { id: Number(id), status: "ACCEPTED" },
       include: { extraction: true },
     }),
-    db.user.findUnique({
-      where: { id: ctx.session.userId as number },
-      select: { groqApiKey: true },
-    }),
+    ctx.session.userId != null
+      ? db.user.findUnique({
+          where: { id: ctx.session.userId },
+          select: { groqApiKey: true },
+        })
+      : null,
   ])
 
   if (!paper) notFound()

@@ -43,7 +43,7 @@ export async function POST(req: NextRequest) {
   if (tmpPath) args.push("--pdf-path", tmpPath)
 
   return new Promise<NextResponse>((resolve) => {
-    const proc = spawn("python3", [scriptPath, ...args], {
+    const proc = spawn("/Users/erinbuchanan/.pyenv/versions/3.9.18/bin/python3", [scriptPath, ...args], {
       env: { ...process.env, GROQ_API_KEY: user.groqApiKey ?? undefined },
     })
 
@@ -53,6 +53,7 @@ export async function POST(req: NextRequest) {
 
     proc.on("close", async (code: number) => {
       if (tmpPath) await fs.unlink(tmpPath).catch(() => {})
+      console.log(`[extract] paper=${paperId} exit=${code} output=${output}`)
       if (code === 0) {
         resolve(NextResponse.json({ ok: true, output }))
       } else {

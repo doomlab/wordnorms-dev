@@ -26,7 +26,7 @@ export async function POST() {
     return NextResponse.json({ error: "Groq API key required" }, { status: 403 })
   }
 
-  const proc = spawn("python3", [scriptPath, "--run-id", String(run.id)], {
+  const proc = spawn("/Users/erinbuchanan/.pyenv/versions/3.9.18/bin/python3", [scriptPath, "--run-id", String(run.id)], {
     env: { ...process.env, GROQ_API_KEY: admin.groqApiKey },
     detached: true,
     stdio: "ignore",

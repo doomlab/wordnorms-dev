@@ -84,7 +84,13 @@ def run(paper_id, pdf_path=None):
         if pdf_path:
             tmp, cleanup = pdf_path, False
         elif paper["pdfUrl"]:
-            tmp, cleanup = download_pdf(paper["pdfUrl"]), True
+            try:
+                tmp, cleanup = download_pdf(paper["pdfUrl"]), True
+            except Exception as e:
+                print(f"Failed to download PDF: {e}")
+                save_extraction_failure(conn, paper_id, "skipped:download_error")
+                conn.commit()
+                sys.exit(0)
         else:
             print("No pdfUrl — cannot extract")
             save_extraction_failure(conn, paper_id, "skipped:no_pdf")
