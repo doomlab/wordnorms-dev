@@ -7,6 +7,7 @@ import { FavoriteButton } from "./components/FavoriteButton"
 import { ReportButton } from "./components/ReportButton"
 import { DECADE_LABELS } from "./data/datasets"
 import { getBlitzContext } from "./blitz-server"
+import { SuggestArticleButton } from "./components/SuggestArticleButton"
 import db from "db"
 
 const capFirst = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
@@ -134,6 +135,7 @@ export default async function Home({
               <span className="font-semibold text-base-content">{papers.length}</span> norm{" "}
               {papers.length === 1 ? "set" : "sets"}
             </p>
+            <SuggestArticleButton isLoggedIn={!!userId} />
           </div>
 
           {papers.length === 0 ? (

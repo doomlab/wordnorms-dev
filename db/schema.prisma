@@ -49,8 +49,9 @@ model User {
   reports          PaperReport[]
   metadataEdits    MetadataEditSuggestion[]
   extractionEdits  ExtractionEditSuggestion[]
-  pipelineRuns       PipelineRun[]
+  pipelineRuns        PipelineRun[]
   extractionsVerified PaperExtraction[]
+  articleSuggestions  ArticleSuggestion[]
 }
 
 model Session {
@@ -224,6 +225,21 @@ model PipelineRun {
   output      String?
   startedById Int?
   startedBy   User?          @relation(fields: [startedById], references: [id])
+}
+
+model ArticleSuggestion {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  userId    Int
+  title     String?
+  authors   String?
+  year      Int?
+  doi       String?
+  url       String?
+  note      String?
+  resolved  Boolean  @default(false)
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Token {

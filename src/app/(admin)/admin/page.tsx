@@ -4,7 +4,7 @@ import { PipelineButton } from "./PipelineButton"
 export const metadata = { title: "Admin" }
 
 export default async function AdminPage() {
-  const [counts, extractionNew, extractionNoPdf, pendingMetadata, openReports, lastRun, activeRun] =
+  const [counts, extractionNew, extractionNoPdf, pendingMetadata, openReports, lastRun, activeRun, openSuggestions] =
     await Promise.all([
       db.paper.groupBy({ by: ["status"], _count: { _all: true } }),
       db.paper.count({ where: { status: "ACCEPTED", extraction: null, pdfUrl: { not: null } } }),
@@ -21,6 +21,7 @@ export default async function AdminPage() {
       db.paperReport.count({ where: { resolved: false } }),
       db.pipelineRun.findFirst({ where: { status: "DONE" }, orderBy: { finishedAt: "desc" } }),
       db.pipelineRun.findFirst({ where: { status: "RUNNING" }, orderBy: { createdAt: "desc" } }),
+      db.articleSuggestion.count({ where: { resolved: false } }),
     ])
   const byStatus = Object.fromEntries(counts.map((c) => [c.status, c._count._all]))
 
@@ -68,6 +69,12 @@ export default async function AdminPage() {
       label: "Duplicates",
       desc: "Find and merge duplicate paper entries (e.g. preprint + published version)",
       badge: null,
+    },
+    {
+      href: "/admin/suggestions",
+      label: "Article Suggestions",
+      desc: "Papers suggested by users that aren't in the database yet",
+      badge: openSuggestions,
     },
   ]
 
