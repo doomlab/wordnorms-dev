@@ -50,6 +50,7 @@ export function SuggestExtractionEdits({
   const [stimuliCount, setStimuliCount] = useState(ext.stimuliCount?.toString() ?? "")
   const [normsCollected, setNormsCollected] = useState(toList(ext.normsCollected))
   const [instructions, setInstructions] = useState(ext.instructions ?? "")
+  const [url, setUrl] = useState("")
   const [note, setNote] = useState("")
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -65,6 +66,7 @@ export function SuggestExtractionEdits({
         stimuliCount: stimuliCount ? parseInt(stimuliCount, 10) : null,
         normsCollected: fromList(normsCollected),
         instructions: instructions.trim() || null,
+        url: url.trim() || null,
         note: note.trim() || undefined,
       })
       setDone(true)
@@ -173,6 +175,16 @@ export function SuggestExtractionEdits({
                 rows={3}
                 value={instructions}
                 onChange={(e) => setInstructions(e.target.value)}
+              />
+            </Field>
+
+            <Field label="Website URL" hint="optional — homepage or repository for this dataset">
+              <input
+                type="url"
+                className="input input-bordered input-sm w-full"
+                value={url}
+                onChange={(e) => setUrl(e.target.value)}
+                placeholder="https://…"
               />
             </Field>
 

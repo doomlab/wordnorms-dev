@@ -11,6 +11,7 @@ const SubmitExtractionEdit = z.object({
   stimuliCount: z.number().int().nullable(),
   normsCollected: z.array(z.string()),
   instructions: z.string().nullable(),
+  url: z.string().nullable(),
   note: z.string().max(1000).optional(),
 })
 

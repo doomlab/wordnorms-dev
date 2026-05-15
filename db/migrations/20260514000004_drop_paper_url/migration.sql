@@ -1,0 +1,1 @@
+ALTER TABLE "Paper" DROP COLUMN "url";

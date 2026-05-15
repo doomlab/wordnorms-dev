@@ -1,6 +1,6 @@
 import db from "db"
 import { PaperActions } from "./PaperActions"
-import { UrlEditor } from "./UrlEditor"
+
 
 export const metadata = { title: "Review – Admin" }
 
@@ -40,7 +40,6 @@ export default async function AdminReviewPage() {
                   <th>Title</th>
                   <th>Authors</th>
                   <th>Year</th>
-                  <th>URL</th>
                   <th>Score</th>
                   <th>Actions</th>
                 </tr>
@@ -66,7 +65,6 @@ export default async function AdminReviewPage() {
                       {p.authors.length > 3 && " et al."}
                     </td>
                     <td>{p.year ?? "—"}</td>
-                    <td><UrlEditor paperId={p.id} initialUrl={p.url} /></td>
                     <td>
                       {p.modelScore != null ? (
                         <span className="badge badge-outline badge-sm">
@@ -105,7 +103,6 @@ export default async function AdminReviewPage() {
                   <th>Title</th>
                   <th>Authors</th>
                   <th>Year</th>
-                  <th>Website URL</th>
                   <th>PDF</th>
                   <th>Actions</th>
                 </tr>
@@ -121,7 +118,6 @@ export default async function AdminReviewPage() {
                       {p.authors.length > 3 && " et al."}
                     </td>
                     <td>{p.year ?? "—"}</td>
-                    <td><UrlEditor paperId={p.id} initialUrl={p.url} /></td>
                     <td>
                       {p.pdfUrl ? (
                         <a

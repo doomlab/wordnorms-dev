@@ -218,16 +218,6 @@ export default async function Home({
                           initialFavorited={favoritedIds.has(paper.id)}
                           isLoggedIn={!!userId}
                         />
-                        {paper.url && (
-                          <a
-                            href={paper.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="btn btn-outline btn-sm"
-                          >
-                            Website
-                          </a>
-                        )}
                         <a href={`/norms/${paper.id}`} className="btn btn-outline btn-sm">
                           View
                         </a>
