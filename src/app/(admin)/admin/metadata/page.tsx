@@ -79,7 +79,7 @@ export default async function AdminMetadataPage() {
                     ) : "—"}
                   </td>
                   <td>
-                    <a href={`/admin/metadata/${p.id}`} className="btn btn-ghost btn-outline btn-xs">
+                    <a href={`/admin/metadata/${p.id}`} className="btn btn-outline btn-xs">
                       Review
                     </a>
                   </td>

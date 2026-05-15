@@ -61,7 +61,7 @@ export default async function AdminReviewDetailPage({
         )}
         <a
           href={`/admin/papers/${paper.id}?from=/admin/review/${paper.id}`}
-          className="btn btn-ghost btn-outline btn-sm"
+          className="btn btn-outline btn-sm"
         >
           Edit paper
         </a>

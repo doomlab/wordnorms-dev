@@ -138,7 +138,7 @@ function PaperTable({ rows, tab }: { rows: PaperRow[]; tab: string }) {
               </td>
               <td>{p.year ?? "—"}</td>
               <td>
-                <a href={`/admin/extract/${p.id}?from=${tab}`} className="btn btn-ghost btn-outline btn-xs">
+                <a href={`/admin/extract/${p.id}?from=${tab}`} className="btn btn-outline btn-xs">
                   View
                 </a>
               </td>

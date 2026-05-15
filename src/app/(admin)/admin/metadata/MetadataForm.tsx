@@ -170,7 +170,7 @@ export function MetadataForm({
 
       <div className="flex gap-3 pt-4">
         <button
-          className="btn btn-ghost btn-outline"
+          className="btn btn-secondary"
           onClick={handleSave}
           disabled={busy}
         >

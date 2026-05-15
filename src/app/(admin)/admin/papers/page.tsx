@@ -88,7 +88,7 @@ export default async function AdminPapersPage({ searchParams }: Props) {
                       href={`/admin/papers/${p.id}?from=/admin/papers${
                         q ? `?q=${encodeURIComponent(q)}` : ""
                       }`}
-                      className="btn btn-ghost btn-outline btn-xs"
+                      className="btn btn-outline btn-xs"
                     >
                       Edit
                     </a>

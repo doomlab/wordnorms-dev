@@ -118,7 +118,7 @@ async function ClassificationReports() {
                 {new Date(r.createdAt).toLocaleDateString()}
               </td>
               <td>
-                <a href={`/admin/reports/${r.id}`} className="btn btn-ghost btn-outline btn-xs">
+                <a href={`/admin/reports/${r.id}`} className="btn btn-outline btn-xs">
                   Review
                 </a>
               </td>
@@ -182,7 +182,7 @@ async function MetadataSuggestions() {
                 {new Date(s.createdAt).toLocaleDateString()}
               </td>
               <td>
-                <a href={`/admin/reports/suggestions/${s.id}`} className="btn btn-ghost btn-outline btn-xs">
+                <a href={`/admin/reports/suggestions/${s.id}`} className="btn btn-outline btn-xs">
                   Review
                 </a>
               </td>

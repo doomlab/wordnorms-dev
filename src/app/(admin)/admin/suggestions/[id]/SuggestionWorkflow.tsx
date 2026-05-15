@@ -328,7 +328,7 @@ export function SuggestionWorkflow({
         <button
           onClick={handleResolve}
           disabled={addStatus === "resolving" || addStatus === "duplicate"}
-          className="btn btn-ghost btn-outline"
+          className="btn btn-secondary"
         >
           {addStatus === "resolving" ? "Resolving…" : "Resolve without adding"}
         </button>

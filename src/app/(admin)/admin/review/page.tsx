@@ -65,7 +65,7 @@ export default async function AdminReviewPage() {
                     )}
                   </td>
                   <td>
-                    <a href={`/admin/review/${p.id}`} className="btn btn-ghost btn-outline btn-xs">
+                    <a href={`/admin/review/${p.id}`} className="btn btn-outline btn-xs">
                       View
                     </a>
                   </td>

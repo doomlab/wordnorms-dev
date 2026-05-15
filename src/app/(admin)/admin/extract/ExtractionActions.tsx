@@ -184,7 +184,7 @@ export function ExtractionActions({
         {status === "loading" ? <span className="loading loading-spinner" /> : "Approve"}
       </button>
       <button
-        className="btn btn-ghost btn-outline btn-wide"
+        className="btn btn-secondary btn-wide"
         onClick={() => extract()}
         disabled={status === "loading"}
       >

@@ -47,7 +47,7 @@ export function SuggestionActions({ suggestionId }: { suggestionId: number }) {
 
   return (
     <div className="flex gap-3 justify-center">
-      <button className="btn btn-ghost btn-outline btn-wide" onClick={handleDismiss} disabled={busy}>
+      <button className="btn btn-secondary btn-wide" onClick={handleDismiss} disabled={busy}>
         {status === "dismissing" ? <span className="loading loading-spinner loading-xs" /> : "Dismiss"}
       </button>
       <button className="btn btn-success btn-wide" onClick={handleApply} disabled={busy}>

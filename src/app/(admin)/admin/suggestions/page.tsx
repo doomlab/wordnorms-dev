@@ -22,7 +22,7 @@ export default async function AdminArticleSuggestionsPage({
         <h1 className="text-3xl font-bold">Article Suggestions</h1>
         <a
           href={showResolved ? "/admin/suggestions" : "/admin/suggestions?resolved=1"}
-          className="btn btn-ghost btn-outline btn-sm"
+          className="btn btn-outline btn-sm"
         >
           {showResolved ? "Show open" : "Show resolved"}
         </a>
@@ -91,7 +91,7 @@ export default async function AdminArticleSuggestionsPage({
                   <td>
                     <a
                       href={`/admin/suggestions/${s.id}`}
-                      className="btn btn-ghost btn-outline btn-xs"
+                      className="btn btn-outline btn-xs"
                     >
                       Review
                     </a>

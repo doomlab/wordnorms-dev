@@ -45,7 +45,7 @@ export function MetadataReportActions({
   return (
     <div className="flex gap-3 justify-center">
       <button
-        className="btn btn-ghost btn-outline btn-wide"
+        className="btn btn-secondary btn-wide"
         onClick={handleDismiss}
         disabled={dismissing}
       >
