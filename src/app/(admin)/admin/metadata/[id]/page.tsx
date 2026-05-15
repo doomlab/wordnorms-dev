@@ -17,7 +17,7 @@ export default async function AdminMetadataDetailPage({
 }) {
   const { id } = await params
   const paper = await db.paper.findUnique({
-    where: { id: Number(id), status: "ACCEPTED", extraction: { isNot: null, verifiedAt: null } },
+    where: { id: Number(id), status: "ACCEPTED", extraction: { is: { verifiedAt: null } } },
     include: { extraction: true },
   })
 

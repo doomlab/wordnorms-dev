@@ -8,14 +8,14 @@ export default async function AdminMetadataPage() {
   const papers = await db.paper.findMany({
     where: {
       status: "ACCEPTED",
-      extraction: { isNot: null, verifiedAt: null },
+      extraction: { is: { verifiedAt: null } },
     },
     select: {
       id: true,
       title: true,
       authors: true,
       year: true,
-      modelScore: true,
+      doi: true,
       extraction: { select: { normsCollected: true, confidence: true } },
     },
     orderBy: { updatedAt: "desc" },
@@ -42,7 +42,6 @@ export default async function AdminMetadataPage() {
                 <th>Title</th>
                 <th>Authors</th>
                 <th>Year</th>
-                <th>Score</th>
                 <th>Norms</th>
                 <th>Confidence</th>
                 <th></th>
@@ -53,19 +52,22 @@ export default async function AdminMetadataPage() {
                 <tr key={p.id}>
                   <td className="max-w-sm">
                     <p className="font-medium line-clamp-2">{cap(p.title)}</p>
+                    {p.doi && (
+                      <a
+                        href={`https://doi.org/${p.doi}`}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-xs text-primary/70 hover:text-primary"
+                      >
+                        {p.doi}
+                      </a>
+                    )}
                   </td>
                   <td className="text-sm text-base-content/70 max-w-xs">
                     {p.authors.slice(0, 3).join(", ")}
                     {p.authors.length > 3 && " et al."}
                   </td>
                   <td>{p.year ?? "—"}</td>
-                  <td>
-                    {p.modelScore != null ? (
-                      <span className="badge badge-outline badge-sm">
-                        {p.modelScore.toFixed(2)}
-                      </span>
-                    ) : "—"}
-                  </td>
                   <td className="max-w-xs truncate text-sm">
                     {p.extraction?.normsCollected?.join(", ") || "—"}
                   </td>

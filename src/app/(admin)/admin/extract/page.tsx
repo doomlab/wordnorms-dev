@@ -14,7 +14,7 @@ export default async function AdminExtractPage({
   const [hasPdf, noPdf] = await Promise.all([
     db.paper.findMany({
       where: { status: "ACCEPTED", extraction: null, pdfUrl: { not: null } },
-      select: { id: true, title: true, authors: true, year: true, modelScore: true },
+      select: { id: true, title: true, authors: true, year: true, doi: true },
       orderBy: { updatedAt: "desc" },
     }),
     db.paper.findMany({
@@ -25,7 +25,7 @@ export default async function AdminExtractPage({
           { extraction: { needsReview: true, confidence: null } },
         ],
       },
-      select: { id: true, title: true, authors: true, year: true, modelScore: true },
+      select: { id: true, title: true, authors: true, year: true, doi: true },
       orderBy: { updatedAt: "desc" },
     }),
   ])
@@ -84,7 +84,7 @@ type PaperRow = {
   title: string
   authors: string[]
   year: number | null
-  modelScore: number | null
+  doi: string | null
 }
 
 function PaperTable({ rows, tab }: { rows: PaperRow[]; tab: string }) {
@@ -96,7 +96,6 @@ function PaperTable({ rows, tab }: { rows: PaperRow[]; tab: string }) {
             <th>Title</th>
             <th>Authors</th>
             <th>Year</th>
-            <th>Score</th>
             <th></th>
           </tr>
         </thead>
@@ -105,17 +104,22 @@ function PaperTable({ rows, tab }: { rows: PaperRow[]; tab: string }) {
             <tr key={p.id}>
               <td className="max-w-sm">
                 <p className="font-medium line-clamp-2">{cap(p.title)}</p>
+                {p.doi && (
+                  <a
+                    href={`https://doi.org/${p.doi}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-xs text-primary/70 hover:text-primary"
+                  >
+                    {p.doi}
+                  </a>
+                )}
               </td>
               <td className="text-sm text-base-content/70 max-w-xs">
                 {p.authors.slice(0, 3).join(", ")}
                 {p.authors.length > 3 && " et al."}
               </td>
               <td>{p.year ?? "—"}</td>
-              <td>
-                {p.modelScore != null ? (
-                  <span className="badge badge-outline badge-sm">{p.modelScore.toFixed(2)}</span>
-                ) : "—"}
-              </td>
               <td>
                 <a href={`/admin/extract/${p.id}?from=${tab}`} className="btn btn-ghost btn-outline btn-xs">
                   View

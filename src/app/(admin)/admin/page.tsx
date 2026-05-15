@@ -4,14 +4,15 @@ import { PipelineButton } from "./PipelineButton"
 export const metadata = { title: "Admin" }
 
 export default async function AdminPage() {
-  const [counts, pendingExtraction, pendingMetadata, openReports, lastRun, activeRun] = await Promise.all([
-    db.paper.groupBy({ by: ["status"], _count: { _all: true } }),
-    db.paper.count({ where: { status: "ACCEPTED", extraction: null } }),
-    db.paperExtraction.count({ where: { verifiedAt: null, paper: { status: "ACCEPTED" } } }),
-    db.paperReport.count({ where: { resolved: false } }),
-    db.pipelineRun.findFirst({ where: { status: "DONE" }, orderBy: { finishedAt: "desc" } }),
-    db.pipelineRun.findFirst({ where: { status: "RUNNING" }, orderBy: { createdAt: "desc" } }),
-  ])
+  const [counts, pendingExtraction, pendingMetadata, openReports, lastRun, activeRun] =
+    await Promise.all([
+      db.paper.groupBy({ by: ["status"], _count: { _all: true } }),
+      db.paper.count({ where: { status: "ACCEPTED", extraction: null } }),
+      db.paperExtraction.count({ where: { verifiedAt: null, paper: { status: "ACCEPTED" } } }),
+      db.paperReport.count({ where: { resolved: false } }),
+      db.pipelineRun.findFirst({ where: { status: "DONE" }, orderBy: { finishedAt: "desc" } }),
+      db.pipelineRun.findFirst({ where: { status: "RUNNING" }, orderBy: { createdAt: "desc" } }),
+    ])
   const byStatus = Object.fromEntries(counts.map((c) => [c.status, c._count._all]))
 
   const lastRanLabel = lastRun?.finishedAt
@@ -23,8 +24,8 @@ export default async function AdminPage() {
     : null
 
   const ONE_WEEK_MS = 7 * 24 * 60 * 60 * 1000
-  const ranRecently = !!lastRun?.finishedAt &&
-    Date.now() - lastRun.finishedAt.getTime() < ONE_WEEK_MS
+  const ranRecently =
+    !!lastRun?.finishedAt && Date.now() - lastRun.finishedAt.getTime() < ONE_WEEK_MS
 
   const pendingReview = byStatus.PENDING_REVIEW ?? 0
 
@@ -38,14 +39,8 @@ export default async function AdminPage() {
     {
       href: "/admin/metadata",
       label: "Metadata Review",
-      desc: "Verify extracted metadata looks correct before publishing",
+      desc: "Edit, verify, and approve extracted metadata",
       badge: pendingMetadata,
-    },
-    {
-      href: "/admin/excluded",
-      label: "Excluded",
-      desc: "Papers rejected from the model",
-      badge: null,
     },
     {
       href: "/admin/stats",
