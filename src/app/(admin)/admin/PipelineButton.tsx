@@ -13,9 +13,11 @@ const STEP_LABEL: Record<string, string> = {
 export function PipelineButton({
   activeRunId,
   activeStep,
+  ranRecently,
 }: {
   activeRunId: number | null
   activeStep: string | null
+  ranRecently: boolean
 }) {
   const [status, setStatus] = useState<RunStatus>(() => {
     if (!activeRunId) return "idle"
@@ -102,7 +104,12 @@ export function PipelineButton({
   }
 
   return (
-    <button className="btn btn-primary btn-sm" onClick={run}>
+    <button
+      className="btn btn-primary btn-sm"
+      onClick={run}
+      disabled={ranRecently}
+      title={ranRecently ? "Pipeline was run in the last week" : undefined}
+    >
       Fetch + Predict
     </button>
   )

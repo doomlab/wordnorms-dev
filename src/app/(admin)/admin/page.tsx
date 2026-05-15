@@ -21,6 +21,10 @@ export default async function AdminPage() {
       })
     : null
 
+  const ONE_WEEK_MS = 7 * 24 * 60 * 60 * 1000
+  const ranRecently = !!lastRun?.finishedAt &&
+    Date.now() - lastRun.finishedAt.getTime() < ONE_WEEK_MS
+
   const pendingReview = byStatus.PENDING_REVIEW ?? 0
 
   const cards = [
@@ -69,10 +73,15 @@ export default async function AdminPage() {
             <p className="text-base-content/60 text-sm">
               Pull new papers from OpenAlex and score them with the model. Run if the review queue
               is empty or to fetch new papers. The queue is automatically run once a month. The
-              process can be slow, so check back later to see results.
+              process can be slow, so check back later to see results. You can only run this once a
+              week.
             </p>
             <div className="flex items-center justify-between">
-              <PipelineButton activeRunId={activeRun?.id ?? null} activeStep={activeRun?.step ?? null} />
+              <PipelineButton
+                activeRunId={activeRun?.id ?? null}
+                activeStep={activeRun?.step ?? null}
+                ranRecently={ranRecently}
+              />
               {lastRanLabel ? (
                 <span className="text-base-content/40 text-xs">Last ran {lastRanLabel}</span>
               ) : (
@@ -83,17 +92,18 @@ export default async function AdminPage() {
         </div>
 
         {/* Step 2: Review */}
-        <a href="/admin/review" className="card card-bordered bg-base-200 hover:bg-base-300 transition-colors">
+        <a
+          href="/admin/review"
+          className="card card-bordered bg-base-200 hover:bg-base-300 transition-colors"
+        >
           <div className="card-body gap-3">
             <div className="flex items-center justify-between">
               <h2 className="card-title">Review</h2>
-              {pendingReview > 0 && (
-                <span className="badge badge-warning">{pendingReview}</span>
-              )}
+              {pendingReview > 0 && <span className="badge badge-warning">{pendingReview}</span>}
             </div>
             <p className="text-base-content/60 text-sm">
-              For each paper, decide: should it go into the model or not? Accept relevant papers
-              and exclude the rest.
+              For each paper, decide: should it go into the model or not? Accept relevant papers and
+              exclude the rest.
             </p>
           </div>
         </a>

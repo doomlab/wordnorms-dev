@@ -157,24 +157,31 @@ def load_existing(conn):
 
 
 def insert_paper(cur, paper):
+    doi = paper["doi"]
+    oa_id = paper["openalex_id"]
     cur.execute(
         """
         INSERT INTO "Paper"
             ("createdAt", "updatedAt", title, authors, year, doi,
              "openAlexId", abstract, journal, "pdfUrl", status)
-        VALUES
-            (NOW(), NOW(), %s, %s, %s, %s, %s, %s, %s, %s, 'PENDING_REVIEW'::"PaperStatus")
-        ON CONFLICT (doi) DO NOTHING
+        SELECT NOW(), NOW(), %s, %s, %s, %s, %s, %s, %s, %s, 'PENDING_REVIEW'::"PaperStatus"
+        WHERE NOT EXISTS (
+            SELECT 1 FROM "Paper"
+            WHERE (%s IS NOT NULL AND doi = %s)
+               OR (%s IS NOT NULL AND "openAlexId" = %s)
+        )
         """,
         (
             paper["title"],
             paper["authors"],
             paper["year"],
-            paper["doi"],
-            paper["openalex_id"],
+            doi,
+            oa_id,
             paper["abstract"],
             paper.get("journal"),
             paper.get("pdf_url"),
+            doi, doi,
+            oa_id, oa_id,
         ),
     )
     return cur.rowcount
@@ -215,6 +222,10 @@ def main():
                 continue
 
             inserted += insert_paper(cur, paper)
+            if paper["doi"]:
+                existing_dois.add(paper["doi"])
+            if paper["openalex_id"]:
+                existing_oa_ids.add(paper["openalex_id"])
 
         conn.commit()
     finally:
