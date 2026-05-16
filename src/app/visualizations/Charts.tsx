@@ -10,15 +10,18 @@ import {
   Cell,
 } from "recharts"
 
-type ChartData = {
+export type VizData = {
+  totalCitations: number
+  uniqueCited: number
+}
+
+export type DbData = {
+  totalPapers: number
   years: { year: string; count: number }[]
   journals: { name: string; count: number }[]
   norms: { name: string; count: number }[]
   languages: { name: string; count: number }[]
   participantTypes: { name: string; count: number }[]
-  totalPapers: number
-  totalCitations: number
-  uniqueCited: number
 }
 
 const PRIMARY = "oklch(55% 0.2 250)"
@@ -63,30 +66,37 @@ function HBar({ data, color = PRIMARY }: { data: { name: string; count: number }
   )
 }
 
-export function Charts({ chartData }: { chartData: ChartData }) {
+function StatCard({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="card card-bordered bg-base-200">
+      <div className="card-body p-5">
+        <p className="text-3xl font-bold">{value}</p>
+        <p className="text-sm text-base-content/60">{label}</p>
+      </div>
+    </div>
+  )
+}
+
+export function VizStats({ data }: { data: VizData }) {
+  return (
+    <div className="grid grid-cols-2 gap-4 mt-4">
+      <StatCard label="Citation relationships stored" value={data.totalCitations.toLocaleString()} />
+      <StatCard label="Unique cited papers not yet in DB" value={data.uniqueCited.toLocaleString()} />
+    </div>
+  )
+}
+
+export function DbCharts({ data }: { data: DbData }) {
   return (
     <div className="space-y-6">
-      {/* Summary stats */}
-      <div className="grid grid-cols-3 gap-4">
-        {[
-          { label: "Accepted papers", value: chartData.totalPapers.toLocaleString() },
-          { label: "Citation relationships", value: chartData.totalCitations.toLocaleString() },
-          { label: "Unique cited (not in DB)", value: chartData.uniqueCited.toLocaleString() },
-        ].map((s) => (
-          <div key={s.label} className="card card-bordered bg-base-200">
-            <div className="card-body p-5">
-              <p className="text-3xl font-bold">{s.value}</p>
-              <p className="text-sm text-base-content/60">{s.label}</p>
-            </div>
-          </div>
-        ))}
+      <div className="grid grid-cols-1 gap-4 max-w-xs">
+        <StatCard label="Accepted papers" value={data.totalPapers.toLocaleString()} />
       </div>
 
-      {/* Two-column charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <ChartCard title="Papers by publication year">
           <ResponsiveContainer width="100%" height={220}>
-            <BarChart data={chartData.years} margin={{ left: -10, right: 8, top: 4, bottom: 0 }}>
+            <BarChart data={data.years} margin={{ left: -10, right: 8, top: 4, bottom: 0 }}>
               <XAxis
                 dataKey="year"
                 tick={{ fontSize: 11, fill: "currentColor" }}
@@ -110,20 +120,20 @@ export function Charts({ chartData }: { chartData: ChartData }) {
         </ChartCard>
 
         <ChartCard title="Top journals">
-          <HBar data={chartData.journals} />
+          <HBar data={data.journals} />
         </ChartCard>
 
         <ChartCard title="Norms collected">
-          <HBar data={chartData.norms} color="oklch(55% 0.18 160)" />
+          <HBar data={data.norms} color="oklch(55% 0.18 160)" />
         </ChartCard>
 
         <ChartCard title="Languages">
-          <HBar data={chartData.languages} color="oklch(55% 0.18 30)" />
+          <HBar data={data.languages} color="oklch(55% 0.18 30)" />
         </ChartCard>
 
-        {chartData.participantTypes.length > 0 && (
+        {data.participantTypes.length > 0 && (
           <ChartCard title="Participant types">
-            <HBar data={chartData.participantTypes} color="oklch(55% 0.18 310)" />
+            <HBar data={data.participantTypes} color="oklch(55% 0.18 310)" />
           </ChartCard>
         )}
       </div>

@@ -79,16 +79,39 @@ export default async function NormDetailPage({
   const isAiExtracted = ext && ["groq", "ollama"].includes(ext.extractedBy ?? "")
   const linkedDataset = findDatasetCard(paper.doi, paper.title)
 
-  // Resolve which cited papers are in the DB
+  // Resolve which cited papers are in the DB, following canonical resolution for duplicates
   const citedIds = paper.citationsFrom.map((c) => c.citedOpenAlexId)
   const matchedCitations =
     citedIds.length > 0
       ? await db.paper.findMany({
           where: { openAlexId: { in: citedIds }, status: "ACCEPTED" },
-          select: { id: true, openAlexId: true, title: true, year: true, journal: true },
+          select: {
+            id: true,
+            openAlexId: true,
+            title: true,
+            year: true,
+            canonicalPaperId: true,
+            canonical: { select: { id: true, title: true, year: true } },
+          },
         })
       : []
-  const matchedById = new Map(matchedCitations.map((p) => [p.openAlexId, p]))
+  // Map each openAlexId to the canonical paper's details (following canonicalPaperId if set)
+  const matchedById = new Map(
+    matchedCitations.map((p) => {
+      const resolved = p.canonical ?? p
+      return [p.openAlexId, { id: resolved.id, title: resolved.title, year: resolved.year ?? null }]
+    })
+  )
+  // Build deduplicated list, collapsing multiple duplicate openAlexIds to the same canonical paper
+  const seenCanonicalIds = new Set<number>()
+  const referencedInDb = paper.citationsFrom
+    .filter((c) => matchedById.has(c.citedOpenAlexId))
+    .map((c) => matchedById.get(c.citedOpenAlexId)!)
+    .filter((resolved) => {
+      if (seenCanonicalIds.has(resolved.id)) return false
+      seenCanonicalIds.add(resolved.id)
+      return true
+    })
 
   const [isFavorited, isReported, hasPriorSuggestion] = await Promise.all([
     userId
@@ -307,30 +330,25 @@ export default async function NormDetailPage({
               </div>
             </div>
           )}
-          {matchedCitations.length > 0 && (
+          {referencedInDb.length > 0 && (
             <Section title="Referenced in WordNorms">
               <div className="space-y-1">
-                {paper.citationsFrom
-                  .filter((c) => matchedById.has(c.citedOpenAlexId))
-                  .map((c) => {
-                    const matched = matchedById.get(c.citedOpenAlexId)!
-                    return (
-                      <a
-                        key={c.citedOpenAlexId}
-                        href={`/norms/${matched.id}`}
-                        className="flex gap-3 py-1.5 hover:text-primary group"
-                      >
-                        <span className="flex-1 text-sm group-hover:underline">
-                          {capFirst(matched.title)}
-                        </span>
-                        {matched.year && (
-                          <span className="text-sm text-base-content/40 shrink-0">
-                            {matched.year}
-                          </span>
-                        )}
-                      </a>
-                    )
-                  })}
+                {referencedInDb.map((resolved) => (
+                  <a
+                    key={resolved.id}
+                    href={`/norms/${resolved.id}`}
+                    className="flex gap-3 py-1.5 hover:text-primary group"
+                  >
+                    <span className="flex-1 text-sm group-hover:underline">
+                      {capFirst(resolved.title)}
+                    </span>
+                    {resolved.year && (
+                      <span className="text-sm text-base-content/40 shrink-0">
+                        {resolved.year}
+                      </span>
+                    )}
+                  </a>
+                ))}
               </div>
             </Section>
           )}

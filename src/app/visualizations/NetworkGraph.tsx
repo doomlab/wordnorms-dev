@@ -1,7 +1,7 @@
 "use client"
 
 import dynamic from "next/dynamic"
-import { useState, useCallback, useRef } from "react"
+import { useState, useCallback, useMemo, useRef } from "react"
 
 const ForceGraph2D = dynamic(() => import("react-force-graph-2d"), { ssr: false })
 
@@ -18,10 +18,11 @@ type Props = {
   }
 }
 
+const HUB_COUNT = 10
+
 export function NetworkGraph({ graphData }: Props) {
   const [showUnmatched, setShowUnmatched] = useState(false)
-  const [tooltip, setTooltip] = useState<{ x: number; y: number; title: string } | null>(null)
-  const containerRef = useRef<HTMLDivElement>(null)
+  const tooltipRef = useRef<HTMLDivElement>(null)
 
   const nodes = showUnmatched
     ? [...graphData.dbNodes, ...graphData.unmatchedNodes]
@@ -31,35 +32,68 @@ export function NetworkGraph({ graphData }: Props) {
 
   const data = { nodes, links }
 
+  // Degree map: count edges touching each node
+  const { degreeMap, maxDegree, hubIds } = useMemo(() => {
+    const map = new Map<string, number>()
+    for (const link of links) {
+      const src = typeof link.source === "object" ? (link.source as any).id : link.source
+      const tgt = typeof link.target === "object" ? (link.target as any).id : link.target
+      map.set(src, (map.get(src) ?? 0) + 1)
+      map.set(tgt, (map.get(tgt) ?? 0) + 1)
+    }
+    const max = Math.max(1, ...map.values())
+    const hubs = new Set(
+      [...map.entries()].sort((a, b) => b[1] - a[1]).slice(0, HUB_COUNT).map(([id]) => id)
+    )
+    return { degreeMap: map, maxDegree: max, hubIds: hubs }
+  }, [links])
+
   const handleNodeClick = useCallback((node: DbNode | UnmatchedNode) => {
     if (node.inDb) window.open(`/norms/${(node as DbNode).paperId}`, "_blank")
   }, [])
 
-  const handleNodeHover = useCallback(
-    (node: (DbNode | UnmatchedNode) | null, _prev: unknown, evt: MouseEvent | undefined) => {
-      if (node && evt) {
-        const rect = containerRef.current?.getBoundingClientRect()
-        setTooltip({
-          x: evt.clientX - (rect?.left ?? 0),
-          y: evt.clientY - (rect?.top ?? 0),
-          title: node.title + (node.year ? ` (${node.year})` : ""),
-        })
-      } else {
-        setTooltip(null)
-      }
-    },
-    []
-  )
+  const handleNodeHover = useCallback((node: (DbNode | UnmatchedNode) | null) => {
+    const el = tooltipRef.current
+    if (!el) return
+    if (node) {
+      const degree = degreeMap.get(node.id) ?? 0
+      el.textContent =
+        node.title + (node.year ? ` (${node.year})` : "") + (degree > 0 ? ` · ${degree} link${degree !== 1 ? "s" : ""}` : "")
+      el.style.opacity = "1"
+    } else {
+      el.style.opacity = "0"
+    }
+  }, [degreeMap])
 
   const paintNode = useCallback(
     (node: DbNode | UnmatchedNode, ctx: CanvasRenderingContext2D, globalScale: number) => {
-      const r = Math.max(3, 5 / Math.sqrt(globalScale))
+      const x = (node as any).x as number
+      const y = (node as any).y as number
+      const degree = degreeMap.get(node.id) ?? 0
+      const normalized = Math.log1p(degree) / Math.log1p(maxDegree)
+      const isHub = hubIds.has(node.id)
+
+      // Larger base for DB nodes; hubs get extra size
+      const worldR = node.inDb ? 4 + normalized * 10 : 2 + normalized * 4
+      const r = Math.max(1.5, worldR / Math.sqrt(globalScale))
+
       ctx.beginPath()
-      ctx.arc((node as any).x, (node as any).y, r, 0, 2 * Math.PI)
-      ctx.fillStyle = node.inDb ? "oklch(55% 0.2 250)" : "oklch(70% 0 0)"
+      ctx.arc(x, y, r, 0, 2 * Math.PI)
+      ctx.fillStyle =
+        isHub && node.inDb
+          ? "oklch(72% 0.18 55)"   // amber for top hubs
+          : node.inDb
+          ? "oklch(55% 0.2 250)"   // blue for regular DB nodes
+          : "oklch(70% 0 0)"       // grey for unmatched
       ctx.fill()
+
+      if (isHub && node.inDb) {
+        ctx.strokeStyle = "oklch(55% 0.18 55)"
+        ctx.lineWidth = Math.max(0.5, 1.5 / globalScale)
+        ctx.stroke()
+      }
     },
-    []
+    [degreeMap, maxDegree, hubIds]
   )
 
   return (
@@ -72,8 +106,12 @@ export function NetworkGraph({ graphData }: Props) {
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-3 text-xs text-base-content/50">
               <span className="flex items-center gap-1.5">
-                <span className="inline-block w-2.5 h-2.5 rounded-full bg-primary" />
+                <span className="inline-block w-2.5 h-2.5 rounded-full" style={{ background: "oklch(55% 0.2 250)" }} />
                 In database
+              </span>
+              <span className="flex items-center gap-1.5">
+                <span className="inline-block w-2.5 h-2.5 rounded-full" style={{ background: "oklch(72% 0.18 55)" }} />
+                Top {HUB_COUNT} hubs
               </span>
               {showUnmatched && (
                 <span className="flex items-center gap-1.5">
@@ -94,10 +132,10 @@ export function NetworkGraph({ graphData }: Props) {
           </div>
         </div>
 
-        <div ref={containerRef} className="relative rounded-lg overflow-hidden bg-base-100" style={{ height: 620 }}>
+        <div className="relative rounded-lg overflow-hidden bg-base-100" style={{ height: 620 }}>
           <ForceGraph2D
             graphData={data}
-            width={containerRef.current?.clientWidth ?? 1000}
+            width={1000}
             height={620}
             nodeCanvasObject={paintNode as any}
             nodeCanvasObjectMode={() => "replace"}
@@ -108,17 +146,14 @@ export function NetworkGraph({ graphData }: Props) {
             cooldownTicks={120}
             nodeRelSize={4}
           />
-          {tooltip && (
-            <div
-              className="pointer-events-none absolute z-10 max-w-xs rounded bg-base-300 px-2 py-1 text-xs shadow"
-              style={{ left: tooltip.x + 12, top: tooltip.y - 8 }}
-            >
-              {tooltip.title}
-            </div>
-          )}
+          <div
+            ref={tooltipRef}
+            className="pointer-events-none absolute bottom-3 left-3 rounded bg-base-300/90 px-2.5 py-1 text-xs shadow max-w-md truncate transition-opacity duration-100"
+            style={{ opacity: 0 }}
+          />
         </div>
         <p className="text-xs text-base-content/40">
-          Click a node to open its paper page. Scroll to zoom, drag to pan.
+          Click a node to open its paper page. Scroll to zoom, drag to pan. Node size and amber color reflect citation count.
         </p>
       </div>
     </div>
