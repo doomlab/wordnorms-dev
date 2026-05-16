@@ -18,21 +18,15 @@ type Props = {
   }
 }
 
-const HUB_COUNT = 10
+const HUB_COUNT = 20
 
 export function NetworkGraph({ graphData }: Props) {
   const [showUnmatched, setShowUnmatched] = useState(false)
   const tooltipRef = useRef<HTMLDivElement>(null)
 
-  const nodes = showUnmatched
-    ? [...graphData.dbNodes, ...graphData.unmatchedNodes]
-    : graphData.dbNodes
-
   const links = showUnmatched ? graphData.allLinks : graphData.dbOnlyLinks
 
-  const data = { nodes, links }
-
-  // Degree map: count edges touching each node
+  // Degree map: count edges touching each node — also used to exclude isolated nodes
   const { degreeMap, maxDegree, hubIds } = useMemo(() => {
     const map = new Map<string, number>()
     for (const link of links) {
@@ -47,6 +41,13 @@ export function NetworkGraph({ graphData }: Props) {
     )
     return { degreeMap: map, maxDegree: max, hubIds: hubs }
   }, [links])
+
+  const allNodes = showUnmatched
+    ? [...graphData.dbNodes, ...graphData.unmatchedNodes]
+    : graphData.dbNodes
+  const nodes = allNodes.filter((n) => degreeMap.has(n.id))
+
+  const data = { nodes, links }
 
   const handleNodeClick = useCallback((node: DbNode | UnmatchedNode) => {
     if (node.inDb) window.open(`/norms/${(node as DbNode).paperId}`, "_blank")

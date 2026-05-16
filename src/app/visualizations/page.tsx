@@ -1,14 +1,14 @@
 import db from "db"
 import { Navbar } from "../components/Navbar"
 import { NetworkGraph } from "./NetworkGraph"
-import { VizStats, DbCharts } from "./Charts"
+import { DbCharts } from "./Charts"
 
 export const metadata = { title: "Visualizations – WordNorms" }
 
-const ACCEPTED = { in: ["ACCEPTED", "ADDED_TO_TRAINING"] as const }
+const ACCEPTED = { in: ["ACCEPTED" as const, "ADDED_TO_TRAINING" as const] }
 
 export default async function VisualizationsPage() {
-  const [acceptedPapers, citations, extractions, yearGroups, journalGroups] = await Promise.all([
+  const [acceptedPapers, citations, extractions, yearGroups, journalGroups, summaryCounts] = await Promise.all([
     db.paper.findMany({
       where: { status: ACCEPTED, openAlexId: { not: null } },
       select: { id: true, title: true, year: true, openAlexId: true, canonicalPaperId: true },
@@ -31,8 +31,16 @@ export default async function VisualizationsPage() {
       where: { status: ACCEPTED, journal: { not: null } },
       _count: { _all: true },
       orderBy: { _count: { journal: "desc" } },
-      take: 15,
+      take: 10,
     }),
+    Promise.all([
+      db.paper.count(),
+      db.paper.count({ where: { status: { in: [...ACCEPTED.in] } } }),
+      db.paper.count({ where: { status: "PENDING_REVIEW" } }),
+      db.paper.count({ where: { status: { in: [...ACCEPTED.in] }, doi: { not: null } } }),
+      db.paper.count({ where: { status: { in: [...ACCEPTED.in] }, openAlexId: { not: null } } }),
+      db.paperExtraction.count({ where: { paper: { status: { in: [...ACCEPTED.in] } } } }),
+    ]),
   ])
 
   // Build network graph data
@@ -58,7 +66,10 @@ export default async function VisualizationsPage() {
     paperId: p.id,
   }))
 
-  const unmatchedNodeMap = new Map<string, { id: string; title: string; year?: number; inDb: false }>()
+  const unmatchedNodeMap = new Map<
+    string,
+    { id: string; title: string; year?: number; inDb: false }
+  >()
   for (const c of citations) {
     if (!allByAlexId.has(c.citedOpenAlexId) && !unmatchedNodeMap.has(c.citedOpenAlexId)) {
       unmatchedNodeMap.set(c.citedOpenAlexId, {
@@ -88,10 +99,28 @@ export default async function VisualizationsPage() {
 
   const graphData = {
     dbNodes,
-    unmatchedNodes: [...unmatchedNodeMap.values()],
+    unmatchedNodes: Array.from(unmatchedNodeMap.values()),
     allLinks,
     dbOnlyLinks,
   }
+
+  // Top 100 hubs by DB-to-DB connections
+  const dbDegreeMap = new Map<string, number>()
+  for (const link of dbOnlyLinks) {
+    dbDegreeMap.set(link.source, (dbDegreeMap.get(link.source) ?? 0) + 1)
+    dbDegreeMap.set(link.target, (dbDegreeMap.get(link.target) ?? 0) + 1)
+  }
+  const topHubs = canonicalPapers
+    .filter((p) => dbDegreeMap.has(p.openAlexId!))
+    .sort((a, b) => dbDegreeMap.get(b.openAlexId!)! - dbDegreeMap.get(a.openAlexId!)!)
+    .slice(0, 100)
+    .map((p, i) => ({
+      rank: i + 1,
+      id: p.id,
+      title: p.title,
+      year: p.year,
+      connections: dbDegreeMap.get(p.openAlexId!)!,
+    }))
 
   // Build chart data
   const normCounts: Record<string, number> = {}
@@ -109,18 +138,31 @@ export default async function VisualizationsPage() {
     uniqueCited: unmatchedNodeMap.size,
   }
 
+  const [totalAll, totalAccepted, totalPending, withDoi, withAlexId, withExtraction] = summaryCounts
+
   const dbData = {
     totalPapers: canonicalPapers.length,
-    years: yearGroups.map((g) => ({ year: String(g.year), count: g._count._all })),
-    journals: journalGroups.map((g) => ({ name: g.journal!, count: g._count._all })),
+    summary: [
+      { label: "Total papers in database", value: totalAll.toLocaleString() },
+      { label: "Accepted papers", value: totalAccepted.toLocaleString() },
+      { label: "Pending review", value: totalPending.toLocaleString() },
+      { label: "With extraction data", value: withExtraction.toLocaleString() },
+      { label: "With DOI", value: withDoi.toLocaleString() },
+      { label: "With OpenAlex ID", value: withAlexId.toLocaleString() },
+    ],
+    years: yearGroups.map((g) => ({ year: String(g.year), count: g._count?._all ?? 0 })),
+    journals: journalGroups.map((g) => ({ name: g.journal!, count: g._count?._all ?? 0 })),
     norms: Object.entries(normCounts)
       .sort((a, b) => b[1] - a[1])
+      .slice(0, 10)
       .map(([name, count]) => ({ name, count })),
     languages: Object.entries(langCounts)
       .sort((a, b) => b[1] - a[1])
+      .slice(0, 10)
       .map(([name, count]) => ({ name, count })),
     participantTypes: Object.entries(ptCounts)
       .sort((a, b) => b[1] - a[1])
+      .slice(0, 10)
       .map(([name, count]) => ({ name, count })),
   }
 
@@ -128,16 +170,84 @@ export default async function VisualizationsPage() {
     <div className="min-h-screen bg-base-100 flex flex-col">
       <Navbar />
       <div className="w-full px-10 py-10">
-        <h1 className="text-3xl font-bold mb-1">Visualizations</h1>
-        <p className="text-base-content/60 mb-10 text-sm">
-          {dbData.totalPapers.toLocaleString()} accepted papers ·{" "}
-          {vizData.totalCitations.toLocaleString()} citation relationships
-        </p>
+        <h1 className="text-3xl font-bold mb-10">Visualizations</h1>
 
         <section className="mb-12">
-          <h2 className="text-lg font-semibold mb-4">Visualization Stats</h2>
+          <h2 className="text-lg font-semibold mb-4">Citation Network</h2>
+          <div className="card card-bordered bg-base-200 mb-6">
+            <div className="card-body p-5">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-4">
+                {[
+                  { value: dbData.totalPapers.toLocaleString(), label: "Accepted papers" },
+                  {
+                    value: vizData.totalCitations.toLocaleString(),
+                    label: "Citation relationships stored",
+                  },
+                  {
+                    value: graphData.dbOnlyLinks.length.toLocaleString(),
+                    label: "Cross-references between DB papers",
+                  },
+                  {
+                    value: vizData.uniqueCited.toLocaleString(),
+                    label: "Cited papers not yet in database",
+                  },
+                ].map((s) => (
+                  <div key={s.label}>
+                    <p className="text-2xl font-bold">{s.value}</p>
+                    <p className="text-xs text-base-content/60 mt-0.5">{s.label}</p>
+                  </div>
+                ))}
+              </div>
+              <p className="text-sm text-base-content/60">
+                Each node is an accepted paper; edges represent citation relationships retrieved
+                from OpenAlex. Larger amber nodes are the top {20} most-connected hubs. Click any
+                node to open its paper page. Papers with no connections to other accepted papers are
+                not shown. Toggle unmatched citations to reveal papers cited by the database but not
+                yet included.
+              </p>
+            </div>
+          </div>
           <NetworkGraph graphData={graphData} />
-          <VizStats data={vizData} />
+
+          {topHubs.length > 0 && (
+            <div className="mt-4">
+              <h3 className="text-sm font-semibold text-base-content/60 uppercase tracking-wider mb-2">
+                Top {topHubs.length} hubs by connections
+              </h3>
+              <div
+                className="overflow-y-auto rounded-lg border border-base-200"
+                style={{ maxHeight: 320 }}
+              >
+                <table className="table table-xs w-full">
+                  <thead className="sticky top-0 bg-base-200 z-10">
+                    <tr className="text-base-content/50 text-xs uppercase">
+                      <th className="w-10">#</th>
+                      <th>Title</th>
+                      <th className="w-16">Year</th>
+                      <th className="w-28 text-right">Connections</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {topHubs.map((hub) => (
+                      <tr key={hub.id} className="hover:bg-base-200">
+                        <td className="text-base-content/40 tabular-nums">{hub.rank}</td>
+                        <td>
+                          <a
+                            href={`/norms/${hub.id}`}
+                            className="hover:text-primary hover:underline"
+                          >
+                            {hub.title.charAt(0).toUpperCase() + hub.title.slice(1)}
+                          </a>
+                        </td>
+                        <td className="text-base-content/60">{hub.year ?? "—"}</td>
+                        <td className="text-right tabular-nums font-medium">{hub.connections}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
         </section>
 
         <section>

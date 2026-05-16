@@ -17,6 +17,7 @@ export type VizData = {
 
 export type DbData = {
   totalPapers: number
+  summary: { label: string; value: string }[]
   years: { year: string; count: number }[]
   journals: { name: string; count: number }[]
   norms: { name: string; count: number }[]
@@ -38,7 +39,7 @@ function ChartCard({ title, children }: { title: string; children: React.ReactNo
   )
 }
 
-function HBar({ data, color = PRIMARY }: { data: { name: string; count: number }[]; color?: string }) {
+function HBar({ data, color = PRIMARY, yAxisWidth = 160 }: { data: { name: string; count: number }[]; color?: string; yAxisWidth?: number }) {
   return (
     <ResponsiveContainer width="100%" height={data.length * 28 + 10}>
       <BarChart data={data} layout="vertical" margin={{ left: 0, right: 24, top: 0, bottom: 0 }}>
@@ -46,7 +47,7 @@ function HBar({ data, color = PRIMARY }: { data: { name: string; count: number }
         <YAxis
           type="category"
           dataKey="name"
-          width={160}
+          width={yAxisWidth}
           tick={{ fontSize: 12, fill: "currentColor" }}
           tickLine={false}
           axisLine={false}
@@ -89,8 +90,17 @@ export function VizStats({ data }: { data: VizData }) {
 export function DbCharts({ data }: { data: DbData }) {
   return (
     <div className="space-y-6">
-      <div className="grid grid-cols-1 gap-4 max-w-xs">
-        <StatCard label="Accepted papers" value={data.totalPapers.toLocaleString()} />
+      <div className="card card-bordered bg-base-200">
+        <div className="card-body p-5">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-8 gap-y-4">
+            {data.summary.map((s) => (
+              <div key={s.label}>
+                <p className="text-2xl font-bold tabular-nums">{s.value}</p>
+                <p className="text-xs text-base-content/60 mt-0.5">{s.label}</p>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -120,7 +130,7 @@ export function DbCharts({ data }: { data: DbData }) {
         </ChartCard>
 
         <ChartCard title="Top journals">
-          <HBar data={data.journals} />
+          <HBar data={data.journals} yAxisWidth={220} />
         </ChartCard>
 
         <ChartCard title="Norms collected">
