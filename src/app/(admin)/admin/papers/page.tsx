@@ -32,7 +32,7 @@ export default async function AdminPapersPage({ searchParams }: Props) {
     <>
       <h1 className="text-3xl font-bold mb-2">Papers</h1>
       <p className="text-base-content/60 mb-8 text-sm">
-        Search by title, DOI, or ID to edit a paper's bibliographic data.
+        Search by title, DOI, or ID to edit a paper&apos;s bibliographic data.
       </p>
 
       <form className="flex gap-2 mb-8" method="get">

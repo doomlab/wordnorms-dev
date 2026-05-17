@@ -3,7 +3,6 @@ import db from "db"
 const HEADERS = { "User-Agent": "mailto:buchananlab@gmail.com" }
 const BATCH_SIZE = 50
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function formatCitation(work: any) {
   const openAlexId = work.id ? (work.id as string).replace("https://openalex.org/", "") : null
   const authors: string[] = work.authorships?.map((a: any) => a.author.display_name) ?? []

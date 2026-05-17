@@ -19,7 +19,6 @@ function reconstructAbstract(aii: Record<string, number[]> | null | undefined): 
   return words.filter(Boolean).join(" ")
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function formatWork(work: any) {
   const doi = work.doi ? work.doi.replace("https://doi.org/", "") : null
   const openAlexId = work.id ? work.id.replace("https://openalex.org/", "") : null

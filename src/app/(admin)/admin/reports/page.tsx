@@ -29,6 +29,9 @@ export default async function AdminReportsPage({
     db.extractionEditSuggestion.count({ where: { resolved: false } }),
   ])
 
+  const tabContent =
+    tab === "metadata" ? await MetadataSuggestions() : await ClassificationReports()
+
   const tabs = [
     { key: "classification", label: "Classification", count: classificationCount },
     { key: "metadata", label: "Metadata", count: metadataCount },
@@ -57,7 +60,7 @@ export default async function AdminReportsPage({
         ))}
       </div>
 
-      {tab === "metadata" ? <MetadataSuggestions /> : <ClassificationReports />}
+      {tabContent}
     </>
   )
 }

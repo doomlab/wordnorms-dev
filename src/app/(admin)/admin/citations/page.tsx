@@ -20,7 +20,7 @@ export default async function CitationsPage({
   })
 
   // Find which citedOpenAlexIds are already in the DB
-  const citedIds = [...new Set(allCitations.map((c) => c.citedOpenAlexId))]
+  const citedIds = Array.from(new Set(allCitations.map((c) => c.citedOpenAlexId)))
   const matched = await db.paper.findMany({
     where: { openAlexId: { in: citedIds } },
     select: { openAlexId: true },
@@ -56,7 +56,7 @@ export default async function CitationsPage({
     groupMap.get(c.citedOpenAlexId)!.citedBy.push(c.citingPaper)
   }
 
-  const groups = [...groupMap.values()]
+  const groups = Array.from(groupMap.values())
   const total = groups.length
   const totalPages = Math.max(1, Math.ceil(total / PER_PAGE))
   const paginated = groups.slice((page - 1) * PER_PAGE, page * PER_PAGE)

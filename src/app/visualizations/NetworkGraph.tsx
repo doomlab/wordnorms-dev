@@ -37,7 +37,7 @@ export function NetworkGraph({ graphData }: Props) {
     }
     const max = Math.max(1, ...map.values())
     const hubs = new Set(
-      [...map.entries()].sort((a, b) => b[1] - a[1]).slice(0, HUB_COUNT).map(([id]) => id)
+      Array.from(map.entries()).sort((a, b) => b[1] - a[1]).slice(0, HUB_COUNT).map(([id]) => id)
     )
     return { degreeMap: map, maxDegree: max, hubIds: hubs }
   }, [links])

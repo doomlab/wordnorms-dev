@@ -25,7 +25,7 @@ buchananlab@gmail.com
 `
 }
 
-export function createForgotPasswordMsg(to, resetUrl) {
+export function createForgotPasswordMsg(to: string, resetUrl: string) {
   const origin = process.env.APP_ORIGIN || process.env.BLITZ_DEV_SERVER_ORIGIN
   return {
     from: "WordNorms <noreply@wordnorms.com>",
@@ -55,7 +55,7 @@ ${emailFooter(origin)}
   }
 }
 
-export function createSignUpMsg(email) {
+export function createSignUpMsg(email: string) {
   const origin = process.env.APP_ORIGIN || process.env.BLITZ_DEV_SERVER_ORIGIN
   return {
     from: "WordNorms <noreply@wordnorms.com>",
@@ -85,7 +85,7 @@ ${emailFooter(origin)}
   }
 }
 
-export function createEditPasswordMsg(currentUser) {
+export function createEditPasswordMsg(currentUser: { email: string }) {
   const origin = process.env.APP_ORIGIN || process.env.BLITZ_DEV_SERVER_ORIGIN
   return {
     from: "WordNorms <noreply@wordnorms.com>",
@@ -115,7 +115,7 @@ ${emailFooter(origin)}
   }
 }
 
-export function createEditProfileMsg(user) {
+export function createEditProfileMsg(user: { email: string }) {
   const origin = process.env.APP_ORIGIN || process.env.BLITZ_DEV_SERVER_ORIGIN
   return {
     from: "WordNorms <noreply@wordnorms.com>",
