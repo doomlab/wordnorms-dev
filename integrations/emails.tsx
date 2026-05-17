@@ -145,6 +145,43 @@ ${emailFooter(origin)}
   }
 }
 
+export function createAdminRequestMsg({
+  name,
+  email,
+  institution,
+  reason,
+}: {
+  name?: string | null
+  email: string
+  institution?: string | null
+  reason?: string | null
+}) {
+  const origin = process.env.APP_ORIGIN || process.env.BLITZ_DEV_SERVER_ORIGIN
+  const rows = [
+    `<tr><td style="padding:4px 12px 4px 0;font-weight:bold;vertical-align:top">Email</td><td style="padding:4px 0">${email}</td></tr>`,
+    name ? `<tr><td style="padding:4px 12px 4px 0;font-weight:bold;vertical-align:top">Name</td><td style="padding:4px 0">${name}</td></tr>` : "",
+    institution ? `<tr><td style="padding:4px 12px 4px 0;font-weight:bold;vertical-align:top">Institution</td><td style="padding:4px 0">${institution}</td></tr>` : "",
+    reason ? `<tr><td style="padding:4px 12px 4px 0;font-weight:bold;vertical-align:top">Reason</td><td style="padding:4px 0">${reason}</td></tr>` : "",
+  ].filter(Boolean).join("")
+
+  return {
+    from: "WordNorms <noreply@wordnorms.com>",
+    to: "buchananlab@gmail.com",
+    replyTo: email,
+    subject: "Admin Access Request – WordNorms",
+    html: `
+<html><body>
+<center><img src="${origin}/images/bannerWN_white.jpg" alt="WordNorms" style="max-width:600px;width:100%"></center>
+<h3>Admin Access Request</h3>
+<p>A user has requested admin access.</p>
+<table style="border-collapse:collapse;margin-top:12px">${rows}</table>
+<p style="margin-top:16px"><a href="${origin}/admin/users" style="background:#3b82f6;color:#fff;padding:8px 16px;border-radius:4px;text-decoration:none">Review in Admin Panel</a></p>
+${emailFooter(origin)}
+</body></html>
+    `,
+  }
+}
+
 export function createDatasetSuggestionMsg({
   datasetUrl,
   doi,

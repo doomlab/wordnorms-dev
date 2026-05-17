@@ -1,3 +1,4 @@
 0 0 1 * * cd /path/to/wordnorms-dev && node scripts/sync-model-cards.mjs >> /var/log/wordnorms-sync.log 2>&1
 0 2 1 * * cd /path/to/wordnorms-dev && python3 pipeline/fetch.py >> /var/log/wordnorms-pipeline.log 2>&1
 0 3 1 * * cd /path/to/wordnorms-dev && python3 pipeline/predict.py >> /var/log/wordnorms-pipeline.log 2>&1
+0 8 * * 1 cd /path/to/wordnorms-dev && node --env-file=.env.local scripts/weekly-admin-summary.mjs >> /var/log/wordnorms-weekly.log 2>&1

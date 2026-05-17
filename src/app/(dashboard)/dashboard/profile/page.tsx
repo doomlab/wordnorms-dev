@@ -4,6 +4,7 @@ import db from "db"
 import { ProfileForm } from "./ProfileForm"
 import { ChangePasswordForm } from "./ChangePasswordForm"
 import { GroqKeyForm } from "./GroqKeyForm"
+import { RequestAdminForm } from "./RequestAdminForm"
 
 export const metadata = { title: "Profile" }
 
@@ -43,6 +44,15 @@ export default async function ProfilePage() {
             <div className="card-body">
               <h2 className="card-title text-lg mb-1">Groq API key</h2>
               <GroqKeyForm hasKey={!!user.groqApiKey} />
+            </div>
+          </div>
+        )}
+
+        {!isAdmin && (
+          <div className="card bg-base-200 shadow-sm">
+            <div className="card-body">
+              <h2 className="card-title text-lg mb-1">Request admin access</h2>
+              <RequestAdminForm />
             </div>
           </div>
         )}
