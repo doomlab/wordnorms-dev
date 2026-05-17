@@ -12,6 +12,7 @@ export const metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      {/* eslint-disable-next-line @next/next/no-head-element */}
       <head>
         <script
           dangerouslySetInnerHTML={{

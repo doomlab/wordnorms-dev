@@ -55,7 +55,7 @@ function HBar({ data, color = PRIMARY, yAxisWidth = 160 }: { data: { name: strin
         <Tooltip
           cursor={{ fill: "oklch(80% 0 0 / 0.1)" }}
           contentStyle={{ fontSize: 12, borderRadius: 6 }}
-          formatter={(v: number) => [v.toLocaleString(), "papers"]}
+          formatter={(v) => [typeof v === "number" ? v.toLocaleString() : v, "papers"]}
         />
         <Bar dataKey="count" radius={[0, 3, 3, 0]}>
           {data.map((_, i) => (
@@ -122,7 +122,7 @@ export function DbCharts({ data }: { data: DbData }) {
               <Tooltip
                 cursor={{ fill: "oklch(80% 0 0 / 0.1)" }}
                 contentStyle={{ fontSize: 12, borderRadius: 6 }}
-                formatter={(v: number) => [v.toLocaleString(), "papers"]}
+                formatter={(v) => [typeof v === "number" ? v.toLocaleString() : v, "papers"]}
               />
               <Bar dataKey="count" fill={PRIMARY} radius={[3, 3, 0, 0]} />
             </BarChart>
