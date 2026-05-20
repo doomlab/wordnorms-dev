@@ -88,16 +88,17 @@ export default async function AdminDuplicatesPage({ searchParams }: Props) {
           LIMIT 50
         `,
         db.$queryRaw<PairRow[]>`
+          WITH normed AS (
+            SELECT id, title, year, status, doi,
+                   lower(left(title, 80)) AS ntitle
+            FROM "Paper"
+            WHERE "canonicalPaperId" IS NULL AND length(title) > 20
+          )
           SELECT a.id AS aid, a.title AS atitle, a.year AS ayear, a.status AS astatus, a.doi AS adoi,
                  b.id AS bid, b.title AS btitle, b.year AS byear, b.status AS bstatus, b.doi AS bdoi
-          FROM "Paper" a
-          JOIN "Paper" b ON b.id > a.id
-          WHERE lower(left(regexp_replace(a.title, '[^a-zA-Z0-9 ]', '', 'g'), 80))
-              = lower(left(regexp_replace(b.title, '[^a-zA-Z0-9 ]', '', 'g'), 80))
-            AND length(a.title) > 20
-            AND a."canonicalPaperId" IS NULL
-            AND b."canonicalPaperId" IS NULL
-            AND (a.doi IS NULL OR b.doi IS NULL OR a.doi != b.doi)
+          FROM normed a
+          JOIN normed b ON b.id > a.id AND a.ntitle = b.ntitle
+          WHERE (a.doi IS NULL OR b.doi IS NULL OR a.doi != b.doi)
           LIMIT 50
         `,
       ])
