@@ -112,8 +112,9 @@ export default async function CitationsPage({
                 </tr>
               </thead>
               <tbody>
-                {groups.map((g) => {
+                {groups.map((g, idx) => {
                   const citedBy = citingByGroup.get(g.citedOpenAlexId) ?? []
+                  const nextIds = groups.slice(idx + 1, idx + 11).map((r) => r.citedOpenAlexId).join(",")
                   return (
                     <tr key={g.citedOpenAlexId} className={`hover:bg-base-200 ${g.reviewed ? "opacity-50" : ""}`}>
                       <td className="text-sm align-top py-3">
@@ -139,7 +140,10 @@ export default async function CitationsPage({
                         </div>
                       </td>
                       <td className="align-top py-3">
-                        <a href={`/admin/citations/${g.citedOpenAlexId}`} className="btn btn-outline btn-xs">
+                        <a
+                          href={`/admin/citations/${g.citedOpenAlexId}${nextIds ? `?next=${nextIds}` : ""}`}
+                          className="btn btn-outline btn-xs"
+                        >
                           Review
                         </a>
                       </td>

@@ -24,9 +24,11 @@ const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
 export function SuggestionWorkflow({
   suggestion,
   existingPaper,
+  nextHref,
 }: {
   suggestion: Suggestion
   existingPaper: ExistingPaper
+  nextHref: string
 }) {
   const router = useRouter()
 
@@ -127,8 +129,8 @@ export function SuggestionWorkflow({
           <a href={`/admin/extract`} className="btn btn-primary btn-sm">
             Go to extraction
           </a>
-          <a href="/admin/suggestions" className="btn btn-ghost btn-sm">
-            Back to suggestions
+          <a href={nextHref} className="btn btn-ghost btn-sm">
+            {nextHref === "/admin/suggestions" ? "Back to suggestions" : "Next →"}
           </a>
         </div>
       </div>
@@ -139,8 +141,8 @@ export function SuggestionWorkflow({
     return (
       <div className="text-center py-16">
         <p className="text-base-content/60 mb-4">Suggestion resolved without adding.</p>
-        <a href="/admin/suggestions" className="btn btn-ghost btn-sm">
-          Back to suggestions
+        <a href={nextHref} className="btn btn-ghost btn-sm">
+          {nextHref === "/admin/suggestions" ? "Back to suggestions" : "Next →"}
         </a>
       </div>
     )

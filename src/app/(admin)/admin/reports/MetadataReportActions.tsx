@@ -9,10 +9,12 @@ export function MetadataReportActions({
   reportId,
   paperId,
   hasExtraction,
+  nextHref,
 }: {
   reportId: number
   paperId: number
   hasExtraction: boolean
+  nextHref: string
 }) {
   const router = useRouter()
   const [resolve] = useMutation(resolveReport)
@@ -23,7 +25,7 @@ export function MetadataReportActions({
     setDismissing(true)
     try {
       await resolve({ reportId })
-      router.push("/admin/reports?tab=metadata")
+      router.push(nextHref as any)
       router.refresh()
     } catch {
       setError(true)

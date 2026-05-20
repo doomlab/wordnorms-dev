@@ -65,7 +65,9 @@ export default async function AdminArticleSuggestionsPage({
                 </tr>
               </thead>
               <tbody>
-                {suggestions.map((s) => (
+                {suggestions.map((s, idx) => {
+                  const nextIds = suggestions.slice(idx + 1, idx + 11).map((x) => x.id).join(",")
+                  return (
                   <tr key={s.id}>
                     <td className="max-w-sm">
                       {s.title && <p className="font-medium line-clamp-2">{s.title}</p>}
@@ -104,12 +106,16 @@ export default async function AdminArticleSuggestionsPage({
                       {new Date(s.createdAt).toLocaleDateString()}
                     </td>
                     <td>
-                      <a href={`/admin/suggestions/${s.id}`} className="btn btn-outline btn-xs">
+                      <a
+                        href={`/admin/suggestions/${s.id}${nextIds ? `?next=${nextIds}` : ""}`}
+                        className="btn btn-outline btn-xs"
+                      >
                         Review
                       </a>
                     </td>
                   </tr>
-                ))}
+                  )
+                })}
               </tbody>
             </table>
           </div>

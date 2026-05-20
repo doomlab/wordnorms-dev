@@ -63,7 +63,9 @@ export default async function AdminReportsPage({
             </tr>
           </thead>
           <tbody>
-            {suggestions.map((s) => (
+            {suggestions.map((s, idx) => {
+              const nextIds = suggestions.slice(idx + 1, idx + 11).map((x) => x.id).join(",")
+              return (
               <tr key={s.id}>
                 <td className="max-w-sm">
                   <p className="font-medium line-clamp-2">{cap(s.paper.title)}</p>
@@ -81,10 +83,16 @@ export default async function AdminReportsPage({
                   {new Date(s.createdAt).toLocaleDateString()}
                 </td>
                 <td>
-                  <a href={`/admin/reports/suggestions/${s.id}`} className="btn btn-outline btn-xs">Review</a>
+                  <a
+                    href={`/admin/reports/suggestions/${s.id}${nextIds ? `?next=${nextIds}` : ""}`}
+                    className="btn btn-outline btn-xs"
+                  >
+                    Review
+                  </a>
                 </td>
               </tr>
-            ))}
+              )
+            })}
           </tbody>
         </table>
       </div>
@@ -119,7 +127,9 @@ export default async function AdminReportsPage({
             </tr>
           </thead>
           <tbody>
-            {reports.map((r) => (
+            {reports.map((r, idx) => {
+              const nextIds = reports.slice(idx + 1, idx + 11).map((x) => x.id).join(",")
+              return (
               <tr key={r.id}>
                 <td className="max-w-sm">
                   <p className="font-medium line-clamp-2">{cap(r.paper.title)}</p>
@@ -139,10 +149,16 @@ export default async function AdminReportsPage({
                   {new Date(r.createdAt).toLocaleDateString()}
                 </td>
                 <td>
-                  <a href={`/admin/reports/${r.id}`} className="btn btn-outline btn-xs">Review</a>
+                  <a
+                    href={`/admin/reports/${r.id}${nextIds ? `?next=${nextIds}` : ""}`}
+                    className="btn btn-outline btn-xs"
+                  >
+                    Review
+                  </a>
                 </td>
               </tr>
-            ))}
+              )
+            })}
           </tbody>
         </table>
       </div>

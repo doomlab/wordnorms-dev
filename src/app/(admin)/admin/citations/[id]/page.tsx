@@ -6,10 +6,17 @@ export const metadata = { title: "Review Citation – Admin" }
 
 export default async function CitationDetailPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>
+  searchParams: Promise<{ next?: string }>
 }) {
   const { id } = await params
+  const { next: nextParam } = await searchParams
+  const [nextFirst, ...restNext] = nextParam?.split(",").filter(Boolean) ?? []
+  const nextHref = nextFirst
+    ? `/admin/citations/${nextFirst}${restNext.length ? `?next=${restNext.join(",")}` : ""}`
+    : "/admin/citations"
 
   const rows = await db.paperCitation.findMany({
     where: { citedOpenAlexId: id },
@@ -71,6 +78,7 @@ export default async function CitationDetailPage({
         reviewed={reviewed}
         citedBy={rows.map((r) => r.citingPaper)}
         existingPaper={existingPaper}
+        nextHref={nextHref}
       />
     </>
   )

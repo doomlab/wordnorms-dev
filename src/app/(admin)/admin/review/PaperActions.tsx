@@ -4,13 +4,13 @@ import { useMutation } from "@blitzjs/rpc"
 import { useRouter } from "next/navigation"
 import reviewPaper from "../../mutations/reviewPaper"
 
-export function PaperActions({ paperId }: { paperId: number }) {
+export function PaperActions({ paperId, nextHref }: { paperId: number; nextHref: string }) {
   const [review] = useMutation(reviewPaper)
   const router = useRouter()
 
   const act = async (status: string) => {
     await review({ paperId, status: status as any })
-    router.push("/admin/review")
+    router.push(nextHref as any)
     router.refresh()
   }
 
@@ -22,6 +22,9 @@ export function PaperActions({ paperId }: { paperId: number }) {
       <button className="btn btn-error btn-wide" onClick={() => act("EXCLUDED")}>
         Exclude
       </button>
+      <a href={nextHref} className="btn btn-ghost btn-outline">
+        Skip →
+      </a>
     </div>
   )
 }

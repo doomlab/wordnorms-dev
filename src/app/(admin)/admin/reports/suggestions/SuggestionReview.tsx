@@ -40,11 +40,13 @@ export function SuggestionReview({
   paperId,
   current,
   suggested,
+  nextHref,
 }: {
   suggestionId: number
   paperId: number
   current: Fields
   suggested: Fields
+  nextHref: string
 }) {
   const router = useRouter()
   const [update] = useMutation(updateExtraction)
@@ -92,7 +94,7 @@ export function SuggestionReview({
     try {
       await update(toPayload())
       await dismiss({ suggestionId })
-      router.push("/admin/reports?tab=metadata")
+      router.push(nextHref as any)
       router.refresh()
     } catch {
       setStatus("error")
@@ -103,7 +105,7 @@ export function SuggestionReview({
     setStatus("dismissing")
     try {
       await dismiss({ suggestionId })
-      router.push("/admin/reports?tab=metadata")
+      router.push(nextHref as any)
       router.refresh()
     } catch {
       setStatus("error")
@@ -164,6 +166,7 @@ export function SuggestionReview({
           <button className="btn btn-success btn-wide" onClick={handleApply} disabled={busy}>
             {status === "applying" ? <span className="loading loading-spinner loading-xs" /> : "Apply Changes"}
           </button>
+          <a href={nextHref} className="btn btn-ghost btn-outline">Skip →</a>
         </div>
       </div>
     </>

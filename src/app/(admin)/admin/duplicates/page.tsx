@@ -9,10 +9,10 @@ function cap(s: string) {
   return s.charAt(0).toUpperCase() + s.slice(1)
 }
 
-type Props = { searchParams: Promise<{ q?: string; a?: string; b?: string; tab?: string }> }
+type Props = { searchParams: Promise<{ q?: string; a?: string; b?: string; tab?: string; next?: string; from?: string }> }
 
 export default async function AdminDuplicatesPage({ searchParams }: Props) {
-  const { q, a, b, tab } = await searchParams
+  const { q, a, b, tab, next: nextParam, from: fromParam } = await searchParams
 
   // Compare mode: both IDs provided
   if (a && b) {
@@ -30,15 +30,28 @@ export default async function AdminDuplicatesPage({ searchParams }: Props) {
     if (!paperA || !paperB) {
       return (
         <>
-          <BackLink />
+          <BackLink fromSuggestions={fromParam === "suggestions"} />
           <p className="text-error">One or both paper IDs not found.</p>
         </>
       )
     }
 
+    // Build href for the next suggestion in the chain
+    const [nextFirst, ...restNext] = nextParam?.split(",").filter(Boolean) ?? []
+    const nextHref = nextFirst
+      ? (() => {
+          const [na, nb] = nextFirst.split("_")
+          const sp = new URLSearchParams({ a: na, b: nb, from: "suggestions" })
+          if (restNext.length) sp.set("next", restNext.join(","))
+          return `/admin/duplicates?${sp.toString()}`
+        })()
+      : fromParam === "suggestions"
+        ? "/admin/duplicates?tab=suggestions"
+        : undefined
+
     return (
       <>
-        <BackLink />
+        <BackLink fromSuggestions={fromParam === "suggestions"} />
         <h1 className="text-3xl font-bold mb-2">Merge Duplicates</h1>
         <p className="text-base-content/60 mb-8 text-sm">
           Choose which paper is canonical (the one to keep). The other will be marked as a
@@ -51,7 +64,7 @@ export default async function AdminDuplicatesPage({ searchParams }: Props) {
           <PaperCard paper={paperB} label="Paper B" />
         </div>
 
-        <MergeActions idA={paperA.id} idB={paperB.id} />
+        <MergeActions idA={paperA.id} idB={paperB.id} nextHref={nextHref} />
       </>
     )
   }
@@ -308,34 +321,35 @@ function SuggestionTable({
           </tr>
         </thead>
         <tbody>
-          {pairs.map((p) => (
-            <tr key={`${p.aid}-${p.bid}`}>
-              <td className="max-w-xs align-top">
-                <p className="line-clamp-2 font-medium">{cap(p.atitle)}</p>
-                <div className="flex gap-2 mt-0.5 text-xs text-base-content/40">
-                  <span className="font-mono">#{p.aid}</span>
-                  {p.ayear && <span>{p.ayear}</span>}
-                  {p.adoi && <span className="font-mono">{p.adoi}</span>}
-                </div>
-              </td>
-              <td className="max-w-xs align-top">
-                <p className="line-clamp-2 font-medium">{cap(p.btitle)}</p>
-                <div className="flex gap-2 mt-0.5 text-xs text-base-content/40">
-                  <span className="font-mono">#{p.bid}</span>
-                  {p.byear && <span>{p.byear}</span>}
-                  {p.bdoi && <span className="font-mono">{p.bdoi}</span>}
-                </div>
-              </td>
-              <td className="align-top">
-                <a
-                  href={`/admin/duplicates?a=${p.aid}&b=${p.bid}`}
-                  className="btn btn-outline btn-xs"
-                >
-                  Compare →
-                </a>
-              </td>
-            </tr>
-          ))}
+          {pairs.map((p, idx) => {
+            const upcoming = pairs.slice(idx + 1, idx + 11).map((r) => `${r.aid}_${r.bid}`).join(",")
+            const href = `/admin/duplicates?a=${p.aid}&b=${p.bid}&from=suggestions${upcoming ? `&next=${upcoming}` : ""}`
+            return (
+              <tr key={`${p.aid}-${p.bid}`}>
+                <td className="max-w-xs align-top">
+                  <p className="line-clamp-2 font-medium">{cap(p.atitle)}</p>
+                  <div className="flex gap-2 mt-0.5 text-xs text-base-content/40">
+                    <span className="font-mono">#{p.aid}</span>
+                    {p.ayear && <span>{p.ayear}</span>}
+                    {p.adoi && <span className="font-mono">{p.adoi}</span>}
+                  </div>
+                </td>
+                <td className="max-w-xs align-top">
+                  <p className="line-clamp-2 font-medium">{cap(p.btitle)}</p>
+                  <div className="flex gap-2 mt-0.5 text-xs text-base-content/40">
+                    <span className="font-mono">#{p.bid}</span>
+                    {p.byear && <span>{p.byear}</span>}
+                    {p.bdoi && <span className="font-mono">{p.bdoi}</span>}
+                  </div>
+                </td>
+                <td className="align-top">
+                  <a href={href} className="btn btn-outline btn-xs">
+                    Compare →
+                  </a>
+                </td>
+              </tr>
+            )
+          })}
         </tbody>
       </table>
     </div>
@@ -406,13 +420,13 @@ function PaperCard({
   )
 }
 
-function BackLink() {
+function BackLink({ fromSuggestions }: { fromSuggestions?: boolean }) {
   return (
     <a
-      href="/admin/duplicates"
+      href={fromSuggestions ? "/admin/duplicates?tab=suggestions" : "/admin/duplicates"}
       className="text-sm text-base-content/50 hover:text-base-content mb-6 inline-block"
     >
-      ← Back to search
+      {fromSuggestions ? "← Back to suggestions" : "← Back to search"}
     </a>
   )
 }

@@ -10,10 +10,12 @@ export function ReportActions({
   reportId,
   paperId,
   currentStatus,
+  nextHref,
 }: {
   reportId: number
   paperId: number
   currentStatus: "ACCEPTED" | "EXCLUDED"
+  nextHref: string
 }) {
   const router = useRouter()
   const [resolve] = useMutation(resolveReport)
@@ -27,7 +29,7 @@ export function ReportActions({
     setStatus("dismissing")
     try {
       await resolve({ reportId })
-      router.push("/admin/reports")
+      router.push(nextHref as any)
       router.refresh()
     } catch {
       setStatus("error")
@@ -38,7 +40,7 @@ export function ReportActions({
     setStatus("reclassifying")
     try {
       await reclassify({ reportId, paperId, newStatus })
-      router.push("/admin/reports")
+      router.push(nextHref as any)
       router.refresh()
     } catch {
       setStatus("error")
@@ -72,6 +74,7 @@ export function ReportActions({
       >
         {status === "reclassifying" ? <span className="loading loading-spinner loading-xs" /> : reclassifyLabel}
       </button>
+      <a href={nextHref} className="btn btn-ghost btn-outline">Skip →</a>
     </div>
   )
 }

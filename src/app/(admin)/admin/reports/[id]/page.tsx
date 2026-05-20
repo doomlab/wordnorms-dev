@@ -21,10 +21,17 @@ const STATUS_LABELS: Record<string, string> = {
 
 export default async function AdminReportDetailPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>
+  searchParams: Promise<{ next?: string }>
 }) {
   const { id } = await params
+  const { next: nextParam } = await searchParams
+  const [nextFirst, ...restNext] = nextParam?.split(",").filter(Boolean) ?? []
+  const nextHref = nextFirst
+    ? `/admin/reports/${nextFirst}${restNext.length ? `?next=${restNext.join(",")}` : ""}`
+    : "/admin/reports"
   const report = await db.paperReport.findUnique({
     where: { id: Number(id), resolved: false },
     include: {
@@ -136,6 +143,7 @@ export default async function AdminReportDetailPage({
               reportId={report.id}
               paperId={paper.id}
               hasExtraction={!!paper.extraction}
+              nextHref={nextHref}
             />
           </>
         ) : (
@@ -147,6 +155,7 @@ export default async function AdminReportDetailPage({
               reportId={report.id}
               paperId={paper.id}
               currentStatus={paper.status as "ACCEPTED" | "EXCLUDED"}
+              nextHref={nextHref}
             />
           </>
         )}

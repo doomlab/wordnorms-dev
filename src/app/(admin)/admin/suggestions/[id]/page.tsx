@@ -6,10 +6,17 @@ export const metadata = { title: "Review Suggestion – Admin" }
 
 export default async function AdminSuggestionDetailPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>
+  searchParams: Promise<{ next?: string }>
 }) {
   const { id } = await params
+  const { next: nextParam } = await searchParams
+  const [nextFirst, ...restNext] = nextParam?.split(",").filter(Boolean) ?? []
+  const nextHref = nextFirst
+    ? `/admin/suggestions/${nextFirst}${restNext.length ? `?next=${restNext.join(",")}` : ""}`
+    : "/admin/suggestions"
   const suggestion = await db.articleSuggestion.findUnique({
     where: { id: Number(id) },
     include: { user: { select: { name: true, email: true } } },
@@ -51,7 +58,7 @@ export default async function AdminSuggestionDetailPage({
         </div>
       )}
 
-      <SuggestionWorkflow suggestion={suggestion} existingPaper={existingPaper} />
+      <SuggestionWorkflow suggestion={suggestion} existingPaper={existingPaper} nextHref={nextHref} />
     </>
   )
 }

@@ -8,10 +8,17 @@ const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
 
 export default async function AdminSuggestionDetailPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>
+  searchParams: Promise<{ next?: string }>
 }) {
   const { id } = await params
+  const { next: nextParam } = await searchParams
+  const [nextFirst, ...restNext] = nextParam?.split(",").filter(Boolean) ?? []
+  const nextHref = nextFirst
+    ? `/admin/reports/suggestions/${nextFirst}${restNext.length ? `?next=${restNext.join(",")}` : ""}`
+    : "/admin/reports?tab=metadata"
   const suggestion = await db.extractionEditSuggestion.findUnique({
     where: { id: Number(id), resolved: false },
     include: {
@@ -75,6 +82,7 @@ export default async function AdminSuggestionDetailPage({
         paperId={paper.id}
         current={current}
         suggested={suggested}
+        nextHref={nextHref}
       />
     </>
   )

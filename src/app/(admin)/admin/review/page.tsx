@@ -54,7 +54,9 @@ export default async function AdminReviewPage({
                 </tr>
               </thead>
               <tbody>
-                {pending.map((p) => (
+                {pending.map((p, idx) => {
+                  const nextIds = pending.slice(idx + 1, idx + 11).map((r) => r.id).join(",")
+                  return (
                   <tr key={p.id}>
                     <td className="max-w-sm">
                       <p className="font-medium line-clamp-2">{p.title}</p>
@@ -84,12 +86,16 @@ export default async function AdminReviewPage({
                       )}
                     </td>
                     <td>
-                      <a href={`/admin/review/${p.id}`} className="btn btn-outline btn-xs">
+                      <a
+                        href={`/admin/review/${p.id}${nextIds ? `?next=${nextIds}` : ""}`}
+                        className="btn btn-outline btn-xs"
+                      >
                         View
                       </a>
                     </td>
                   </tr>
-                ))}
+                  )
+                })}
               </tbody>
             </table>
           </div>

@@ -10,15 +10,23 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 
 export default async function AdminReviewDetailPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>
+  searchParams: Promise<{ next?: string }>
 }) {
   const { id } = await params
+  const { next: nextParam } = await searchParams
   const paper = await db.paper.findUnique({
     where: { id: Number(id), status: "PENDING_REVIEW" },
   })
 
   if (!paper) notFound()
+
+  const [nextFirst, ...restNext] = nextParam?.split(",").filter(Boolean) ?? []
+  const nextHref = nextFirst
+    ? `/admin/review/${nextFirst}${restNext.length ? `?next=${restNext.join(",")}` : ""}`
+    : "/admin/review"
 
   return (
     <>
@@ -84,7 +92,7 @@ export default async function AdminReviewDetailPage({
 
       <div className="border-t border-base-200 pt-8 text-center">
         <p className="text-sm text-base-content/60 mb-3">Should this paper go into the model?</p>
-        <PaperActions paperId={paper.id} />
+        <PaperActions paperId={paper.id} nextHref={nextHref} />
       </div>
     </>
   )

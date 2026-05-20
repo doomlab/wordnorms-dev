@@ -6,7 +6,7 @@ import { useMutation } from "@blitzjs/rpc"
 import applyEditSuggestion from "../../../mutations/applyEditSuggestion"
 import dismissEditSuggestion from "../../../mutations/dismissEditSuggestion"
 
-export function SuggestionActions({ suggestionId }: { suggestionId: number }) {
+export function SuggestionActions({ suggestionId, nextHref }: { suggestionId: number; nextHref: string }) {
   const router = useRouter()
   const [apply] = useMutation(applyEditSuggestion)
   const [dismiss] = useMutation(dismissEditSuggestion)
@@ -16,7 +16,7 @@ export function SuggestionActions({ suggestionId }: { suggestionId: number }) {
     setStatus("applying")
     try {
       await apply({ suggestionId })
-      router.push("/admin/reports?tab=metadata")
+      router.push(nextHref as any)
       router.refresh()
     } catch {
       setStatus("error")
@@ -27,7 +27,7 @@ export function SuggestionActions({ suggestionId }: { suggestionId: number }) {
     setStatus("dismissing")
     try {
       await dismiss({ suggestionId })
-      router.push("/admin/reports?tab=metadata")
+      router.push(nextHref as any)
       router.refresh()
     } catch {
       setStatus("error")

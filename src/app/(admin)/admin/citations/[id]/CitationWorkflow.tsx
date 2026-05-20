@@ -17,6 +17,7 @@ type Props = {
   reviewed: boolean
   citedBy: { id: number; title: string; year: number | null }[]
   existingPaper: { id: number; title: string } | null
+  nextHref: string
 }
 
 export function CitationWorkflow({
@@ -28,6 +29,7 @@ export function CitationWorkflow({
   reviewed,
   citedBy,
   existingPaper,
+  nextHref,
 }: Props) {
   const router = useRouter()
   const [pull] = useMutation(pullCitedPaper)
@@ -61,7 +63,7 @@ export function CitationWorkflow({
     try {
       await review({ citedOpenAlexId, reviewed: true })
       setDismissStatus("done")
-      router.push("/admin/citations")
+      router.push(nextHref as any)
     } catch {
       setDismissStatus("idle")
     }
@@ -76,7 +78,9 @@ export function CitationWorkflow({
         </p>
         <div className="flex gap-3 justify-center">
           <a href="/admin/extract" className="btn btn-primary btn-sm">Go to extraction</a>
-          <a href="/admin/citations" className="btn btn-ghost btn-sm">Back to citations</a>
+          <a href={nextHref} className="btn btn-ghost btn-sm">
+            {nextHref === "/admin/citations" ? "Back to citations" : "Next →"}
+          </a>
         </div>
       </div>
     )
@@ -151,6 +155,9 @@ export function CitationWorkflow({
         >
           {dismissStatus === "loading" ? "Dismissing…" : "Dismiss"}
         </button>
+        <a href={nextHref} className="btn btn-ghost btn-outline">
+          Skip →
+        </a>
         {addStatus === "error" && (
           <span className="text-error text-sm self-center">Something went wrong.</span>
         )}

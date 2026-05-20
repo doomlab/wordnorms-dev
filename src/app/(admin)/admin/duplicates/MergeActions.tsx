@@ -5,18 +5,20 @@ import { useRouter } from "next/navigation"
 import { useState } from "react"
 import mergePapers from "../../mutations/mergePapers"
 
-export function MergeActions({ idA, idB }: { idA: number; idB: number }) {
+export function MergeActions({ idA, idB, nextHref }: { idA: number; idB: number; nextHref?: string }) {
   const [merge] = useMutation(mergePapers)
   const router = useRouter()
   const [pending, setPending] = useState<number | null>(null)
   const [error, setError] = useState<string | null>(null)
+
+  const afterHref = nextHref ?? "/admin/duplicates"
 
   const handleMerge = async (canonicalId: number, duplicateId: number) => {
     setError(null)
     setPending(canonicalId)
     try {
       await merge({ canonicalId, duplicateId })
-      router.push("/admin/duplicates")
+      router.push(afterHref as any)
       router.refresh()
     } catch (e: any) {
       setError(e.message ?? "Merge failed")
@@ -49,9 +51,15 @@ export function MergeActions({ idA, idB }: { idA: number; idB: number }) {
         >
           {pending === idB ? "Merging…" : `Keep B (#${idB})`}
         </button>
-        <a href="/admin/duplicates" className="btn btn-ghost btn-outline">
-          Cancel
-        </a>
+        {nextHref ? (
+          <a href={nextHref} className="btn btn-ghost btn-outline">
+            Skip →
+          </a>
+        ) : (
+          <a href="/admin/duplicates" className="btn btn-ghost btn-outline">
+            Cancel
+          </a>
+        )}
       </div>
       <p className="text-xs text-base-content/40 text-center mt-3">
         The other paper will be marked as a duplicate pointing to the one you keep.
