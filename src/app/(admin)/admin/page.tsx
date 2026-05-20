@@ -4,7 +4,7 @@ import { PipelineButton } from "./PipelineButton"
 export const metadata = { title: "Admin" }
 
 export default async function AdminPage() {
-  const [counts, extractionNew, extractionNoPdf, pendingMetadata, openReports, lastRun, activeRun, openSuggestions, unmatchedCitations] =
+  const [counts, extractionNew, extractionNoPdf, pendingMetadata, openReports, lastRun, activeRun, openSuggestions, unmatchedCitations, borderlineExcluded] =
     await Promise.all([
       db.paper.groupBy({ by: ["status"], _count: { _all: true } }),
       db.paper.count({ where: { status: "ACCEPTED", extraction: null, pdfUrl: { not: null } } }),
@@ -22,6 +22,7 @@ export default async function AdminPage() {
       db.pipelineRun.findFirst({ where: { status: "DONE" }, orderBy: { finishedAt: "desc" } }),
       db.pipelineRun.findFirst({ where: { status: "RUNNING" }, orderBy: { createdAt: "desc" } }),
       db.articleSuggestion.count({ where: { resolved: false } }),
+      db.paper.count({ where: { status: "EXCLUDED", modelScore: { gte: 0 }, reviewedBy: null } }),
       db.$queryRaw<[{ count: bigint }]>`
         SELECT COUNT(*)::int AS count FROM "PaperCitation" pc
         WHERE NOT EXISTS (
@@ -134,6 +135,25 @@ export default async function AdminPage() {
             <p className="text-base-content/60 text-sm">
               For each paper, decide: should it go into the model or not? Accept relevant papers and
               exclude the rest.
+            </p>
+          </div>
+        </a>
+
+        {/* Step 2b: Borderline excluded review */}
+        <a
+          href="/admin/excluded"
+          className="card card-bordered bg-base-200 hover:bg-base-300 transition-colors"
+        >
+          <div className="card-body gap-3">
+            <div className="flex items-center justify-between">
+              <h2 className="card-title">Borderline Excluded</h2>
+              {borderlineExcluded > 0 && (
+                <span className="badge badge-warning">{borderlineExcluded}</span>
+              )}
+            </div>
+            <p className="text-base-content/60 text-sm">
+              Auto-excluded papers the model wasn&apos;t confident about — sorted by score so the
+              closest calls are at the top. Accept any that belong.
             </p>
           </div>
         </a>

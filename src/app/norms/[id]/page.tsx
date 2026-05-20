@@ -239,9 +239,7 @@ export default async function NormDetailPage({
                     Extracted information
                   </h2>
                   {ext?.verifiedAt ? (
-                    <span className="badge badge-ghost badge-sm text-base-content/50">
-                      Reviewed by {ext.verifiedBy?.name ?? "admin"}
-                    </span>
+                    <span className="badge badge-success badge-sm">Verified</span>
                   ) : isAiExtracted ? (
                     <span className="badge badge-ghost badge-sm text-base-content/40">
                       AI extracted
@@ -327,6 +325,12 @@ export default async function NormDetailPage({
                     resolved={edit.resolved}
                   />
                 ))}
+                {ext.verifiedAt && (
+                  <HistoryEvent
+                    label={`Verified by ${ext.verifiedBy?.name ?? "admin"}`}
+                    date={ext.verifiedAt}
+                  />
+                )}
               </div>
             </div>
           )}

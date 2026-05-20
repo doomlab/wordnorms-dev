@@ -6,14 +6,17 @@ import { BrowseFilters } from "../components/BrowseFilters"
 import { ReportButton } from "../components/ReportButton"
 import { DECADE_LABELS } from "../data/datasets"
 import { getBlitzContext } from "../blitz-server"
+import { Pagination } from "../components/Pagination"
 import db from "db"
 
 export const metadata = { title: "Excluded Papers – WordNorms" }
 
+const PAGE_SIZE = 50
+
 export default async function ExcludedPage({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string; decade?: string | string[] }>
+  searchParams: Promise<{ q?: string; decade?: string | string[]; page?: string }>
 }) {
   const params = await searchParams
   const ctx = await getBlitzContext()
@@ -25,6 +28,8 @@ export default async function ExcludedPage({
       ? params.decade
       : [params.decade]
     : []
+  const page = Math.max(1, parseInt(params.page ?? "1", 10) || 1)
+  const skip = (page - 1) * PAGE_SIZE
 
   const andClauses: object[] = []
 
@@ -47,13 +52,15 @@ export default async function ExcludedPage({
     })
   }
 
-  const [papers, reportedIds] = await Promise.all([
+  const where = {
+    status: "EXCLUDED" as const,
+    canonicalPaperId: null,
+    ...(andClauses.length ? { AND: andClauses } : {}),
+  }
+
+  const [papers, total, reportedIds] = await Promise.all([
     db.paper.findMany({
-      where: {
-        status: "EXCLUDED",
-        canonicalPaperId: null,
-        ...(andClauses.length ? { AND: andClauses } : {}),
-      },
+      where,
       select: {
         id: true,
         title: true,
@@ -63,13 +70,26 @@ export default async function ExcludedPage({
         reviewNote: true,
       },
       orderBy: { year: "desc" },
+      skip,
+      take: PAGE_SIZE,
     }),
+    db.paper.count({ where }),
     userId
       ? db.paperReport
           .findMany({ where: { userId }, select: { paperId: true } })
           .then((rows) => new Set(rows.map((r) => r.paperId)))
       : Promise.resolve(new Set<number>()),
   ])
+
+  const totalPages = Math.ceil(total / PAGE_SIZE)
+
+  const buildHref = (p: number) => {
+    const sp = new URLSearchParams()
+    if (q) sp.set("q", q)
+    decades.forEach((d) => sp.append("decade", d))
+    sp.set("page", String(p))
+    return `/excluded?${sp.toString()}`
+  }
 
   return (
     <div className="min-h-screen bg-base-100 flex flex-col">
@@ -90,12 +110,12 @@ export default async function ExcludedPage({
           </div>
 
           <p className="text-sm text-base-content/60 mb-5">
-            <span className="font-semibold text-base-content">{papers.length}</span>{" "}
-            {papers.length === 1 ? "paper" : "papers"}
+            <span className="font-semibold text-base-content">{total}</span>{" "}
+            {total === 1 ? "paper" : "papers"}
             {(q || decades.length > 0) && " match your filters"}
           </p>
 
-          {papers.length === 0 ? (
+          {total === 0 ? (
             <div className="text-center py-16 text-base-content/40">
               <p className="text-lg">No results match your filters.</p>
               <a href="/excluded" className="link link-primary text-sm mt-2 inline-block">
@@ -103,53 +123,56 @@ export default async function ExcludedPage({
               </a>
             </div>
           ) : (
-            <ul className="flex flex-col divide-y divide-base-200">
-              {papers.map((paper) => (
-                <li
-                  key={paper.id}
-                  className="py-5 hover:bg-base-200/40 px-3 -mx-3 rounded-lg transition-colors"
-                >
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="min-w-0">
-                      <h2 className="font-semibold text-base leading-snug mb-1">{capFirst(paper.title)}</h2>
-                      {paper.abstract && (
-                        <p className="text-sm text-base-content/60 mb-3 line-clamp-2">
-                          {paper.abstract}
-                        </p>
-                      )}
-                      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-base-content/50">
-                        {paper.year && <span>{paper.year}</span>}
-                        {paper.journal && (
-                          <>
-                            <span>·</span>
-                            <span className="italic">{paper.journal}</span>
-                          </>
+            <>
+              <ul className="flex flex-col divide-y divide-base-200">
+                {papers.map((paper) => (
+                  <li
+                    key={paper.id}
+                    className="py-5 hover:bg-base-200/40 px-3 -mx-3 rounded-lg transition-colors"
+                  >
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="min-w-0">
+                        <h2 className="font-semibold text-base leading-snug mb-1">{capFirst(paper.title)}</h2>
+                        {paper.abstract && (
+                          <p className="text-sm text-base-content/60 mb-3 line-clamp-2">
+                            {paper.abstract}
+                          </p>
                         )}
-                        {paper.reviewNote && (
-                          <>
-                            <span>·</span>
-                            <span className="text-base-content/40">{paper.reviewNote}</span>
-                          </>
-                        )}
+                        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-base-content/50">
+                          {paper.year && <span>{paper.year}</span>}
+                          {paper.journal && (
+                            <>
+                              <span>·</span>
+                              <span className="italic">{paper.journal}</span>
+                            </>
+                          )}
+                          {paper.reviewNote && (
+                            <>
+                              <span>·</span>
+                              <span className="text-base-content/40">{paper.reviewNote}</span>
+                            </>
+                          )}
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2 shrink-0">
+                        <ReportButton
+                          paperId={paper.id}
+                          initialReported={reportedIds.has(paper.id)}
+                          isLoggedIn={!!userId}
+                        />
+                        <a
+                          href={`/excluded/${paper.id}?from=excluded`}
+                          className="btn btn-outline btn-sm"
+                        >
+                          View
+                        </a>
                       </div>
                     </div>
-                    <div className="flex items-center gap-2 shrink-0">
-                      <ReportButton
-                        paperId={paper.id}
-                        initialReported={reportedIds.has(paper.id)}
-                        isLoggedIn={!!userId}
-                      />
-                      <a
-                        href={`/excluded/${paper.id}?from=excluded`}
-                        className="btn btn-outline btn-sm"
-                      >
-                        View
-                      </a>
-                    </div>
-                  </div>
-                </li>
-              ))}
-            </ul>
+                  </li>
+                ))}
+              </ul>
+              <Pagination page={page} totalPages={totalPages} buildHref={buildHref} />
+            </>
           )}
         </div>
       </div>

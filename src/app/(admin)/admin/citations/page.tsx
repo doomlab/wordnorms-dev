@@ -1,4 +1,5 @@
 import db from "db"
+import { Pagination } from "src/app/components/Pagination"
 
 export const metadata = { title: "Citation Review – Admin" }
 
@@ -12,54 +13,65 @@ export default async function CitationsPage({
   const { page: pageParam, show } = await searchParams
   const page = Math.max(1, parseInt(pageParam ?? "1", 10))
   const showAll = show === "all"
+  const skip = (page - 1) * PER_PAGE
 
-  const allCitations = await db.paperCitation.findMany({
-    where: showAll ? undefined : { reviewed: false },
-    include: { citingPaper: { select: { id: true, title: true } } },
-    orderBy: { id: "asc" },
-  })
-
-  // Find which citedOpenAlexIds are already in the DB
-  const citedIds = Array.from(new Set(allCitations.map((c) => c.citedOpenAlexId)))
-  const matched = await db.paper.findMany({
-    where: { openAlexId: { in: citedIds } },
-    select: { openAlexId: true },
-  })
-  const matchedIds = new Set(matched.map((p) => p.openAlexId))
-
-  // Group unmatched rows by citedOpenAlexId
-  type CitingPaper = { id: number; title: string }
-  type Group = {
+  // Count and fetch unmatched citations grouped by citedOpenAlexId at DB level
+  type GroupRow = {
     citedOpenAlexId: string
     title: string | null
-    authors: string[]
     year: number | null
     journal: string | null
     reviewed: boolean
-    citedBy: CitingPaper[]
+    citedByCount: bigint
   }
 
-  const groupMap = new Map<string, Group>()
-  for (const c of allCitations) {
-    if (matchedIds.has(c.citedOpenAlexId)) continue
-    if (!groupMap.has(c.citedOpenAlexId)) {
-      groupMap.set(c.citedOpenAlexId, {
-        citedOpenAlexId: c.citedOpenAlexId,
-        title: c.title,
-        authors: c.authors,
-        year: c.year,
-        journal: c.journal,
-        reviewed: c.reviewed,
-        citedBy: [],
-      })
-    }
-    groupMap.get(c.citedOpenAlexId)!.citedBy.push(c.citingPaper)
-  }
+  const reviewedFilter = showAll ? "" : `AND c.reviewed = false`
 
-  const groups = Array.from(groupMap.values())
-  const total = groups.length
+  const [groups, countResult] = await Promise.all([
+    db.$queryRawUnsafe<GroupRow[]>(`
+      SELECT
+        c."citedOpenAlexId",
+        MIN(c.title) AS title,
+        MIN(c.year)  AS year,
+        MIN(c.journal) AS journal,
+        bool_and(c.reviewed) AS reviewed,
+        COUNT(DISTINCT c."citingPaperId") AS "citedByCount"
+      FROM "PaperCitation" c
+      WHERE NOT EXISTS (
+        SELECT 1 FROM "Paper" p WHERE p."openAlexId" = c."citedOpenAlexId"
+      )
+      ${reviewedFilter}
+      GROUP BY c."citedOpenAlexId"
+      ORDER BY MIN(c.id)
+      LIMIT ${PER_PAGE} OFFSET ${skip}
+    `),
+    db.$queryRawUnsafe<[{ count: bigint }]>(`
+      SELECT COUNT(DISTINCT c."citedOpenAlexId") AS count
+      FROM "PaperCitation" c
+      WHERE NOT EXISTS (
+        SELECT 1 FROM "Paper" p WHERE p."openAlexId" = c."citedOpenAlexId"
+      )
+      ${reviewedFilter}
+    `),
+  ])
+
+  const total = Number(countResult[0]?.count ?? 0)
   const totalPages = Math.max(1, Math.ceil(total / PER_PAGE))
-  const paginated = groups.slice((page - 1) * PER_PAGE, page * PER_PAGE)
+
+  // Fetch citing paper titles for this page's groups
+  const citedIds = groups.map((g) => g.citedOpenAlexId)
+  const citingRows = citedIds.length
+    ? await db.paperCitation.findMany({
+        where: { citedOpenAlexId: { in: citedIds } },
+        select: { citedOpenAlexId: true, citingPaper: { select: { id: true, title: true } } },
+      })
+    : []
+
+  const citingByGroup = new Map<string, { id: number; title: string }[]>()
+  for (const r of citingRows) {
+    if (!citingByGroup.has(r.citedOpenAlexId)) citingByGroup.set(r.citedOpenAlexId, [])
+    citingByGroup.get(r.citedOpenAlexId)!.push(r.citingPaper)
+  }
 
   return (
     <>
@@ -72,16 +84,10 @@ export default async function CitationsPage({
       </p>
 
       <div className="flex gap-2 mb-6">
-        <a
-          href={`?show=pending&page=1`}
-          className={`btn btn-sm ${!showAll ? "btn-neutral" : "btn-ghost"}`}
-        >
+        <a href="?show=pending&page=1" className={`btn btn-sm ${!showAll ? "btn-neutral" : "btn-ghost"}`}>
           Unreviewed
         </a>
-        <a
-          href={`?show=all&page=1`}
-          className={`btn btn-sm ${showAll ? "btn-neutral" : "btn-ghost"}`}
-        >
+        <a href="?show=all&page=1" className={`btn btn-sm ${showAll ? "btn-neutral" : "btn-ghost"}`}>
           All
         </a>
       </div>
@@ -106,74 +112,48 @@ export default async function CitationsPage({
                 </tr>
               </thead>
               <tbody>
-                {paginated.map((g) => (
-                  <tr
-                    key={g.citedOpenAlexId}
-                    className={`hover:bg-base-200 ${g.reviewed ? "opacity-50" : ""}`}
-                  >
-                    <td className="text-sm align-top py-3">
-                      {g.title ?? <span className="text-base-content/30 italic">no title</span>}
-                    </td>
-                    <td className="text-sm text-base-content/60 align-top py-3">{g.year ?? "—"}</td>
-                    <td className="text-sm text-base-content/60 italic align-top py-3">
-                      {g.journal ?? "—"}
-                    </td>
-                    <td className="align-top py-3">
-                      <div className="flex flex-col gap-0.5">
-                        {g.citedBy.slice(0, 3).map((p) => (
-                          <a
-                            key={p.id}
-                            href={`/norms/${p.id}`}
-                            className="text-xs link link-hover text-base-content/50 max-w-[200px] truncate block"
-                            title={p.title}
-                          >
-                            {p.title}
-                          </a>
-                        ))}
-                        {g.citedBy.length > 3 && (
-                          <span className="text-xs text-base-content/30">
-                            +{g.citedBy.length - 3} more
-                          </span>
-                        )}
-                      </div>
-                    </td>
-                    <td className="align-top py-3">
-                      <a
-                        href={`/admin/citations/${g.citedOpenAlexId}`}
-                        className="btn btn-outline btn-xs"
-                      >
-                        Review
-                      </a>
-                    </td>
-                  </tr>
-                ))}
+                {groups.map((g) => {
+                  const citedBy = citingByGroup.get(g.citedOpenAlexId) ?? []
+                  return (
+                    <tr key={g.citedOpenAlexId} className={`hover:bg-base-200 ${g.reviewed ? "opacity-50" : ""}`}>
+                      <td className="text-sm align-top py-3">
+                        {g.title ?? <span className="text-base-content/30 italic">no title</span>}
+                      </td>
+                      <td className="text-sm text-base-content/60 align-top py-3">{g.year ?? "—"}</td>
+                      <td className="text-sm text-base-content/60 italic align-top py-3">{g.journal ?? "—"}</td>
+                      <td className="align-top py-3">
+                        <div className="flex flex-col gap-0.5">
+                          {citedBy.slice(0, 3).map((p) => (
+                            <a
+                              key={p.id}
+                              href={`/norms/${p.id}`}
+                              className="text-xs link link-hover text-base-content/50 max-w-[200px] truncate block"
+                              title={p.title}
+                            >
+                              {p.title}
+                            </a>
+                          ))}
+                          {citedBy.length > 3 && (
+                            <span className="text-xs text-base-content/30">+{citedBy.length - 3} more</span>
+                          )}
+                        </div>
+                      </td>
+                      <td className="align-top py-3">
+                        <a href={`/admin/citations/${g.citedOpenAlexId}`} className="btn btn-outline btn-xs">
+                          Review
+                        </a>
+                      </td>
+                    </tr>
+                  )
+                })}
               </tbody>
             </table>
           </div>
-
-          {totalPages > 1 && (
-            <div className="flex justify-center gap-2 mt-8">
-              {page > 1 && (
-                <a
-                  href={`?show=${show ?? "pending"}&page=${page - 1}`}
-                  className="btn btn-sm btn-ghost"
-                >
-                  ← Prev
-                </a>
-              )}
-              <span className="btn btn-sm btn-ghost no-animation cursor-default">
-                {page} / {totalPages}
-              </span>
-              {page < totalPages && (
-                <a
-                  href={`?show=${show ?? "pending"}&page=${page + 1}`}
-                  className="btn btn-sm btn-ghost"
-                >
-                  Next →
-                </a>
-              )}
-            </div>
-          )}
+          <Pagination
+            page={page}
+            totalPages={totalPages}
+            buildHref={(p) => `?show=${show ?? "pending"}&page=${p}`}
+          />
         </>
       )}
     </>

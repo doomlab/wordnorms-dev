@@ -1,25 +1,44 @@
 import db from "db"
+import { Pagination } from "src/app/components/Pagination"
 
 export const metadata = { title: "Metadata Review – Admin" }
 
 const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
+const PAGE_SIZE = 50
 
-export default async function AdminMetadataPage() {
-  const papers = await db.paper.findMany({
-    where: {
-      status: "ACCEPTED",
-      extraction: { is: { verifiedAt: null } },
-    },
-    select: {
-      id: true,
-      title: true,
-      authors: true,
-      year: true,
-      doi: true,
-      extraction: { select: { normsCollected: true, confidence: true } },
-    },
-    orderBy: { updatedAt: "desc" },
-  })
+export default async function AdminMetadataPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>
+}) {
+  const { page: pageParam } = await searchParams
+  const page = Math.max(1, parseInt(pageParam ?? "1", 10) || 1)
+  const skip = (page - 1) * PAGE_SIZE
+
+  const where = {
+    status: "ACCEPTED" as const,
+    extraction: { is: { verifiedAt: null } },
+  }
+
+  const [papers, total] = await Promise.all([
+    db.paper.findMany({
+      where,
+      select: {
+        id: true,
+        title: true,
+        authors: true,
+        year: true,
+        doi: true,
+        extraction: { select: { normsCollected: true, confidence: true } },
+      },
+      orderBy: { updatedAt: "desc" },
+      skip,
+      take: PAGE_SIZE,
+    }),
+    db.paper.count({ where }),
+  ])
+
+  const totalPages = Math.ceil(total / PAGE_SIZE)
 
   return (
     <>
@@ -29,65 +48,68 @@ export default async function AdminMetadataPage() {
       </p>
 
       <p className="text-sm text-base-content/60 mb-4">
-        {papers.length} paper{papers.length !== 1 ? "s" : ""} pending review
+        {total} paper{total !== 1 ? "s" : ""} pending review
       </p>
 
-      {papers.length === 0 ? (
+      {total === 0 ? (
         <div className="text-base-content/40 py-10 text-center">All extractions verified.</div>
       ) : (
-        <div className="overflow-x-auto">
-          <table className="table table-zebra">
-            <thead>
-              <tr>
-                <th>Title</th>
-                <th>Authors</th>
-                <th>Year</th>
-                <th>Norms</th>
-                <th>Confidence</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {papers.map((p) => (
-                <tr key={p.id}>
-                  <td className="max-w-sm">
-                    <p className="font-medium line-clamp-2">{cap(p.title)}</p>
-                    {p.doi && (
-                      <a
-                        href={`https://doi.org/${p.doi}`}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="text-xs text-primary/70 hover:text-primary"
-                      >
-                        {p.doi}
-                      </a>
-                    )}
-                  </td>
-                  <td className="text-sm text-base-content/70 max-w-xs">
-                    {p.authors.slice(0, 3).join(", ")}
-                    {p.authors.length > 3 && " et al."}
-                  </td>
-                  <td>{p.year ?? "—"}</td>
-                  <td className="max-w-xs truncate text-sm">
-                    {p.extraction?.normsCollected?.join(", ") || "—"}
-                  </td>
-                  <td>
-                    {p.extraction?.confidence != null ? (
-                      <span className={p.extraction.confidence < 0.6 ? "text-warning" : "text-success"}>
-                        {(p.extraction.confidence * 100).toFixed(0)}%
-                      </span>
-                    ) : "—"}
-                  </td>
-                  <td>
-                    <a href={`/admin/metadata/${p.id}`} className="btn btn-outline btn-xs">
-                      Review
-                    </a>
-                  </td>
+        <>
+          <div className="overflow-x-auto">
+            <table className="table table-zebra">
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Authors</th>
+                  <th>Year</th>
+                  <th>Norms</th>
+                  <th>Confidence</th>
+                  <th></th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                {papers.map((p) => (
+                  <tr key={p.id}>
+                    <td className="max-w-sm">
+                      <p className="font-medium line-clamp-2">{cap(p.title)}</p>
+                      {p.doi && (
+                        <a
+                          href={`https://doi.org/${p.doi}`}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="text-xs text-primary/70 hover:text-primary"
+                        >
+                          {p.doi}
+                        </a>
+                      )}
+                    </td>
+                    <td className="text-sm text-base-content/70 max-w-xs">
+                      {p.authors.slice(0, 3).join(", ")}
+                      {p.authors.length > 3 && " et al."}
+                    </td>
+                    <td>{p.year ?? "—"}</td>
+                    <td className="max-w-xs truncate text-sm">
+                      {p.extraction?.normsCollected?.join(", ") || "—"}
+                    </td>
+                    <td>
+                      {p.extraction?.confidence != null ? (
+                        <span className={p.extraction.confidence < 0.6 ? "text-warning" : "text-success"}>
+                          {(p.extraction.confidence * 100).toFixed(0)}%
+                        </span>
+                      ) : "—"}
+                    </td>
+                    <td>
+                      <a href={`/admin/metadata/${p.id}`} className="btn btn-outline btn-xs">
+                        Review
+                      </a>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <Pagination page={page} totalPages={totalPages} buildHref={(p) => `?page=${p}`} />
+        </>
       )}
     </>
   )

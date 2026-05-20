@@ -1,12 +1,30 @@
 import db from "db"
+import { Pagination } from "src/app/components/Pagination"
 
 export const metadata = { title: "Review – Admin" }
 
-export default async function AdminReviewPage() {
-  const pending = await db.paper.findMany({
-    where: { status: "PENDING_REVIEW" },
-    orderBy: [{ modelScore: "desc" }, { createdAt: "asc" }],
-  })
+const PAGE_SIZE = 50
+
+export default async function AdminReviewPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>
+}) {
+  const { page: pageParam } = await searchParams
+  const page = Math.max(1, parseInt(pageParam ?? "1", 10) || 1)
+  const skip = (page - 1) * PAGE_SIZE
+
+  const [pending, total] = await Promise.all([
+    db.paper.findMany({
+      where: { status: "PENDING_REVIEW" },
+      orderBy: [{ modelScore: "desc" }, { createdAt: "asc" }],
+      skip,
+      take: PAGE_SIZE,
+    }),
+    db.paper.count({ where: { status: "PENDING_REVIEW" } }),
+  ])
+
+  const totalPages = Math.ceil(total / PAGE_SIZE)
 
   return (
     <>
@@ -17,63 +35,66 @@ export default async function AdminReviewPage() {
       </p>
 
       <p className="text-sm text-base-content/60 mb-4">
-        {pending.length} paper{pending.length !== 1 ? "s" : ""} pending
+        {total} paper{total !== 1 ? "s" : ""} pending
       </p>
 
-      {pending.length === 0 ? (
+      {total === 0 ? (
         <div className="text-base-content/40 py-10 text-center">Queue is empty.</div>
       ) : (
-        <div className="overflow-x-auto">
-          <table className="table table-zebra">
-            <thead>
-              <tr>
-                <th>Title</th>
-                <th>Authors</th>
-                <th>Year</th>
-                <th>Score</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {pending.map((p) => (
-                <tr key={p.id}>
-                  <td className="max-w-sm">
-                    <p className="font-medium line-clamp-2">{p.title}</p>
-                    {p.doi && (
-                      <a
-                        href={`https://doi.org/${p.doi}`}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="link link-primary text-xs"
-                      >
-                        {p.doi}
-                      </a>
-                    )}
-                  </td>
-                  <td className="text-sm text-base-content/70 max-w-xs">
-                    {p.authors.slice(0, 3).join(", ")}
-                    {p.authors.length > 3 && " et al."}
-                  </td>
-                  <td>{p.year ?? "—"}</td>
-                  <td>
-                    {p.modelScore != null ? (
-                      <span className="badge badge-outline badge-sm">
-                        {p.modelScore.toFixed(2)}
-                      </span>
-                    ) : (
-                      "—"
-                    )}
-                  </td>
-                  <td>
-                    <a href={`/admin/review/${p.id}`} className="btn btn-outline btn-xs">
-                      View
-                    </a>
-                  </td>
+        <>
+          <div className="overflow-x-auto">
+            <table className="table table-zebra">
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Authors</th>
+                  <th>Year</th>
+                  <th>Score</th>
+                  <th></th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                {pending.map((p) => (
+                  <tr key={p.id}>
+                    <td className="max-w-sm">
+                      <p className="font-medium line-clamp-2">{p.title}</p>
+                      {p.doi && (
+                        <a
+                          href={`https://doi.org/${p.doi}`}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="link link-primary text-xs"
+                        >
+                          {p.doi}
+                        </a>
+                      )}
+                    </td>
+                    <td className="text-sm text-base-content/70 max-w-xs">
+                      {p.authors.slice(0, 3).join(", ")}
+                      {p.authors.length > 3 && " et al."}
+                    </td>
+                    <td>{p.year ?? "—"}</td>
+                    <td>
+                      {p.modelScore != null ? (
+                        <span className="badge badge-outline badge-sm">
+                          {p.modelScore.toFixed(2)}
+                        </span>
+                      ) : (
+                        "—"
+                      )}
+                    </td>
+                    <td>
+                      <a href={`/admin/review/${p.id}`} className="btn btn-outline btn-xs">
+                        View
+                      </a>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <Pagination page={page} totalPages={totalPages} buildHref={(p) => `?page=${p}`} />
+        </>
       )}
     </>
   )

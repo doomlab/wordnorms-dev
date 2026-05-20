@@ -8,7 +8,10 @@ import { ReportButton } from "./components/ReportButton"
 import { DECADE_LABELS } from "./data/datasets"
 import { getBlitzContext } from "./blitz-server"
 import { SuggestArticleButton } from "./components/SuggestArticleButton"
+import { Pagination } from "./components/Pagination"
 import db from "db"
+
+const PAGE_SIZE = 50
 
 const capFirst = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
 
@@ -34,7 +37,7 @@ function loadDatasetLookup(): { byDoi: Map<string, string>; byTitle: Map<string,
 export default async function Home({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string; lang?: string | string[]; decade?: string | string[]; stimuli?: string | string[] }>
+  searchParams: Promise<{ q?: string; lang?: string | string[]; decade?: string | string[]; stimuli?: string | string[]; page?: string }>
 }) {
   const params = await searchParams
 
@@ -50,6 +53,8 @@ export default async function Home({
       ? params.stimuli
       : [params.stimuli]
     : []
+  const page = Math.max(1, parseInt(params.page ?? "1", 10) || 1)
+  const skip = (page - 1) * PAGE_SIZE
 
   const ctx = await getBlitzContext()
   const userId = ctx.session.userId as number | undefined
@@ -86,23 +91,28 @@ export default async function Home({
     })
   }
 
-  const [papers, allPapers, favoritedIds, reportedIds] = await Promise.all([
+  const paperWhere = {
+    status: "ACCEPTED" as const,
+    canonicalPaperId: null,
+    extraction:
+      languages.length || stimuliTypes.length
+        ? {
+            ...(languages.length ? { language: { hasSome: languages } } : {}),
+            ...(stimuliTypes.length ? { stimuliType: { hasSome: stimuliTypes } } : {}),
+          }
+        : { isNot: null },
+    ...(andClauses.length ? { AND: andClauses } : {}),
+  }
+
+  const [papers, totalPapers, allPapers, favoritedIds, reportedIds] = await Promise.all([
     db.paper.findMany({
-      where: {
-        status: "ACCEPTED",
-        canonicalPaperId: null,
-        extraction:
-          languages.length || stimuliTypes.length
-            ? {
-                ...(languages.length ? { language: { hasSome: languages } } : {}),
-                ...(stimuliTypes.length ? { stimuliType: { hasSome: stimuliTypes } } : {}),
-              }
-            : { isNot: null },
-        ...(andClauses.length ? { AND: andClauses } : {}),
-      },
-      include: { extraction: true },
+      where: paperWhere,
+      include: { extraction: { select: { language: true, stimuliType: true, stimuliCount: true, normsCollected: true, verifiedAt: true } } },
       orderBy: { year: { sort: "desc", nulls: "last" } },
+      skip,
+      take: PAGE_SIZE,
     }),
+    db.paper.count({ where: paperWhere }),
     db.paper.findMany({
       where: {
         status: "ACCEPTED",
@@ -145,8 +155,8 @@ export default async function Home({
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between mb-5">
             <p className="text-sm text-base-content/60">
-              <span className="font-semibold text-base-content">{papers.length}</span> norm{" "}
-              {papers.length === 1 ? "set" : "sets"}
+              <span className="font-semibold text-base-content">{totalPapers}</span> norm{" "}
+              {totalPapers === 1 ? "set" : "sets"}
             </p>
             <SuggestArticleButton isLoggedIn={!!userId} />
           </div>
@@ -184,6 +194,9 @@ export default async function Home({
                             >
                               dataset
                             </a>
+                          )}
+                          {ext?.verifiedAt && (
+                            <span className="badge badge-success badge-sm shrink-0">verified</span>
                           )}
                         </div>
                         {paper.abstract && (
@@ -244,6 +257,19 @@ export default async function Home({
                 )
               })}
             </ul>
+            {totalPapers > PAGE_SIZE && (() => {
+              const totalPages = Math.ceil(totalPapers / PAGE_SIZE)
+              const buildHref = (p: number) => {
+                const sp = new URLSearchParams()
+                if (q) sp.set("q", q)
+                languages.forEach((l) => sp.append("lang", l))
+                decades.forEach((d) => sp.append("decade", d))
+                stimuliTypes.forEach((s) => sp.append("stimuli", s))
+                sp.set("page", String(p))
+                return `/?${sp.toString()}`
+              }
+              return <Pagination page={page} totalPages={totalPages} buildHref={buildHref} />
+            })()}
           )}
         </div>
       </div>
