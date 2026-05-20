@@ -43,7 +43,7 @@ export async function POST(req: NextRequest) {
   if (tmpPath) args.push("--pdf-path", tmpPath)
 
   return new Promise<NextResponse>((resolve) => {
-    const proc = spawn("/Users/erinbuchanan/.pyenv/versions/3.9.18/bin/python3", [scriptPath, ...args], {
+    const proc = spawn(process.env.PIPELINE_PYTHON ?? "python3", [scriptPath, ...args], {
       env: { ...process.env, GROQ_API_KEY: user.groqApiKey ?? undefined },
     })
 
