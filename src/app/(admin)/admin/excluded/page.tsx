@@ -6,7 +6,7 @@ export default async function AdminExcludedPage() {
   const papers = await db.paper.findMany({
     where: { status: "EXCLUDED" },
     include: { reviewedBy: { select: { email: true } } },
-    orderBy: { updatedAt: "desc" },
+    orderBy: { modelScore: { sort: "desc", nulls: "last" } },
   })
 
   return (
@@ -22,6 +22,7 @@ export default async function AdminExcludedPage() {
             <tr>
               <th>Title</th>
               <th>Year</th>
+              <th>Score</th>
               <th>Reviewed by</th>
               <th>Note</th>
             </tr>
@@ -53,6 +54,13 @@ export default async function AdminExcludedPage() {
                   )}
                 </td>
                 <td>{p.year ?? "—"}</td>
+                <td className="text-sm tabular-nums">
+                  {p.modelScore != null ? (
+                    <span className={p.modelScore >= 0 ? "text-warning" : "text-base-content/40"}>
+                      {p.modelScore.toFixed(2)}
+                    </span>
+                  ) : "—"}
+                </td>
                 <td className="text-sm text-base-content/60">
                   {p.reviewedBy?.email ?? "—"}
                 </td>
