@@ -21,7 +21,7 @@ export function RequestAdminForm() {
   }
 
   if (status === "sent") {
-    return <p className="text-sm text-success">Request sent — you'll hear back by email.</p>
+    return <p className="text-sm text-success">Request sent &mdash; you&apos;ll hear back by email.</p>
   }
 
   return (
