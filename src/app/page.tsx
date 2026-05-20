@@ -169,6 +169,7 @@ export default async function Home({
               </a>
             </div>
           ) : (
+            <>
             <ul className="flex flex-col divide-y divide-base-200">
               {papers.map((paper) => {
                 const ext = paper.extraction
@@ -270,6 +271,7 @@ export default async function Home({
               }
               return <Pagination page={page} totalPages={totalPages} buildHref={buildHref} />
             })()}
+            </>
           )}
         </div>
       </div>
