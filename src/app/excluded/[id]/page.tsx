@@ -62,7 +62,6 @@ export default async function ExcludedDetailPage({
           <div>
             <h1 className="text-2xl font-bold leading-snug mb-2">{capFirst(paper.title)}</h1>
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="badge badge-error badge-sm">Excluded</span>
               {paper.reviewedBy?.name ? (
                 <span className="badge badge-ghost badge-sm text-base-content/50">
                   Reviewed by {paper.reviewedBy.name}
