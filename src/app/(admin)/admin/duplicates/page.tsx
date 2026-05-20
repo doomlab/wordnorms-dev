@@ -58,6 +58,7 @@ export default async function AdminDuplicatesPage({ searchParams }: Props) {
 
   const mergedCount = await db.paper.count({ where: { canonicalPaperId: { not: null } } })
   const isMergedTab = tab === "merged"
+  const isSuggestionsTab = tab === "suggestions"
 
   // Merged tab: show all duplicate→canonical relationships
   const mergedPapers = isMergedTab
@@ -68,9 +69,43 @@ export default async function AdminDuplicatesPage({ searchParams }: Props) {
       })
     : null
 
+  // Suggestions: same DOI and title-prefix matches
+  type PairRow = {
+    aid: number; atitle: string; ayear: number | null; astatus: string; adoi: string | null
+    bid: number; btitle: string; byear: number | null; bstatus: string; bdoi: string | null
+  }
+
+  const [doiPairs, titlePairs] = isSuggestionsTab
+    ? await Promise.all([
+        db.$queryRaw<PairRow[]>`
+          SELECT a.id AS aid, a.title AS atitle, a.year AS ayear, a.status AS astatus, a.doi AS adoi,
+                 b.id AS bid, b.title AS btitle, b.year AS byear, b.status AS bstatus, b.doi AS bdoi
+          FROM "Paper" a
+          JOIN "Paper" b ON b.id > a.id AND a.doi = b.doi
+          WHERE a.doi IS NOT NULL
+            AND a."canonicalPaperId" IS NULL
+            AND b."canonicalPaperId" IS NULL
+          LIMIT 50
+        `,
+        db.$queryRaw<PairRow[]>`
+          SELECT a.id AS aid, a.title AS atitle, a.year AS ayear, a.status AS astatus, a.doi AS adoi,
+                 b.id AS bid, b.title AS btitle, b.year AS byear, b.status AS bstatus, b.doi AS bdoi
+          FROM "Paper" a
+          JOIN "Paper" b ON b.id > a.id
+          WHERE lower(left(regexp_replace(a.title, '[^a-zA-Z0-9 ]', '', 'g'), 80))
+              = lower(left(regexp_replace(b.title, '[^a-zA-Z0-9 ]', '', 'g'), 80))
+            AND length(a.title) > 20
+            AND a."canonicalPaperId" IS NULL
+            AND b."canonicalPaperId" IS NULL
+            AND (a.doi IS NULL OR b.doi IS NULL OR a.doi != b.doi)
+          LIMIT 50
+        `,
+      ])
+    : [[], []]
+
   // Search mode
   const results =
-    !isMergedTab && q && q.trim().length > 1
+    !isMergedTab && !isSuggestionsTab && q && q.trim().length > 1
       ? await db.paper.findMany({
           where: {
             OR: [
@@ -92,9 +127,16 @@ export default async function AdminDuplicatesPage({ searchParams }: Props) {
         <a
           href="/admin/duplicates"
           role="tab"
-          className={`tab ${!isMergedTab ? "tab-active" : ""}`}
+          className={`tab ${!isMergedTab && !isSuggestionsTab ? "tab-active" : ""}`}
         >
           Search &amp; Merge
+        </a>
+        <a
+          href="/admin/duplicates?tab=suggestions"
+          role="tab"
+          className={`tab ${isSuggestionsTab ? "tab-active" : ""}`}
+        >
+          Suggestions
         </a>
         <a
           href="/admin/duplicates?tab=merged"
@@ -108,7 +150,37 @@ export default async function AdminDuplicatesPage({ searchParams }: Props) {
         </a>
       </div>
 
-      {isMergedTab ? (
+      {isSuggestionsTab ? (
+        <>
+          <p className="text-base-content/60 mb-6 text-sm">
+            Candidate pairs detected by DOI match or title similarity. Click Compare to review.
+          </p>
+
+          {doiPairs.length > 0 && (
+            <>
+              <h2 className="font-semibold text-sm mb-3 text-base-content/70 uppercase tracking-wide">
+                Same DOI ({doiPairs.length})
+              </h2>
+              <SuggestionTable pairs={doiPairs} />
+            </>
+          )}
+
+          {titlePairs.length > 0 && (
+            <>
+              <h2 className={`font-semibold text-sm mb-3 text-base-content/70 uppercase tracking-wide ${doiPairs.length > 0 ? "mt-10" : ""}`}>
+                Similar title ({titlePairs.length})
+              </h2>
+              <SuggestionTable pairs={titlePairs} />
+            </>
+          )}
+
+          {doiPairs.length === 0 && titlePairs.length === 0 && (
+            <p className="text-base-content/40 text-sm text-center py-10">
+              No duplicate candidates found.
+            </p>
+          )}
+        </>
+      ) : isMergedTab ? (
         <>
           <p className="text-base-content/60 mb-6 text-sm">
             Papers marked as duplicates. Click Undo to restore a paper as independent.
@@ -213,6 +285,59 @@ export default async function AdminDuplicatesPage({ searchParams }: Props) {
         </>
       )}
     </>
+  )
+}
+
+function SuggestionTable({
+  pairs,
+}: {
+  pairs: {
+    aid: number; atitle: string; ayear: number | null; astatus: string; adoi: string | null
+    bid: number; btitle: string; byear: number | null; bstatus: string; bdoi: string | null
+  }[]
+}) {
+  return (
+    <div className="overflow-x-auto mb-6">
+      <table className="table table-zebra text-sm">
+        <thead>
+          <tr>
+            <th>Paper A</th>
+            <th>Paper B</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {pairs.map((p) => (
+            <tr key={`${p.aid}-${p.bid}`}>
+              <td className="max-w-xs align-top">
+                <p className="line-clamp-2 font-medium">{cap(p.atitle)}</p>
+                <div className="flex gap-2 mt-0.5 text-xs text-base-content/40">
+                  <span className="font-mono">#{p.aid}</span>
+                  {p.ayear && <span>{p.ayear}</span>}
+                  {p.adoi && <span className="font-mono">{p.adoi}</span>}
+                </div>
+              </td>
+              <td className="max-w-xs align-top">
+                <p className="line-clamp-2 font-medium">{cap(p.btitle)}</p>
+                <div className="flex gap-2 mt-0.5 text-xs text-base-content/40">
+                  <span className="font-mono">#{p.bid}</span>
+                  {p.byear && <span>{p.byear}</span>}
+                  {p.bdoi && <span className="font-mono">{p.bdoi}</span>}
+                </div>
+              </td>
+              <td className="align-top">
+                <a
+                  href={`/admin/duplicates?a=${p.aid}&b=${p.bid}`}
+                  className="btn btn-outline btn-xs"
+                >
+                  Compare →
+                </a>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   )
 }
 
