@@ -5,6 +5,7 @@ const nextConfig = {
   experimental: {
     typedRoutes: true,
   },
+  serverExternalPackages: ["sodium-native", "secure-password"],
 }
 
 module.exports = withBlitz(nextConfig)
