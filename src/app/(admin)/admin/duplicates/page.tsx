@@ -3,6 +3,7 @@ import { MergeActions } from "./MergeActions"
 import { DuplicateResultsTable } from "./DuplicateResultsTable"
 import { StatusBadge } from "src/app/components/StatusBadge"
 import { AutomergeVersionsButton } from "./AutomergeVersionsButton"
+import { MergeGroupButton } from "./MergeGroupButton"
 
 export const metadata = { title: "Duplicates – Admin" }
 
@@ -83,11 +84,8 @@ export default async function AdminDuplicatesPage({ searchParams }: Props) {
       })
     : null
 
-  // Suggestions: same DOI and title-prefix matches
-  type PairRow = {
-    aid: number; atitle: string; ayear: number | null; astatus: string; adoi: string | null
-    bid: number; btitle: string; byear: number | null; bstatus: string; bdoi: string | null
-  }
+  // Suggestions: group by DOI and title (not pairwise — avoids N*(N-1)/2 explosion)
+  type GroupMember = { id: number; title: string; year: number | null; status: string; doi: string | null; groupkey: string }
 
   const [versionPairsResult] = await db.$queryRaw<[{ count: bigint }]>`
     SELECT COUNT(*)::int AS count
@@ -100,33 +98,63 @@ export default async function AdminDuplicatesPage({ searchParams }: Props) {
   `
   const versionPairsCount = Number(versionPairsResult?.count ?? 0)
 
-  const [doiPairs, titlePairs] = await Promise.all([
-    db.$queryRaw<PairRow[]>`
-      SELECT a.id AS aid, a.title AS atitle, a.year AS ayear, a.status AS astatus, a.doi AS adoi,
-             b.id AS bid, b.title AS btitle, b.year AS byear, b.status AS bstatus, b.doi AS bdoi
-      FROM "Paper" a
-      JOIN "Paper" b ON b.id > a.id AND a.doi = b.doi
-      WHERE a.doi IS NOT NULL
-        AND a."canonicalPaperId" IS NULL
-        AND b."canonicalPaperId" IS NULL
-      LIMIT 50
-    `,
-    db.$queryRaw<PairRow[]>`
-      WITH normed AS (
-        SELECT id, title, year, status, doi,
-               lower(left(title, 80)) AS ntitle
-        FROM "Paper"
-        WHERE "canonicalPaperId" IS NULL AND length(title) > 20
+  type GroupCount = { count: bigint }
+  const [doiRows, titleRows, doiGroupCount, titleGroupCount] = await Promise.all([
+    db.$queryRaw<GroupMember[]>`
+      WITH dup_dois AS (
+        SELECT doi FROM "Paper"
+        WHERE doi IS NOT NULL AND "canonicalPaperId" IS NULL
+        GROUP BY doi HAVING COUNT(*) > 1
+        ORDER BY COUNT(*) DESC LIMIT 50
       )
-      SELECT a.id AS aid, a.title AS atitle, a.year AS ayear, a.status AS astatus, a.doi AS adoi,
-             b.id AS bid, b.title AS btitle, b.year AS byear, b.status AS bstatus, b.doi AS bdoi
-      FROM normed a
-      JOIN normed b ON b.id > a.id AND a.ntitle = b.ntitle
-      WHERE (a.doi IS NULL OR b.doi IS NULL OR a.doi != b.doi)
-      LIMIT 50
+      SELECT p.id, p.title, p.year, p.status::text AS status, p.doi, p.doi AS groupkey
+      FROM "Paper" p JOIN dup_dois d ON p.doi = d.doi
+      WHERE p."canonicalPaperId" IS NULL
+      ORDER BY p.doi, p.id
+    `,
+    db.$queryRaw<GroupMember[]>`
+      WITH dup_titles AS (
+        SELECT lower(left(title, 80)) AS ntitle FROM "Paper"
+        WHERE "canonicalPaperId" IS NULL AND length(title) > 20
+          AND doi IS NULL
+        GROUP BY ntitle HAVING COUNT(*) > 1
+        ORDER BY COUNT(*) DESC LIMIT 50
+      )
+      SELECT p.id, p.title, p.year, p.status::text AS status, p.doi,
+             lower(left(p.title, 80)) AS groupkey
+      FROM "Paper" p JOIN dup_titles d ON lower(left(p.title, 80)) = d.ntitle
+      WHERE p."canonicalPaperId" IS NULL
+      ORDER BY groupkey, p.id
+    `,
+    db.$queryRaw<[GroupCount]>`
+      SELECT COUNT(*)::int AS count FROM (
+        SELECT doi FROM "Paper"
+        WHERE doi IS NOT NULL AND "canonicalPaperId" IS NULL
+        GROUP BY doi HAVING COUNT(*) > 1 LIMIT 50
+      ) sub
+    `,
+    db.$queryRaw<[GroupCount]>`
+      SELECT COUNT(*)::int AS count FROM (
+        SELECT lower(left(title, 80)) FROM "Paper"
+        WHERE "canonicalPaperId" IS NULL AND length(title) > 20 AND doi IS NULL
+        GROUP BY lower(left(title, 80)) HAVING COUNT(*) > 1 LIMIT 50
+      ) sub
     `,
   ])
-  const suggestionsCount = doiPairs.length + titlePairs.length
+
+  // Group rows by key
+  const groupBy = (rows: GroupMember[]) => {
+    const map = new Map<string, GroupMember[]>()
+    for (const r of rows) {
+      const list = map.get(r.groupkey) ?? []
+      list.push(r)
+      map.set(r.groupkey, list)
+    }
+    return [...map.values()]
+  }
+  const doiGroups = groupBy(doiRows)
+  const titleGroups = groupBy(titleRows)
+  const suggestionsCount = Number(doiGroupCount[0]?.count ?? 0) + Number(titleGroupCount[0]?.count ?? 0)
 
   // Search mode
   const results =
@@ -193,28 +221,28 @@ export default async function AdminDuplicatesPage({ searchParams }: Props) {
       {isSuggestionsTab ? (
         <>
           <p className="text-base-content/60 mb-6 text-sm">
-            Candidate pairs detected by DOI match or title similarity. Click Compare to review.
+            Groups of papers sharing a DOI or title. Click <strong>Make canonical</strong> on the one to keep — the rest will be merged into it.
           </p>
 
-          {doiPairs.length > 0 && (
+          {doiGroups.length > 0 && (
             <>
               <h2 className="font-semibold text-sm mb-3 text-base-content/70 uppercase tracking-wide">
-                Same DOI ({doiPairs.length})
+                Same DOI ({doiGroups.length} groups)
               </h2>
-              <SuggestionTable pairs={doiPairs} />
+              <GroupTable groups={doiGroups} />
             </>
           )}
 
-          {titlePairs.length > 0 && (
+          {titleGroups.length > 0 && (
             <>
-              <h2 className={`font-semibold text-sm mb-3 text-base-content/70 uppercase tracking-wide ${doiPairs.length > 0 ? "mt-10" : ""}`}>
-                Similar title ({titlePairs.length})
+              <h2 className={`font-semibold text-sm mb-3 text-base-content/70 uppercase tracking-wide ${doiGroups.length > 0 ? "mt-10" : ""}`}>
+                Same title, no DOI ({titleGroups.length} groups)
               </h2>
-              <SuggestionTable pairs={titlePairs} />
+              <GroupTable groups={titleGroups} />
             </>
           )}
 
-          {doiPairs.length === 0 && titlePairs.length === 0 && (
+          {doiGroups.length === 0 && titleGroups.length === 0 && (
             <p className="text-base-content/40 text-sm text-center py-10">
               No duplicate candidates found.
             </p>
@@ -328,56 +356,47 @@ export default async function AdminDuplicatesPage({ searchParams }: Props) {
   )
 }
 
-function SuggestionTable({
-  pairs,
-}: {
-  pairs: {
-    aid: number; atitle: string; ayear: number | null; astatus: string; adoi: string | null
-    bid: number; btitle: string; byear: number | null; bstatus: string; bdoi: string | null
-  }[]
-}) {
+type GroupMember = { id: number; title: string; year: number | null; status: string; doi: string | null; groupkey: string }
+
+function GroupTable({ groups }: { groups: GroupMember[][] }) {
   return (
-    <div className="overflow-x-auto mb-6">
-      <table className="table table-zebra text-sm">
-        <thead>
-          <tr>
-            <th>Paper A</th>
-            <th>Paper B</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {pairs.map((p, idx) => {
-            const upcoming = pairs.slice(idx + 1, idx + 11).map((r) => `${r.aid}_${r.bid}`).join(",")
-            const href = `/admin/duplicates?a=${p.aid}&b=${p.bid}&from=suggestions${upcoming ? `&next=${upcoming}` : ""}`
-            return (
-              <tr key={`${p.aid}-${p.bid}`}>
-                <td className="max-w-xs align-top">
-                  <p className="line-clamp-2 font-medium">{cap(p.atitle)}</p>
-                  <div className="flex gap-2 mt-0.5 text-xs text-base-content/40">
-                    <span className="font-mono">#{p.aid}</span>
-                    {p.ayear && <span>{p.ayear}</span>}
-                    {p.adoi && <span className="font-mono">{p.adoi}</span>}
-                  </div>
-                </td>
-                <td className="max-w-xs align-top">
-                  <p className="line-clamp-2 font-medium">{cap(p.btitle)}</p>
-                  <div className="flex gap-2 mt-0.5 text-xs text-base-content/40">
-                    <span className="font-mono">#{p.bid}</span>
-                    {p.byear && <span>{p.byear}</span>}
-                    {p.bdoi && <span className="font-mono">{p.bdoi}</span>}
-                  </div>
-                </td>
-                <td className="align-top">
-                  <a href={href} className="btn btn-outline btn-xs">
-                    Compare →
-                  </a>
-                </td>
-              </tr>
-            )
-          })}
-        </tbody>
-      </table>
+    <div className="space-y-4 mb-6">
+      {groups.map((members) => {
+        const allIds = members.map((m) => m.id)
+        return (
+          <div key={members[0]!.groupkey} className="border border-base-300 rounded-lg overflow-hidden">
+            <div className="bg-base-200 px-4 py-2 text-xs font-semibold text-base-content/50 uppercase tracking-wide">
+              {cap(members[0]!.title)} — {members.length} copies
+            </div>
+            <table className="table table-sm text-sm w-full">
+              <tbody>
+                {members.map((m) => (
+                  <tr key={m.id}>
+                    <td className="font-mono text-xs text-base-content/40 w-16">#{m.id}</td>
+                    <td className="w-12">{m.year ?? "—"}</td>
+                    <td><StatusBadge status={m.status} /></td>
+                    <td className="font-mono text-xs text-base-content/40 max-w-xs truncate">{m.doi ?? "—"}</td>
+                    <td className="text-right">
+                      <div className="flex gap-1 justify-end">
+                        <a
+                          href={`/admin/papers/${m.id}?from=/admin/duplicates?tab=suggestions`}
+                          className="btn btn-outline btn-xs"
+                        >
+                          View
+                        </a>
+                        <MergeGroupButton
+                          canonicalId={m.id}
+                          duplicateIds={allIds.filter((id) => id !== m.id)}
+                        />
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )
+      })}
     </div>
   )
 }

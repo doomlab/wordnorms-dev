@@ -47,23 +47,17 @@ export async function Navbar({ leftLinks, rightExtra, className }: NavbarProps) 
         Promise.all([
           db.$queryRaw<[{ count: bigint }]>`
             SELECT COUNT(*)::int AS count FROM (
-              SELECT a.id FROM "Paper" a
-              JOIN "Paper" b ON b.id > a.id AND a.doi = b.doi
-              WHERE a.doi IS NOT NULL
-                AND a."canonicalPaperId" IS NULL
-                AND b."canonicalPaperId" IS NULL
+              SELECT doi FROM "Paper"
+              WHERE doi IS NOT NULL AND "canonicalPaperId" IS NULL
+              GROUP BY doi HAVING COUNT(*) > 1
               LIMIT 50
             ) sub
           `.then((r) => Number(r[0]?.count ?? 0)),
           db.$queryRaw<[{ count: bigint }]>`
             SELECT COUNT(*)::int AS count FROM (
-              WITH normed AS (
-                SELECT id, lower(left(title, 80)) AS ntitle
-                FROM "Paper"
-                WHERE "canonicalPaperId" IS NULL AND length(title) > 20
-              )
-              SELECT a.id FROM normed a
-              JOIN normed b ON b.id > a.id AND a.ntitle = b.ntitle
+              SELECT lower(left(title, 80)) FROM "Paper"
+              WHERE "canonicalPaperId" IS NULL AND length(title) > 20 AND doi IS NULL
+              GROUP BY lower(left(title, 80)) HAVING COUNT(*) > 1
               LIMIT 50
             ) sub
           `.then((r) => Number(r[0]?.count ?? 0)),
