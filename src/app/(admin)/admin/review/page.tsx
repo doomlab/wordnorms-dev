@@ -14,14 +14,16 @@ export default async function AdminReviewPage({
   const page = Math.max(1, parseInt(pageParam ?? "1", 10) || 1)
   const skip = (page - 1) * PAGE_SIZE
 
+  const where = { status: "PENDING_REVIEW" as const, canonicalPaperId: null }
+
   const [pending, total] = await Promise.all([
     db.paper.findMany({
-      where: { status: "PENDING_REVIEW" },
+      where,
       orderBy: [{ modelScore: "desc" }, { createdAt: "asc" }],
       skip,
       take: PAGE_SIZE,
     }),
-    db.paper.count({ where: { status: "PENDING_REVIEW" } }),
+    db.paper.count({ where }),
   ])
 
   const totalPages = Math.ceil(total / PAGE_SIZE)

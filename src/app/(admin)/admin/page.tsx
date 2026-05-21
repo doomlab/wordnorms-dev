@@ -46,8 +46,7 @@ export default async function AdminPage() {
       where: {
         status: "EXCLUDED",
         canonicalPaperId: null,
-        modelScore: { not: null },
-        reviewedBy: null,
+        reviewedById: null,
       },
     }),
     db.$queryRaw<[{ count: bigint }]>`

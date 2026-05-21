@@ -18,7 +18,7 @@ export default async function AdminExcludedPage({
   const where = {
     status: "EXCLUDED" as const,
     canonicalPaperId: null,
-    modelScore: { not: null },
+    reviewedById: null,
   }
 
   const [papers, total] = await Promise.all([

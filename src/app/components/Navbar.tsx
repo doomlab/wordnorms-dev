@@ -29,7 +29,7 @@ export async function Navbar({ leftLinks, rightExtra, className }: NavbarProps) 
   ] = isAdmin
     ? await Promise.all([
         db.paper.count({ where: { status: "PENDING_REVIEW", canonicalPaperId: null } }),
-        db.paper.count({ where: { status: "EXCLUDED", canonicalPaperId: null, modelScore: { not: null }, reviewedById: null } }),
+        db.paper.count({ where: { status: "EXCLUDED", canonicalPaperId: null, reviewedById: null } }),
         Promise.all([
           db.paper.count({ where: { status: "ACCEPTED", canonicalPaperId: null, extraction: null, pdfUrl: { not: null } } }),
           db.paper.count({ where: { status: "ACCEPTED", canonicalPaperId: null, OR: [{ extraction: { is: null }, pdfUrl: null }, { extraction: { needsReview: true, confidence: null } }] } }),
@@ -38,10 +38,11 @@ export async function Navbar({ leftLinks, rightExtra, className }: NavbarProps) 
         db.paperReport.count({ where: { resolved: false } }),
         db.articleSuggestion.count({ where: { resolved: false } }),
         db.$queryRaw<[{ count: bigint }]>`
-          SELECT COUNT(*)::int AS count FROM "PaperCitation" pc
+          SELECT COUNT(DISTINCT pc."citedOpenAlexId")::int AS count FROM "PaperCitation" pc
           WHERE NOT EXISTS (
             SELECT 1 FROM "Paper" p WHERE p."openAlexId" = pc."citedOpenAlexId"
           )
+          AND pc.reviewed = false
         `.then((r) => Number(r[0]?.count ?? 0)),
         Promise.all([
           db.$queryRaw<[{ count: bigint }]>`
