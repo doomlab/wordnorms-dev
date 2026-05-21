@@ -85,7 +85,10 @@ export default async function AdminDuplicatesPage({ searchParams }: Props) {
     : null
 
   // Suggestions: group by DOI and title (not pairwise — avoids N*(N-1)/2 explosion)
-  type GroupMember = { id: number; title: string; year: number | null; status: string; doi: string | null; groupkey: string }
+  type GroupMember = {
+    id: number; title: string; year: number | null; status: string; doi: string | null
+    authors: string[]; journal: string | null; has_extraction: boolean; groupkey: string
+  }
 
   const [versionPairsResult] = await db.$queryRaw<[{ count: bigint }]>`
     SELECT COUNT(*)::int AS count
@@ -107,7 +110,9 @@ export default async function AdminDuplicatesPage({ searchParams }: Props) {
         GROUP BY doi HAVING COUNT(*) > 1
         ORDER BY COUNT(*) DESC LIMIT 50
       )
-      SELECT p.id, p.title, p.year, p.status::text AS status, p.doi, p.doi AS groupkey
+      SELECT p.id, p.title, p.year, p.status::text AS status, p.doi, p.authors, p.journal,
+             EXISTS (SELECT 1 FROM "PaperExtraction" pe WHERE pe."paperId" = p.id) AS has_extraction,
+             p.doi AS groupkey
       FROM "Paper" p JOIN dup_dois d ON p.doi = d.doi
       WHERE p."canonicalPaperId" IS NULL
       ORDER BY p.doi, p.id
@@ -120,7 +125,8 @@ export default async function AdminDuplicatesPage({ searchParams }: Props) {
         GROUP BY ntitle HAVING COUNT(*) > 1
         ORDER BY COUNT(*) DESC LIMIT 50
       )
-      SELECT p.id, p.title, p.year, p.status::text AS status, p.doi,
+      SELECT p.id, p.title, p.year, p.status::text AS status, p.doi, p.authors, p.journal,
+             EXISTS (SELECT 1 FROM "PaperExtraction" pe WHERE pe."paperId" = p.id) AS has_extraction,
              lower(left(p.title, 80)) AS groupkey
       FROM "Paper" p JOIN dup_titles d ON lower(left(p.title, 80)) = d.ntitle
       WHERE p."canonicalPaperId" IS NULL
@@ -356,7 +362,10 @@ export default async function AdminDuplicatesPage({ searchParams }: Props) {
   )
 }
 
-type GroupMember = { id: number; title: string; year: number | null; status: string; doi: string | null; groupkey: string }
+type GroupMember = {
+  id: number; title: string; year: number | null; status: string; doi: string | null
+  authors: string[]; journal: string | null; has_extraction: boolean; groupkey: string
+}
 
 function GroupTable({ groups }: { groups: GroupMember[][] }) {
   return (
@@ -368,32 +377,42 @@ function GroupTable({ groups }: { groups: GroupMember[][] }) {
             <div className="bg-base-200 px-4 py-2 text-xs font-semibold text-base-content/50 uppercase tracking-wide">
               {cap(members[0]!.title)} — {members.length} copies
             </div>
-            <table className="table table-sm text-sm w-full">
-              <tbody>
-                {members.map((m) => (
-                  <tr key={m.id}>
-                    <td className="font-mono text-xs text-base-content/40 w-16">#{m.id}</td>
-                    <td className="w-12">{m.year ?? "—"}</td>
-                    <td><StatusBadge status={m.status} /></td>
-                    <td className="font-mono text-xs text-base-content/40 max-w-xs truncate">{m.doi ?? "—"}</td>
-                    <td className="text-right">
-                      <div className="flex gap-1 justify-end">
-                        <a
-                          href={`/admin/papers/${m.id}?from=/admin/duplicates?tab=suggestions`}
-                          className="btn btn-outline btn-xs"
-                        >
-                          View
-                        </a>
-                        <MergeGroupButton
-                          canonicalId={m.id}
-                          duplicateIds={allIds.filter((id) => id !== m.id)}
-                        />
+            <div className="divide-y divide-base-200">
+              {members.map((m) => {
+                const authorStr = m.authors.length
+                  ? m.authors.slice(0, 3).join(", ") + (m.authors.length > 3 ? " et al." : "")
+                  : null
+                return (
+                  <div key={m.id} className="flex items-start gap-4 px-4 py-3 text-sm">
+                    <span className="font-mono text-xs text-base-content/40 w-14 shrink-0 pt-0.5">#{m.id}</span>
+                    <div className="flex-1 min-w-0 space-y-0.5">
+                      {authorStr && <p className="text-base-content/70 truncate">{authorStr}</p>}
+                      <div className="flex flex-wrap gap-x-3 gap-y-0.5 text-xs text-base-content/40">
+                        {m.year && <span>{m.year}</span>}
+                        {m.journal && <span className="italic truncate max-w-xs">{m.journal}</span>}
+                        {m.doi && <span className="font-mono">{m.doi}</span>}
                       </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+                    </div>
+                    <div className="flex items-center gap-1.5 shrink-0">
+                      <StatusBadge status={m.status} />
+                      {m.has_extraction && (
+                        <span className="badge badge-success badge-xs">extracted</span>
+                      )}
+                      <a
+                        href={`/admin/papers/${m.id}?from=/admin/duplicates?tab=suggestions`}
+                        className="btn btn-outline btn-xs"
+                      >
+                        View
+                      </a>
+                      <MergeGroupButton
+                        canonicalId={m.id}
+                        duplicateIds={allIds.filter((id) => id !== m.id)}
+                      />
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
           </div>
         )
       })}
