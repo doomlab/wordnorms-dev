@@ -1,6 +1,7 @@
 import fs from "fs"
 import path from "path"
 import db from "db"
+import { ImportCardButton } from "./ImportCardButton"
 
 export const metadata = { title: "Datasets – Admin" }
 
@@ -36,7 +37,8 @@ export default async function AdminDatasetsPage() {
   const linksByBibtex = new Map(allLinks.map((l) => [l.bibtex, l]))
 
   const matched: { card: Card; paperId: number; paperTitle: string; via: string }[] = []
-  const unmatched: Card[] = []
+  const unmatchedWithDoi: Card[] = []
+  const unmatchedNoDoi: Card[] = []
 
   for (const card of cards) {
     const link = linksByBibtex.get(card.bibtex)
@@ -49,7 +51,11 @@ export default async function AdminDatasetsPage() {
       matched.push({ card, paperId: byDoi.id, paperTitle: byDoi.title, via: "doi" })
       continue
     }
-    unmatched.push(card)
+    if (card.citation.doi) {
+      unmatchedWithDoi.push(card)
+    } else {
+      unmatchedNoDoi.push(card)
+    }
   }
 
   return (
@@ -57,7 +63,7 @@ export default async function AdminDatasetsPage() {
       <h1 className="text-3xl font-bold mb-2">Datasets</h1>
       <p className="text-base-content/60 mb-8 text-sm">
         Link YAML dataset cards to their corresponding paper in the database. Cards matched by DOI automatically;
-        others need a manual link.
+        cards with a DOI not yet in the DB can be imported from OpenAlex; others need a manual link.
       </p>
 
       <div className="flex gap-6 mb-6 text-sm">
@@ -67,18 +73,26 @@ export default async function AdminDatasetsPage() {
         <span className="text-base-content/60">
           <span className="font-semibold text-success">{matched.length}</span> matched
         </span>
-        {unmatched.length > 0 && (
+        {unmatchedWithDoi.length > 0 && (
           <span className="text-base-content/60">
-            <span className="font-semibold text-warning">{unmatched.length}</span> unmatched
+            <span className="font-semibold text-warning">{unmatchedWithDoi.length}</span> importable
+          </span>
+        )}
+        {unmatchedNoDoi.length > 0 && (
+          <span className="text-base-content/60">
+            <span className="font-semibold text-error">{unmatchedNoDoi.length}</span> need manual link
           </span>
         )}
       </div>
 
-      {unmatched.length > 0 && (
+      {unmatchedWithDoi.length > 0 && (
         <>
           <h2 className="font-semibold text-sm mb-3 text-base-content/70 uppercase tracking-wide">
-            Unmatched ({unmatched.length})
+            Import from OpenAlex ({unmatchedWithDoi.length})
           </h2>
+          <p className="text-xs text-base-content/50 mb-3">
+            These cards have DOIs but the paper isn't in the database yet. Click Import to fetch from OpenAlex and add as Pending Review.
+          </p>
           <div className="overflow-x-auto mb-10">
             <table className="table table-zebra text-sm">
               <thead>
@@ -90,14 +104,57 @@ export default async function AdminDatasetsPage() {
                 </tr>
               </thead>
               <tbody>
-                {unmatched.map((c) => (
+                {unmatchedWithDoi.map((c) => (
                   <tr key={c.bibtex}>
                     <td className="max-w-sm">
                       <p className="font-medium line-clamp-2">{cap(c.citation.title)}</p>
                       <p className="text-xs text-base-content/40 mt-0.5">{c.bibtex}</p>
                     </td>
                     <td>{c.citation.year ?? "—"}</td>
-                    <td className="font-mono text-xs text-base-content/50">{c.citation.doi ?? "—"}</td>
+                    <td className="font-mono text-xs text-base-content/50">{c.citation.doi}</td>
+                    <td className="flex gap-1">
+                      <ImportCardButton
+                        bibtex={c.bibtex}
+                        doi={c.citation.doi}
+                        title={c.citation.title}
+                        authors={c.citation.author}
+                        year={c.citation.year}
+                        journal={c.citation.journal}
+                      />
+                      <a href={`/admin/datasets/${encodeURIComponent(c.bibtex)}`} className="btn btn-outline btn-xs">
+                        Link →
+                      </a>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </>
+      )}
+
+      {unmatchedNoDoi.length > 0 && (
+        <>
+          <h2 className="font-semibold text-sm mb-3 text-base-content/70 uppercase tracking-wide">
+            No DOI — manual link needed ({unmatchedNoDoi.length})
+          </h2>
+          <div className="overflow-x-auto mb-10">
+            <table className="table table-zebra text-sm">
+              <thead>
+                <tr>
+                  <th>Dataset</th>
+                  <th>Year</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {unmatchedNoDoi.map((c) => (
+                  <tr key={c.bibtex}>
+                    <td className="max-w-sm">
+                      <p className="font-medium line-clamp-2">{cap(c.citation.title)}</p>
+                      <p className="text-xs text-base-content/40 mt-0.5">{c.bibtex}</p>
+                    </td>
+                    <td>{c.citation.year ?? "—"}</td>
                     <td>
                       <a href={`/admin/datasets/${encodeURIComponent(c.bibtex)}`} className="btn btn-warning btn-xs">
                         Link →
