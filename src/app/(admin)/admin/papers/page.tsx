@@ -16,6 +16,7 @@ export default async function AdminPapersPage({ searchParams }: Props) {
     q && q.trim().length > 1
       ? await db.paper.findMany({
           where: {
+            canonicalPaperId: null,
             OR: [
               { title: { contains: q, mode: "insensitive" } },
               { doi: { contains: q, mode: "insensitive" } },
@@ -30,9 +31,10 @@ export default async function AdminPapersPage({ searchParams }: Props) {
 
   return (
     <>
-      <h1 className="text-3xl font-bold mb-2">Papers</h1>
+      <h1 className="text-3xl font-bold mb-2">Edit Paper Metadata</h1>
       <p className="text-base-content/60 mb-8 text-sm">
-        Search by title, DOI, or ID to edit a paper&apos;s bibliographic data.
+        Search by title, DOI, or ID to correct bibliographic fields (title, authors, year, journal,
+        DOI). To edit extracted norm data, use Metadata Review.
       </p>
 
       <form className="flex gap-2 mb-8" method="get">
