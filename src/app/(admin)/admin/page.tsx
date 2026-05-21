@@ -23,7 +23,7 @@ export default async function AdminPage() {
       db.pipelineRun.findFirst({ where: { status: "DONE" }, orderBy: { finishedAt: "desc" } }),
       db.pipelineRun.findFirst({ where: { status: "RUNNING" }, orderBy: { createdAt: "desc" } }),
       db.articleSuggestion.count({ where: { resolved: false } }),
-      db.paper.count({ where: { status: "EXCLUDED", canonicalPaperId: null, modelScore: { gte: 0 }, reviewedBy: null } }),
+      db.paper.count({ where: { status: "EXCLUDED", canonicalPaperId: null, modelScore: { not: null }, reviewedBy: null } }),
       db.$queryRaw<[{ count: bigint }]>`
         SELECT COUNT(*)::int AS count FROM "PaperCitation" pc
         WHERE NOT EXISTS (
@@ -171,7 +171,7 @@ export default async function AdminPage() {
                   <span className="badge badge-warning">{extractionNew} new</span>
                 )}
                 {extractionNoPdf > 0 && (
-                  <span className="badge badge-ghost">{extractionNoPdf} no PDF</span>
+                  <span className="badge badge-neutral">{extractionNoPdf} no PDF</span>
                 )}
               </div>
             </div>

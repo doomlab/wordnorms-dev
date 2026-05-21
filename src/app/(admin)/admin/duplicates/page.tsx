@@ -151,7 +151,7 @@ export default async function AdminDuplicatesPage({ searchParams }: Props) {
         >
           Suggestions
           {suggestionsCount > 0 && (
-            <span className="badge badge-ghost badge-sm ml-2">{suggestionsCount}</span>
+            <span className="badge badge-neutral badge-sm ml-2">{suggestionsCount}</span>
           )}
         </a>
         <a
@@ -161,7 +161,7 @@ export default async function AdminDuplicatesPage({ searchParams }: Props) {
         >
           Merged
           {mergedCount > 0 && (
-            <span className="badge badge-ghost badge-sm ml-2">{mergedCount}</span>
+            <span className="badge badge-neutral badge-sm ml-2">{mergedCount}</span>
           )}
         </a>
       </div>

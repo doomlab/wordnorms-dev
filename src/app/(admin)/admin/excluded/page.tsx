@@ -1,7 +1,7 @@
 import db from "db"
 import { Pagination } from "src/app/components/Pagination"
 
-export const metadata = { title: "Borderline Excluded – Admin" }
+export const metadata = { title: "Excluded – Admin" }
 
 const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
 const PAGE_SIZE = 50
@@ -18,14 +18,17 @@ export default async function AdminExcludedPage({
   const where = {
     status: "EXCLUDED" as const,
     canonicalPaperId: null,
-    modelScore: { gte: 0 },
-    reviewedBy: null,
+    modelScore: { not: null },
   }
 
   const [papers, total] = await Promise.all([
     db.paper.findMany({
       where,
-      orderBy: { modelScore: { sort: "desc", nulls: "last" } },
+      select: {
+        id: true, title: true, authors: true, year: true, doi: true,
+        modelScore: true, reviewedById: true,
+      },
+      orderBy: [{ reviewedById: { sort: "asc", nulls: "first" } }, { modelScore: { sort: "desc", nulls: "last" } }],
       skip,
       take: PAGE_SIZE,
     }),
@@ -36,10 +39,10 @@ export default async function AdminExcludedPage({
 
   return (
     <>
-      <h1 className="text-3xl font-bold mb-2">Borderline Excluded</h1>
+      <h1 className="text-3xl font-bold mb-2">Excluded</h1>
       <p className="text-base-content/60 mb-8">
-        Auto-excluded papers the model wasn&apos;t confident about — closest calls first. Accept any
-        that belong, or confirm exclusion to clear them from this queue.
+        Auto-excluded papers. Accept any that belong, or confirm exclusion to clear them from this
+        queue.
       </p>
 
       <p className="text-sm text-base-content/60 mb-4">
@@ -63,11 +66,19 @@ export default async function AdminExcludedPage({
               </thead>
               <tbody>
                 {papers.map((p, idx) => {
-                  const nextIds = papers.slice(idx + 1, idx + 11).map((r) => r.id).join(",")
+                  const nextIds = papers
+                    .slice(idx + 1, idx + 11)
+                    .map((r) => r.id)
+                    .join(",")
                   return (
                     <tr key={p.id}>
                       <td className="max-w-sm">
-                        <p className="font-medium line-clamp-2">{cap(p.title)}</p>
+                        <div className="flex items-center gap-1.5 flex-wrap mb-0.5">
+                          <p className="font-medium line-clamp-2">{cap(p.title)}</p>
+                          {p.reviewedById && (
+                            <span className="badge badge-neutral badge-xs shrink-0">reviewed</span>
+                          )}
+                        </div>
                         {p.doi && (
                           <a
                             href={`https://doi.org/${p.doi}`}
@@ -89,7 +100,9 @@ export default async function AdminExcludedPage({
                           <span className="badge badge-outline badge-sm">
                             {p.modelScore.toFixed(2)}
                           </span>
-                        ) : "—"}
+                        ) : (
+                          "—"
+                        )}
                       </td>
                       <td>
                         <a

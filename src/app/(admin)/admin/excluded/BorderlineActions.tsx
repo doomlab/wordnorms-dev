@@ -33,13 +33,13 @@ export function BorderlineActions({ paperId, nextHref }: { paperId: number; next
         {pending === "ACCEPTED" ? <span className="loading loading-spinner loading-xs" /> : "Accept"}
       </button>
       <button
-        className="btn btn-ghost btn-outline btn-wide"
+        className="btn btn-outline btn-wide"
         onClick={() => act("EXCLUDED")}
         disabled={busy}
       >
         {pending === "EXCLUDED" ? <span className="loading loading-spinner loading-xs" /> : "Confirm Excluded"}
       </button>
-      <a href={nextHref} className="btn btn-ghost">Skip →</a>
+      <a href={nextHref} className="btn btn-outline">Skip →</a>
     </div>
   )
 }

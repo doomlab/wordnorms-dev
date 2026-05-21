@@ -21,7 +21,7 @@ export default async function AdminExcludedDetailPage({
   const { next: nextParam } = await searchParams
 
   const paper = await db.paper.findUnique({
-    where: { id: Number(id), status: "EXCLUDED", reviewedBy: null },
+    where: { id: Number(id), status: "EXCLUDED" },
   })
 
   if (!paper) notFound()
@@ -37,11 +37,16 @@ export default async function AdminExcludedDetailPage({
         href="/admin/excluded"
         className="text-sm text-base-content/50 hover:text-base-content mb-6 inline-block"
       >
-        ← Back to borderline queue
+        ← Back to excluded queue
       </a>
 
       <div className="flex items-start justify-between gap-4 mb-6">
-        <h1 className="text-2xl font-bold leading-snug">{cap(paper.title)}</h1>
+        <div>
+          <h1 className="text-2xl font-bold leading-snug">{cap(paper.title)}</h1>
+          {paper.reviewedById && (
+            <span className="badge badge-neutral badge-sm mt-2">reviewed</span>
+          )}
+        </div>
         {paper.modelScore != null && (
           <span className="badge badge-outline shrink-0 mt-1">
             Score {paper.modelScore.toFixed(2)}
@@ -94,9 +99,7 @@ export default async function AdminExcludedDetailPage({
       </div>
 
       <div className="border-t border-base-200 pt-8 text-center">
-        <p className="text-sm text-base-content/60 mb-3">
-          Does this paper belong in the database?
-        </p>
+        <p className="text-sm text-base-content/60 mb-3">Does this paper belong in the database?</p>
         <BorderlineActions paperId={paper.id} nextHref={nextHref} />
       </div>
     </>
@@ -114,7 +117,15 @@ function Section({ title, children }: { title: string; children: React.ReactNode
   )
 }
 
-function Row({ label, value, italic }: { label: string; value: string | undefined; italic?: boolean }) {
+function Row({
+  label,
+  value,
+  italic,
+}: {
+  label: string
+  value: string | undefined
+  italic?: boolean
+}) {
   if (!value) return null
   return (
     <div className="flex gap-3 py-1.5">
