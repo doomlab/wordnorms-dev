@@ -218,8 +218,7 @@ export function SuggestionWorkflow({
           <div>
             <label className="label py-1">
               <span className="label-text font-medium">
-                Authors{" "}
-                <span className="font-normal text-base-content/50">(comma-separated)</span>
+                Authors <span className="font-normal text-base-content/50">(comma-separated)</span>
               </span>
             </label>
             <input
@@ -324,7 +323,7 @@ export function SuggestionWorkflow({
               <span className="loading loading-spinner loading-xs" /> Adding…
             </>
           ) : (
-            "Add to pipeline"
+            "Add to accepted papers"
           )}
         </button>
         <button

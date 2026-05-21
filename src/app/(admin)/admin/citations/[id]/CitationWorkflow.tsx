@@ -35,9 +35,9 @@ export function CitationWorkflow({
   const [pull] = useMutation(pullCitedPaper)
   const [review] = useMutation(reviewCitation)
 
-  const [addStatus, setAddStatus] = useState<
-    "idle" | "adding" | "done" | "duplicate" | "error"
-  >(existingPaper ? "duplicate" : "idle")
+  const [addStatus, setAddStatus] = useState<"idle" | "adding" | "done" | "duplicate" | "error">(
+    existingPaper ? "duplicate" : "idle"
+  )
   const [dismissStatus, setDismissStatus] = useState<"idle" | "loading" | "done">("idle")
   const [resultPaper, setResultPaper] = useState(existingPaper)
 
@@ -77,7 +77,9 @@ export function CitationWorkflow({
           &ldquo;{cap(resultPaper!.title)}&rdquo; is now accepted and queued for extraction.
         </p>
         <div className="flex gap-3 justify-center">
-          <a href="/admin/extract" className="btn btn-primary btn-sm">Go to extraction</a>
+          <a href="/admin/extract" className="btn btn-primary btn-sm">
+            Go to extraction
+          </a>
           <a href={nextHref} className="btn btn-ghost btn-sm">
             {nextHref === "/admin/citations" ? "Back to citations" : "Next →"}
           </a>
@@ -125,7 +127,9 @@ export function CitationWorkflow({
             {resultPaper && (
               <p className="text-xs mt-1">
                 &ldquo;{cap(resultPaper.title)}&rdquo; —{" "}
-                <a href={`/admin/papers/${resultPaper.id}`} className="link">view paper</a>
+                <a href={`/admin/papers/${resultPaper.id}`} className="link">
+                  view paper
+                </a>
               </p>
             )}
           </div>
@@ -145,8 +149,12 @@ export function CitationWorkflow({
           className="btn btn-success"
         >
           {addStatus === "adding" ? (
-            <><span className="loading loading-spinner loading-xs" /> Adding…</>
-          ) : "Add to pipeline"}
+            <>
+              <span className="loading loading-spinner loading-xs" /> Adding…
+            </>
+          ) : (
+            "Add to accepted papers"
+          )}
         </button>
         <button
           onClick={handleDismiss}
