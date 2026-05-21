@@ -68,7 +68,7 @@ export async function Navbar({ leftLinks, rightExtra, className }: NavbarProps) 
                     <Link href="/admin">Home</Link>
                   </li>
                   <li>
-                    <Link href="/admin/review">Review</Link>
+                    <Link href="/admin/review">Included</Link>
                   </li>
                   <li>
                     <Link href="/admin/excluded">Excluded</Link>
@@ -80,7 +80,7 @@ export async function Navbar({ leftLinks, rightExtra, className }: NavbarProps) 
                     <Link href="/admin/metadata">Metadata Review</Link>
                   </li>
                   <li>
-                    <Link href="/admin/reports">Reports</Link>
+                    <Link href="/admin/reports">User Reports</Link>
                   </li>
                   <li>
                     <Link href="/admin/suggestions">Suggestions</Link>

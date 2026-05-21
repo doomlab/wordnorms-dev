@@ -76,7 +76,7 @@ export default async function AdminExcludedPage({
                         <div className="flex items-center gap-1.5 flex-wrap mb-0.5">
                           <p className="font-medium line-clamp-2">{cap(p.title)}</p>
                           {p.reviewedById && (
-                            <span className="badge badge-neutral badge-xs shrink-0">reviewed</span>
+                            <span className="badge badge-success badge-xs shrink-0">reviewed</span>
                           )}
                         </div>
                         {p.doi && (

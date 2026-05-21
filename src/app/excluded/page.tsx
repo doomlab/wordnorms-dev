@@ -68,6 +68,7 @@ export default async function ExcludedPage({
         year: true,
         journal: true,
         reviewNote: true,
+        reviewedById: true,
       },
       orderBy: { year: "desc" },
       skip,
@@ -132,7 +133,12 @@ export default async function ExcludedPage({
                   >
                     <div className="flex items-start justify-between gap-4">
                       <div className="min-w-0">
-                        <h2 className="font-semibold text-base leading-snug mb-1">{capFirst(paper.title)}</h2>
+                        <div className="flex items-center gap-2 flex-wrap mb-1">
+                          <h2 className="font-semibold text-base leading-snug">{capFirst(paper.title)}</h2>
+                          {paper.reviewedById && (
+                            <span className="badge badge-success badge-xs shrink-0">reviewed</span>
+                          )}
+                        </div>
                         {paper.abstract && (
                           <p className="text-sm text-base-content/60 mb-3 line-clamp-2">
                             {paper.abstract}

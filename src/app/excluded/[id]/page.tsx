@@ -61,17 +61,11 @@ export default async function ExcludedDetailPage({
         <div className="flex items-start justify-between gap-4 mb-6">
           <div>
             <h1 className="text-2xl font-bold leading-snug mb-2">{capFirst(paper.title)}</h1>
-            <div className="flex items-center gap-2 flex-wrap">
-              {paper.reviewedBy?.name ? (
-                <span className="badge badge-ghost badge-sm text-base-content/50">
-                  Reviewed by {paper.reviewedBy.name}
-                </span>
-              ) : (
-                <span className="badge badge-ghost badge-sm text-base-content/40">
-                  Not yet reviewed
-                </span>
-              )}
-            </div>
+            {paper.reviewedBy && (
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="badge badge-success badge-sm">Reviewed</span>
+              </div>
+            )}
           </div>
           <div className="shrink-0 pt-1">
             <ReportButton paperId={paper.id} initialReported={isReported} isLoggedIn={!!userId} />
@@ -138,8 +132,8 @@ export default async function ExcludedDetailPage({
             </Section>
           )}
 
-          {reports.length > 0 && (
-            <Section title="Community feedback">
+          {(paper.reviewedBy || reports.length > 0) && (
+            <Section title="History">
               <div className="space-y-2">
                 {reports.map((r, i) => {
                   const who = r.user.name ?? "A user"
@@ -161,6 +155,12 @@ export default async function ExcludedDetailPage({
                     />
                   )
                 })}
+                {paper.reviewedBy && (
+                  <HistoryEvent
+                    label={`Reviewed by ${paper.reviewedBy.name ?? "admin"}`}
+                    date={paper.updatedAt}
+                  />
+                )}
               </div>
             </Section>
           )}
@@ -177,7 +177,7 @@ function HistoryEvent({
 }: {
   label: string
   date: Date
-  resolved: boolean
+  resolved?: boolean
 }) {
   const formatted = date.toLocaleDateString("en-US", {
     year: "numeric",
@@ -189,11 +189,8 @@ function HistoryEvent({
       <span className="shrink-0">·</span>
       <span>{label}</span>
       <span className="shrink-0">{formatted}</span>
-      {resolved ? (
-        <span className="badge badge-success badge-xs">reviewed</span>
-      ) : (
-        <span className="badge badge-ghost badge-xs">pending</span>
-      )}
+      {resolved === true && <span className="badge badge-success badge-xs">reviewed</span>}
+      {resolved === false && <span className="badge badge-outline badge-xs">pending</span>}
     </div>
   )
 }

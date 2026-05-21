@@ -4,33 +4,59 @@ import { PipelineButton } from "./PipelineButton"
 export const metadata = { title: "Admin" }
 
 export default async function AdminPage() {
-  const [counts, extractionNew, extractionNoPdf, pendingMetadata, openReports, lastRun, activeRun, openSuggestions, borderlineExcluded, unmatchedCitations] =
-    await Promise.all([
-      db.paper.groupBy({ by: ["status"], where: { canonicalPaperId: null }, _count: { _all: true } }),
-      db.paper.count({ where: { status: "ACCEPTED", canonicalPaperId: null, extraction: null, pdfUrl: { not: null } } }),
-      db.paper.count({
-        where: {
-          status: "ACCEPTED",
-          canonicalPaperId: null,
-          OR: [
-            { extraction: { is: null }, pdfUrl: null },
-            { extraction: { needsReview: true, confidence: null } },
-          ],
-        },
-      }),
-      db.paperExtraction.count({ where: { verifiedAt: null, paper: { status: "ACCEPTED", canonicalPaperId: null } } }),
-      db.paperReport.count({ where: { resolved: false } }),
-      db.pipelineRun.findFirst({ where: { status: "DONE" }, orderBy: { finishedAt: "desc" } }),
-      db.pipelineRun.findFirst({ where: { status: "RUNNING" }, orderBy: { createdAt: "desc" } }),
-      db.articleSuggestion.count({ where: { resolved: false } }),
-      db.paper.count({ where: { status: "EXCLUDED", canonicalPaperId: null, modelScore: { not: null }, reviewedBy: null } }),
-      db.$queryRaw<[{ count: bigint }]>`
+  const [
+    counts,
+    extractionNew,
+    extractionNoPdf,
+    pendingMetadata,
+    openReports,
+    lastRun,
+    activeRun,
+    openSuggestions,
+    borderlineExcluded,
+    unmatchedCitations,
+  ] = await Promise.all([
+    db.paper.groupBy({ by: ["status"], where: { canonicalPaperId: null }, _count: { _all: true } }),
+    db.paper.count({
+      where: {
+        status: "ACCEPTED",
+        canonicalPaperId: null,
+        extraction: null,
+        pdfUrl: { not: null },
+      },
+    }),
+    db.paper.count({
+      where: {
+        status: "ACCEPTED",
+        canonicalPaperId: null,
+        OR: [
+          { extraction: { is: null }, pdfUrl: null },
+          { extraction: { needsReview: true, confidence: null } },
+        ],
+      },
+    }),
+    db.paperExtraction.count({
+      where: { verifiedAt: null, paper: { status: "ACCEPTED", canonicalPaperId: null } },
+    }),
+    db.paperReport.count({ where: { resolved: false } }),
+    db.pipelineRun.findFirst({ where: { status: "DONE" }, orderBy: { finishedAt: "desc" } }),
+    db.pipelineRun.findFirst({ where: { status: "RUNNING" }, orderBy: { createdAt: "desc" } }),
+    db.articleSuggestion.count({ where: { resolved: false } }),
+    db.paper.count({
+      where: {
+        status: "EXCLUDED",
+        canonicalPaperId: null,
+        modelScore: { not: null },
+        reviewedBy: null,
+      },
+    }),
+    db.$queryRaw<[{ count: bigint }]>`
         SELECT COUNT(*)::int AS count FROM "PaperCitation" pc
         WHERE NOT EXISTS (
           SELECT 1 FROM "Paper" p WHERE p."openAlexId" = pc."citedOpenAlexId"
         )
       `.then((r) => Number(r[0]?.count ?? 0)),
-    ])
+  ])
   const byStatus = Object.fromEntries(counts.map((c) => [c.status, c._count._all]))
 
   const lastRanLabel = lastRun?.finishedAt
@@ -56,8 +82,8 @@ export default async function AdminPage() {
     },
     {
       href: "/admin/reports",
-      label: "Reports",
-      desc: "Papers flagged by users as incorrectly classified",
+      label: "User Reports",
+      desc: "Papers flagged by users as incorrectly classified or incorrect metadata.",
       badge: openReports,
     },
     {
@@ -130,7 +156,7 @@ export default async function AdminPage() {
         >
           <div className="card-body gap-3">
             <div className="flex items-center justify-between">
-              <h2 className="card-title">Review</h2>
+              <h2 className="card-title">Included</h2>
               {pendingReview > 0 && <span className="badge badge-warning">{pendingReview}</span>}
             </div>
             <p className="text-base-content/60 text-sm">
@@ -153,7 +179,8 @@ export default async function AdminPage() {
               )}
             </div>
             <p className="text-base-content/60 text-sm">
-              Double-check auto-excluded papers — confirm they should be excluded or accept any that belong.
+              Double-check auto-excluded papers — confirm they should be excluded or accept any that
+              belong.
             </p>
           </div>
         </a>

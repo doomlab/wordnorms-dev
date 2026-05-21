@@ -44,7 +44,7 @@ export default async function AdminExcludedDetailPage({
         <div>
           <h1 className="text-2xl font-bold leading-snug">{cap(paper.title)}</h1>
           {paper.reviewedById && (
-            <span className="badge badge-neutral badge-sm mt-2">reviewed</span>
+            <span className="badge badge-success badge-sm mt-2">reviewed</span>
           )}
         </div>
         {paper.modelScore != null && (
