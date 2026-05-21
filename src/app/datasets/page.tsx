@@ -196,6 +196,13 @@ export default async function DatasetsPage({
 
   const hasFilters = q || selectedLanguages.length || selectedDecades.length || selectedFlags.length
 
+  const downloadParams = new URLSearchParams()
+  if (q) downloadParams.set("q", q)
+  selectedLanguages.forEach((l) => downloadParams.append("lang", l))
+  selectedDecades.forEach((d) => downloadParams.append("decade", d))
+  selectedFlags.forEach((f) => downloadParams.append("flag", f))
+  const downloadHref = `/api/download/datasets${downloadParams.size ? `?${downloadParams}` : ""}`
+
   const syncDate = new Date(data.syncedAt).toLocaleDateString("en-US", {
     month: "long", day: "numeric", year: "numeric",
   })
@@ -232,7 +239,12 @@ export default async function DatasetsPage({
               {cards.length === 1 ? "dataset" : "datasets"}
               {hasFilters && " match your filters"}
             </p>
-            <SuggestDatasetButton />
+            <div className="flex items-center gap-2">
+              <a href={downloadHref} className="btn btn-outline btn-sm">
+                Download CSV
+              </a>
+              <SuggestDatasetButton />
+            </div>
           </div>
 
           {cards.length === 0 ? (

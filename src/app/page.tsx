@@ -144,6 +144,13 @@ export default async function Home({
 
   const { byDoi: datasetByDoi, byTitle: datasetByTitle } = loadDatasetLookup()
 
+  const downloadParams = new URLSearchParams()
+  if (q) downloadParams.set("q", q)
+  languages.forEach((l) => downloadParams.append("lang", l))
+  decades.forEach((d) => downloadParams.append("decade", d))
+  stimuliTypes.forEach((s) => downloadParams.append("stimuli", s))
+  const downloadHref = `/api/download/norms${downloadParams.size ? `?${downloadParams}` : ""}`
+
   return (
     <div className="min-h-screen bg-base-100 flex flex-col">
       <Navbar />
@@ -159,7 +166,12 @@ export default async function Home({
               <span className="font-semibold text-base-content">{totalPapers}</span> norm{" "}
               {totalPapers === 1 ? "set" : "sets"}
             </p>
-            <SuggestArticleButton isLoggedIn={!!userId} />
+            <div className="flex items-center gap-2">
+              <a href={downloadHref} className="btn btn-outline btn-sm">
+                Download CSV
+              </a>
+              <SuggestArticleButton isLoggedIn={!!userId} />
+            </div>
           </div>
 
           {papers.length === 0 ? (
