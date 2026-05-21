@@ -3,6 +3,7 @@ import { MergeActions } from "./MergeActions"
 import { DuplicateResultsTable } from "./DuplicateResultsTable"
 import { StatusBadge } from "src/app/components/StatusBadge"
 import { AutomergeVersionsButton } from "./AutomergeVersionsButton"
+import { AutomergeZenodoButton } from "./AutomergeZenodoButton"
 import { MergeGroupButton } from "./MergeGroupButton"
 import { DismissGroupButton } from "./DismissGroupButton"
 
@@ -93,16 +94,32 @@ export default async function AdminDuplicatesPage({ searchParams }: Props) {
     authors: string[]; journal: string | null; has_extraction: boolean; groupkey: string
   }
 
-  const [versionPairsResult] = await db.$queryRaw<[{ count: bigint }]>`
-    SELECT COUNT(*)::int AS count
-    FROM "Paper" v
-    JOIN "Paper" c ON c.doi = regexp_replace(v.doi, '[._]v[0-9]+$', '')
-    WHERE v.doi ~ '[._]v[0-9]+$'
-      AND v.doi != regexp_replace(v.doi, '[._]v[0-9]+$', '')
-      AND v."canonicalPaperId" IS NULL
-      AND c."canonicalPaperId" IS NULL
-  `
+  const [[versionPairsResult], [zenodoGroupsResult]] = await Promise.all([
+    db.$queryRaw<[{ count: bigint }]>`
+      SELECT COUNT(*)::int AS count
+      FROM "Paper" v
+      JOIN "Paper" c ON c.doi = regexp_replace(v.doi, '[._]v[0-9]+$', '')
+      WHERE v.doi ~ '[._]v[0-9]+$'
+        AND v.doi != regexp_replace(v.doi, '[._]v[0-9]+$', '')
+        AND v."canonicalPaperId" IS NULL
+        AND c."canonicalPaperId" IS NULL
+    `,
+    db.$queryRaw<[{ count: bigint }]>`
+      SELECT COUNT(*)::int AS count FROM (
+        SELECT left(regexp_replace(regexp_replace(lower(title), '[^a-z0-9 ]', '', 'g'), '\s+', ' ', 'g'), 80),
+               lower(authors[1])
+        FROM "Paper"
+        WHERE doi ~ '^10\.5281/zenodo\.\d+$'
+          AND "canonicalPaperId" IS NULL
+          AND array_length(authors, 1) > 0
+          AND length(title) > 20
+        GROUP BY 1, 2
+        HAVING COUNT(*) > 1
+      ) sub
+    `,
+  ])
   const versionPairsCount = Number(versionPairsResult?.count ?? 0)
+  const zenodoGroupsCount = Number(zenodoGroupsResult?.count ?? 0)
 
   type GroupCount = { count: bigint }
   const [doiRows, titleRows, doiGroupCount, titleGroupCount, ignoredGroups] = await Promise.all([
@@ -193,7 +210,7 @@ export default async function AdminDuplicatesPage({ searchParams }: Props) {
       <h1 className="text-3xl font-bold mb-2">Duplicates</h1>
 
       {versionPairsCount > 0 && (
-        <div className="alert mb-6 flex items-center justify-between">
+        <div className="alert mb-3 flex items-center justify-between">
           <div>
             <p className="font-semibold text-sm">Versioned DOI duplicates detected</p>
             <p className="text-sm text-base-content/60">
@@ -201,6 +218,18 @@ export default async function AdminDuplicatesPage({ searchParams }: Props) {
             </p>
           </div>
           <AutomergeVersionsButton count={versionPairsCount} />
+        </div>
+      )}
+
+      {zenodoGroupsCount > 0 && (
+        <div className="alert mb-6 flex items-center justify-between">
+          <div>
+            <p className="font-semibold text-sm">Zenodo version groups detected</p>
+            <p className="text-sm text-base-content/60">
+              {zenodoGroupsCount} groups of Zenodo papers share the same title and first author. The earliest version (lowest record number) will be kept as canonical.
+            </p>
+          </div>
+          <AutomergeZenodoButton groupCount={zenodoGroupsCount} />
         </div>
       )}
 
