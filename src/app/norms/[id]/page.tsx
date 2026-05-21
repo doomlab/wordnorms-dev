@@ -8,36 +8,52 @@ import { SuggestExtractionEdits } from "../../components/SuggestExtractionEdits"
 import { getBlitzContext } from "../../blitz-server"
 import db from "db"
 
-async function findDatasetCard(
+async function findDatasetCards(
   paperId: number,
   doi: string | null,
   title: string
-): Promise<{ bibtex: string; title: string } | null> {
+): Promise<{ bibtex: string; title: string }[]> {
   const p = path.join(process.cwd(), "data", "model-cards", "_data.json")
-  if (!fs.existsSync(p)) return null
+  if (!fs.existsSync(p)) return []
   try {
     const { cards } = JSON.parse(fs.readFileSync(p, "utf8")) as {
       cards: { bibtex: string; citation: { doi: string | null; title: string } }[]
     }
-    // Manual link takes precedence
-    const dbLink = await db.datasetLink.findFirst({ where: { paperId } })
-    if (dbLink) {
-      const byLink = cards.find((c) => c.bibtex === dbLink.bibtex)
-      if (byLink) return { bibtex: byLink.bibtex, title: byLink.citation.title }
+    const seen = new Set<string>()
+    const results: { bibtex: string; title: string }[] = []
+
+    const add = (c: { bibtex: string; citation: { title: string } }) => {
+      if (!seen.has(c.bibtex)) {
+        seen.add(c.bibtex)
+        results.push({ bibtex: c.bibtex, title: c.citation.title })
+      }
     }
-    // DOI match
-    const byDoi = doi
-      ? cards.find((c) => c.citation.doi?.toLowerCase() === doi.toLowerCase())
-      : undefined
-    if (byDoi) return { bibtex: byDoi.bibtex, title: byDoi.citation.title }
-    // Title fallback
-    const normalizeTitle = (t: string) => t.toLowerCase().trim().replace(/\s+/g, " ")
-    const byTitle = cards.find(
-      (c) => normalizeTitle(c.citation.title) === normalizeTitle(title)
-    )
-    return byTitle ? { bibtex: byTitle.bibtex, title: byTitle.citation.title } : null
+
+    // Manual links
+    const dbLinks = await db.datasetLink.findMany({ where: { paperId } })
+    for (const link of dbLinks) {
+      const c = cards.find((c) => c.bibtex === link.bibtex)
+      if (c) add(c)
+    }
+
+    // All cards sharing this DOI
+    if (doi) {
+      for (const c of cards) {
+        if (c.citation.doi?.toLowerCase() === doi.toLowerCase()) add(c)
+      }
+    }
+
+    // Title fallback (only if nothing matched yet)
+    if (results.length === 0) {
+      const normalizeTitle = (t: string) => t.toLowerCase().trim().replace(/\s+/g, " ")
+      for (const c of cards) {
+        if (normalizeTitle(c.citation.title) === normalizeTitle(title)) add(c)
+      }
+    }
+
+    return results
   } catch {
-    return null
+    return []
   }
 }
 
@@ -86,7 +102,7 @@ export default async function NormDetailPage({
   const ext = paper.extraction
   const doiUrl = paper.doi ? `https://doi.org/${paper.doi}` : null
   const isAiExtracted = ext && ["groq", "ollama"].includes(ext.extractedBy ?? "")
-  const linkedDataset = await findDatasetCard(paper.id, paper.doi, paper.title)
+  const linkedDatasets = await findDatasetCards(paper.id, paper.doi, paper.title)
 
   // Resolve which cited papers are in the DB, following canonical resolution for duplicates
   const citedIds = paper.citationsFrom.map((c) => c.citedOpenAlexId)
@@ -168,7 +184,7 @@ export default async function NormDetailPage({
         </div>
 
         {/* Links */}
-        {(doiUrl || paper.pdfUrl || linkedDataset) && (
+        {(doiUrl || paper.pdfUrl || linkedDatasets.length > 0) && (
           <div className="flex flex-wrap gap-2 mb-8">
             {doiUrl && (
               <a
@@ -191,14 +207,15 @@ export default async function NormDetailPage({
               </a>
             )}
 
-            {linkedDataset && (
+            {linkedDatasets.map((ds) => (
               <a
-                href={`/datasets/${linkedDataset.bibtex}`}
-                className="btn btn-ghost btn-outline btn-sm"
+                key={ds.bibtex}
+                href={`/datasets/${ds.bibtex}`}
+                className="btn btn-outline btn-sm"
               >
-                View Dataset
+                {linkedDatasets.length > 1 ? ds.bibtex : "View Dataset"}
               </a>
-            )}
+            ))}
             {(role === "ADMIN" || role === "SUPER_ADMIN") && (
               <a
                 href={`/admin/papers/${paper.id}?from=/norms/${paper.id}`}
