@@ -119,16 +119,17 @@ export default async function AdminDuplicatesPage({ searchParams }: Props) {
     `,
     db.$queryRaw<GroupMember[]>`
       WITH dup_titles AS (
-        SELECT lower(left(title, 80)) AS ntitle FROM "Paper"
+        SELECT left(regexp_replace(regexp_replace(lower(title), '[^a-z0-9 ]', '', 'g'), '\s+', ' ', 'g'), 80) AS ntitle
+        FROM "Paper"
         WHERE "canonicalPaperId" IS NULL AND length(title) > 20
-          AND doi IS NULL
         GROUP BY ntitle HAVING COUNT(*) > 1
         ORDER BY COUNT(*) DESC LIMIT 50
       )
       SELECT p.id, p.title, p.year, p.status::text AS status, p.doi, p.authors, p.journal,
              EXISTS (SELECT 1 FROM "PaperExtraction" pe WHERE pe."paperId" = p.id) AS has_extraction,
-             lower(left(p.title, 80)) AS groupkey
-      FROM "Paper" p JOIN dup_titles d ON lower(left(p.title, 80)) = d.ntitle
+             left(regexp_replace(regexp_replace(lower(p.title), '[^a-z0-9 ]', '', 'g'), '\s+', ' ', 'g'), 80) AS groupkey
+      FROM "Paper" p
+      JOIN dup_titles d ON left(regexp_replace(regexp_replace(lower(p.title), '[^a-z0-9 ]', '', 'g'), '\s+', ' ', 'g'), 80) = d.ntitle
       WHERE p."canonicalPaperId" IS NULL
       ORDER BY groupkey, p.id
     `,
@@ -141,9 +142,11 @@ export default async function AdminDuplicatesPage({ searchParams }: Props) {
     `,
     db.$queryRaw<[GroupCount]>`
       SELECT COUNT(*)::int AS count FROM (
-        SELECT lower(left(title, 80)) FROM "Paper"
-        WHERE "canonicalPaperId" IS NULL AND length(title) > 20 AND doi IS NULL
-        GROUP BY lower(left(title, 80)) HAVING COUNT(*) > 1 LIMIT 50
+        SELECT left(regexp_replace(regexp_replace(lower(title), '[^a-z0-9 ]', '', 'g'), '\s+', ' ', 'g'), 80)
+        FROM "Paper"
+        WHERE "canonicalPaperId" IS NULL AND length(title) > 20
+        GROUP BY 1 HAVING COUNT(*) > 1
+        LIMIT 50
       ) sub
     `,
   ])
@@ -242,7 +245,7 @@ export default async function AdminDuplicatesPage({ searchParams }: Props) {
           {titleGroups.length > 0 && (
             <>
               <h2 className={`font-semibold text-sm mb-3 text-base-content/70 uppercase tracking-wide ${doiGroups.length > 0 ? "mt-10" : ""}`}>
-                Same title, no DOI ({titleGroups.length} groups)
+                Similar title ({titleGroups.length} groups)
               </h2>
               <GroupTable groups={titleGroups} />
             </>
