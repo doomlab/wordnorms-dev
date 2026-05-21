@@ -108,7 +108,7 @@ export default async function Home({
     db.paper.findMany({
       where: paperWhere,
       include: { extraction: { select: { language: true, stimuliType: true, stimuliCount: true, normsCollected: true, verifiedAt: true } } },
-      orderBy: { year: { sort: "desc", nulls: "last" } },
+      orderBy: [{ updatedAt: "desc" }, { year: { sort: "desc", nulls: "last" } }],
       skip,
       take: PAGE_SIZE,
     }),
