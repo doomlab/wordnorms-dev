@@ -32,6 +32,10 @@ export default resolver.pipe(
             data: { paperId: canonical_id },
           })
         }
+        await tx.paper.updateMany({
+          where: { canonicalPaperId: versioned_id },
+          data: { canonicalPaperId: canonical_id },
+        })
         await tx.paper.update({
           where: { id: versioned_id },
           data: { canonicalPaperId: canonical_id },

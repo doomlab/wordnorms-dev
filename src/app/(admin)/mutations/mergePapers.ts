@@ -34,6 +34,13 @@ export default resolver.pipe(
         })
       }
 
+      // Reroute any papers already pointing to the duplicate → point them to the new canonical
+      // This prevents a→b→c chains; the DB stays at max 1 level deep
+      await tx.paper.updateMany({
+        where: { canonicalPaperId: duplicateId },
+        data: { canonicalPaperId: canonicalId },
+      })
+
       return tx.paper.update({
         where: { id: duplicateId },
         data: { canonicalPaperId: canonicalId },
