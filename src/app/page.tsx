@@ -94,13 +94,14 @@ export default async function Home({
   const paperWhere = {
     status: "ACCEPTED" as const,
     canonicalPaperId: null,
-    extraction:
-      languages.length || stimuliTypes.length
-        ? {
+    ...(languages.length || stimuliTypes.length
+      ? {
+          extraction: {
             ...(languages.length ? { language: { hasSome: languages } } : {}),
             ...(stimuliTypes.length ? { stimuliType: { hasSome: stimuliTypes } } : {}),
-          }
-        : { isNot: null },
+          },
+        }
+      : {}),
     ...(andClauses.length ? { AND: andClauses } : {}),
   }
 
@@ -195,6 +196,9 @@ export default async function Home({
                             >
                               dataset
                             </a>
+                          )}
+                          {!ext && (
+                            <span className="badge badge-outline badge-sm shrink-0">awaiting extraction</span>
                           )}
                           {ext?.verifiedAt && (
                             <span className="badge badge-success badge-sm shrink-0">verified</span>
