@@ -3,6 +3,8 @@ import { Pagination } from "src/app/components/Pagination"
 
 export const metadata = { title: "Citation Review – Admin" }
 
+const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
+
 const PER_PAGE = 50
 
 export default async function CitationsPage({
@@ -118,7 +120,7 @@ export default async function CitationsPage({
                   return (
                     <tr key={g.citedOpenAlexId} className={`hover:bg-base-200 ${g.reviewed ? "opacity-50" : ""}`}>
                       <td className="text-sm align-top py-3">
-                        {g.title ?? <span className="text-base-content/30 italic">no title</span>}
+                        {g.title ? cap(g.title) : <span className="text-base-content/30 italic">no title</span>}
                       </td>
                       <td className="text-sm text-base-content/60 align-top py-3">{g.year ?? "—"}</td>
                       <td className="text-sm text-base-content/60 italic align-top py-3">{g.journal ?? "—"}</td>
@@ -131,7 +133,7 @@ export default async function CitationsPage({
                               className="text-xs link link-hover text-base-content/50 max-w-[200px] truncate block"
                               title={p.title}
                             >
-                              {p.title}
+                              {cap(p.title)}
                             </a>
                           ))}
                           {citedBy.length > 3 && (

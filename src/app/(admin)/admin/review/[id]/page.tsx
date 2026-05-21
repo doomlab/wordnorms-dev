@@ -2,6 +2,8 @@ import { notFound } from "next/navigation"
 import db from "db"
 import { PaperActions } from "../PaperActions"
 
+const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
+
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
   const paper = await db.paper.findUnique({ where: { id: Number(id) }, select: { title: true } })
@@ -38,7 +40,7 @@ export default async function AdminReviewDetailPage({
       </a>
 
       <div className="flex items-start justify-between gap-4 mb-6">
-        <h1 className="text-2xl font-bold leading-snug">{paper.title}</h1>
+        <h1 className="text-2xl font-bold leading-snug">{cap(paper.title)}</h1>
         {paper.modelScore != null && (
           <span className="badge badge-outline shrink-0 mt-1">
             Score {paper.modelScore.toFixed(2)}
