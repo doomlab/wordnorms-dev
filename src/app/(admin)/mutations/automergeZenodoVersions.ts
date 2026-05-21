@@ -14,17 +14,15 @@ export default resolver.pipe(
       WITH zenodo AS (
         SELECT id,
           left(regexp_replace(regexp_replace(lower(title), '[^a-z0-9 ]', '', 'g'), '\s+', ' ', 'g'), 80) AS ntitle,
-          lower(authors[1]) AS first_author,
-          (regexp_match(doi, '^10\.5281/zenodo\.(\d+)$'))[1]::int AS record_id
+          (regexp_match(doi, '^10[.]5281/zenodo[.]([0-9]+)$'))[1]::int AS record_id
         FROM "Paper"
-        WHERE doi ~ '^10\.5281/zenodo\.\d+$'
+        WHERE doi ~ '^10[.]5281/zenodo[.][0-9]+$'
           AND "canonicalPaperId" IS NULL
-          AND array_length(authors, 1) > 0
           AND length(title) > 20
       )
       SELECT array_agg(id ORDER BY record_id) AS ids
       FROM zenodo
-      GROUP BY ntitle, first_author
+      GROUP BY ntitle
       HAVING COUNT(*) > 1
     `
 

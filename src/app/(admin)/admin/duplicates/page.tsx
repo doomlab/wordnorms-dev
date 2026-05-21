@@ -106,14 +106,12 @@ export default async function AdminDuplicatesPage({ searchParams }: Props) {
     `,
     db.$queryRaw<[{ count: bigint }]>`
       SELECT COUNT(*)::int AS count FROM (
-        SELECT left(regexp_replace(regexp_replace(lower(title), '[^a-z0-9 ]', '', 'g'), '\s+', ' ', 'g'), 80),
-               lower(authors[1])
+        SELECT left(regexp_replace(regexp_replace(lower(title), '[^a-z0-9 ]', '', 'g'), '\s+', ' ', 'g'), 80)
         FROM "Paper"
-        WHERE doi ~ '^10\.5281/zenodo\.\d+$'
+        WHERE doi ~ '^10[.]5281/zenodo[.][0-9]+$'
           AND "canonicalPaperId" IS NULL
-          AND array_length(authors, 1) > 0
           AND length(title) > 20
-        GROUP BY 1, 2
+        GROUP BY 1
         HAVING COUNT(*) > 1
       ) sub
     `,
