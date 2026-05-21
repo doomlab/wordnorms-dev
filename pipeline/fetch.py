@@ -124,7 +124,7 @@ def fetch_openalex():
                 "title": w.get("title"),
                 "year": w.get("publication_year"),
                 "doi": doi,
-                "openalex_id": w.get("id"),
+                "openalex_id": (w.get("id") or "").replace("https://openalex.org/", "") or None,
                 "authors": [
                     a["author"]["display_name"]
                     for a in w.get("authorships", [])
