@@ -3,6 +3,8 @@ import { Pagination } from "src/app/components/Pagination"
 
 export const metadata = { title: "Review – Admin" }
 
+const capFirst = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
+
 const PAGE_SIZE = 50
 
 export default async function AdminReviewPage({
@@ -61,7 +63,7 @@ export default async function AdminReviewPage({
                   return (
                   <tr key={p.id}>
                     <td className="max-w-sm">
-                      <p className="font-medium line-clamp-2">{p.title}</p>
+                      <p className="font-medium line-clamp-2">{capFirst(p.title)}</p>
                       {p.doi && (
                         <a
                           href={`https://doi.org/${p.doi}`}
