@@ -103,7 +103,9 @@ model Paper {
   metadataEdits    MetadataEditSuggestion[]
   extractionEdits  ExtractionEditSuggestion[]
   citationsFrom    PaperCitation[]
+  datasetLinks     DatasetLink[]
 }
+
 
 model PaperCitation {
   id              Int      @id @default(autoincrement())
@@ -280,4 +282,13 @@ model Token {
   userId Int
 
   @@unique([hashedToken, type])
+}
+
+model DatasetLink {
+  bibtex    String   @id
+  paperId   Int
+  createdAt DateTime @default(now())
+  paper     Paper    @relation(fields: [paperId], references: [id], onDelete: Cascade)
+
+  @@index([paperId])
 }

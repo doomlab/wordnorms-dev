@@ -8,20 +8,29 @@ import { SuggestExtractionEdits } from "../../components/SuggestExtractionEdits"
 import { getBlitzContext } from "../../blitz-server"
 import db from "db"
 
-function findDatasetCard(
+async function findDatasetCard(
+  paperId: number,
   doi: string | null,
   title: string
-): { bibtex: string; title: string } | null {
+): Promise<{ bibtex: string; title: string } | null> {
   const p = path.join(process.cwd(), "data", "model-cards", "_data.json")
   if (!fs.existsSync(p)) return null
   try {
     const { cards } = JSON.parse(fs.readFileSync(p, "utf8")) as {
       cards: { bibtex: string; citation: { doi: string | null; title: string } }[]
     }
+    // Manual link takes precedence
+    const dbLink = await db.datasetLink.findFirst({ where: { paperId } })
+    if (dbLink) {
+      const byLink = cards.find((c) => c.bibtex === dbLink.bibtex)
+      if (byLink) return { bibtex: byLink.bibtex, title: byLink.citation.title }
+    }
+    // DOI match
     const byDoi = doi
       ? cards.find((c) => c.citation.doi?.toLowerCase() === doi.toLowerCase())
       : undefined
     if (byDoi) return { bibtex: byDoi.bibtex, title: byDoi.citation.title }
+    // Title fallback
     const normalizeTitle = (t: string) => t.toLowerCase().trim().replace(/\s+/g, " ")
     const byTitle = cards.find(
       (c) => normalizeTitle(c.citation.title) === normalizeTitle(title)
@@ -77,7 +86,7 @@ export default async function NormDetailPage({
   const ext = paper.extraction
   const doiUrl = paper.doi ? `https://doi.org/${paper.doi}` : null
   const isAiExtracted = ext && ["groq", "ollama"].includes(ext.extractedBy ?? "")
-  const linkedDataset = findDatasetCard(paper.doi, paper.title)
+  const linkedDataset = await findDatasetCard(paper.id, paper.doi, paper.title)
 
   // Resolve which cited papers are in the DB, following canonical resolution for duplicates
   const citedIds = paper.citationsFrom.map((c) => c.citedOpenAlexId)

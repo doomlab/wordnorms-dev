@@ -169,6 +169,9 @@ export async function Navbar({ leftLinks, rightExtra, className }: NavbarProps) 
                       {duplicateSuggestionsCount > 0 && <span className="badge badge-warning badge-sm">{duplicateSuggestionsCount}</span>}
                     </Link>
                   </li>
+                  <li><Link href="/admin/datasets" className="flex justify-between">
+                    <span>Datasets</span>
+                  </Link></li>
                   <li><Link href="/admin/papers">Edit Papers</Link></li>
                   <li><Link href="/admin/stats">Stats</Link></li>
                   <li><Link href="/admin/users">Users</Link></li>
