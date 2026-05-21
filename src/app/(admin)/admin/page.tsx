@@ -147,14 +147,13 @@ export default async function AdminPage() {
         >
           <div className="card-body gap-3">
             <div className="flex items-center justify-between">
-              <h2 className="card-title">Borderline Excluded</h2>
+              <h2 className="card-title">Excluded</h2>
               {borderlineExcluded > 0 && (
                 <span className="badge badge-warning">{borderlineExcluded}</span>
               )}
             </div>
             <p className="text-base-content/60 text-sm">
-              Auto-excluded papers the model wasn&apos;t confident about — sorted by score so the
-              closest calls are at the top. Accept any that belong.
+              Double-check auto-excluded papers — confirm they should be excluded or accept any that belong.
             </p>
           </div>
         </a>
