@@ -4,6 +4,7 @@ import { DuplicateResultsTable } from "./DuplicateResultsTable"
 import { StatusBadge } from "src/app/components/StatusBadge"
 import { AutomergeVersionsButton } from "./AutomergeVersionsButton"
 import { MergeGroupButton } from "./MergeGroupButton"
+import { DismissGroupButton } from "./DismissGroupButton"
 
 export const metadata = { title: "Duplicates – Admin" }
 
@@ -15,6 +16,10 @@ type Props = { searchParams: Promise<{ q?: string; a?: string; b?: string; tab?:
 
 export default async function AdminDuplicatesPage({ searchParams }: Props) {
   const { q, a, b, tab, next: nextParam, from: fromParam } = await searchParams
+
+  const isMergedTab = tab === "merged"
+  const isSuggestionsTab = tab === "suggestions"
+  const isDismissedTab = tab === "dismissed"
 
   // Compare mode: both IDs provided
   if (a && b) {
@@ -72,8 +77,6 @@ export default async function AdminDuplicatesPage({ searchParams }: Props) {
   }
 
   const mergedCount = await db.paper.count({ where: { canonicalPaperId: { not: null } } })
-  const isMergedTab = tab === "merged"
-  const isSuggestionsTab = tab === "suggestions"
 
   // Merged tab: show all duplicate→canonical relationships
   const mergedPapers = isMergedTab
@@ -102,7 +105,7 @@ export default async function AdminDuplicatesPage({ searchParams }: Props) {
   const versionPairsCount = Number(versionPairsResult?.count ?? 0)
 
   type GroupCount = { count: bigint }
-  const [doiRows, titleRows, doiGroupCount, titleGroupCount] = await Promise.all([
+  const [doiRows, titleRows, doiGroupCount, titleGroupCount, ignoredGroups] = await Promise.all([
     db.$queryRaw<GroupMember[]>`
       WITH dup_dois AS (
         SELECT doi FROM "Paper"
@@ -149,9 +152,13 @@ export default async function AdminDuplicatesPage({ searchParams }: Props) {
         LIMIT 50
       ) sub
     `,
+    db.duplicateGroupIgnore.findMany({ orderBy: { createdAt: "desc" } }),
   ])
 
-  // Group rows by key
+  // Group rows by key, filtering out dismissed groups
+  const ignoredDoiKeys = new Set(ignoredGroups.filter(g => g.groupType === "doi").map(g => g.groupKey))
+  const ignoredTitleKeys = new Set(ignoredGroups.filter(g => g.groupType === "title").map(g => g.groupKey))
+
   const groupBy = (rows: GroupMember[]) => {
     const map = new Map<string, GroupMember[]>()
     for (const r of rows) {
@@ -161,13 +168,13 @@ export default async function AdminDuplicatesPage({ searchParams }: Props) {
     }
     return [...map.values()]
   }
-  const doiGroups = groupBy(doiRows)
-  const titleGroups = groupBy(titleRows)
-  const suggestionsCount = Number(doiGroupCount[0]?.count ?? 0) + Number(titleGroupCount[0]?.count ?? 0)
+  const doiGroups = groupBy(doiRows).filter(g => !ignoredDoiKeys.has(g[0]!.groupkey))
+  const titleGroups = groupBy(titleRows).filter(g => !ignoredTitleKeys.has(g[0]!.groupkey))
+  const suggestionsCount = doiGroups.length + titleGroups.length
 
   // Search mode
   const results =
-    !isMergedTab && !isSuggestionsTab && q && q.trim().length > 1
+    !isMergedTab && !isSuggestionsTab && !isDismissedTab && q && q.trim().length > 1
       ? await db.paper.findMany({
           where: {
             OR: [
@@ -201,7 +208,7 @@ export default async function AdminDuplicatesPage({ searchParams }: Props) {
         <a
           href="/admin/duplicates"
           role="tab"
-          className={`tab ${!isMergedTab && !isSuggestionsTab ? "tab-active" : ""}`}
+          className={`tab ${!isMergedTab && !isSuggestionsTab && !isDismissedTab ? "tab-active" : ""}`}
         >
           Search &amp; Merge
         </a>
@@ -213,6 +220,16 @@ export default async function AdminDuplicatesPage({ searchParams }: Props) {
           Suggestions
           {suggestionsCount > 0 && (
             <span className="badge badge-neutral badge-sm ml-2">{suggestionsCount}</span>
+          )}
+        </a>
+        <a
+          href="/admin/duplicates?tab=dismissed"
+          role="tab"
+          className={`tab ${isDismissedTab ? "tab-active" : ""}`}
+        >
+          Dismissed
+          {ignoredGroups.length > 0 && (
+            <span className="badge badge-neutral badge-sm ml-2">{ignoredGroups.length}</span>
           )}
         </a>
         <a
@@ -230,7 +247,7 @@ export default async function AdminDuplicatesPage({ searchParams }: Props) {
       {isSuggestionsTab ? (
         <>
           <p className="text-base-content/60 mb-6 text-sm">
-            Groups of papers sharing a DOI or title. Click <strong>Make canonical</strong> on the one to keep — the rest will be merged into it.
+            Groups of papers sharing a DOI or title. Click <strong>Make canonical</strong> on the one to keep — the rest will be merged into it. Click <strong>Dismiss</strong> to hide a group that is not actually a duplicate.
           </p>
 
           {doiGroups.length > 0 && (
@@ -238,7 +255,7 @@ export default async function AdminDuplicatesPage({ searchParams }: Props) {
               <h2 className="font-semibold text-sm mb-3 text-base-content/70 uppercase tracking-wide">
                 Same DOI ({doiGroups.length} groups)
               </h2>
-              <GroupTable groups={doiGroups} />
+              <GroupTable groups={doiGroups} groupType="doi" />
             </>
           )}
 
@@ -247,7 +264,7 @@ export default async function AdminDuplicatesPage({ searchParams }: Props) {
               <h2 className={`font-semibold text-sm mb-3 text-base-content/70 uppercase tracking-wide ${doiGroups.length > 0 ? "mt-10" : ""}`}>
                 Similar title ({titleGroups.length} groups)
               </h2>
-              <GroupTable groups={titleGroups} />
+              <GroupTable groups={titleGroups} groupType="title" />
             </>
           )}
 
@@ -255,6 +272,38 @@ export default async function AdminDuplicatesPage({ searchParams }: Props) {
             <p className="text-base-content/40 text-sm text-center py-10">
               No duplicate candidates found.
             </p>
+          )}
+        </>
+      ) : isDismissedTab ? (
+        <>
+          <p className="text-base-content/60 mb-6 text-sm">
+            Groups you dismissed as not being duplicates. Click <strong>Restore</strong> to bring them back to Suggestions.
+          </p>
+          {ignoredGroups.length === 0 ? (
+            <p className="text-base-content/40 text-sm text-center py-10">No dismissed groups.</p>
+          ) : (
+            <div className="border border-base-300 rounded-lg overflow-hidden divide-y divide-base-200">
+              {ignoredGroups.map((g) => (
+                <div
+                  key={`${g.groupType}:${g.groupKey}`}
+                  className="flex items-center justify-between px-4 py-3 text-sm gap-4"
+                >
+                  <div className="min-w-0">
+                    <span className="badge badge-outline badge-xs mr-2">{g.groupType}</span>
+                    <span className="font-medium">{cap(g.label)}</span>
+                    {g.groupType === "doi" && (
+                      <span className="font-mono text-xs text-base-content/40 ml-2">{g.groupKey}</span>
+                    )}
+                  </div>
+                  <DismissGroupButton
+                    groupKey={g.groupKey}
+                    groupType={g.groupType}
+                    label={g.label}
+                    isDismissed
+                  />
+                </div>
+              ))}
+            </div>
           )}
         </>
       ) : isMergedTab ? (
@@ -370,16 +419,31 @@ type GroupMember = {
   authors: string[]; journal: string | null; has_extraction: boolean; groupkey: string
 }
 
-function GroupTable({ groups }: { groups: GroupMember[][] }) {
+function GroupTable({ groups, groupType }: { groups: GroupMember[][], groupType: "doi" | "title" }) {
   return (
     <div className="space-y-4 mb-6">
       {groups.map((members) => {
         const allIds = members.map((m) => m.id)
+        const defaultOpen = members.length <= 5
         return (
-          <div key={members[0]!.groupkey} className="border border-base-300 rounded-lg overflow-hidden">
-            <div className="bg-base-200 px-4 py-2 text-xs font-semibold text-base-content/50 uppercase tracking-wide">
-              {cap(members[0]!.title)} — {members.length} copies
-            </div>
+          <details
+            key={members[0]!.groupkey}
+            open={defaultOpen}
+            className="border border-base-300 rounded-lg overflow-hidden"
+          >
+            <summary className="bg-base-200 px-4 py-2 cursor-pointer select-none list-none flex items-center justify-between gap-4">
+              <span className="text-xs font-semibold text-base-content/50 uppercase tracking-wide truncate min-w-0">
+                {cap(members[0]!.title)} — {members.length} {members.length === 1 ? "copy" : "copies"}
+              </span>
+              <div className="flex items-center gap-2 shrink-0">
+                <span className="text-xs text-base-content/30">▾</span>
+                <DismissGroupButton
+                  groupKey={members[0]!.groupkey}
+                  groupType={groupType}
+                  label={members[0]!.title}
+                />
+              </div>
+            </summary>
             <div className="divide-y divide-base-200">
               {members.map((m) => {
                 const authorStr = m.authors.length
@@ -416,7 +480,7 @@ function GroupTable({ groups }: { groups: GroupMember[][] }) {
                 )
               })}
             </div>
-          </div>
+          </details>
         )
       })}
     </div>

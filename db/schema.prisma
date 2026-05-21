@@ -292,3 +292,13 @@ model DatasetLink {
 
   @@index([paperId])
 }
+
+model DuplicateGroupIgnore {
+  id        Int      @id @default(autoincrement())
+  groupKey  String
+  groupType String
+  label     String
+  createdAt DateTime @default(now())
+
+  @@unique([groupKey, groupType])
+}
