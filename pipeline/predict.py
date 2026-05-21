@@ -64,6 +64,7 @@ def rebalance_validation(conn, seed=RANDOM_SEED):
     cur.execute("""
         SELECT COUNT(*) FROM "Paper"
         WHERE status IN ('ACCEPTED'::"PaperStatus", 'EXCLUDED'::"PaperStatus")
+          AND "canonicalPaperId" IS NULL
     """)
     total_labeled = cur.fetchone()[0]
     if total_labeled == 0:
@@ -72,6 +73,7 @@ def rebalance_validation(conn, seed=RANDOM_SEED):
     cur.execute("""
         SELECT COUNT(*) FROM "Paper"
         WHERE status IN ('ACCEPTED'::"PaperStatus", 'EXCLUDED'::"PaperStatus")
+          AND "canonicalPaperId" IS NULL
           AND "isValidation" = true
     """)
     current_val = cur.fetchone()[0]
@@ -83,6 +85,7 @@ def rebalance_validation(conn, seed=RANDOM_SEED):
     cur.execute("""
         SELECT id, status FROM "Paper"
         WHERE status IN ('ACCEPTED'::"PaperStatus", 'EXCLUDED'::"PaperStatus")
+          AND "canonicalPaperId" IS NULL
           AND "isValidation" = false
     """)
     candidates = cur.fetchall()
@@ -125,6 +128,7 @@ def load_labeled(engine):
         SELECT id, title, abstract, status, "isValidation"
         FROM "Paper"
         WHERE status IN ('ACCEPTED'::"PaperStatus", 'EXCLUDED'::"PaperStatus")
+          AND "canonicalPaperId" IS NULL
         """,
         engine,
     )
