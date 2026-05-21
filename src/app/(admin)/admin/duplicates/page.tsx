@@ -2,6 +2,7 @@ import db from "db"
 import { MergeActions } from "./MergeActions"
 import { DuplicateResultsTable } from "./DuplicateResultsTable"
 import { StatusBadge } from "src/app/components/StatusBadge"
+import { AutomergeVersionsButton } from "./AutomergeVersionsButton"
 
 export const metadata = { title: "Duplicates – Admin" }
 
@@ -88,6 +89,17 @@ export default async function AdminDuplicatesPage({ searchParams }: Props) {
     bid: number; btitle: string; byear: number | null; bstatus: string; bdoi: string | null
   }
 
+  const [versionPairsResult] = await db.$queryRaw<[{ count: bigint }]>`
+    SELECT COUNT(*)::int AS count
+    FROM "Paper" v
+    JOIN "Paper" c ON c.doi = regexp_replace(v.doi, '[._]v[0-9]+$', '')
+    WHERE v.doi ~ '[._]v[0-9]+$'
+      AND v.doi != regexp_replace(v.doi, '[._]v[0-9]+$', '')
+      AND v."canonicalPaperId" IS NULL
+      AND c."canonicalPaperId" IS NULL
+  `
+  const versionPairsCount = Number(versionPairsResult?.count ?? 0)
+
   const [doiPairs, titlePairs] = await Promise.all([
     db.$queryRaw<PairRow[]>`
       SELECT a.id AS aid, a.title AS atitle, a.year AS ayear, a.status AS astatus, a.doi AS adoi,
@@ -135,6 +147,18 @@ export default async function AdminDuplicatesPage({ searchParams }: Props) {
   return (
     <>
       <h1 className="text-3xl font-bold mb-2">Duplicates</h1>
+
+      {versionPairsCount > 0 && (
+        <div className="alert mb-6 flex items-center justify-between">
+          <div>
+            <p className="font-semibold text-sm">Versioned DOI duplicates detected</p>
+            <p className="text-sm text-base-content/60">
+              {versionPairsCount} papers with versioned DOIs (e.g. <code>.v18</code>, <code>_v1</code>) have a matching canonical paper. These can be safely auto-merged.
+            </p>
+          </div>
+          <AutomergeVersionsButton count={versionPairsCount} />
+        </div>
+      )}
 
       <div role="tablist" className="tabs tabs-bordered mb-8">
         <a
