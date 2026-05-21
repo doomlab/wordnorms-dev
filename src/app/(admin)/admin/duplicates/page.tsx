@@ -88,34 +88,33 @@ export default async function AdminDuplicatesPage({ searchParams }: Props) {
     bid: number; btitle: string; byear: number | null; bstatus: string; bdoi: string | null
   }
 
-  const [doiPairs, titlePairs] = isSuggestionsTab
-    ? await Promise.all([
-        db.$queryRaw<PairRow[]>`
-          SELECT a.id AS aid, a.title AS atitle, a.year AS ayear, a.status AS astatus, a.doi AS adoi,
-                 b.id AS bid, b.title AS btitle, b.year AS byear, b.status AS bstatus, b.doi AS bdoi
-          FROM "Paper" a
-          JOIN "Paper" b ON b.id > a.id AND a.doi = b.doi
-          WHERE a.doi IS NOT NULL
-            AND a."canonicalPaperId" IS NULL
-            AND b."canonicalPaperId" IS NULL
-          LIMIT 50
-        `,
-        db.$queryRaw<PairRow[]>`
-          WITH normed AS (
-            SELECT id, title, year, status, doi,
-                   lower(left(title, 80)) AS ntitle
-            FROM "Paper"
-            WHERE "canonicalPaperId" IS NULL AND length(title) > 20
-          )
-          SELECT a.id AS aid, a.title AS atitle, a.year AS ayear, a.status AS astatus, a.doi AS adoi,
-                 b.id AS bid, b.title AS btitle, b.year AS byear, b.status AS bstatus, b.doi AS bdoi
-          FROM normed a
-          JOIN normed b ON b.id > a.id AND a.ntitle = b.ntitle
-          WHERE (a.doi IS NULL OR b.doi IS NULL OR a.doi != b.doi)
-          LIMIT 50
-        `,
-      ])
-    : [[], []]
+  const [doiPairs, titlePairs] = await Promise.all([
+    db.$queryRaw<PairRow[]>`
+      SELECT a.id AS aid, a.title AS atitle, a.year AS ayear, a.status AS astatus, a.doi AS adoi,
+             b.id AS bid, b.title AS btitle, b.year AS byear, b.status AS bstatus, b.doi AS bdoi
+      FROM "Paper" a
+      JOIN "Paper" b ON b.id > a.id AND a.doi = b.doi
+      WHERE a.doi IS NOT NULL
+        AND a."canonicalPaperId" IS NULL
+        AND b."canonicalPaperId" IS NULL
+      LIMIT 50
+    `,
+    db.$queryRaw<PairRow[]>`
+      WITH normed AS (
+        SELECT id, title, year, status, doi,
+               lower(left(title, 80)) AS ntitle
+        FROM "Paper"
+        WHERE "canonicalPaperId" IS NULL AND length(title) > 20
+      )
+      SELECT a.id AS aid, a.title AS atitle, a.year AS ayear, a.status AS astatus, a.doi AS adoi,
+             b.id AS bid, b.title AS btitle, b.year AS byear, b.status AS bstatus, b.doi AS bdoi
+      FROM normed a
+      JOIN normed b ON b.id > a.id AND a.ntitle = b.ntitle
+      WHERE (a.doi IS NULL OR b.doi IS NULL OR a.doi != b.doi)
+      LIMIT 50
+    `,
+  ])
+  const suggestionsCount = doiPairs.length + titlePairs.length
 
   // Search mode
   const results =
@@ -151,6 +150,9 @@ export default async function AdminDuplicatesPage({ searchParams }: Props) {
           className={`tab ${isSuggestionsTab ? "tab-active" : ""}`}
         >
           Suggestions
+          {suggestionsCount > 0 && (
+            <span className="badge badge-ghost badge-sm ml-2">{suggestionsCount}</span>
+          )}
         </a>
         <a
           href="/admin/duplicates?tab=merged"
