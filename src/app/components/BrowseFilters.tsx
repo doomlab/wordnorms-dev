@@ -111,7 +111,7 @@ export function BrowseFilters({
           <p className="text-xs font-medium uppercase tracking-wide text-base-content/50 mb-2">
             Stimuli Type
           </p>
-          <div className="flex flex-col gap-1.5">
+          <div className="flex flex-col gap-1.5 max-h-48 overflow-y-auto pr-1">
             {allStimuliTypes.map((st) => (
               <label key={st} className="flex items-center gap-2 cursor-pointer">
                 <input

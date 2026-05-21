@@ -173,6 +173,7 @@ def main():
 
     try:
         rebalanced = rebalance_validation(conn)
+        conn.commit()
 
         df_labeled = load_labeled(engine)
         if len(df_labeled) < 10:
