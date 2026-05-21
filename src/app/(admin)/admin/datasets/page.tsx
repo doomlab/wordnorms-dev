@@ -91,7 +91,7 @@ export default async function AdminDatasetsPage() {
             Import from OpenAlex ({unmatchedWithDoi.length})
           </h2>
           <p className="text-xs text-base-content/50 mb-3">
-            These cards have DOIs but the paper isn't in the database yet. Click Import to fetch from OpenAlex and add as Pending Review.
+            These cards have DOIs but the paper is not in the database yet. Click Import to fetch from OpenAlex and add as Pending Review.
           </p>
           <div className="overflow-x-auto mb-10">
             <table className="table table-zebra text-sm">
