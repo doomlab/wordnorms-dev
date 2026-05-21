@@ -18,8 +18,8 @@ export function MergeActions({ idA, idB, nextHref }: { idA: number; idB: number;
     setPending(canonicalId)
     try {
       await merge({ canonicalId, duplicateId })
+      setPending(null)
       router.push(afterHref as any)
-      router.refresh()
     } catch (e: any) {
       setError(e.message ?? "Merge failed")
       setPending(null)

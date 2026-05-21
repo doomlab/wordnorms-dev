@@ -4,7 +4,7 @@ import { PipelineButton } from "./PipelineButton"
 export const metadata = { title: "Admin" }
 
 export default async function AdminPage() {
-  const [counts, extractionNew, extractionNoPdf, pendingMetadata, openReports, lastRun, activeRun, openSuggestions, unmatchedCitations, borderlineExcluded] =
+  const [counts, extractionNew, extractionNoPdf, pendingMetadata, openReports, lastRun, activeRun, openSuggestions, borderlineExcluded, unmatchedCitations] =
     await Promise.all([
       db.paper.groupBy({ by: ["status"], _count: { _all: true } }),
       db.paper.count({ where: { status: "ACCEPTED", extraction: null, pdfUrl: { not: null } } }),
