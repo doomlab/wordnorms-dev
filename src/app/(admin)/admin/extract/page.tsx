@@ -17,9 +17,10 @@ export default async function AdminExtractPage({
   const skip = (page - 1) * PAGE_SIZE
   const ctx = await getBlitzContext()
 
-  const hasPdfWhere = { status: "ACCEPTED" as const, extraction: null, pdfUrl: { not: null } }
+  const hasPdfWhere = { status: "ACCEPTED" as const, canonicalPaperId: null, extraction: null, pdfUrl: { not: null } }
   const noPdfWhere = {
     status: "ACCEPTED" as const,
+    canonicalPaperId: null,
     OR: [
       { extraction: { is: null }, pdfUrl: null },
       { extraction: { needsReview: true, confidence: null } },

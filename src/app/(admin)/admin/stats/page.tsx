@@ -8,9 +8,9 @@ function pct(n: number) {
 
 export default async function AdminStatsPage() {
   const [counts, extracted, metadataApproved, runs] = await Promise.all([
-    db.paper.groupBy({ by: ["status"], _count: { _all: true } }),
-    db.paper.count({ where: { status: "ACCEPTED", extraction: { isNot: null } } }),
-    db.paperExtraction.count({ where: { verifiedAt: { not: null }, paper: { status: "ACCEPTED" } } }),
+    db.paper.groupBy({ by: ["status"], where: { canonicalPaperId: null }, _count: { _all: true } }),
+    db.paper.count({ where: { status: "ACCEPTED", canonicalPaperId: null, extraction: { isNot: null } } }),
+    db.paperExtraction.count({ where: { verifiedAt: { not: null }, paper: { status: "ACCEPTED", canonicalPaperId: null } } }),
     db.modelRun.findMany({ orderBy: { createdAt: "desc" }, take: 20 }),
   ])
 

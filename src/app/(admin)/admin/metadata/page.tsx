@@ -17,6 +17,7 @@ export default async function AdminMetadataPage({
 
   const where = {
     status: "ACCEPTED" as const,
+    canonicalPaperId: null,
     extraction: { is: { verifiedAt: null } },
   }
 

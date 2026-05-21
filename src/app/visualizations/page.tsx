@@ -17,29 +17,29 @@ export default async function VisualizationsPage() {
       include: { citingPaper: { select: { openAlexId: true } } },
     }),
     db.paperExtraction.findMany({
-      where: { paper: { status: ACCEPTED } },
+      where: { paper: { status: ACCEPTED, canonicalPaperId: null } },
       select: { normsCollected: true, language: true, participantType: true },
     }),
     db.paper.groupBy({
       by: ["year"],
-      where: { status: ACCEPTED, year: { not: null } },
+      where: { status: ACCEPTED, canonicalPaperId: null, year: { not: null } },
       _count: { _all: true },
       orderBy: { year: "asc" },
     }),
     db.paper.groupBy({
       by: ["journal"],
-      where: { status: ACCEPTED, journal: { not: null } },
+      where: { status: ACCEPTED, canonicalPaperId: null, journal: { not: null } },
       _count: { _all: true },
       orderBy: { _count: { journal: "desc" } },
       take: 10,
     }),
     Promise.all([
-      db.paper.count(),
-      db.paper.count({ where: { status: { in: [...ACCEPTED.in] } } }),
+      db.paper.count({ where: { canonicalPaperId: null } }),
+      db.paper.count({ where: { status: { in: [...ACCEPTED.in] }, canonicalPaperId: null } }),
       db.paper.count({ where: { status: "PENDING_REVIEW" } }),
-      db.paper.count({ where: { status: { in: [...ACCEPTED.in] }, doi: { not: null } } }),
-      db.paper.count({ where: { status: { in: [...ACCEPTED.in] }, openAlexId: { not: null } } }),
-      db.paperExtraction.count({ where: { paper: { status: { in: [...ACCEPTED.in] } } } }),
+      db.paper.count({ where: { status: { in: [...ACCEPTED.in] }, canonicalPaperId: null, doi: { not: null } } }),
+      db.paper.count({ where: { status: { in: [...ACCEPTED.in] }, canonicalPaperId: null, openAlexId: { not: null } } }),
+      db.paperExtraction.count({ where: { paper: { status: { in: [...ACCEPTED.in] }, canonicalPaperId: null } } }),
     ]),
   ])
 

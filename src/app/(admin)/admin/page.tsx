@@ -6,23 +6,24 @@ export const metadata = { title: "Admin" }
 export default async function AdminPage() {
   const [counts, extractionNew, extractionNoPdf, pendingMetadata, openReports, lastRun, activeRun, openSuggestions, borderlineExcluded, unmatchedCitations] =
     await Promise.all([
-      db.paper.groupBy({ by: ["status"], _count: { _all: true } }),
-      db.paper.count({ where: { status: "ACCEPTED", extraction: null, pdfUrl: { not: null } } }),
+      db.paper.groupBy({ by: ["status"], where: { canonicalPaperId: null }, _count: { _all: true } }),
+      db.paper.count({ where: { status: "ACCEPTED", canonicalPaperId: null, extraction: null, pdfUrl: { not: null } } }),
       db.paper.count({
         where: {
           status: "ACCEPTED",
+          canonicalPaperId: null,
           OR: [
             { extraction: { is: null }, pdfUrl: null },
             { extraction: { needsReview: true, confidence: null } },
           ],
         },
       }),
-      db.paperExtraction.count({ where: { verifiedAt: null, paper: { status: "ACCEPTED" } } }),
+      db.paperExtraction.count({ where: { verifiedAt: null, paper: { status: "ACCEPTED", canonicalPaperId: null } } }),
       db.paperReport.count({ where: { resolved: false } }),
       db.pipelineRun.findFirst({ where: { status: "DONE" }, orderBy: { finishedAt: "desc" } }),
       db.pipelineRun.findFirst({ where: { status: "RUNNING" }, orderBy: { createdAt: "desc" } }),
       db.articleSuggestion.count({ where: { resolved: false } }),
-      db.paper.count({ where: { status: "EXCLUDED", modelScore: { gte: 0 }, reviewedBy: null } }),
+      db.paper.count({ where: { status: "EXCLUDED", canonicalPaperId: null, modelScore: { gte: 0 }, reviewedBy: null } }),
       db.$queryRaw<[{ count: bigint }]>`
         SELECT COUNT(*)::int AS count FROM "PaperCitation" pc
         WHERE NOT EXISTS (
