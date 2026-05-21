@@ -11,11 +11,13 @@ export function ReportActions({
   paperId,
   currentStatus,
   nextHref,
+  reason,
 }: {
   reportId: number
   paperId: number
   currentStatus: "ACCEPTED" | "EXCLUDED"
   nextHref: string
+  reason?: string
 }) {
   const router = useRouter()
   const [resolve] = useMutation(resolveReport)
@@ -67,13 +69,15 @@ export function ReportActions({
       >
         {status === "dismissing" ? <span className="loading loading-spinner loading-xs" /> : "Dismiss"}
       </button>
-      <button
-        className="btn btn-warning btn-wide"
-        onClick={handleReclassify}
-        disabled={busy}
-      >
-        {status === "reclassifying" ? <span className="loading loading-spinner loading-xs" /> : reclassifyLabel}
-      </button>
+      {reason !== "DUPLICATE" && (
+        <button
+          className="btn btn-warning btn-wide"
+          onClick={handleReclassify}
+          disabled={busy}
+        >
+          {status === "reclassifying" ? <span className="loading loading-spinner loading-xs" /> : reclassifyLabel}
+        </button>
+      )}
       <a href={nextHref} className="btn btn-ghost btn-outline">Skip →</a>
     </div>
   )

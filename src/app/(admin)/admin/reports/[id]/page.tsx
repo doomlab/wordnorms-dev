@@ -156,6 +156,7 @@ export default async function AdminReportDetailPage({
               paperId={paper.id}
               currentStatus={paper.status as "ACCEPTED" | "EXCLUDED"}
               nextHref={nextHref}
+              reason={report.reason}
             />
           </>
         )}
