@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import fs from "fs"
 import path from "path"
 import { DECADE_LABELS } from "../../../data/datasets"
+import { getBlitzContext } from "../../../blitz-server"
 
 const FLAG_LABELS: Record<string, string> = {
   accuracy: "Accuracy",
@@ -76,6 +77,11 @@ type Card = {
 }
 
 export async function GET(request: NextRequest) {
+  const ctx = await getBlitzContext()
+  if (!ctx.session.userId) {
+    return new NextResponse("Unauthorized", { status: 401 })
+  }
+
   const { searchParams } = request.nextUrl
 
   const q = searchParams.get("q")?.trim().toLowerCase() || undefined

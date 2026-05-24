@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import db from "db"
 import { DECADE_LABELS } from "../../../data/datasets"
+import { getBlitzContext } from "../../../blitz-server"
 
 const capFirst = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
 
@@ -18,6 +19,11 @@ function csvRow(cells: (string | number | null | undefined)[]): string {
 }
 
 export async function GET(request: NextRequest) {
+  const ctx = await getBlitzContext()
+  if (!ctx.session.userId) {
+    return new NextResponse("Unauthorized", { status: 401 })
+  }
+
   const { searchParams } = request.nextUrl
 
   const q = searchParams.get("q")?.trim() || undefined
