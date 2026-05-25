@@ -1,17 +1,8 @@
 # Install on server with: crontab -e
 # To install: crontab -e, then paste the lines below
 
-REPO=/home/ubuntu/wordnorms-development
-PYTHON=/home/ubuntu/wordnorms-development/pipeline/.venv/bin/python3
-NODE=/home/ubuntu/.nvm/versions/node/v20.20.2/bin/node
-
 0 0 1 * * cd $REPO && $NODE scripts/sync-model-cards.mjs >> /var/log/wordnorms-sync.log 2>&1
 0 2 1 * * cd $REPO && $PYTHON pipeline/fetch.py >> /var/log/wordnorms-pipeline.log 2>&1
 0 3 1 * * cd $REPO && $PYTHON pipeline/predict.py >> /var/log/wordnorms-pipeline.log 2>&1
 0 8 * * 1 cd $REPO && $NODE --env-file=.env.local scripts/weekly-admin-summary.mjs >> /var/log/wordnorms-weekly.log 2>&1
 
-# use these
-0 0 1 * * cd /home/ubuntu/wordnorms-development && /home/ubuntu/.nvm/versions/node/v20.20.2/bin/node scripts/sync-model-cards.mjs >> /var/log/wordnorms-sync.log 2>&1
-0 2 1 * * cd /home/ubuntu/wordnorms-development && /home/ubuntu/wordnorms-development/pipeline/.venv/bin/python3 pipeline/fetch.py >> /var/log/wordnorms-pipeline.log 2>&1
-0 3 1 * * cd /home/ubuntu/wordnorms-development && /home/ubuntu/wordnorms-development/pipeline/.venv/bin/python3 pipeline/predict.py >> /var/log/wordnorms-pipeline.log 2>&1
-0 8 * * 1 cd /home/ubuntu/wordnorms-development && /home/ubuntu/.nvm/versions/node/v20.20.2/bin/node --env-file=.env.local scripts/weekly-admin-summary.mjs >> /var/log/wordnorms-weekly.log 2>&1
