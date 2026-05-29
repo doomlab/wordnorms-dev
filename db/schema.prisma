@@ -97,6 +97,7 @@ model Paper {
   duplicates          Paper[]           @relation("duplicates")
   discoverySource     DiscoverySource   @default(DIRECT)
   citationsFetchedAt  DateTime?
+  authorMeta          Json?
   extraction       PaperExtraction?
   favorites        UserFavorite[]
   reports          PaperReport[]
