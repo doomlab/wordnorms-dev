@@ -37,7 +37,7 @@ function loadDatasetLookup(): { byDoi: Map<string, string>; byTitle: Map<string,
 export default async function Home({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string; lang?: string | string[]; decade?: string | string[]; stimuli?: string | string[]; page?: string }>
+  searchParams: Promise<{ q?: string; lang?: string | string[]; decade?: string | string[]; stimuli?: string | string[]; status?: string | string[]; page?: string }>
 }) {
   const params = await searchParams
 
@@ -53,8 +53,15 @@ export default async function Home({
       ? params.stimuli
       : [params.stimuli]
     : []
+  const statuses = params.status
+    ? Array.isArray(params.status)
+      ? params.status
+      : [params.status]
+    : []
   const page = Math.max(1, parseInt(params.page ?? "1", 10) || 1)
   const skip = (page - 1) * PAGE_SIZE
+
+  const { byDoi: datasetByDoi, byTitle: datasetByTitle } = loadDatasetLookup()
 
   const ctx = await getBlitzContext()
   const userId = ctx.session.userId as number | undefined
@@ -89,6 +96,28 @@ export default async function Home({
         return range ? [{ year: { gte: range[0], lte: range[1] } }] : []
       }),
     })
+  }
+
+  if (statuses.length) {
+    const statusClauses: object[] = []
+    if (statuses.includes("peer-reviewed")) {
+      statusClauses.push({ journal: { not: null } })
+    }
+    if (statuses.includes("awaiting")) {
+      statusClauses.push({ extraction: { is: null } })
+    }
+    if (statuses.includes("verified")) {
+      statusClauses.push({ extraction: { verifiedAt: { not: null } } })
+    }
+    if (statuses.includes("dataset")) {
+      const datasetDois = Array.from(datasetByDoi.keys()).filter(Boolean)
+      const datasetTitles = Array.from(datasetByTitle.keys()).filter(Boolean)
+      const dsClauses: object[] = []
+      if (datasetDois.length) dsClauses.push({ doi: { in: datasetDois } })
+      if (datasetTitles.length) dsClauses.push({ title: { in: datasetTitles } })
+      if (dsClauses.length) statusClauses.push({ OR: dsClauses })
+    }
+    if (statusClauses.length) andClauses.push({ OR: statusClauses })
   }
 
   const paperWhere = {
@@ -142,13 +171,12 @@ export default async function Home({
     new Set(allPapers.flatMap((p) => p.extraction?.stimuliType ?? []))
   ).sort()
 
-  const { byDoi: datasetByDoi, byTitle: datasetByTitle } = loadDatasetLookup()
-
   const downloadParams = new URLSearchParams()
   if (q) downloadParams.set("q", q)
   languages.forEach((l) => downloadParams.append("lang", l))
   decades.forEach((d) => downloadParams.append("decade", d))
   stimuliTypes.forEach((s) => downloadParams.append("stimuli", s))
+  statuses.forEach((s) => downloadParams.append("status", s))
   const downloadHref = `/api/download/norms${downloadParams.size ? `?${downloadParams}` : ""}`
 
   return (
@@ -208,6 +236,9 @@ export default async function Home({
                             >
                               dataset
                             </a>
+                          )}
+                          {paper.journal && (
+                            <span className="badge badge-info badge-sm shrink-0">peer reviewed</span>
                           )}
                           {!ext && (
                             <span className="badge badge-outline badge-sm shrink-0">awaiting extraction</span>
@@ -282,6 +313,7 @@ export default async function Home({
                 languages.forEach((l) => sp.append("lang", l))
                 decades.forEach((d) => sp.append("decade", d))
                 stimuliTypes.forEach((s) => sp.append("stimuli", s))
+                statuses.forEach((s) => sp.append("status", s))
                 sp.set("page", String(p))
                 return `/?${sp.toString()}`
               }

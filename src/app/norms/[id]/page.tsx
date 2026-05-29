@@ -6,6 +6,7 @@ import { FavoriteButton } from "../../components/FavoriteButton"
 import { ReportButton } from "../../components/ReportButton"
 import { SuggestExtractionEdits } from "../../components/SuggestExtractionEdits"
 import { getBlitzContext } from "../../blitz-server"
+import { CitationCard } from "./CitationCard"
 import db from "db"
 
 async function findDatasetCards(
@@ -137,6 +138,35 @@ export default async function NormDetailPage({
       seenCanonicalIds.add(resolved.id)
       return true
     })
+
+  const otherCitations = paper.citationsFrom
+    .filter((c) => !matchedById.has(c.citedOpenAlexId))
+    .sort((a, b) => (b.year ?? 0) - (a.year ?? 0))
+
+  const [citedByInDb, openAlexCitedByCount] = await Promise.all([
+    paper.openAlexId
+      ? db.paperCitation
+          .findMany({
+            where: { citedOpenAlexId: paper.openAlexId, citingPaper: { status: "ACCEPTED" } },
+            select: { citingPaper: { select: { id: true, title: true, year: true } } },
+          })
+          .then((rows) => {
+            const seen = new Set<number>()
+            return rows
+              .map((r) => ({ id: r.citingPaper.id, title: r.citingPaper.title, year: r.citingPaper.year ?? null }))
+              .filter((p) => { if (seen.has(p.id)) return false; seen.add(p.id); return true })
+          })
+      : Promise.resolve([] as { id: number; title: string; year: number | null }[]),
+    paper.openAlexId
+      ? fetch(
+          `https://api.openalex.org/works/${encodeURIComponent(paper.openAlexId)}?select=cited_by_count&mailto=buchananlab@gmail.com`,
+          { next: { revalidate: 86400 } }
+        )
+          .then((r) => (r.ok ? (r.json() as Promise<{ cited_by_count?: number }>) : null))
+          .then((d) => d?.cited_by_count ?? null)
+          .catch(() => null)
+      : Promise.resolve(null as number | null),
+  ])
 
   const [isFavorited, isReported, hasPriorSuggestion] = await Promise.all([
     userId
@@ -360,27 +390,30 @@ export default async function NormDetailPage({
               </div>
             </div>
           )}
-          {referencedInDb.length > 0 && (
-            <Section title="Referenced in WordNorms">
-              <div className="space-y-1">
-                {referencedInDb.map((resolved) => (
-                  <a
-                    key={resolved.id}
-                    href={`/norms/${resolved.id}`}
-                    className="flex gap-3 py-1.5 hover:text-primary group"
-                  >
-                    <span className="flex-1 text-sm group-hover:underline">
-                      {capFirst(resolved.title)}
-                    </span>
-                    {resolved.year && (
-                      <span className="text-sm text-base-content/40 shrink-0">
-                        {resolved.year}
-                      </span>
-                    )}
-                  </a>
-                ))}
-              </div>
-            </Section>
+          {(citedByInDb.length > 0 || openAlexCitedByCount != null) && (() => {
+            const parts: string[] = []
+            if (citedByInDb.length > 0) parts.push(`${citedByInDb.length} in WordNorms`)
+            if (openAlexCitedByCount != null) parts.push(`${openAlexCitedByCount.toLocaleString()} total`)
+            return (
+              <CitationCard
+                title="Cited by"
+                subtitle={parts.join(" · ")}
+                papers={citedByInDb}
+                emptyMessage="No citing papers are currently in WordNorms"
+              />
+            )
+          })()}
+          {(referencedInDb.length > 0 || otherCitations.length > 0) && (
+            <CitationCard
+              title="Cites"
+              subtitle={
+                paper.citationsFrom.length > 0
+                  ? `${referencedInDb.length} in WordNorms · ${paper.citationsFrom.length} total`
+                  : undefined
+              }
+              papers={referencedInDb}
+              otherRefs={otherCitations}
+            />
           )}
         </div>
       </div>

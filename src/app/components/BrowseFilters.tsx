@@ -19,6 +19,7 @@ export function BrowseFilters({
   const selectedLanguages = searchParams.getAll("lang")
   const selectedDecades = searchParams.getAll("decade")
   const selectedStimuliTypes = searchParams.getAll("stimuli")
+  const selectedStatuses = searchParams.getAll("status")
 
   const [inputValue, setInputValue] = useState(q)
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -53,7 +54,7 @@ export function BrowseFilters({
     debounceRef.current = setTimeout(() => update("q", value), 400)
   }
 
-  const hasFilters = q || selectedLanguages.length || selectedDecades.length || selectedStimuliTypes.length
+  const hasFilters = q || selectedLanguages.length || selectedDecades.length || selectedStimuliTypes.length || selectedStatuses.length
 
   return (
     <aside className="w-56 shrink-0">
@@ -100,6 +101,33 @@ export function BrowseFilters({
               }`}
             >
               {kw}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Status */}
+      <div className="mb-6">
+        <p className="text-xs font-medium uppercase tracking-wide text-base-content/50 mb-2">
+          Status
+        </p>
+        <div className="flex flex-wrap gap-1">
+          {[
+            { value: "dataset", label: "dataset", activeClass: "badge-primary" },
+            { value: "peer-reviewed", label: "peer reviewed", activeClass: "badge-info" },
+            { value: "verified", label: "verified", activeClass: "badge-success" },
+            { value: "awaiting", label: "awaiting extraction", activeClass: "badge-neutral" },
+          ].map(({ value, label, activeClass }) => (
+            <button
+              key={value}
+              onClick={() => update("status", value, !selectedStatuses.includes(value))}
+              className={`badge badge-sm cursor-pointer transition-colors ${
+                selectedStatuses.includes(value)
+                  ? activeClass
+                  : "badge-outline hover:badge-primary"
+              }`}
+            >
+              {label}
             </button>
           ))}
         </div>
