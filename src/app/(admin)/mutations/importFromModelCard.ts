@@ -64,6 +64,11 @@ export default resolver.pipe(
     const resolvedDoi = work?.doi ? work.doi.replace("https://doi.org/", "") : doi
     const openAlexId = work?.id ? work.id.replace("https://openalex.org/", "") : null
     const paperAuthors: string[] = work?.authorships?.map((a: any) => a.author.display_name) ?? authors.split(",").map((s: string) => s.trim()).filter(Boolean)
+    const authorMeta = work?.authorships?.map((a: any) => ({
+      name: a.author.display_name as string,
+      orcid: (a.author.orcid as string | null) ?? null,
+      openAlexId: a.author.id ? (a.author.id as string).replace("https://openalex.org/", "") : null,
+    })) ?? []
     const abstract = reconstructAbstract(work?.abstract_inverted_index)
     const pdfUrl = work?.primary_location?.pdf_url ?? work?.open_access?.oa_url ?? null
     const resolvedJournal = work?.primary_location?.source?.display_name ?? journal
@@ -85,6 +90,7 @@ export default resolver.pipe(
       data: {
         title: title.toLowerCase(),
         authors: paperAuthors,
+        authorMeta,
         year: year ?? null,
         doi: resolvedDoi ?? null,
         journal: resolvedJournal ?? null,

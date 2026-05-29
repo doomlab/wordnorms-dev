@@ -23,12 +23,18 @@ function formatWork(work: any) {
   const doi = work.doi ? work.doi.replace("https://doi.org/", "") : null
   const openAlexId = work.id ? work.id.replace("https://openalex.org/", "") : null
   const authors: string[] = work.authorships?.map((a: any) => a.author.display_name) ?? []
+  const authorMeta = work.authorships?.map((a: any) => ({
+    name: a.author.display_name as string,
+    orcid: (a.author.orcid as string | null) ?? null,
+    openAlexId: a.author.id ? (a.author.id as string).replace("https://openalex.org/", "") : null,
+  })) ?? []
   const abstract = reconstructAbstract(work.abstract_inverted_index)
   const journal = work.primary_location?.source?.display_name ?? null
   const pdfUrl = work.primary_location?.pdf_url ?? work.open_access?.oa_url ?? null
   return {
     title: (work.title as string | null) ?? null,
     authors,
+    authorMeta,
     year: (work.publication_year as number | null) ?? null,
     doi,
     journal,

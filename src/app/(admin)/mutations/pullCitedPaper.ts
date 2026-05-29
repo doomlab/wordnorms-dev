@@ -38,6 +38,7 @@ export default resolver.pipe(
     let doi: string | null = null
     let abstract: string | null = null
     let pdfUrl: string | null = null
+    let authorMeta: { name: string; orcid: string | null; openAlexId: string | null }[] = []
 
     try {
       const res = await fetch(`https://api.openalex.org/works/openalex:${citedOpenAlexId}`, {
@@ -48,6 +49,11 @@ export default resolver.pipe(
         doi = data.doi ? data.doi.replace("https://doi.org/", "") : null
         pdfUrl = data.primary_location?.pdf_url ?? data.open_access?.oa_url ?? null
         abstract = reconstructAbstract(data.abstract_inverted_index)
+        authorMeta = data.authorships?.map((a: any) => ({
+          name: a.author.display_name as string,
+          orcid: (a.author.orcid as string | null) ?? null,
+          openAlexId: a.author.id ? (a.author.id as string).replace("https://openalex.org/", "") : null,
+        })) ?? []
       }
     } catch {}
 
@@ -64,6 +70,7 @@ export default resolver.pipe(
       data: {
         title: title.toLowerCase(),
         authors,
+        authorMeta,
         year,
         doi,
         journal,
