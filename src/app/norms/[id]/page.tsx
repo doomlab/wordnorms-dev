@@ -334,6 +334,26 @@ export default async function NormDetailPage({
                     ext.participantCount != null ? ext.participantCount.toLocaleString() : undefined
                   }
                 />
+                {ext.participantLevelData && (
+                  <div className="flex gap-3 py-1.5">
+                    <span className="w-36 shrink-0 font-medium text-base-content/70">Participant data</span>
+                    <span className="text-base-content/80">Raw data available</span>
+                  </div>
+                )}
+                {Array.isArray(ext.reliabilities) && (ext.reliabilities as { norm: string; value: number | null; metric: string | null }[]).length > 0 && (
+                  <div className="flex gap-3 py-1.5">
+                    <span className="w-36 shrink-0 font-medium text-base-content/70">Reliabilities</span>
+                    <div className="space-y-0.5">
+                      {(ext.reliabilities as { norm: string; value: number | null; metric: string | null }[]).map((r, i) => (
+                        <div key={i} className="text-base-content/80 text-sm">
+                          {r.norm}
+                          {r.value != null && <span> — {r.value}</span>}
+                          {r.metric && <span className="text-base-content/40"> ({r.metric.replace(/_/g, " ")})</span>}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
                 {ext.dataSource && (
                   <div className="flex gap-3 py-1.5">
                     <span className="w-36 shrink-0 font-medium text-base-content/70">Data source</span>

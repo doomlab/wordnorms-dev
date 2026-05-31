@@ -216,8 +216,10 @@ model PaperExtraction {
   instructions     String?
   licenseUrl       String?
   dataSource       String?
-  confidence       Float?
-  needsReview      Boolean   @default(false)
+  participantLevelData Boolean  @default(false)
+  reliabilities        Json?
+  confidence           Float?
+  needsReview          Boolean   @default(false)
   extractedBy      String?
   extractedAt      DateTime
   verifiedAt       DateTime?

@@ -25,6 +25,8 @@ Fields to extract:
 - stimuli_count: integer number of stimuli/items, or null
 - norms_collected: list of dimensions rated (e.g. ["valence", "arousal", "familiarity", "imageability"])
 - instructions: the exact or paraphrased instructions given to participants, or null if not reported
+- participant_level_data: true if the paper makes raw participant-level response data available (e.g. individual ratings per item per participant), false otherwise
+- reliabilities: list of reported reliability or internal consistency statistics, one object per norm dimension — e.g. [{"norm": "valence", "value": 0.87, "metric": "cronbach_alpha"}]. Use null for value if the paper reports a reliability metric but not the number. Common metrics: cronbach_alpha, split_half, icc, pearson_r, kappa. Return an empty list if no reliability statistics are reported.
 - confidence: your confidence in the extraction as a float from 0.0 to 1.0
 
 Paper text:
@@ -113,6 +115,11 @@ def save_extraction(conn, paper_id, data, extracted_by):
     confidence = data.get("confidence")
     needs_review = confidence is not None and confidence < 0.6
 
+    participant_level_data = bool(data.get("participant_level_data") or False)
+    reliabilities = data.get("reliabilities") or []
+    if not isinstance(reliabilities, list):
+        reliabilities = []
+
     cur = conn.cursor()
     cur.execute(
         """
@@ -120,28 +127,32 @@ def save_extraction(conn, paper_id, data, extracted_by):
             "createdAt", "updatedAt", "paperId",
             language, "participantCount", "participantType",
             "stimuliType", "stimuliCount", "normsCollected",
-            instructions, confidence, "needsReview",
+            instructions, "participantLevelData", reliabilities,
+            confidence, "needsReview",
             "extractedBy", "extractedAt"
         ) VALUES (
             NOW(), NOW(), %s,
             %s, %s, %s,
             %s, %s, %s,
-            %s, %s, %s,
+            %s, %s, %s::jsonb,
+            %s, %s,
             %s, NOW()
         )
         ON CONFLICT ("paperId") DO UPDATE SET
-            "updatedAt"       = NOW(),
-            language          = EXCLUDED.language,
-            "participantCount" = EXCLUDED."participantCount",
-            "participantType" = EXCLUDED."participantType",
-            "stimuliType"     = EXCLUDED."stimuliType",
-            "stimuliCount"    = EXCLUDED."stimuliCount",
-            "normsCollected"  = EXCLUDED."normsCollected",
-            instructions      = EXCLUDED.instructions,
-            confidence        = EXCLUDED.confidence,
-            "needsReview"     = EXCLUDED."needsReview",
-            "extractedBy"     = EXCLUDED."extractedBy",
-            "extractedAt"     = NOW()
+            "updatedAt"            = NOW(),
+            language               = EXCLUDED.language,
+            "participantCount"     = EXCLUDED."participantCount",
+            "participantType"      = EXCLUDED."participantType",
+            "stimuliType"          = EXCLUDED."stimuliType",
+            "stimuliCount"         = EXCLUDED."stimuliCount",
+            "normsCollected"       = EXCLUDED."normsCollected",
+            instructions           = EXCLUDED.instructions,
+            "participantLevelData" = EXCLUDED."participantLevelData",
+            reliabilities          = EXCLUDED.reliabilities,
+            confidence             = EXCLUDED.confidence,
+            "needsReview"          = EXCLUDED."needsReview",
+            "extractedBy"          = EXCLUDED."extractedBy",
+            "extractedAt"          = NOW()
         """,
         (
             paper_id,
@@ -152,6 +163,8 @@ def save_extraction(conn, paper_id, data, extracted_by):
             data.get("stimuli_count"),
             data.get("norms_collected") or [],
             data.get("instructions"),
+            participant_level_data,
+            json.dumps(reliabilities),
             confidence,
             needs_review,
             extracted_by,
