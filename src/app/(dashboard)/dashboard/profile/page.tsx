@@ -14,7 +14,7 @@ export default async function ProfilePage() {
 
   const user = await db.user.findUniqueOrThrow({
     where: { id: ctx.session.userId },
-    select: { email: true, name: true, institution: true, role: true, groqApiKey: true },
+    select: { email: true, name: true, institution: true, role: true, groqApiKey: true, points: true },
   })
 
   const isAdmin = user.role === "ADMIN" || user.role === "SUPER_ADMIN"
@@ -47,6 +47,32 @@ export default async function ProfilePage() {
             </div>
           </div>
         )}
+
+        <div className="card bg-base-200 shadow-sm">
+          <div className="card-body">
+            <h2 className="card-title text-lg mb-1">Contributions</h2>
+            <p className="text-3xl font-bold text-primary mb-1">{user.points} pts</p>
+            {!isAdmin && (
+              <>
+                <div className="w-full bg-base-300 rounded-full h-2 mb-1">
+                  <div
+                    className="bg-primary h-2 rounded-full transition-all"
+                    style={{ width: `${Math.min(100, (user.points / 20) * 100)}%` }}
+                  />
+                </div>
+                <p className="text-xs text-base-content/50 mb-3">
+                  {user.points >= 20
+                    ? "You've reached the threshold for admin consideration."
+                    : `${20 - user.points} pts to admin consideration`}
+                </p>
+              </>
+            )}
+            <ul className="text-xs text-base-content/50 space-y-0.5">
+              <li>+10 pts — article suggestion accepted</li>
+              <li>+5 pts — extraction edit applied</li>
+            </ul>
+          </div>
+        </div>
 
         {!isAdmin && (
           <div className="card bg-base-200 shadow-sm">

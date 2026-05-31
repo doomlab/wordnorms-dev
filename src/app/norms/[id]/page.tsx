@@ -82,13 +82,13 @@ export default async function NormDetailPage({
   const paper = await db.paper.findUnique({
     where: { id: Number(id), status: "ACCEPTED" },
     include: {
-      extraction: { include: { verifiedBy: { select: { name: true } } } },
+      extraction: { include: { verifiedBy: { select: { name: true, points: true } } } },
       extractionEdits: {
         select: {
           createdAt: true,
           resolved: true,
           note: true,
-          user: { select: { name: true } },
+          user: { select: { name: true, points: true } },
         },
         orderBy: { createdAt: "asc" },
       },
@@ -394,16 +394,30 @@ export default async function NormDetailPage({
                 {paper.extractionEdits.map((edit, i) => (
                   <HistoryEvent
                     key={i}
-                    label={`${edit.user.name ?? "A user"} suggested edits${
-                      edit.note ? ` — "${edit.note}"` : ""
-                    }`}
+                    label={
+                      <>
+                        {edit.user.name ?? "A user"}
+                        {edit.user.points > 0 && (
+                          <span className="badge badge-info badge-xs ml-1">{edit.user.points} pts</span>
+                        )}
+                        {` suggested edits${edit.note ? ` — "${edit.note}"` : ""}`}
+                      </>
+                    }
                     date={edit.createdAt}
                     resolved={edit.resolved}
                   />
                 ))}
                 {ext.verifiedAt && (
                   <HistoryEvent
-                    label={`Verified by ${ext.verifiedBy?.name ?? "admin"}`}
+                    label={
+                      <>
+                        {"Verified by "}
+                        {ext.verifiedBy?.name ?? "admin"}
+                        {ext.verifiedBy && ext.verifiedBy.points > 0 && (
+                          <span className="badge badge-info badge-xs ml-1">{ext.verifiedBy.points} pts</span>
+                        )}
+                      </>
+                    }
                     date={ext.verifiedAt}
                   />
                 )}
@@ -446,7 +460,7 @@ function HistoryEvent({
   date,
   resolved,
 }: {
-  label: string
+  label: React.ReactNode
   date: Date
   resolved?: boolean
 }) {
