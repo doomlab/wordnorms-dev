@@ -87,6 +87,8 @@ export function SuggestionReview({
     instructions: values.instructions || null,
     licenseUrl: null,
     dataSource: null,
+    participantLevelData: false,
+    reliabilities: [],
   })
 
   const handleApply = async () => {

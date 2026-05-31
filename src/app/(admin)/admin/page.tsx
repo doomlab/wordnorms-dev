@@ -1,9 +1,14 @@
 import db from "db"
+import { getBlitzContext } from "../../blitz-server"
 import { PipelineButton } from "./PipelineButton"
+import { MaintenanceCard } from "./MaintenanceCard"
 
 export const metadata = { title: "Admin" }
 
 export default async function AdminPage() {
+  const ctx = await getBlitzContext()
+  const isSuperAdmin = ctx.session.role === "SUPER_ADMIN"
+
   const [
     counts,
     extractionNew,
@@ -15,6 +20,7 @@ export default async function AdminPage() {
     openSuggestions,
     borderlineExcluded,
     unmatchedCitations,
+    siteSettings,
   ] = await Promise.all([
     db.paper.groupBy({ by: ["status"], where: { canonicalPaperId: null }, _count: { _all: true } }),
     db.paper.count({
@@ -55,6 +61,9 @@ export default async function AdminPage() {
           SELECT 1 FROM "Paper" p WHERE p."openAlexId" = pc."citedOpenAlexId"
         )
       `.then((r) => Number(r[0]?.count ?? 0)),
+    isSuperAdmin
+      ? db.siteSettings.findFirst({ where: { id: 1 } })
+      : Promise.resolve(null),
   ])
   const byStatus = Object.fromEntries(counts.map((c) => [c.status, c._count._all]))
 
@@ -222,6 +231,10 @@ export default async function AdminPage() {
             </div>
           </a>
         ))}
+
+        {isSuperAdmin && (
+          <MaintenanceCard initialEnabled={siteSettings?.maintenanceMode ?? false} />
+        )}
       </div>
     </>
   )

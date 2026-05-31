@@ -305,3 +305,9 @@ model DuplicateGroupIgnore {
 
   @@unique([groupKey, groupType])
 }
+
+model SiteSettings {
+  id              Int      @id @default(1)
+  maintenanceMode Boolean  @default(false)
+  updatedAt       DateTime @updatedAt
+}
