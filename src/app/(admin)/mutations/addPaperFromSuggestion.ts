@@ -33,25 +33,35 @@ export default resolver.pipe(
       }
     }
 
-    const paper = await db.paper.create({
-      data: {
-        title: title.toLowerCase(),
-        authors: rest.authors,
-        year: rest.year ?? null,
-        doi: rest.doi ?? null,
-        journal: rest.journal ?? null,
-        abstract: rest.abstract ?? null,
-        openAlexId: rest.openAlexId?.replace("https://openalex.org/", "") ?? null,
-        pdfUrl: rest.pdfUrl ?? null,
-        status: "ACCEPTED",
-        discoverySource: "DIRECT",
-      },
+    const suggestion = await db.articleSuggestion.findUniqueOrThrow({
+      where: { id: suggestionId },
+      select: { userId: true },
     })
 
-    await db.articleSuggestion.update({
-      where: { id: suggestionId },
-      data: { resolved: true },
-    })
+    const [paper] = await db.$transaction([
+      db.paper.create({
+        data: {
+          title: title.toLowerCase(),
+          authors: rest.authors,
+          year: rest.year ?? null,
+          doi: rest.doi ?? null,
+          journal: rest.journal ?? null,
+          abstract: rest.abstract ?? null,
+          openAlexId: rest.openAlexId?.replace("https://openalex.org/", "") ?? null,
+          pdfUrl: rest.pdfUrl ?? null,
+          status: "ACCEPTED",
+          discoverySource: "DIRECT",
+        },
+      }),
+      db.articleSuggestion.update({
+        where: { id: suggestionId },
+        data: { resolved: true },
+      }),
+      db.user.update({
+        where: { id: suggestion.userId },
+        data: { points: { increment: 10 } },
+      }),
+    ])
 
     if (paper.openAlexId) {
       await fetchAndStoreCitations(paper.id, paper.openAlexId)
