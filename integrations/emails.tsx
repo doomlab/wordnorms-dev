@@ -182,6 +182,38 @@ ${emailFooter(origin)}
   }
 }
 
+export function createFeedbackMsg({
+  message,
+  name,
+  email,
+}: {
+  message: string
+  name?: string
+  email?: string
+}) {
+  const origin = process.env.APP_ORIGIN || process.env.BLITZ_DEV_SERVER_ORIGIN
+  const rows = [
+    name ? `<tr><td style="padding:4px 12px 4px 0;font-weight:bold;vertical-align:top">Name</td><td style="padding:4px 0">${name}</td></tr>` : "",
+    email ? `<tr><td style="padding:4px 12px 4px 0;font-weight:bold;vertical-align:top">Email</td><td style="padding:4px 0">${email}</td></tr>` : "",
+    `<tr><td style="padding:4px 12px 4px 0;font-weight:bold;vertical-align:top">Message</td><td style="padding:4px 0;white-space:pre-wrap">${message}</td></tr>`,
+  ].filter(Boolean).join("")
+
+  return {
+    from: "WordNorms <noreply@wordnorms.com>",
+    to: "buchananlab@gmail.com",
+    replyTo: email ?? "noreply@wordnorms.com",
+    subject: "Feedback – WordNorms",
+    html: `
+<html><body>
+<center><img src="${origin}/images/bannerWN_white.jpg" alt="WordNorms" style="max-width:600px;width:100%"></center>
+<h3>New Feedback</h3>
+<table style="border-collapse:collapse;margin-top:12px">${rows}</table>
+${emailFooter(origin)}
+</body></html>
+    `,
+  }
+}
+
 export function createDatasetSuggestionMsg({
   datasetUrl,
   doi,

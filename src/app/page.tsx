@@ -9,6 +9,7 @@ import { DECADE_LABELS } from "./data/datasets"
 import { getBlitzContext } from "./blitz-server"
 import { SuggestArticleButton } from "./components/SuggestArticleButton"
 import { Pagination } from "./components/Pagination"
+import { FeedbackForm } from "./components/FeedbackForm"
 import db from "db"
 
 const PAGE_SIZE = 50
@@ -321,6 +322,7 @@ export default async function Home({
             })()}
             </>
           )}
+          <FeedbackForm />
         </div>
       </div>
     </div>
