@@ -10,6 +10,7 @@ import { getBlitzContext } from "./blitz-server"
 import { SuggestArticleButton } from "./components/SuggestArticleButton"
 import { Pagination } from "./components/Pagination"
 import { FeedbackForm } from "./components/FeedbackForm"
+import { TrainingBanner } from "./components/TrainingBanner"
 import db from "db"
 
 const PAGE_SIZE = 50
@@ -183,6 +184,7 @@ export default async function Home({
   return (
     <div className="min-h-screen bg-base-100 flex flex-col">
       <Navbar />
+      <TrainingBanner />
 
       <div className="flex flex-1 w-full px-10 py-8 gap-8">
         <Suspense fallback={<div className="w-56 shrink-0" />}>
