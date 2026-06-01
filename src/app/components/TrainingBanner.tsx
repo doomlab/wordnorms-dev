@@ -6,7 +6,7 @@ export function TrainingBanner() {
       <span className="font-medium">
         We&apos;re building a training dataset for word norms prediction — help us by verifying paper extractions.
       </span>
-      <Link href="/visualizations" className="btn btn-outline btn-xs border-primary-content/60 text-primary-content hover:bg-primary-content hover:text-primary shrink-0">
+      <Link href="/progress" className="btn btn-outline btn-xs border-primary-content/60 text-primary-content hover:bg-primary-content hover:text-primary shrink-0">
         View progress
       </Link>
     </div>
