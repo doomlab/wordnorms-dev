@@ -13,6 +13,7 @@ type Ext = {
   stimuliCount: number | null
   normsCollected: string[]
   instructions: string | null
+  sourceSnippets?: Record<string, string> | null
 }
 
 function toList(arr: string[]) {
@@ -24,6 +25,41 @@ function fromList(s: string) {
     .split(",")
     .map((v) => v.trim())
     .filter(Boolean)
+}
+
+function SnippetBlock({
+  text,
+  fieldKey,
+  hasEvidence,
+  onCapture,
+}: {
+  text: string
+  fieldKey: string
+  hasEvidence: boolean
+  onCapture: (key: string, text: string) => void
+}) {
+  const handleMouseUp = () => {
+    const sel = window.getSelection()?.toString().trim()
+    if (sel && sel.length > 5) onCapture(fieldKey, sel)
+  }
+
+  return (
+    <div className="mt-1.5">
+      <p className="text-xs text-base-content/40 mb-1">
+        {hasEvidence ? (
+          <span className="text-success font-medium">✓ Evidence captured — highlight to update</span>
+        ) : (
+          "Highlight the correct text if this passage is wrong"
+        )}
+      </p>
+      <div
+        onMouseUp={handleMouseUp}
+        className="text-xs text-base-content/55 border-l-2 border-base-300 pl-2.5 py-0.5 leading-relaxed select-text cursor-text italic"
+      >
+        {text}
+      </div>
+    </div>
+  )
 }
 
 export function SuggestExtractionEdits({
@@ -52,6 +88,13 @@ export function SuggestExtractionEdits({
   const [instructions, setInstructions] = useState(ext.instructions ?? "")
   const [url, setUrl] = useState("")
   const [note, setNote] = useState("")
+  const [sourceEvidence, setSourceEvidence] = useState<Record<string, string>>({})
+
+  const snippets = ext.sourceSnippets ?? {}
+
+  const captureEvidence = (key: string, text: string) => {
+    setSourceEvidence((prev) => ({ ...prev, [key]: text }))
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -68,6 +111,7 @@ export function SuggestExtractionEdits({
         instructions: instructions.trim() || null,
         url: url.trim() || null,
         note: note.trim() || undefined,
+        sourceEvidence: Object.keys(sourceEvidence).length > 0 ? sourceEvidence : undefined,
       })
       setDone(true)
       dialogRef.current?.close()
@@ -102,10 +146,11 @@ export function SuggestExtractionEdits({
       </button>
 
       <dialog ref={dialogRef} className="modal">
-        <div className="modal-box max-w-lg">
+        <div className="modal-box max-w-xl">
           <h3 className="font-bold text-lg mb-1">Suggest edits</h3>
           <p className="text-sm text-base-content/60 mb-5">
-            Correct any extracted values. Your suggestion will be reviewed by our team.
+            Correct any extracted values. If the source passage is shown, highlight the correct text
+            to capture it as evidence.
           </p>
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
@@ -117,6 +162,14 @@ export function SuggestExtractionEdits({
                 onChange={(e) => setLanguage(e.target.value)}
                 placeholder="e.g. English, French"
               />
+              {snippets.language && (
+                <SnippetBlock
+                  text={snippets.language}
+                  fieldKey="language"
+                  hasEvidence={"language" in sourceEvidence}
+                  onCapture={captureEvidence}
+                />
+              )}
             </Field>
 
             <Field label="Norms collected" hint="comma-separated">
@@ -127,6 +180,14 @@ export function SuggestExtractionEdits({
                 onChange={(e) => setNormsCollected(e.target.value)}
                 placeholder="e.g. valence, arousal"
               />
+              {snippets.normsCollected && (
+                <SnippetBlock
+                  text={snippets.normsCollected}
+                  fieldKey="normsCollected"
+                  hasEvidence={"normsCollected" in sourceEvidence}
+                  onCapture={captureEvidence}
+                />
+              )}
             </Field>
 
             <Field label="Stimuli type" hint="comma-separated">
@@ -137,6 +198,14 @@ export function SuggestExtractionEdits({
                 onChange={(e) => setStimuliType(e.target.value)}
                 placeholder="e.g. words"
               />
+              {snippets.stimuliType && (
+                <SnippetBlock
+                  text={snippets.stimuliType}
+                  fieldKey="stimuliType"
+                  hasEvidence={"stimuliType" in sourceEvidence}
+                  onCapture={captureEvidence}
+                />
+              )}
             </Field>
 
             <Field label="Stimuli count">
@@ -147,6 +216,14 @@ export function SuggestExtractionEdits({
                 onChange={(e) => setStimuliCount(e.target.value)}
                 min={0}
               />
+              {snippets.stimuliCount && (
+                <SnippetBlock
+                  text={snippets.stimuliCount}
+                  fieldKey="stimuliCount"
+                  hasEvidence={"stimuliCount" in sourceEvidence}
+                  onCapture={captureEvidence}
+                />
+              )}
             </Field>
 
             <Field label="Participant type">
@@ -157,6 +234,14 @@ export function SuggestExtractionEdits({
                 onChange={(e) => setParticipantType(e.target.value)}
                 placeholder="e.g. undergraduates"
               />
+              {snippets.participantType && (
+                <SnippetBlock
+                  text={snippets.participantType}
+                  fieldKey="participantType"
+                  hasEvidence={"participantType" in sourceEvidence}
+                  onCapture={captureEvidence}
+                />
+              )}
             </Field>
 
             <Field label="Participant count">
@@ -167,6 +252,14 @@ export function SuggestExtractionEdits({
                 onChange={(e) => setParticipantCount(e.target.value)}
                 min={0}
               />
+              {snippets.participantCount && (
+                <SnippetBlock
+                  text={snippets.participantCount}
+                  fieldKey="participantCount"
+                  hasEvidence={"participantCount" in sourceEvidence}
+                  onCapture={captureEvidence}
+                />
+              )}
             </Field>
 
             <Field label="Instructions">
@@ -176,7 +269,29 @@ export function SuggestExtractionEdits({
                 value={instructions}
                 onChange={(e) => setInstructions(e.target.value)}
               />
+              {snippets.instructions && (
+                <SnippetBlock
+                  text={snippets.instructions}
+                  fieldKey="instructions"
+                  hasEvidence={"instructions" in sourceEvidence}
+                  onCapture={captureEvidence}
+                />
+              )}
             </Field>
+
+            {snippets.reliabilities && (
+              <div>
+                <label className="label py-1">
+                  <span className="label-text font-medium">Reliabilities</span>
+                </label>
+                <SnippetBlock
+                  text={snippets.reliabilities}
+                  fieldKey="reliabilities"
+                  hasEvidence={"reliabilities" in sourceEvidence}
+                  onCapture={captureEvidence}
+                />
+              </div>
+            )}
 
             <Field label="Website URL" hint="optional — homepage or repository for this dataset">
               <input
@@ -202,7 +317,7 @@ export function SuggestExtractionEdits({
             <div className="modal-action mt-0">
               <button
                 type="button"
-                className="btn btn-ghost btn-outline"
+                className="btn btn-outline"
                 onClick={() => dialogRef.current?.close()}
               >
                 Cancel

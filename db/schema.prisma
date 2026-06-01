@@ -194,6 +194,7 @@ model ExtractionEditSuggestion {
   instructions     String?
   url              String?
   note             String?
+  sourceEvidence   Json?
   resolved         Boolean  @default(false)
 
   paper Paper @relation(fields: [paperId], references: [id], onDelete: Cascade)
@@ -221,6 +222,7 @@ model PaperExtraction {
   reliabilities        Json?
   confidence           Float?
   needsReview          Boolean   @default(false)
+  sourceSnippets       Json?
   extractedBy      String?
   extractedAt      DateTime
   verifiedAt       DateTime?

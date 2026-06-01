@@ -28,6 +28,7 @@ Fields to extract:
 - participant_level_data: true if the paper makes raw participant-level response data available (e.g. individual ratings per item per participant), false otherwise
 - reliabilities: list of reported reliability or internal consistency statistics, one object per norm dimension — e.g. [{"norm": "valence", "value": 0.87, "metric": "cronbach_alpha"}]. Use null for value if the paper reports a reliability metric but not the number. Common metrics: cronbach_alpha, split_half, icc, pearson_r, kappa. Return an empty list if no reliability statistics are reported.
 - confidence: your confidence in the extraction as a float from 0.0 to 1.0
+- source_snippets: for each field above (except confidence and participant_level_data), the full sentence or paragraph from the paper where you found that information. Use null if you could not find a source. Keys must be: language, participantCount, participantType, stimuliType, stimuliCount, normsCollected, instructions, reliabilities.
 
 Paper text:
 {text}"""
@@ -120,6 +121,10 @@ def save_extraction(conn, paper_id, data, extracted_by):
     if not isinstance(reliabilities, list):
         reliabilities = []
 
+    # source_snippets already uses camelCase keys as requested in the prompt
+    raw_snippets = data.get("source_snippets") or {}
+    source_snippets = {k: v for k, v in raw_snippets.items() if v is not None} if raw_snippets else None
+
     cur = conn.cursor()
     cur.execute(
         """
@@ -128,14 +133,14 @@ def save_extraction(conn, paper_id, data, extracted_by):
             language, "participantCount", "participantType",
             "stimuliType", "stimuliCount", "normsCollected",
             instructions, "participantLevelData", reliabilities,
-            confidence, "needsReview",
+            confidence, "needsReview", "sourceSnippets",
             "extractedBy", "extractedAt"
         ) VALUES (
             NOW(), NOW(), %s,
             %s, %s, %s,
             %s, %s, %s,
             %s, %s, %s::jsonb,
-            %s, %s,
+            %s, %s, %s::jsonb,
             %s, NOW()
         )
         ON CONFLICT ("paperId") DO UPDATE SET
@@ -151,6 +156,7 @@ def save_extraction(conn, paper_id, data, extracted_by):
             reliabilities          = EXCLUDED.reliabilities,
             confidence             = EXCLUDED.confidence,
             "needsReview"          = EXCLUDED."needsReview",
+            "sourceSnippets"       = EXCLUDED."sourceSnippets",
             "extractedBy"          = EXCLUDED."extractedBy",
             "extractedAt"          = NOW()
         """,
@@ -167,6 +173,7 @@ def save_extraction(conn, paper_id, data, extracted_by):
             json.dumps(reliabilities),
             confidence,
             needs_review,
+            json.dumps(source_snippets) if source_snippets else None,
             extracted_by,
         ),
     )

@@ -304,36 +304,22 @@ export default async function NormDetailPage({
                 </div>
                 <SuggestExtractionEdits
                   paperId={paper.id}
-                  ext={ext}
+                  ext={{ ...ext, sourceSnippets: ext.sourceSnippets as Record<string, string> | null }}
                   hasPriorSuggestion={hasPriorSuggestion}
                   isLoggedIn={!!userId}
                 />
               </div>
 
+              {(() => {
+                const snippets = (ext.sourceSnippets ?? {}) as Record<string, string>
+                return (
               <div className="space-y-0.5">
-                <Row
-                  label="Language"
-                  value={ext.language.length ? ext.language.join(", ") : undefined}
-                />
-                <Row
-                  label="Norms collected"
-                  value={ext.normsCollected.length ? ext.normsCollected.join(", ") : undefined}
-                />
-                <Row
-                  label="Stimuli type"
-                  value={ext.stimuliType.length ? ext.stimuliType.join(", ") : undefined}
-                />
-                <Row
-                  label="Stimuli count"
-                  value={ext.stimuliCount != null ? ext.stimuliCount.toLocaleString() : undefined}
-                />
-                <Row label="Participant type" value={ext.participantType ?? undefined} />
-                <Row
-                  label="Participant count"
-                  value={
-                    ext.participantCount != null ? ext.participantCount.toLocaleString() : undefined
-                  }
-                />
+                <Row label="Language" value={ext.language.length ? ext.language.join(", ") : undefined} snippet={snippets.language} />
+                <Row label="Norms collected" value={ext.normsCollected.length ? ext.normsCollected.join(", ") : undefined} snippet={snippets.normsCollected} />
+                <Row label="Stimuli type" value={ext.stimuliType.length ? ext.stimuliType.join(", ") : undefined} snippet={snippets.stimuliType} />
+                <Row label="Stimuli count" value={ext.stimuliCount != null ? ext.stimuliCount.toLocaleString() : undefined} snippet={snippets.stimuliCount} />
+                <Row label="Participant type" value={ext.participantType ?? undefined} snippet={snippets.participantType} />
+                <Row label="Participant count" value={ext.participantCount != null ? ext.participantCount.toLocaleString() : undefined} snippet={snippets.participantCount} />
                 {ext.participantLevelData && (
                   <div className="flex gap-3 py-1.5">
                     <span className="w-36 shrink-0 font-medium text-base-content/70">Participant data</span>
@@ -381,9 +367,16 @@ export default async function NormDetailPage({
                       Instructions
                     </span>
                     <p className="text-base-content/70 leading-relaxed">{ext.instructions}</p>
+                    {snippets.instructions && (
+                      <p className="text-xs text-base-content/40 border-l-2 border-base-300 pl-2 mt-1 italic">{snippets.instructions}</p>
+                    )}
                   </div>
                 )}
+                {snippets.reliabilities && Array.isArray(ext.reliabilities) && (ext.reliabilities as { norm: string }[]).length > 0 && (
+                  <p className="text-xs text-base-content/40 border-l-2 border-base-300 pl-2 mt-1 italic">{snippets.reliabilities}</p>
+                )}
               </div>
+              )})()}
 
               {/* Edit history */}
               <div className="mt-5 pt-4 border-t border-base-200 space-y-2">
@@ -495,16 +488,25 @@ function Row({
   label,
   value,
   italic,
+  snippet,
 }: {
   label: string
   value: string | undefined
   italic?: boolean
+  snippet?: string
 }) {
   if (!value) return null
   return (
-    <div className="flex gap-3 py-1.5">
-      <span className="w-36 shrink-0 font-medium text-base-content/70">{label}</span>
-      <span className={`text-base-content/80 ${italic ? "italic" : ""}`}>{value}</span>
+    <div className="py-1.5">
+      <div className="flex gap-3">
+        <span className="w-36 shrink-0 font-medium text-base-content/70">{label}</span>
+        <span className={`text-base-content/80 ${italic ? "italic" : ""}`}>{value}</span>
+      </div>
+      {snippet && (
+        <p className="text-xs text-base-content/40 border-l-2 border-base-300 pl-2 mt-1 ml-36 italic leading-relaxed">
+          {snippet}
+        </p>
+      )}
     </div>
   )
 }

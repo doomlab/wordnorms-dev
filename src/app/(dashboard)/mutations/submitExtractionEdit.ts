@@ -13,6 +13,7 @@ const SubmitExtractionEdit = z.object({
   instructions: z.string().nullable(),
   url: z.string().nullable(),
   note: z.string().max(1000).optional(),
+  sourceEvidence: z.record(z.string()).optional(),
 })
 
 export default resolver.pipe(
