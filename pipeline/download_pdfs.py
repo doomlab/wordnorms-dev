@@ -128,16 +128,18 @@ def html_pdf_url(url):
 
 SCIHUB_DOMAINS = ["sci-hub.ru", "sci-hub.st"]
 
-def scihub_pdf_url(doi, browser):
-    """Use an existing Playwright browser to load Sci-Hub and extract the PDF URL."""
+def scihub_fetch(doi, browser):
+    """Use Playwright to load Sci-Hub and download the PDF in the same browser session."""
     if not doi or not browser:
-        return None
+        return None, "no doi or browser"
     for domain in SCIHUB_DOMAINS:
+        page = None
         try:
             page = browser.new_page()
             page.goto(f"https://{domain}/{doi}", wait_until="networkidle", timeout=25000)
             html = page.content()
-            page.close()
+
+            pdf_url = None
             for pat in [
                 r'<iframe[^>]+id=["\']pdf["\'][^>]+src=["\']([^"\']+)["\']',
                 r'<iframe[^>]+src=["\']([^"\']+)["\'][^>]+id=["\']pdf["\']',
@@ -151,13 +153,29 @@ def scihub_pdf_url(doi, browser):
                         url = "https:" + url
                     elif not url.startswith("http"):
                         url = f"https://{domain}{url}"
-                    return url
-        except Exception:
-            try:
+                    pdf_url = url
+                    break
+
+            if not pdf_url:
                 page.close()
-            except Exception:
-                pass
-    return None
+                return None, "not found on page"
+
+            # Navigate to PDF URL in the same page — cookies carry over, avoids 403
+            resp = page.goto(pdf_url, wait_until="networkidle", timeout=30000)
+            body = resp.body() if resp else None
+            page.close()
+            if body and b"%PDF" in body[:1024]:
+                return body, "ok"
+            return None, f"not PDF ({len(body) if body else 0} bytes)"
+
+        except Exception as e:
+            if page:
+                try:
+                    page.close()
+                except Exception:
+                    pass
+            continue
+    return None, "all domains failed"
 
 
 def unpaywall_pdf_url(doi):
@@ -224,15 +242,11 @@ def get_pdf(pdf_url, doi, browser=None):
 
     # Sci-Hub via headless browser (last resort)
     if doi and browser:
-        resolved = scihub_pdf_url(doi, browser)
-        if resolved:
-            data, note = fetch_pdf(resolved)
-            if data:
-                return data, "scihub"
-            reasons.append(f"scihub:{note}")
-        else:
-            reasons.append("scihub:not found")
-        time.sleep(1)
+        time.sleep(3)  # be polite — don't hammer Sci-Hub
+        data, note = scihub_fetch(doi, browser)
+        if data:
+            return data, "scihub"
+        reasons.append(f"scihub:{note}")
 
     return None, " | ".join(reasons)
 
@@ -371,7 +385,10 @@ def main():
         title_short = str(row["title"])[:65]
         print(f"  [{paper_id}] {title_short} ...", end=" ", flush=True)
 
-        pdf_bytes, source = get_pdf(row.get("pdfUrl"), doi, browser=browser)
+        pdf_url = row.get("pdfUrl")
+        if not isinstance(pdf_url, str):
+            pdf_url = None
+        pdf_bytes, source = get_pdf(pdf_url, doi, browser=browser)
 
         if pdf_bytes is None:
             print(f"failed — {source}")
