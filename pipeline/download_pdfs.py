@@ -195,60 +195,92 @@ def unpaywall_pdf_url(doi):
     return None
 
 
-def get_pdf(pdf_url, doi, browser=None):
+def semantic_scholar_pdf_url(doi):
+    """Ask Semantic Scholar for an open-access PDF URL."""
+    if not doi:
+        return None
+    try:
+        r = requests.get(
+            f"https://api.semanticscholar.org/graph/v1/paper/DOI:{doi}",
+            params={"fields": "openAccessPdf"},
+            timeout=15,
+        )
+        if r.status_code == 200:
+            oa = r.json().get("openAccessPdf") or {}
+            return oa.get("url")
+    except Exception:
+        pass
+    return None
+
+
+def get_pdf(pdf_url, doi, browser=None, semantic_scholar_only=False):
     """Try all strategies to retrieve PDF bytes. Returns (bytes, source) or (None, reason)."""
     reasons = []
 
-    if pdf_url:
-        # Direct download
-        data, note = fetch_pdf(pdf_url)
-        if data:
-            return data, "direct"
-        reasons.append(f"direct:{note}")
+    if not semantic_scholar_only:
+        if pdf_url:
+            # Direct download
+            data, note = fetch_pdf(pdf_url)
+            if data:
+                return data, "direct"
+            reasons.append(f"direct:{note}")
 
-        # Zenodo landing page
-        m = re.search(r"zenodo\.org/(?:record|records)/(\d+)", pdf_url)
-        if m:
-            resolved = zenodo_pdf_url(m.group(1))
+            # Zenodo landing page
+            m = re.search(r"zenodo\.org/(?:record|records)/(\d+)", pdf_url)
+            if m:
+                resolved = zenodo_pdf_url(m.group(1))
+                if resolved:
+                    data, note = fetch_pdf(resolved)
+                    if data:
+                        return data, "zenodo"
+                    reasons.append(f"zenodo:{note}")
+                else:
+                    reasons.append("zenodo:no file found")
+
+            # Generic landing page (handle.net, figshare, institutional repos)
+            resolved = html_pdf_url(pdf_url)
             if resolved:
                 data, note = fetch_pdf(resolved)
                 if data:
-                    return data, "zenodo"
-                reasons.append(f"zenodo:{note}")
+                    return data, "html"
+                reasons.append(f"html:{note}")
             else:
-                reasons.append("zenodo:no file found")
+                reasons.append("html:no pdf link")
 
-        # Generic landing page (handle.net, figshare, institutional repos)
-        resolved = html_pdf_url(pdf_url)
-        if resolved:
-            data, note = fetch_pdf(resolved)
-            if data:
-                return data, "html"
-            reasons.append(f"html:{note}")
-        else:
-            reasons.append("html:no pdf link")
+        # Unpaywall fallback
+        if doi:
+            resolved = unpaywall_pdf_url(doi)
+            if resolved:
+                data, note = fetch_pdf(resolved)
+                if data:
+                    return data, "unpaywall"
+                reasons.append(f"unpaywall:{note}")
+            else:
+                reasons.append("unpaywall:no oa url")
+            time.sleep(0.5)
 
-    # Unpaywall fallback
+    # Semantic Scholar
     if doi:
-        resolved = unpaywall_pdf_url(doi)
+        resolved = semantic_scholar_pdf_url(doi)
         if resolved:
             data, note = fetch_pdf(resolved)
             if data:
-                return data, "unpaywall"
-            reasons.append(f"unpaywall:{note}")
+                return data, "semanticscholar"
+            reasons.append(f"semanticscholar:{note}")
         else:
-            reasons.append("unpaywall:no oa url")
+            reasons.append("semanticscholar:no oa url")
         time.sleep(0.5)
 
-    # Sci-Hub via headless browser (last resort)
-    if doi and browser:
-        time.sleep(3)  # be polite — don't hammer Sci-Hub
-        data, note = scihub_fetch(doi, browser)
-        if data:
-            return data, "scihub"
-        reasons.append(f"scihub:{note}")
+    if not semantic_scholar_only:
+        # Sci-Hub via headless browser (last resort)
+        if doi and browser:
+            time.sleep(3)  # be polite — don't hammer Sci-Hub
+            data, note = scihub_fetch(doi, browser)
+            if data:
+                return data, "scihub"
+            reasons.append(f"scihub:{note}")
 
-    return None, " | ".join(reasons)
+    return None, " | ".join(reasons) if reasons else "no pdf_url or doi"
 
 
 # ---------------------------------------------------------------------------
@@ -339,6 +371,8 @@ def main():
                         help="All accepted papers — for collecting emails across the full corpus")
     parser.add_argument("--before-id", type=int, default=None,
                         help="Only process papers with id < N")
+    parser.add_argument("--semantic-scholar-only", action="store_true",
+                        help="Skip all other sources; only try Semantic Scholar (good for re-runs after prior failures)")
     args = parser.parse_args()
 
     os.makedirs(PDF_DIR, exist_ok=True)
@@ -364,6 +398,10 @@ def main():
         writer.writerow(["paper_id", "doi", "title", "emails"])
 
     downloaded = already_have = failed = 0
+    failures_csv = os.path.join(PDF_DIR, "failed_downloads.csv")
+    failures_file = open(failures_csv, "w", newline="", encoding="utf-8")
+    failures_writer = csv.writer(failures_file)
+    failures_writer.writerow(["paper_id", "doi", "title", "reason"])
 
     for _, row in df.iterrows():
         paper_id = int(row["id"])
@@ -388,10 +426,13 @@ def main():
         pdf_url = row.get("pdfUrl")
         if not isinstance(pdf_url, str):
             pdf_url = None
-        pdf_bytes, source = get_pdf(pdf_url, doi, browser=browser)
+        pdf_bytes, source = get_pdf(pdf_url, doi, browser=browser,
+                                    semantic_scholar_only=args.semantic_scholar_only)
 
         if pdf_bytes is None:
             print(f"failed — {source}")
+            failures_writer.writerow([paper_id, doi or "", str(row["title"]), source])
+            failures_file.flush()
             failed += 1
             time.sleep(args.delay)
             continue
@@ -414,6 +455,7 @@ def main():
         time.sleep(args.delay)
 
     csv_file.close()
+    failures_file.close()
     if browser:
         browser.close()
     if playwright_ctx:
@@ -423,6 +465,10 @@ def main():
 
     print(f"\nDone — downloaded: {downloaded}  |  already had: {already_have}  |  failed: {failed}")
     print(f"Emails: {EMAILS_CSV}")
+
+    if failed:
+        print(f"Failed list: {failures_csv}")
+
     print(f"Re-extract with local PDFs: python extract_local.py --retry-failed --pdf-dir pdfs")
 
 

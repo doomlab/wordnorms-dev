@@ -32,6 +32,10 @@ Admin reviews PENDING_REVIEW papers
 | `fetch.py` | Cron (e.g. weekly) | Queries OpenAlex, enriches missing abstracts via Crossref/EuropePMC, inserts new papers into DB (skips existing DOIs) |
 | `predict.py` | After fetch, or on demand | Trains SVM on reviewed papers, scores PENDING_REVIEW papers, logs a ModelRun |
 | `extract.py` | Admin panel button | Runs extraction model on ACCEPTED papers, updates status to ADDED_TO_TRAINING |
+| `extract_local.py` | On demand | Bulk-extracts ACCEPTED papers using a local Ollama model (free, no API key) |
+| `download_pdfs.py` | On demand | Downloads PDFs for ACCEPTED papers and extracts author emails into `pdfs/emails.csv` |
+| `extract_emails.py` | On demand | Scans `pdfs/` for any manually-added PDFs not yet in `emails.csv` and fills in the gaps |
+| `send_drafts.py` | On demand | Reads `emails.csv`, groups papers by author email, and creates Outlook draft emails via AppleScript |
 | `seed.py` | One-time | Imports `both_lab_table.csv` into Paper table with an 80/20 validation split |
 | `db.py` | Imported by all scripts | Shared Postgres connection via DATABASE_URL |
 
@@ -76,13 +80,74 @@ ollama pull llama3.1
 **Step 3 — Run extraction from the pipeline directory**
 ```bash
 cd pipeline
-python extract_local.py                    # all unextracted ACCEPTED papers
-python extract_local.py --limit 50         # test run on 50 papers
-python extract_local.py --pdf-dir ./pdfs   # use local PDFs instead of downloading
-python extract_local.py --redo             # re-extract everything (e.g. after updating the prompt)
+python extract_local.py
 ```
 
-Papers with `confidence < 0.6` are flagged as "needs review" in the DB. Already-extracted papers are skipped automatically.
+| Flag | Default | Description |
+|---|---|---|
+| _(none)_ | | All unextracted ACCEPTED papers (no existing extraction record) |
+| `--retry-failed` | | Only papers that previously failed (`parse_error`, `llm_error`, `pdf_error_retryable`) |
+| `--redo` | | Re-extract all ACCEPTED papers, even ones already done (e.g. after updating the prompt) |
+| `--pdf-dir PATH` | | Read PDFs from a local directory (`pdfs/{id}.pdf`) instead of downloading via `pdfUrl` |
+| `--limit N` | | Stop after N papers |
+| `--delay N` | `4.0` | Seconds between Ollama calls |
+
+Papers with `confidence < 0.6` are flagged as "needs review" in the DB. Already-extracted papers are skipped automatically unless `--redo` is set.
+
+Typical follow-up after a PDF download run:
+```bash
+python extract_local.py --retry-failed --pdf-dir ./pdfs
+```
+
+---
+
+## Author email campaign
+
+To invite authors to verify their extracted data, run these three steps in order.
+
+**Step 1 — Download PDFs and extract emails**
+```bash
+python download_pdfs.py --all --delay 3
+```
+Downloads PDFs for all ACCEPTED papers using a resolution chain (direct URL → Zenodo API → HTML meta tag → Unpaywall → Sci-Hub via headless Chromium). Extracts author emails from the first two pages of each PDF. Saves PDFs to `pdfs/{id}.pdf` (gitignored) and emails to `pdfs/emails.csv`. A log of papers that couldn't be downloaded is written to `pdfs/failed_downloads.csv` as it runs.
+
+| Flag | Default | Description |
+|---|---|---|
+| _(none)_ | | Only papers currently marked `failed:pdf_error` |
+| `--all-missing` | | Also include papers with no extraction record yet |
+| `--all` | | All ACCEPTED papers — use this for a full email collection run |
+| `--before-id N` | | Only process papers with `id < N` (useful for catching papers missed at the start of a run) |
+| `--limit N` | | Stop after N papers (useful for test runs) |
+| `--delay N` | `2.0` | Seconds between papers; increase if publishers start blocking |
+| `--semantic-scholar-only` | | Skip all other sources and only try Semantic Scholar — useful after a prior run where direct/Unpaywall/Sci-Hub already failed |
+
+Sci-Hub fallback requires Playwright: `pip install playwright && playwright install chromium`. If not installed, Sci-Hub is skipped gracefully.
+
+For papers that still can't be downloaded automatically, find and place the PDF manually as `pdfs/{paper_id}.pdf`.
+
+**Step 2 — Catch manually-added PDFs**
+```bash
+python extract_emails.py
+```
+Scans `pdfs/` for any PDFs not yet represented in `emails.csv` (e.g. ones you dropped in manually after the download run). Safe to re-run — already-processed papers are skipped.
+
+| Flag | Description |
+|---|---|
+| `--recheck` | Re-extract emails even from papers already in `emails.csv` |
+
+**Step 3 — Create Outlook drafts**
+```bash
+python send_drafts.py --dry-run   # preview what will be sent
+python send_drafts.py             # create drafts in Outlook
+```
+Reads `emails.csv`, deduplicates by email address (one email per person even if they have multiple papers), and creates draft emails in Outlook via AppleScript. Drafts land in your Outlook Drafts folder — review and send from there.
+
+| Flag | Default | Description |
+|---|---|---|
+| `--base-url` | `https://manynorms.wordnorms.com` | Base URL used to build suggest-edit links in the email body |
+| `--dry-run` | | Print a preview of each email instead of creating drafts |
+
+Requires Mac with Microsoft Outlook installed. No API key needed — uses AppleScript to create drafts directly in the app.
 
 ---
 
