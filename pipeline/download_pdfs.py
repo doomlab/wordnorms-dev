@@ -132,11 +132,12 @@ def scihub_fetch(doi, browser):
     """Use Playwright to load Sci-Hub and download the PDF in the same browser session."""
     if not doi or not browser:
         return None, "no doi or browser"
+    domain_notes = []
     for domain in SCIHUB_DOMAINS:
         page = None
         try:
             page = browser.new_page()
-            page.goto(f"https://{domain}/{doi}", wait_until="networkidle", timeout=25000)
+            page.goto(f"https://{domain}/{doi}", wait_until="domcontentloaded", timeout=40000)
             html = page.content()
 
             pdf_url = None
@@ -158,15 +159,31 @@ def scihub_fetch(doi, browser):
 
             if not pdf_url:
                 page.close()
-                return None, "not found on page"
+                domain_notes.append(f"{domain}:no pdf link")
+                continue  # try next domain
 
-            # Navigate to PDF URL in the same page — cookies carry over, avoids 403
-            resp = page.goto(pdf_url, wait_until="networkidle", timeout=30000)
-            body = resp.body() if resp else None
-            page.close()
-            if body and b"%PDF" in body[:1024]:
-                return body, "ok"
-            return None, f"not PDF ({len(body) if body else 0} bytes)"
+            print(f"\n    [scihub] found {pdf_url[:80]}", end=" ", flush=True)
+
+            # Use Playwright's request context to download the PDF —
+            # shares the full browser session (cookies across all domains, headers)
+            # without opening a PDF viewer
+            try:
+                api_resp = page.context.request.get(
+                    pdf_url,
+                    headers={
+                        "Referer": f"https://{domain}/{doi}",
+                        "Accept": "application/pdf,*/*",
+                    },
+                    timeout=30000,
+                )
+                body = api_resp.body()
+                page.close()
+                if body and b"%PDF" in body[:1024]:
+                    return body, "ok"
+                return None, f"HTTP {api_resp.status} / not PDF ({len(body)} bytes)"
+            except Exception as e:
+                page.close()
+                return None, f"download err: {e}"
 
         except Exception as e:
             if page:
@@ -174,8 +191,9 @@ def scihub_fetch(doi, browser):
                     page.close()
                 except Exception:
                     pass
+            domain_notes.append(f"{domain}:err:{e}")
             continue
-    return None, "all domains failed"
+    return None, " | ".join(domain_notes) if domain_notes else "all domains failed"
 
 
 def unpaywall_pdf_url(doi):

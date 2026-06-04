@@ -175,8 +175,8 @@ def _escape_newlines_in_strings(raw):
 
 def _fix_llm_json(raw):
     """Fix common LLM JSON mistakes before parsing."""
-    # Strip "= result" from expressions like "741 + 852 = 1593" — just keep the result
-    raw = re.sub(r"(\d+(?:\s*[+*]\s*\d+)+)\s*=\s*(\d+)", r"\2", raw)
+    # Strip "= result (annotation)" from expressions like "741 + 852 = 1593 (calculated)"
+    raw = re.sub(r"(\d+(?:\s*[+*]\s*\d+)+)\s*=\s*(\d+)\s*(?:\([^)\n]*\))?", r"\2", raw)
     # Evaluate inline integer arithmetic: 146 + 49, 10 * 1000000, etc.
     def _eval_op(m):
         try:
