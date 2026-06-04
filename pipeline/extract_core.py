@@ -116,7 +116,7 @@ def build_prompt(text):
 
 
 def parse_response(raw):
-    """Extract JSON from model response, stripping any markdown fences."""
+    """Extract JSON from model response, stripping any markdown fences or prose."""
     raw = raw.strip()
     # strip ```json ... ``` fences if present
     raw = re.sub(r"^```(?:json)?\s*", "", raw)
@@ -124,7 +124,15 @@ def parse_response(raw):
     try:
         return json.loads(raw)
     except json.JSONDecodeError:
-        return None
+        pass
+    # fall back: find the outermost { ... } block in case of leading/trailing prose
+    m = re.search(r"\{.*\}", raw, re.DOTALL)
+    if m:
+        try:
+            return json.loads(m.group())
+        except json.JSONDecodeError:
+            pass
+    return None
 
 
 # ---------------------------------------------------------------------------
