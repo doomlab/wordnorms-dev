@@ -59,6 +59,32 @@ The holdout set is designed to stay representative as publication styles and pap
 - **One-way:** papers already in the validation set are never moved back to training — the set only grows
 - **Why this works:** recent papers flow into the validation set gradually, keeping it representative of current literature without causing abrupt metric shifts. The stats page flags runs where the validation set was rebalanced so you can distinguish real model improvement from distribution shift
 
+## Local extraction with Ollama
+
+Use this to bulk-extract ACCEPTED papers locally (free, no API key needed) after restoring the production DB.
+
+**Step 1 — Start Ollama**
+```bash
+ollama serve
+```
+
+**Step 2 — Pull the model (first time only)**
+```bash
+ollama pull llama3.1
+```
+
+**Step 3 — Run extraction from the pipeline directory**
+```bash
+cd pipeline
+python extract_local.py                    # all unextracted ACCEPTED papers
+python extract_local.py --limit 50         # test run on 50 papers
+python extract_local.py --pdf-dir ./pdfs   # use local PDFs instead of downloading
+```
+
+Papers with `confidence < 0.6` are flagged as "needs review" in the DB. Already-extracted papers are skipped automatically.
+
+---
+
 ## Running locally
 
 Install dependencies:

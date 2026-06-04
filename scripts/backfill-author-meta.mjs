@@ -16,7 +16,7 @@
  *   --all            Re-fetch even papers that already have authorMeta
  */
 
-import { PrismaClient } from "@prisma/client"
+import { PrismaClient, Prisma } from "@prisma/client"
 
 const args = {}
 for (let i = 2; i < process.argv.length; i++) {
@@ -79,7 +79,7 @@ async function main() {
   const papers = await db.paper.findMany({
     where: {
       openAlexId: { not: null },
-      ...(REFETCH_ALL ? {} : { authorMeta: null }),
+      ...(REFETCH_ALL ? {} : { authorMeta: { equals: Prisma.JsonNull } }),
     },
     select: { id: true, title: true, openAlexId: true },
     take: BATCH_SIZE,
