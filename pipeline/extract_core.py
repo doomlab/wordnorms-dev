@@ -157,6 +157,24 @@ def _to_int(val):
     return int(m.group().replace(",", "")) if m else None
 
 
+def _to_str(val):
+    """Coerce LLM output to a plain string; dicts/lists become JSON strings."""
+    if val is None:
+        return None
+    if isinstance(val, str):
+        return val
+    return json.dumps(val)
+
+
+def _to_str_list(val):
+    """Coerce LLM output to a list of plain strings."""
+    if not val:
+        return []
+    if not isinstance(val, list):
+        val = [val]
+    return [_to_str(v) for v in val if v is not None]
+
+
 def save_extraction(conn, paper_id, data, extracted_by, paper_text=None):
     if data is None:
         return False
@@ -211,13 +229,13 @@ def save_extraction(conn, paper_id, data, extracted_by, paper_text=None):
         """,
         (
             paper_id,
-            data.get("language") or [],
+            _to_str_list(data.get("language")),
             _to_int(data.get("participant_count")),
-            data.get("participant_type"),
-            data.get("stimuli_type") or [],
+            _to_str(data.get("participant_type")),
+            _to_str_list(data.get("stimuli_type")),
             _to_int(data.get("stimuli_count")),
-            data.get("norms_collected") or [],
-            data.get("instructions"),
+            _to_str_list(data.get("norms_collected")),
+            _to_str(data.get("instructions")),
             participant_level_data,
             json.dumps(reliabilities),
             confidence,
