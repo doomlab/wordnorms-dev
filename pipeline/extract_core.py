@@ -38,15 +38,42 @@ Paper text:
 # PDF text extraction
 # ---------------------------------------------------------------------------
 
+def _area_to_text(area):
+    """Convert a pdfplumber page/crop to text using word-level extraction.
+
+    extract_words() detects gaps between character bboxes and inserts spaces
+    explicitly, which fixes PDFs where extract_text() joins words without spaces.
+    Falls back to extract_text() if no words are detected.
+    """
+    words = area.extract_words(x_tolerance=2, y_tolerance=3, keep_blank_chars=False)
+    if not words:
+        return (area.extract_text() or "").strip()
+    lines = []
+    cur_line: list[str] = []
+    cur_top = None
+    for w in words:
+        top = round(w["top"] / 4)  # bucket into ~4px rows
+        if cur_top is None or top == cur_top:
+            cur_line.append(w["text"])
+            cur_top = top
+        else:
+            lines.append(" ".join(cur_line))
+            cur_line = [w["text"]]
+            cur_top = top
+    if cur_line:
+        lines.append(" ".join(cur_line))
+    return "\n".join(lines)
+
+
 def _extract_page_columns(page):
     """Extract text handling two-column layouts by splitting at midpoint."""
     w, h = page.width, page.height
-    left = (page.crop((0, 0, w / 2, h)).extract_text() or "").strip()
-    right = (page.crop((w / 2, 0, w, h)).extract_text() or "").strip()
+    left = _area_to_text(page.crop((0, 0, w / 2, h)))
+    right = _area_to_text(page.crop((w / 2, 0, w, h)))
     if len(right) > 100:
         return left + "\n\n" + right
-    # single column or near-empty right half — fall back to full-page
-    return (page.extract_text() or "").strip()
+    # single column or near-empty right half — use full-page extraction
+    return _area_to_text(page)
 
 
 def extract_pdf_text(pdf_path, max_pages=20):
@@ -120,6 +147,16 @@ def save_extraction_failure(conn, paper_id, reason):
     )
 
 
+def _to_int(val):
+    """Coerce LLM output to int (handles strings like 'over 8,000', '~200')."""
+    if val is None:
+        return None
+    if isinstance(val, int):
+        return val
+    m = re.search(r"\d[\d,]*", str(val))
+    return int(m.group().replace(",", "")) if m else None
+
+
 def save_extraction(conn, paper_id, data, extracted_by, paper_text=None):
     if data is None:
         return False
@@ -175,10 +212,10 @@ def save_extraction(conn, paper_id, data, extracted_by, paper_text=None):
         (
             paper_id,
             data.get("language") or [],
-            data.get("participant_count"),
+            _to_int(data.get("participant_count")),
             data.get("participant_type"),
             data.get("stimuli_type") or [],
-            data.get("stimuli_count"),
+            _to_int(data.get("stimuli_count")),
             data.get("norms_collected") or [],
             data.get("instructions"),
             participant_level_data,

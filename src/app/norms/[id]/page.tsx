@@ -7,6 +7,7 @@ import { ReportButton } from "../../components/ReportButton"
 import { SuggestExtractionEdits } from "../../components/SuggestExtractionEdits"
 import { getBlitzContext } from "../../blitz-server"
 import { CitationCard } from "./CitationCard"
+import { CollapsibleSection } from "./CollapsibleSection"
 import db from "db"
 
 async function findDatasetCards(
@@ -88,6 +89,15 @@ export default async function NormDetailPage({
           createdAt: true,
           resolved: true,
           note: true,
+          language: true,
+          participantCount: true,
+          participantType: true,
+          stimuliType: true,
+          stimuliCount: true,
+          normsCollected: true,
+          instructions: true,
+          participantLevelData: true,
+          reliabilities: true,
           user: { select: { name: true, points: true } },
         },
         orderBy: { createdAt: "asc" },
@@ -101,6 +111,20 @@ export default async function NormDetailPage({
   if (!paper) notFound()
 
   const ext = paper.extraction
+  // Use the most recent human edit suggestion's values where available, falling back to model extraction
+  const latestEdit = paper.extractionEdits.at(-1)
+  const displayExt = ext && latestEdit ? {
+    ...ext,
+    language: latestEdit.language.length ? latestEdit.language : ext.language,
+    participantCount: latestEdit.participantCount ?? ext.participantCount,
+    participantType: latestEdit.participantType ?? ext.participantType,
+    stimuliType: latestEdit.stimuliType.length ? latestEdit.stimuliType : ext.stimuliType,
+    stimuliCount: latestEdit.stimuliCount ?? ext.stimuliCount,
+    normsCollected: latestEdit.normsCollected.length ? latestEdit.normsCollected : ext.normsCollected,
+    instructions: latestEdit.instructions ?? ext.instructions,
+    participantLevelData: latestEdit.participantLevelData ?? ext.participantLevelData,
+    reliabilities: latestEdit.reliabilities ?? ext.reliabilities,
+  } : ext
   const doiUrl = paper.doi ? `https://doi.org/${paper.doi}` : null
   const isAiExtracted = ext && ["groq", "ollama"].includes(ext.extractedBy ?? "")
   const linkedDatasets = await findDatasetCards(paper.id, paper.doi, paper.title)
@@ -329,21 +353,11 @@ export default async function NormDetailPage({
           )}
 
           {ext && (
-            <div className="py-6">
-              <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center gap-2">
-                  <h2 className="text-xs font-semibold uppercase tracking-wider text-base-content/40">
-                    Extracted information
-                  </h2>
-                  {ext?.verifiedAt ? (
-                    <span className="badge badge-success badge-sm">Verified</span>
-                  ) : isAiExtracted ? (
-                    <span className="badge badge-ghost badge-sm text-base-content/40">
-                      AI extracted
-                    </span>
-                  ) : null}
-                </div>
-                {userId ? (
+            <>
+            <CollapsibleSection
+              title="Extracted information"
+              subtitle={ext?.verifiedAt ? undefined : isAiExtracted ? "AI extracted" : undefined}
+              headerRight={userId ? (
                   <a
                     href={`/norms/${paper.id}/suggest-edit`}
                     className="btn btn-primary btn-sm text-base-content/50 hover:text-base-content"
@@ -357,29 +371,33 @@ export default async function NormDetailPage({
                     </button>
                   </div>
                 )}
-              </div>
+            >
 
               {(() => {
-                const snippets = (ext.sourceSnippets ?? {}) as Record<string, string>
+                const snippets: Record<string, string> = Object.fromEntries(
+                  Object.entries((ext.sourceSnippets ?? {}) as Record<string, unknown>).map(
+                    ([k, v]) => [k, typeof v === "string" ? v : JSON.stringify(v)]
+                  )
+                )
                 return (
               <div className="space-y-0.5">
-                <Row label="Language" value={ext.language.length ? ext.language.join(", ") : undefined} snippet={snippets.language} />
-                <Row label="Norms collected" value={ext.normsCollected.length ? ext.normsCollected.join(", ") : undefined} snippet={snippets.normsCollected} />
-                <Row label="Stimuli type" value={ext.stimuliType.length ? ext.stimuliType.join(", ") : undefined} snippet={snippets.stimuliType} />
-                <Row label="Stimuli count" value={ext.stimuliCount != null ? ext.stimuliCount.toLocaleString() : undefined} snippet={snippets.stimuliCount} />
-                <Row label="Participant type" value={ext.participantType ?? undefined} snippet={snippets.participantType} />
-                <Row label="Participant count" value={ext.participantCount != null ? ext.participantCount.toLocaleString() : undefined} snippet={snippets.participantCount} />
-                {ext.participantLevelData && (
+                <Row label="Language" value={displayExt.language.length ? displayExt.language.join(", ") : undefined} snippet={snippets.language} />
+                <Row label="Norms collected" value={displayExt.normsCollected.length ? displayExt.normsCollected.join(", ") : undefined} snippet={snippets.normsCollected} />
+                <Row label="Stimuli type" value={displayExt.stimuliType.length ? displayExt.stimuliType.join(", ") : undefined} snippet={snippets.stimuliType} />
+                <Row label="Stimuli count" value={displayExt.stimuliCount != null ? displayExt.stimuliCount.toLocaleString() : undefined} snippet={snippets.stimuliCount} />
+                <Row label="Participant type" value={displayExt.participantType ?? undefined} snippet={snippets.participantType} />
+                <Row label="Participant count" value={displayExt.participantCount != null ? displayExt.participantCount.toLocaleString() : undefined} snippet={snippets.participantCount} />
+                {displayExt.participantLevelData && (
                   <div className="flex gap-3 py-1.5">
                     <span className="w-36 shrink-0 font-medium text-base-content/70">Participant data</span>
                     <span className="text-base-content/80">Raw data available</span>
                   </div>
                 )}
-                {Array.isArray(ext.reliabilities) && (ext.reliabilities as { norm: string; value: number | null; metric: string | null }[]).length > 0 && (
+                {Array.isArray(displayExt.reliabilities) && (displayExt.reliabilities as { norm: string; value: number | null; metric: string | null }[]).length > 0 && (
                   <div className="flex gap-3 py-1.5">
                     <span className="w-36 shrink-0 font-medium text-base-content/70">Reliabilities</span>
                     <div className="space-y-0.5">
-                      {(ext.reliabilities as { norm: string; value: number | null; metric: string | null }[]).map((r, i) => (
+                      {(displayExt.reliabilities as { norm: string; value: number | null; metric: string | null }[]).map((r, i) => (
                         <div key={i} className="text-base-content/80 text-sm">
                           {r.norm}
                           {r.value != null && <span> — {r.value}</span>}
@@ -410,25 +428,27 @@ export default async function NormDetailPage({
                     </a>
                   </div>
                 )}
-                {ext.instructions && (
+                {displayExt.instructions && (
                   <div className="py-1.5">
                     <span className="font-medium text-base-content/70 block mb-1">
                       Instructions
                     </span>
-                    <p className="text-base-content/70 leading-relaxed">{ext.instructions}</p>
+                    <p className="text-base-content/70 leading-relaxed">{displayExt.instructions}</p>
                     {snippets.instructions && (
                       <p className="text-xs text-base-content/40 border-l-2 border-base-300 pl-2 mt-1 italic">{snippets.instructions}</p>
                     )}
                   </div>
                 )}
-                {snippets.reliabilities && Array.isArray(ext.reliabilities) && (ext.reliabilities as { norm: string }[]).length > 0 && (
+                {snippets.reliabilities && Array.isArray(displayExt.reliabilities) && (displayExt.reliabilities as { norm: string }[]).length > 0 && (
                   <p className="text-xs text-base-content/40 border-l-2 border-base-300 pl-2 mt-1 italic">{snippets.reliabilities}</p>
                 )}
               </div>
               )})()}
 
-              {/* Edit history */}
-              <div className="mt-5 pt-4 border-t border-base-200 space-y-2">
+            </CollapsibleSection>
+
+            <CollapsibleSection title="Edits / History" defaultOpen={false}>
+              <div className="space-y-2">
                 <HistoryEvent
                   label={`Extracted by ${ext.extractedBy ?? "AI"}`}
                   date={ext.extractedAt}
@@ -464,7 +484,8 @@ export default async function NormDetailPage({
                   />
                 )}
               </div>
-            </div>
+            </CollapsibleSection>
+            </>
           )}
           {(citedByInDb.length > 0 || openAlexCitedByCount != null) && (() => {
             const parts: string[] = []
@@ -481,7 +502,7 @@ export default async function NormDetailPage({
           })()}
           {(referencedInDb.length > 0 || otherCitations.length > 0) && (
             <CitationCard
-              title="Cites"
+              title="References"
               subtitle={
                 paper.citationsFrom.length > 0
                   ? `${referencedInDb.length} in WordNorms · ${paper.citationsFrom.length} total`

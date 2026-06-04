@@ -146,6 +146,7 @@ def main():
                     failed += 1
             except Exception as e:
                 print(f"error: {e}")
+                conn.rollback()
                 save_extraction_failure(conn, int(row["id"]), "failed:llm_error")
                 conn.commit()
                 failed += 1
