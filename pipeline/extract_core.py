@@ -65,14 +65,47 @@ def _area_to_text(area):
     return "\n".join(lines)
 
 
+def _find_column_gap(page):
+    """Return the x-coordinate of the column gap, or None if single-column page.
+
+    Looks for the longest horizontal strip with no words in the middle 60% of
+    page width. Only returns a split point if the gap is at least 8px wide.
+    """
+    words = page.extract_words(x_tolerance=3, y_tolerance=3)
+    if len(words) < 20:
+        return None
+    w = page.width
+    lo, hi = int(w * 0.2), int(w * 0.8)
+    occ = [0] * (int(w) + 2)
+    for word in words:
+        for x in range(int(word["x0"]), int(word["x1"]) + 1):
+            if 0 <= x < len(occ):
+                occ[x] += 1
+    best_start, best_len, cur_start, cur_len = lo, 0, lo, 0
+    for x in range(lo, hi):
+        if occ[x] == 0:
+            if cur_len == 0:
+                cur_start = x
+            cur_len += 1
+            if cur_len > best_len:
+                best_len, best_start = cur_len, cur_start
+        else:
+            cur_len = 0
+    if best_len >= 8:
+        return best_start + best_len // 2
+    return None
+
+
 def _extract_page_columns(page):
-    """Extract text handling two-column layouts by splitting at midpoint."""
-    w, h = page.width, page.height
-    left = _area_to_text(page.crop((0, 0, w / 2, h)))
-    right = _area_to_text(page.crop((w / 2, 0, w, h)))
+    """Extract text, splitting at the actual column gap if one exists."""
+    split_x = _find_column_gap(page)
+    if split_x is None:
+        return _area_to_text(page)
+    h = page.height
+    left = _area_to_text(page.crop((0, 0, split_x, h)))
+    right = _area_to_text(page.crop((split_x, 0, page.width, h)))
     if len(right) > 100:
         return left + "\n\n" + right
-    # single column or near-empty right half — use full-page extraction
     return _area_to_text(page)
 
 
@@ -115,12 +148,27 @@ def build_prompt(text):
     return PROMPT_TEMPLATE.replace("{text}", trim_text(text))
 
 
+def _fix_llm_json(raw):
+    """Fix common LLM JSON mistakes before parsing."""
+    # Replace inline arithmetic: "stimuliCount": 146 + 49  ->  195
+    def _sum(m):
+        try:
+            return str(int(m.group(1)) + int(m.group(2)))
+        except Exception:
+            return m.group(0)
+    raw = re.sub(r"(\d+)\s*\+\s*(\d+)", _sum, raw)
+    # Replace set-like array items {"valence"} -> "valence"
+    raw = re.sub(r'\{"([^"{}]+)"\}', r'"\1"', raw)
+    return raw
+
+
 def parse_response(raw):
     """Extract JSON from model response, stripping any markdown fences or prose."""
     raw = raw.strip()
     # strip ```json ... ``` fences if present
     raw = re.sub(r"^```(?:json)?\s*", "", raw)
     raw = re.sub(r"\s*```$", "", raw)
+    raw = _fix_llm_json(raw)
     try:
         return json.loads(raw)
     except json.JSONDecodeError:
@@ -180,7 +228,15 @@ def _to_str_list(val):
         return []
     if not isinstance(val, list):
         val = [val]
-    return [_to_str(v) for v in val if v is not None]
+    return [_to_str(v) for v in val if v is not None and v != "null"]
+
+
+def _get(data, snake, camel=None):
+    """Get value by snake_case key, falling back to camelCase if model used that instead."""
+    v = data.get(snake)
+    if v is None and camel:
+        v = data.get(camel)
+    return v
 
 
 def save_extraction(conn, paper_id, data, extracted_by, paper_text=None):
@@ -190,13 +246,12 @@ def save_extraction(conn, paper_id, data, extracted_by, paper_text=None):
     confidence = data.get("confidence")
     needs_review = confidence is not None and confidence < 0.6
 
-    participant_level_data = bool(data.get("participant_level_data") or False)
-    reliabilities = data.get("reliabilities") or []
+    participant_level_data = bool(_get(data, "participant_level_data", "participantLevelData") or False)
+    reliabilities = _get(data, "reliabilities") or []
     if not isinstance(reliabilities, list):
         reliabilities = []
 
-    # source_snippets already uses camelCase keys as requested in the prompt
-    raw_snippets = data.get("source_snippets") or {}
+    raw_snippets = _get(data, "source_snippets", "sourceSnippets") or {}
     source_snippets = {k: v for k, v in raw_snippets.items() if v is not None} if raw_snippets else None
 
     cur = conn.cursor()
@@ -237,13 +292,13 @@ def save_extraction(conn, paper_id, data, extracted_by, paper_text=None):
         """,
         (
             paper_id,
-            _to_str_list(data.get("language")),
-            _to_int(data.get("participant_count")),
-            _to_str(data.get("participant_type")),
-            _to_str_list(data.get("stimuli_type")),
-            _to_int(data.get("stimuli_count")),
-            _to_str_list(data.get("norms_collected")),
-            _to_str(data.get("instructions")),
+            _to_str_list(_get(data, "language")),
+            _to_int(_get(data, "participant_count", "participantCount")),
+            _to_str(_get(data, "participant_type", "participantType")),
+            _to_str_list(_get(data, "stimuli_type", "stimuliType")),
+            _to_int(_get(data, "stimuli_count", "stimuliCount")),
+            _to_str_list(_get(data, "norms_collected", "normsCollected")),
+            _to_str(_get(data, "instructions")),
             participant_level_data,
             json.dumps(reliabilities),
             confidence,

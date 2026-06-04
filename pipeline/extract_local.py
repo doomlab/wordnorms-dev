@@ -35,6 +35,7 @@ def call_ollama(text):
     payload = {
         "model": MODEL,
         "stream": False,
+        "options": {"num_predict": 4096},
         "messages": [
             {"role": "system", "content": PROMPT_SYSTEM},
             {"role": "user", "content": build_prompt(text)},
@@ -141,7 +142,7 @@ def main():
                     print(f"ok (confidence={data.get('confidence', '?')}){flag}")
                     done += 1
                 else:
-                    print(f"parse failed — raw response was:\n{raw[:500]}")
+                    print(f"parse failed — raw response ({len(raw)} chars):\n...head: {raw[:300]}\n...tail: {raw[-200:]}")
                     save_extraction_failure(conn, int(row["id"]), "failed:parse_error")
                     conn.commit()
                     failed += 1

@@ -373,20 +373,14 @@ export default async function NormDetailPage({
                 )}
             >
 
-              {(() => {
-                const snippets: Record<string, string> = Object.fromEntries(
-                  Object.entries((ext.sourceSnippets ?? {}) as Record<string, unknown>).map(
-                    ([k, v]) => [k, typeof v === "string" ? v : JSON.stringify(v)]
-                  )
-                )
-                return (
+              {(()=> (
               <div className="space-y-0.5">
-                <Row label="Language" value={displayExt.language.length ? displayExt.language.join(", ") : undefined} snippet={snippets.language} />
-                <Row label="Norms collected" value={displayExt.normsCollected.length ? displayExt.normsCollected.join(", ") : undefined} snippet={snippets.normsCollected} />
-                <Row label="Stimuli type" value={displayExt.stimuliType.length ? displayExt.stimuliType.join(", ") : undefined} snippet={snippets.stimuliType} />
-                <Row label="Stimuli count" value={displayExt.stimuliCount != null ? displayExt.stimuliCount.toLocaleString() : undefined} snippet={snippets.stimuliCount} />
-                <Row label="Participant type" value={displayExt.participantType ?? undefined} snippet={snippets.participantType} />
-                <Row label="Participant count" value={displayExt.participantCount != null ? displayExt.participantCount.toLocaleString() : undefined} snippet={snippets.participantCount} />
+                <Row label="Language" value={displayExt.language.length ? displayExt.language.join(", ") : undefined} />
+                <Row label="Norms collected" value={displayExt.normsCollected.length ? displayExt.normsCollected.join(", ") : undefined} />
+                <Row label="Stimuli type" value={displayExt.stimuliType.length ? displayExt.stimuliType.join(", ") : undefined} />
+                <Row label="Stimuli count" value={displayExt.stimuliCount != null ? displayExt.stimuliCount.toLocaleString() : undefined} />
+                <Row label="Participant type" value={displayExt.participantType ?? undefined} />
+                <Row label="Participant count" value={displayExt.participantCount != null ? displayExt.participantCount.toLocaleString() : undefined} />
                 {displayExt.participantLevelData && (
                   <div className="flex gap-3 py-1.5">
                     <span className="w-36 shrink-0 font-medium text-base-content/70">Participant data</span>
@@ -429,21 +423,13 @@ export default async function NormDetailPage({
                   </div>
                 )}
                 {displayExt.instructions && (
-                  <div className="py-1.5">
-                    <span className="font-medium text-base-content/70 block mb-1">
-                      Instructions
-                    </span>
-                    <p className="text-base-content/70 leading-relaxed">{displayExt.instructions}</p>
-                    {snippets.instructions && (
-                      <p className="text-xs text-base-content/40 border-l-2 border-base-300 pl-2 mt-1 italic">{snippets.instructions}</p>
-                    )}
+                  <div className="flex gap-3 py-1.5">
+                    <span className="w-36 shrink-0 font-medium text-base-content/70">Instructions</span>
+                    <p className="text-base-content/80 leading-relaxed">{displayExt.instructions}</p>
                   </div>
                 )}
-                {snippets.reliabilities && Array.isArray(displayExt.reliabilities) && (displayExt.reliabilities as { norm: string }[]).length > 0 && (
-                  <p className="text-xs text-base-content/40 border-l-2 border-base-300 pl-2 mt-1 italic">{snippets.reliabilities}</p>
-                )}
               </div>
-              )})()}
+              ))()}
 
             </CollapsibleSection>
 
@@ -558,25 +544,16 @@ function Row({
   label,
   value,
   italic,
-  snippet,
 }: {
   label: string
   value: string | undefined
   italic?: boolean
-  snippet?: string
 }) {
   if (!value) return null
   return (
-    <div className="py-1.5">
-      <div className="flex gap-3">
-        <span className="w-36 shrink-0 font-medium text-base-content/70">{label}</span>
-        <span className={`text-base-content/80 ${italic ? "italic" : ""}`}>{value}</span>
-      </div>
-      {snippet && (
-        <p className="text-xs text-base-content/40 border-l-2 border-base-300 pl-2 mt-1 ml-36 italic leading-relaxed">
-          {snippet}
-        </p>
-      )}
+    <div className="flex gap-3 py-1.5">
+      <span className="w-36 shrink-0 font-medium text-base-content/70">{label}</span>
+      <span className={`text-base-content/80 ${italic ? "italic" : ""}`}>{value}</span>
     </div>
   )
 }
