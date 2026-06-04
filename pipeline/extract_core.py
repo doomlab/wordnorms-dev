@@ -101,9 +101,14 @@ def _extract_page_columns(page):
     split_x = _find_column_gap(page)
     if split_x is None:
         return _area_to_text(page)
-    h = page.height
-    left = _area_to_text(page.crop((0, 0, split_x, h)))
-    right = _area_to_text(page.crop((split_x, 0, page.width, h)))
+    # Clamp to the page's actual bounding box (some PDFs have non-zero x0/y0)
+    x0, y0, x1, y1 = page.bbox
+    split_x = max(x0, min(split_x, x1))
+    try:
+        left = _area_to_text(page.crop((x0, y0, split_x, y1)))
+        right = _area_to_text(page.crop((split_x, y0, x1, y1)))
+    except Exception:
+        return _area_to_text(page)
     if len(right) > 100:
         return left + "\n\n" + right
     return _area_to_text(page)
@@ -198,9 +203,39 @@ def _fix_llm_json(raw):
     # Fix thousands-separated numbers: 97,261 -> 97261 (applied twice for e.g. 1,234,567)
     for _ in range(2):
         raw = re.sub(r"(\d),(\d{3})(?!\d)", r"\1\2", raw)
+    # Strip "- from X section" annotations after string values: "foo" - from X] -> "foo"]
+    raw = re.sub(r'"\s*-\s*from\s+[^\]},\n"]+', '"', raw)
     # Escape literal newlines inside string values
     raw = _escape_newlines_in_strings(raw)
+    # Close any unclosed braces/brackets (truncated responses)
+    raw = _close_open_brackets(raw)
     return raw
+
+
+def _close_open_brackets(raw):
+    """Append missing closing braces/brackets for truncated JSON."""
+    stack = []
+    in_string = False
+    i = 0
+    while i < len(raw):
+        c = raw[i]
+        if in_string:
+            if c == "\\":
+                i += 2
+                continue
+            elif c == '"':
+                in_string = False
+        else:
+            if c == '"':
+                in_string = True
+            elif c == "{":
+                stack.append("}")
+            elif c == "[":
+                stack.append("]")
+            elif c in "}]" and stack and stack[-1] == c:
+                stack.pop()
+        i += 1
+    return raw.rstrip() + "".join(reversed(stack))
 
 
 def parse_response(raw):

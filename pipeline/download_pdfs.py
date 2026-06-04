@@ -138,6 +138,14 @@ def scihub_fetch(doi, browser):
         try:
             page = browser.new_page()
             page.goto(f"https://{domain}/{doi}", wait_until="domcontentloaded", timeout=40000)
+            # Wait for DDoS challenge to resolve and the actual PDF embed to appear
+            try:
+                page.wait_for_selector(
+                    "iframe#pdf, embed[src], a[href*='.pdf']",
+                    timeout=20000,
+                )
+            except Exception:
+                pass  # read whatever is there and let the regex decide
             html = page.content()
 
             pdf_url = None
@@ -330,8 +338,10 @@ def get_pdf(pdf_url, doi, browser=None, semantic_scholar_only=False, title=None,
         time.sleep(0.5)
 
     if not semantic_scholar_only:
-        # Sci-Hub via headless browser (last resort)
-        if doi and browser:
+        # Sci-Hub via headless browser (last resort — requires DOI)
+        if not doi:
+            reasons.append("scihub:skipped (no doi)")
+        elif browser:
             time.sleep(3)  # be polite — don't hammer Sci-Hub
             data, note = scihub_fetch(doi, browser)
             if data:
@@ -431,6 +441,8 @@ def main():
                         help="Only process papers with id < N")
     parser.add_argument("--semantic-scholar-only", action="store_true",
                         help="Skip all other sources; only try Semantic Scholar (good for re-runs after prior failures)")
+    parser.add_argument("--headed", action="store_true",
+                        help="Run Playwright in headed mode (visible browser) for debugging")
     args = parser.parse_args()
 
     os.makedirs(PDF_DIR, exist_ok=True)
@@ -444,7 +456,7 @@ def main():
     browser = None
     if PLAYWRIGHT_AVAILABLE:
         playwright_ctx = sync_playwright().start()
-        browser = playwright_ctx.chromium.launch(headless=True)
+        browser = playwright_ctx.chromium.launch(headless=not args.headed)
         print("Playwright ready (Sci-Hub fallback enabled)\n")
     else:
         print("Playwright not installed — Sci-Hub fallback disabled\n")
@@ -463,7 +475,9 @@ def main():
 
     for _, row in df.iterrows():
         paper_id = int(row["id"])
-        doi = row.get("doi") or ""
+        doi = str(row.get("doi") or "").strip()
+        if doi in ("nan", "None"):
+            doi = ""
         pdf_path = os.path.join(PDF_DIR, f"{paper_id}.pdf")
 
         if os.path.exists(pdf_path):

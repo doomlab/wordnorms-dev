@@ -116,6 +116,32 @@ def main():
     engine = get_engine()
     conn = get_conn()
 
+    # Auto-mark any locally-present PDFs as retryable so --retry-failed picks them up
+    if args.pdf_dir and os.path.isdir(args.pdf_dir):
+        cur = conn.cursor()
+        marked = 0
+        for fname in os.listdir(args.pdf_dir):
+            if not fname.endswith(".pdf"):
+                continue
+            try:
+                paper_id = int(fname[:-4])
+            except ValueError:
+                continue
+            with open(os.path.join(args.pdf_dir, fname), "rb") as f:
+                if b"%PDF" not in f.read(8):
+                    continue
+            cur.execute(
+                """UPDATE "PaperExtraction"
+                   SET "extractedBy" = 'failed:pdf_error_retryable'
+                   WHERE "paperId" = %s AND "extractedBy" = 'failed:pdf_error'""",
+                (paper_id,),
+            )
+            if cur.rowcount:
+                marked += 1
+        conn.commit()
+        if marked:
+            print(f"Auto-marked {marked} local PDFs as retryable")
+
     df = load_pending(engine, limit=args.limit, redo=args.redo, retry_failed=args.retry_failed)
     print(f"Found {len(df)} unextracted ACCEPTED papers")
 
