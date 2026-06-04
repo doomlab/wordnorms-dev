@@ -11,6 +11,7 @@ Usage:
     python extract_local.py                   # process all unextracted ACCEPTED papers
     python extract_local.py --limit 50        # process at most 50 papers
     python extract_local.py --pdf-dir ./pdfs  # read PDFs from a local directory
+    python extract_local.py --redo            # re-extract all ACCEPTED papers, even already done
 """
 import argparse
 import os
@@ -44,16 +45,24 @@ def call_ollama(text):
     return r.json()["message"]["content"]
 
 
-def load_pending(engine, limit=None):
+def load_pending(engine, limit=None, redo=False):
     import pandas as pd
-    query = """
-        SELECT p.id, p.title, p."pdfUrl"
-        FROM "Paper" p
-        LEFT JOIN "PaperExtraction" pe ON pe."paperId" = p.id
-        WHERE p.status = 'ACCEPTED'::"PaperStatus"
-          AND pe.id IS NULL
-        ORDER BY p.id
-    """
+    if redo:
+        query = """
+            SELECT p.id, p.title, p."pdfUrl"
+            FROM "Paper" p
+            WHERE p.status = 'ACCEPTED'::"PaperStatus"
+            ORDER BY p.id
+        """
+    else:
+        query = """
+            SELECT p.id, p.title, p."pdfUrl"
+            FROM "Paper" p
+            LEFT JOIN "PaperExtraction" pe ON pe."paperId" = p.id
+            WHERE p.status = 'ACCEPTED'::"PaperStatus"
+              AND pe.id IS NULL
+            ORDER BY p.id
+        """
     if limit:
         query += f" LIMIT {int(limit)}"
     return pd.read_sql(query, engine)
@@ -90,12 +99,13 @@ def main():
     parser.add_argument("--limit", type=int, default=None)
     parser.add_argument("--pdf-dir", default=None)
     parser.add_argument("--delay", type=float, default=4.0, help="Seconds to wait between papers (default: 4)")
+    parser.add_argument("--redo", action="store_true", help="Re-extract all ACCEPTED papers, even already done")
     args = parser.parse_args()
 
     engine = get_engine()
     conn = get_conn()
 
-    df = load_pending(engine, limit=args.limit)
+    df = load_pending(engine, limit=args.limit, redo=args.redo)
     print(f"Found {len(df)} unextracted ACCEPTED papers")
 
     done = failed = skipped = 0
@@ -124,7 +134,7 @@ def main():
             try:
                 raw = call_ollama(text)
                 data = parse_response(raw)
-                if save_extraction(conn, int(row["id"]), data, EXTRACTED_BY):
+                if save_extraction(conn, int(row["id"]), data, EXTRACTED_BY, paper_text=text):
                     conn.commit()
                     flag = " ⚑ needs review" if (data or {}).get("confidence", 1) < 0.6 else ""
                     print(f"ok (confidence={data.get('confidence', '?')}){flag}")

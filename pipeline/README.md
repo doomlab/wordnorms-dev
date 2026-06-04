@@ -79,6 +79,7 @@ cd pipeline
 python extract_local.py                    # all unextracted ACCEPTED papers
 python extract_local.py --limit 50         # test run on 50 papers
 python extract_local.py --pdf-dir ./pdfs   # use local PDFs instead of downloading
+python extract_local.py --redo             # re-extract everything (e.g. after updating the prompt)
 ```
 
 Papers with `confidence < 0.6` are flagged as "needs review" in the DB. Already-extracted papers are skipped automatically.

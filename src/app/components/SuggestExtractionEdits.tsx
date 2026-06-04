@@ -3,6 +3,7 @@
 import { useRef, useState } from "react"
 import { useRouter } from "next/navigation"
 import { useMutation } from "@blitzjs/rpc"
+import { Prisma } from "@prisma/client"
 import submitExtractionEdit from "../(dashboard)/mutations/submitExtractionEdit"
 
 type Ext = {
@@ -13,6 +14,8 @@ type Ext = {
   stimuliCount: number | null
   normsCollected: string[]
   instructions: string | null
+  participantLevelData: boolean
+  reliabilities: Prisma.JsonValue | null
   sourceSnippets?: Record<string, string> | null
 }
 
@@ -32,11 +35,13 @@ function SnippetBlock({
   fieldKey,
   hasEvidence,
   onCapture,
+  onDismiss,
 }: {
   text: string
   fieldKey: string
   hasEvidence: boolean
   onCapture: (key: string, text: string) => void
+  onDismiss: (key: string) => void
 }) {
   const handleMouseUp = () => {
     const sel = window.getSelection()?.toString().trim()
@@ -45,12 +50,20 @@ function SnippetBlock({
 
   return (
     <div className="mt-1.5">
-      <p className="text-xs text-base-content/40 mb-1">
+      <p className="text-xs text-base-content/40 mb-1 flex items-center gap-2">
         {hasEvidence ? (
           <span className="text-success font-medium">✓ Evidence captured — highlight to update</span>
         ) : (
-          "Highlight the correct text if this passage is wrong"
+          <span>Highlight the correct text if this passage is wrong</span>
         )}
+        <button
+          type="button"
+          onClick={() => onDismiss(fieldKey)}
+          className="text-base-content/30 hover:text-error leading-none"
+          title="Dismiss this snippet"
+        >
+          ✕
+        </button>
       </p>
       <div
         onMouseUp={handleMouseUp}
@@ -86,14 +99,32 @@ export function SuggestExtractionEdits({
   const [stimuliCount, setStimuliCount] = useState(ext.stimuliCount?.toString() ?? "")
   const [normsCollected, setNormsCollected] = useState(toList(ext.normsCollected))
   const [instructions, setInstructions] = useState(ext.instructions ?? "")
+  const [participantLevelData, setParticipantLevelData] = useState(ext.participantLevelData)
+  const [reliabilities, setReliabilities] = useState<{ norm: string; value: string; metric: string }[]>(
+    Array.isArray(ext.reliabilities)
+      ? (ext.reliabilities as { norm: string; value: number | null; metric: string }[]).map((r) => ({
+          norm: r.norm ?? "",
+          value: r.value?.toString() ?? "",
+          metric: r.metric ?? "",
+        }))
+      : []
+  )
   const [url, setUrl] = useState("")
   const [note, setNote] = useState("")
   const [sourceEvidence, setSourceEvidence] = useState<Record<string, string>>({})
+  const [dismissedSnippets, setDismissedSnippets] = useState<Set<string>>(new Set())
 
-  const snippets = ext.sourceSnippets ?? {}
+  const rawSnippets = ext.sourceSnippets ?? {}
+  const snippets = Object.fromEntries(
+    Object.entries(rawSnippets).filter(([k]) => !dismissedSnippets.has(k))
+  )
 
   const captureEvidence = (key: string, text: string) => {
     setSourceEvidence((prev) => ({ ...prev, [key]: text }))
+  }
+
+  const dismissSnippet = (key: string) => {
+    setDismissedSnippets((prev) => new Set([...prev, key]))
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -109,6 +140,10 @@ export function SuggestExtractionEdits({
         stimuliCount: stimuliCount ? parseInt(stimuliCount, 10) : null,
         normsCollected: fromList(normsCollected),
         instructions: instructions.trim() || null,
+        participantLevelData,
+        reliabilities: reliabilities.length > 0
+          ? reliabilities.map((r) => ({ norm: r.norm, value: r.value !== "" ? parseFloat(r.value) : null, metric: r.metric }))
+          : null,
         url: url.trim() || null,
         note: note.trim() || undefined,
         sourceEvidence: Object.keys(sourceEvidence).length > 0 ? sourceEvidence : undefined,
@@ -168,6 +203,7 @@ export function SuggestExtractionEdits({
                   fieldKey="language"
                   hasEvidence={"language" in sourceEvidence}
                   onCapture={captureEvidence}
+                  onDismiss={dismissSnippet}
                 />
               )}
             </Field>
@@ -186,6 +222,7 @@ export function SuggestExtractionEdits({
                   fieldKey="normsCollected"
                   hasEvidence={"normsCollected" in sourceEvidence}
                   onCapture={captureEvidence}
+                  onDismiss={dismissSnippet}
                 />
               )}
             </Field>
@@ -204,6 +241,7 @@ export function SuggestExtractionEdits({
                   fieldKey="stimuliType"
                   hasEvidence={"stimuliType" in sourceEvidence}
                   onCapture={captureEvidence}
+                  onDismiss={dismissSnippet}
                 />
               )}
             </Field>
@@ -222,6 +260,7 @@ export function SuggestExtractionEdits({
                   fieldKey="stimuliCount"
                   hasEvidence={"stimuliCount" in sourceEvidence}
                   onCapture={captureEvidence}
+                  onDismiss={dismissSnippet}
                 />
               )}
             </Field>
@@ -240,6 +279,7 @@ export function SuggestExtractionEdits({
                   fieldKey="participantType"
                   hasEvidence={"participantType" in sourceEvidence}
                   onCapture={captureEvidence}
+                  onDismiss={dismissSnippet}
                 />
               )}
             </Field>
@@ -258,6 +298,7 @@ export function SuggestExtractionEdits({
                   fieldKey="participantCount"
                   hasEvidence={"participantCount" in sourceEvidence}
                   onCapture={captureEvidence}
+                  onDismiss={dismissSnippet}
                 />
               )}
             </Field>
@@ -275,23 +316,81 @@ export function SuggestExtractionEdits({
                   fieldKey="instructions"
                   hasEvidence={"instructions" in sourceEvidence}
                   onCapture={captureEvidence}
+                  onDismiss={dismissSnippet}
                 />
               )}
             </Field>
 
-            {snippets.reliabilities && (
-              <div>
-                <label className="label py-1">
-                  <span className="label-text font-medium">Reliabilities</span>
-                </label>
+            <Field label="Participant-level data available">
+              <label className="flex items-center gap-2 mt-1 cursor-pointer">
+                <input
+                  type="checkbox"
+                  className="checkbox checkbox-sm"
+                  checked={participantLevelData}
+                  onChange={(e) => setParticipantLevelData(e.target.checked)}
+                />
+                <span className="text-sm text-base-content/70">
+                  Raw per-participant data is publicly available
+                </span>
+              </label>
+            </Field>
+
+            <div>
+              <label className="label py-1">
+                <span className="label-text font-medium">Reliabilities</span>
+              </label>
+              {reliabilities.length > 0 && (
+                <div className="flex flex-col gap-1.5 mb-2">
+                  {reliabilities.map((r, i) => (
+                    <div key={i} className="flex gap-2 items-center">
+                      <input
+                        type="text"
+                        className="input input-bordered input-xs flex-1"
+                        placeholder="norm (e.g. valence)"
+                        value={r.norm}
+                        onChange={(e) => setReliabilities((prev) => prev.map((x, j) => j === i ? { ...x, norm: e.target.value } : x))}
+                      />
+                      <input
+                        type="number"
+                        className="input input-bordered input-xs w-24"
+                        placeholder="value"
+                        value={r.value}
+                        onChange={(e) => setReliabilities((prev) => prev.map((x, j) => j === i ? { ...x, value: e.target.value } : x))}
+                        step="0.01"
+                      />
+                      <input
+                        type="text"
+                        className="input input-bordered input-xs flex-1"
+                        placeholder="metric (e.g. cronbach_alpha)"
+                        value={r.metric}
+                        onChange={(e) => setReliabilities((prev) => prev.map((x, j) => j === i ? { ...x, metric: e.target.value } : x))}
+                      />
+                      <button
+                        type="button"
+                        className="text-base-content/30 hover:text-error text-xs"
+                        onClick={() => setReliabilities((prev) => prev.filter((_, j) => j !== i))}
+                      >✕</button>
+                    </div>
+                  ))}
+                </div>
+              )}
+              <button
+                type="button"
+                className="btn btn-xs btn-primary ml-2"
+                onClick={() => setReliabilities((prev) => [...prev, { norm: "", value: "", metric: "" }])}
+              >
+                + Add reliability
+              </button>
+              {snippets.reliabilities && (
                 <SnippetBlock
                   text={snippets.reliabilities}
                   fieldKey="reliabilities"
                   hasEvidence={"reliabilities" in sourceEvidence}
                   onCapture={captureEvidence}
+                  onDismiss={dismissSnippet}
                 />
-              </div>
-            )}
+              )}
+            </div>
 
             <Field label="Website URL" hint="optional — homepage or repository for this dataset">
               <input

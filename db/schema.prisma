@@ -181,21 +181,25 @@ model MetadataEditSuggestion {
 }
 
 model ExtractionEditSuggestion {
-  id               Int      @id @default(autoincrement())
-  createdAt        DateTime @default(now())
-  paperId          Int
-  userId           Int
-  language         String[]
-  participantCount Int?
-  participantType  String?
-  stimuliType      String[]
-  stimuliCount     Int?
-  normsCollected   String[]
-  instructions     String?
-  url              String?
-  note             String?
-  sourceEvidence   Json?
-  resolved         Boolean  @default(false)
+  id                   Int      @id @default(autoincrement())
+  createdAt            DateTime @default(now())
+  paperId              Int
+  userId               Int
+  language             String[]
+  participantCount     Int?
+  participantType      String?
+  stimuliType          String[]
+  stimuliCount         Int?
+  normsCollected       String[]
+  instructions         String?
+  url                  String?
+  participantLevelData Boolean?
+  reliabilities        Json?
+  note                 String?
+  sourceEvidence       Json?
+  modelAnswers         Json?
+  modelSnippets        Json?
+  resolved             Boolean  @default(false)
 
   paper Paper @relation(fields: [paperId], references: [id], onDelete: Cascade)
   user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -223,6 +227,7 @@ model PaperExtraction {
   confidence           Float?
   needsReview          Boolean   @default(false)
   sourceSnippets       Json?
+  paperText        String?
   extractedBy      String?
   extractedAt      DateTime
   verifiedAt       DateTime?

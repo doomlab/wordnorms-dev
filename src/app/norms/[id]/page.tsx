@@ -343,12 +343,20 @@ export default async function NormDetailPage({
                     </span>
                   ) : null}
                 </div>
-                <SuggestExtractionEdits
-                  paperId={paper.id}
-                  ext={{ ...ext, sourceSnippets: ext.sourceSnippets as Record<string, string> | null }}
-                  hasPriorSuggestion={hasPriorSuggestion}
-                  isLoggedIn={!!userId}
-                />
+                {userId ? (
+                  <a
+                    href={`/norms/${paper.id}/suggest-edit`}
+                    className="btn btn-primary btn-sm text-base-content/50 hover:text-base-content"
+                  >
+                    {hasPriorSuggestion ? "Edit suggestion submitted ✓" : "Suggest edits"}
+                  </a>
+                ) : (
+                  <div className="tooltip tooltip-left" data-tip="You must have an account to use this feature">
+                    <button disabled className="btn btn-primary btn-sm opacity-40 cursor-not-allowed">
+                      Suggest edits
+                    </button>
+                  </div>
+                )}
               </div>
 
               {(() => {

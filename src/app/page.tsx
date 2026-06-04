@@ -9,7 +9,6 @@ import { DECADE_LABELS } from "./data/datasets"
 import { getBlitzContext } from "./blitz-server"
 import { SuggestArticleButton } from "./components/SuggestArticleButton"
 import { Pagination } from "./components/Pagination"
-import { FeedbackForm } from "./components/FeedbackForm"
 import { TrainingBanner } from "./components/TrainingBanner"
 import db from "db"
 
@@ -324,7 +323,6 @@ export default async function Home({
             })()}
             </>
           )}
-          <FeedbackForm />
         </div>
       </div>
     </div>

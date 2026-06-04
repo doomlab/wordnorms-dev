@@ -28,7 +28,7 @@ Fields to extract:
 - participant_level_data: true if the paper makes raw participant-level response data available (e.g. individual ratings per item per participant), false otherwise
 - reliabilities: list of reported reliability or internal consistency statistics, one object per norm dimension — e.g. [{"norm": "valence", "value": 0.87, "metric": "cronbach_alpha"}]. Use null for value if the paper reports a reliability metric but not the number. Common metrics: cronbach_alpha, split_half, icc, pearson_r, kappa. Return an empty list if no reliability statistics are reported.
 - confidence: your confidence in the extraction as a float from 0.0 to 1.0
-- source_snippets: for each field above (except confidence and participant_level_data), the full sentence or paragraph from the paper where you found that information. Use null if you could not find a source. Keys must be: language, participantCount, participantType, stimuliType, stimuliCount, normsCollected, instructions, reliabilities.
+- source_snippets: for each field above (except confidence and participant_level_data), copy the full sentence or sentences from the paper that support the extracted value — do not paraphrase or truncate, include at least one complete sentence. Use null if you could not find a source. Keys must be: language, participantCount, participantType, stimuliType, stimuliCount, normsCollected, instructions, reliabilities.
 
 Paper text:
 {text}"""
@@ -74,7 +74,7 @@ def trim_text(text, max_chars=6000):
 # ---------------------------------------------------------------------------
 
 def build_prompt(text):
-    return PROMPT_TEMPLATE.format(text=trim_text(text))
+    return PROMPT_TEMPLATE.replace("{text}", trim_text(text))
 
 
 def parse_response(raw):
@@ -109,7 +109,7 @@ def save_extraction_failure(conn, paper_id, reason):
     )
 
 
-def save_extraction(conn, paper_id, data, extracted_by):
+def save_extraction(conn, paper_id, data, extracted_by, paper_text=None):
     if data is None:
         return False
 
@@ -134,14 +134,14 @@ def save_extraction(conn, paper_id, data, extracted_by):
             "stimuliType", "stimuliCount", "normsCollected",
             instructions, "participantLevelData", reliabilities,
             confidence, "needsReview", "sourceSnippets",
-            "extractedBy", "extractedAt"
+            "paperText", "extractedBy", "extractedAt"
         ) VALUES (
             NOW(), NOW(), %s,
             %s, %s, %s,
             %s, %s, %s,
             %s, %s, %s::jsonb,
             %s, %s, %s::jsonb,
-            %s, NOW()
+            %s, %s, NOW()
         )
         ON CONFLICT ("paperId") DO UPDATE SET
             "updatedAt"            = NOW(),
@@ -157,6 +157,7 @@ def save_extraction(conn, paper_id, data, extracted_by):
             confidence             = EXCLUDED.confidence,
             "needsReview"          = EXCLUDED."needsReview",
             "sourceSnippets"       = EXCLUDED."sourceSnippets",
+            "paperText"            = EXCLUDED."paperText",
             "extractedBy"          = EXCLUDED."extractedBy",
             "extractedAt"          = NOW()
         """,
@@ -174,6 +175,7 @@ def save_extraction(conn, paper_id, data, extracted_by):
             confidence,
             needs_review,
             json.dumps(source_snippets) if source_snippets else None,
+            paper_text,
             extracted_by,
         ),
     )
