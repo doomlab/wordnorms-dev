@@ -38,14 +38,25 @@ Paper text:
 # PDF text extraction
 # ---------------------------------------------------------------------------
 
+def _extract_page_columns(page):
+    """Extract text handling two-column layouts by splitting at midpoint."""
+    w, h = page.width, page.height
+    left = (page.crop((0, 0, w / 2, h)).extract_text() or "").strip()
+    right = (page.crop((w / 2, 0, w, h)).extract_text() or "").strip()
+    if len(right) > 100:
+        return left + "\n\n" + right
+    # single column or near-empty right half — fall back to full-page
+    return (page.extract_text() or "").strip()
+
+
 def extract_pdf_text(pdf_path, max_pages=20):
     """Extract text from a PDF file, capped at max_pages to avoid token bloat."""
     pages = []
     with pdfplumber.open(pdf_path) as pdf:
         for page in pdf.pages[:max_pages]:
-            text = page.extract_text()
+            text = _extract_page_columns(page)
             if text:
-                pages.append(text.strip())
+                pages.append(text)
     return "\n\n".join(pages)
 
 

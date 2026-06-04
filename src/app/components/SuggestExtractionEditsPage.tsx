@@ -22,79 +22,113 @@ type Ext = {
 
 function toList(arr: string[]) { return arr.join(", ") }
 function fromList(s: string) { return s.split(",").map((v) => v.trim()).filter(Boolean) }
+function snippetStr(v: unknown): string {
+  if (v == null) return ""
+  return typeof v === "string" ? v : JSON.stringify(v)
+}
 
-function ModelTag({ label, snippet }: { label: string; snippet?: string }) {
-  const [expanded, setExpanded] = useState(false)
-  if (!label && !snippet) return null
+function FieldBlock({
+  label, hint, modelAnswer, modelSnippet, fieldKey,
+  capturedSnippets, setCapturedSnippets, activeSnippetField, setActiveSnippetField,
+  noEvidenceFields, setNoEvidenceFields,
+  children,
+}: {
+  label: string
+  hint?: string
+  modelAnswer?: string
+  modelSnippet?: unknown
+  fieldKey: string
+  capturedSnippets: Record<string, string>
+  setCapturedSnippets: React.Dispatch<React.SetStateAction<Record<string, string>>>
+  activeSnippetField: string | null
+  setActiveSnippetField: (k: string | null) => void
+  noEvidenceFields: Set<string>
+  setNoEvidenceFields: React.Dispatch<React.SetStateAction<Set<string>>>
+  children: React.ReactNode
+}) {
+  const [snippetExpanded, setSnippetExpanded] = useState(false)
+  const isActive = activeSnippetField === fieldKey
+  const noEvidence = noEvidenceFields.has(fieldKey)
+  const snippetText = snippetStr(modelSnippet)
+
+  const toggleNoEvidence = () => {
+    setNoEvidenceFields((prev) => {
+      const next = new Set(prev)
+      if (next.has(fieldKey)) next.delete(fieldKey)
+      else { next.add(fieldKey); setActiveSnippetField(null) }
+      return next
+    })
+  }
+
   return (
-    <div className="mt-1 text-xs text-base-content/40 flex flex-col gap-0.5">
-      {label && (
-        <span>
-          <span className="font-medium text-base-content/30">Model: </span>
-          {label}
-        </span>
-      )}
-      {snippet && (
-        <span>
-          <span className="font-medium text-base-content/30">From: </span>
-          {expanded ? (
-            <>
-              <span className="italic">{snippet}</span>{" "}
-              <button type="button" onClick={() => setExpanded(false)} className="underline text-base-content/30">less</button>
-            </>
+    <div className="rounded-lg border border-base-200 overflow-hidden">
+      <div className="px-4 py-2 bg-base-200/50 border-b border-base-200">
+        <span className="text-sm font-semibold">{label}</span>
+        {hint && <span className="text-xs font-normal text-base-content/50 ml-1">({hint})</span>}
+      </div>
+
+      {/* Model rows */}
+      <div className="px-4 py-3 border-b border-base-200/60 bg-base-200/20">
+        <div className="grid grid-cols-[130px_1fr] gap-x-3 gap-y-1.5 text-sm">
+          <span className="text-base-content/40 font-medium">Model answer</span>
+          <span className="text-base-content/70">
+            {modelAnswer || <span className="italic text-base-content/30">—</span>}
+          </span>
+          <span className="text-base-content/40 font-medium">Model evidence</span>
+          <span className="text-base-content/50 italic leading-relaxed">
+            {snippetText ? (
+              <>
+                {snippetExpanded || snippetText.length <= 140
+                  ? snippetText
+                  : snippetText.slice(0, 140) + "…"}
+                {snippetText.length > 140 && (
+                  <button type="button" onClick={() => setSnippetExpanded((v) => !v)}
+                    className="ml-1 underline text-base-content/30 not-italic">
+                    {snippetExpanded ? "less" : "more"}
+                  </button>
+                )}
+              </>
+            ) : <span className="text-base-content/30">—</span>}
+          </span>
+        </div>
+      </div>
+
+      {/* Human rows */}
+      <div className="px-4 py-3 flex flex-col gap-3">
+        <div>
+          <label className="text-sm font-medium text-base-content/50 mb-1.5 block">Your answer</label>
+          {children}
+        </div>
+        <div>
+          <div className="flex items-center justify-between mb-1.5">
+            <label className="text-sm font-medium text-base-content/50">Your evidence</label>
+            <label className="flex items-center gap-1.5 cursor-pointer select-none">
+              <input type="checkbox" className="checkbox checkbox-xs" checked={noEvidence} onChange={toggleNoEvidence} />
+              <span className="text-xs text-base-content/40">No evidence</span>
+            </label>
+          </div>
+          {noEvidence ? (
+            <div className="rounded border border-dashed border-base-300 px-3 py-2 text-sm text-base-content/30 italic">
+              Marked as not in paper — answer based on supplement or prior knowledge
+            </div>
           ) : (
             <>
-              <span className="italic">{snippet.length > 80 ? snippet.slice(0, 80) + "…" : snippet}</span>
-              {snippet.length > 80 && (
-                <> <button type="button" onClick={() => setExpanded(true)} className="underline text-base-content/30">more</button></>
-              )}
+              <textarea
+                className="textarea textarea-bordered w-full text-sm leading-relaxed"
+                rows={2}
+                value={capturedSnippets[fieldKey] ?? ""}
+                onChange={(e) => setCapturedSnippets((prev) => ({ ...prev, [fieldKey]: e.target.value }))}
+                placeholder="Paste the sentence(s) from the paper that support your answer…"
+              />
+              <button type="button"
+                onClick={() => setActiveSnippetField(isActive ? null : fieldKey)}
+                className={`mt-1 text-sm ${isActive ? "text-primary font-medium" : "text-base-content/40 hover:text-base-content"}`}>
+                {isActive ? "→ Select text in the paper panel to the right" : "Select from paper text →"}
+              </button>
             </>
           )}
-        </span>
-      )}
-    </div>
-  )
-}
-
-function SnippetHint({
-  fieldKey, captured, active, onActivate, onClear,
-}: {
-  fieldKey: string
-  captured: Record<string, string>
-  active: string | null
-  onActivate: (key: string | null) => void
-  onClear: (key: string) => void
-}) {
-  const hasCaptured = fieldKey in captured
-  const isActive = active === fieldKey
-  return (
-    <div className="mt-1 flex items-center gap-2">
-      {hasCaptured ? (
-        <>
-          <span className="text-xs text-success">✓ Evidence captured</span>
-          <button type="button" onClick={() => onClear(fieldKey)}
-            className="text-xs text-base-content/30 hover:text-error">clear</button>
-        </>
-      ) : (
-        <button type="button" onClick={() => onActivate(isActive ? null : fieldKey)}
-          className={`text-xs ${isActive ? "text-primary font-medium" : "text-base-content/40 hover:text-base-content"}`}>
-          {isActive ? "→ Now select text in the paper" : "Capture evidence from paper text"}
-        </button>
-      )}
-    </div>
-  )
-}
-
-function Field({ label, hint, children }: { label: string; hint?: string; children: React.ReactNode }) {
-  return (
-    <div>
-      <label className="label py-1">
-        <span className="label-text font-medium">
-          {label}
-          {hint && <span className="font-normal text-base-content/50 ml-1">({hint})</span>}
-        </span>
-      </label>
-      {children}
+        </div>
+      </div>
     </div>
   )
 }
@@ -128,8 +162,9 @@ export function SuggestExtractionEditsPage({
       : []
   )
   const [capturedSnippets, setCapturedSnippets] = useState<Record<string, string>>(
-    ext.sourceSnippets ?? {}
+    (ext.sourceSnippets as Record<string, string>) ?? {}
   )
+  const [noEvidenceFields, setNoEvidenceFields] = useState<Set<string>>(new Set())
   const [url, setUrl] = useState("")
   const [note, setNote] = useState("")
 
@@ -147,10 +182,11 @@ export function SuggestExtractionEditsPage({
     reliabilities: ext.reliabilities,
   }
 
-  const handleTextSelect = (fieldKey: string) => {
+  const handleTextSelect = () => {
+    if (!activeSnippetField) return
     const sel = window.getSelection()?.toString().trim()
     if (sel && sel.length > 5) {
-      setCapturedSnippets((prev) => ({ ...prev, [fieldKey]: sel }))
+      setCapturedSnippets((prev) => ({ ...prev, [activeSnippetField]: sel }))
       setActiveSnippetField(null)
     }
   }
@@ -174,9 +210,14 @@ export function SuggestExtractionEditsPage({
           : null,
         url: url.trim() || null,
         note: note.trim() || undefined,
-        sourceEvidence: Object.keys(capturedSnippets).length > 0 ? capturedSnippets : undefined,
+        sourceEvidence: (() => {
+          const evidence = Object.fromEntries(
+            Object.entries(capturedSnippets).filter(([k]) => !noEvidenceFields.has(k))
+          )
+          return Object.keys(evidence).length > 0 ? evidence : undefined
+        })(),
         modelAnswers,
-        modelSnippets: Object.keys(snippets).length > 0 ? snippets : undefined,
+        modelSnippets: Object.keys(snippets).length > 0 ? snippets as Record<string, string> : undefined,
       })
       setDone(true)
       router.refresh()
@@ -187,7 +228,7 @@ export function SuggestExtractionEditsPage({
     }
   }
 
-  const clear = (k: string) => setCapturedSnippets((p) => { const n = { ...p }; delete n[k]; return n })
+  const fieldProps = { capturedSnippets, setCapturedSnippets, activeSnippetField, setActiveSnippetField, noEvidenceFields, setNoEvidenceFields }
 
   if (done) {
     return (
@@ -203,110 +244,209 @@ export function SuggestExtractionEditsPage({
       {/* Left: form */}
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
 
-        <Field label="Language" hint="comma-separated">
+        {/* Instructions banner */}
+        <div className="rounded-lg bg-info/10 border border-info/20 px-4 py-3 text-sm text-base-content/70 flex flex-col gap-1">
+          <p className="font-semibold text-base-content/90">How to use this page</p>
+          <ul className="list-disc list-inside text-sm gap-1 flex flex-col">
+            <li>Each field shows the model&apos;s answer and the sentence it used as evidence.</li>
+            <li>Edit <strong>Your answer</strong> if the model got it wrong.</li>
+            <li>Edit or replace <strong>Your evidence</strong> — paste the correct sentence, or click &ldquo;Select from paper text&rdquo; and highlight text in the panel on the right.</li>
+          </ul>
+        </div>
+
+        <FieldBlock label="Language" hint="comma-separated"
+          modelAnswer={modelAnswers.language} modelSnippet={snippets.language}
+          fieldKey="language" {...fieldProps}>
           <input type="text" className="input input-bordered input-sm w-full" value={language}
             onChange={(e) => setLanguage(e.target.value)} placeholder="e.g. English, French" />
-          <ModelTag label={modelAnswers.language} snippet={snippets.language} />
-          <SnippetHint fieldKey="language" captured={capturedSnippets} active={activeSnippetField}
-            onActivate={setActiveSnippetField} onClear={clear} />
-        </Field>
+        </FieldBlock>
 
-        <Field label="Norms collected" hint="comma-separated">
+        <FieldBlock label="Norms collected" hint="comma-separated"
+          modelAnswer={modelAnswers.normsCollected} modelSnippet={snippets.normsCollected}
+          fieldKey="normsCollected" {...fieldProps}>
           <input type="text" className="input input-bordered input-sm w-full" value={normsCollected}
             onChange={(e) => setNormsCollected(e.target.value)} placeholder="e.g. valence, arousal" />
-          <ModelTag label={modelAnswers.normsCollected} snippet={snippets.normsCollected} />
-          <SnippetHint fieldKey="normsCollected" captured={capturedSnippets} active={activeSnippetField}
-            onActivate={setActiveSnippetField} onClear={clear} />
-        </Field>
+        </FieldBlock>
 
-        <Field label="Stimuli type" hint="comma-separated">
+        <FieldBlock label="Stimuli type" hint="comma-separated"
+          modelAnswer={modelAnswers.stimuliType} modelSnippet={snippets.stimuliType}
+          fieldKey="stimuliType" {...fieldProps}>
           <input type="text" className="input input-bordered input-sm w-full" value={stimuliType}
             onChange={(e) => setStimuliType(e.target.value)} placeholder="e.g. words" />
-          <ModelTag label={modelAnswers.stimuliType} snippet={snippets.stimuliType} />
-          <SnippetHint fieldKey="stimuliType" captured={capturedSnippets} active={activeSnippetField}
-            onActivate={setActiveSnippetField} onClear={clear} />
-        </Field>
+        </FieldBlock>
 
-        <Field label="Stimuli count">
+        <FieldBlock label="Stimuli count"
+          modelAnswer={modelAnswers.stimuliCount ?? ""} modelSnippet={snippets.stimuliCount}
+          fieldKey="stimuliCount" {...fieldProps}>
           <input type="number" className="input input-bordered input-sm w-full" value={stimuliCount}
             onChange={(e) => setStimuliCount(e.target.value)} min={0} />
-          <ModelTag label={modelAnswers.stimuliCount ?? ""} snippet={snippets.stimuliCount} />
-          <SnippetHint fieldKey="stimuliCount" captured={capturedSnippets} active={activeSnippetField}
-            onActivate={setActiveSnippetField} onClear={clear} />
-        </Field>
+        </FieldBlock>
 
-        <Field label="Participant type">
+        <FieldBlock label="Participant type"
+          modelAnswer={modelAnswers.participantType ?? ""} modelSnippet={snippets.participantType}
+          fieldKey="participantType" {...fieldProps}>
           <input type="text" className="input input-bordered input-sm w-full" value={participantType}
             onChange={(e) => setParticipantType(e.target.value)} placeholder="e.g. undergraduates" />
-          <ModelTag label={modelAnswers.participantType ?? ""} snippet={snippets.participantType} />
-          <SnippetHint fieldKey="participantType" captured={capturedSnippets} active={activeSnippetField}
-            onActivate={setActiveSnippetField} onClear={clear} />
-        </Field>
+        </FieldBlock>
 
-        <Field label="Participant count">
+        <FieldBlock label="Participant count"
+          modelAnswer={modelAnswers.participantCount ?? ""} modelSnippet={snippets.participantCount}
+          fieldKey="participantCount" {...fieldProps}>
           <input type="number" className="input input-bordered input-sm w-full" value={participantCount}
             onChange={(e) => setParticipantCount(e.target.value)} min={0} />
-          <ModelTag label={modelAnswers.participantCount ?? ""} snippet={snippets.participantCount} />
-          <SnippetHint fieldKey="participantCount" captured={capturedSnippets} active={activeSnippetField}
-            onActivate={setActiveSnippetField} onClear={clear} />
-        </Field>
+        </FieldBlock>
 
-        <Field label="Instructions">
+        <FieldBlock label="Instructions"
+          modelAnswer={modelAnswers.instructions ?? ""} modelSnippet={snippets.instructions}
+          fieldKey="instructions" {...fieldProps}>
           <textarea className="textarea textarea-bordered w-full text-sm" rows={3} value={instructions}
             onChange={(e) => setInstructions(e.target.value)} />
-          <ModelTag label={modelAnswers.instructions ?? ""} snippet={snippets.instructions} />
-          <SnippetHint fieldKey="instructions" captured={capturedSnippets} active={activeSnippetField}
-            onActivate={setActiveSnippetField} onClear={clear} />
-        </Field>
+        </FieldBlock>
 
-        <Field label="Participant-level data available">
-          <label className="flex items-center gap-2 mt-1 cursor-pointer">
-            <input type="checkbox" className="checkbox checkbox-sm" checked={participantLevelData}
-              onChange={(e) => setParticipantLevelData(e.target.checked)} />
-            <span className="text-sm text-base-content/70">Raw per-participant data is publicly available</span>
-          </label>
-          <div className="mt-1 text-xs text-base-content/40">
-            <span className="font-medium text-base-content/30">Model: </span>
-            {modelAnswers.participantLevelData ? "Yes" : "No"}
+        {/* Participant-level data — no evidence field */}
+        <div className="rounded-lg border border-base-200 overflow-hidden">
+          <div className="px-4 py-2 bg-base-200/50 border-b border-base-200">
+            <span className="text-sm font-semibold">Participant-level data available</span>
           </div>
-        </Field>
-
-        <Field label="Reliabilities">
-          {reliabilities.length > 0 && (
-            <div className="flex flex-col gap-1.5 mb-2">
-              {reliabilities.map((r, i) => (
-                <div key={i} className="flex gap-2 items-center">
-                  <input type="text" className="input input-bordered input-xs flex-1" placeholder="norm"
-                    value={r.norm} onChange={(e) => setReliabilities((prev) => prev.map((x, j) => j === i ? { ...x, norm: e.target.value } : x))} />
-                  <input type="number" className="input input-bordered input-xs w-24" placeholder="value"
-                    value={r.value} step="0.01" onChange={(e) => setReliabilities((prev) => prev.map((x, j) => j === i ? { ...x, value: e.target.value } : x))} />
-                  <input type="text" className="input input-bordered input-xs flex-1" placeholder="metric"
-                    value={r.metric} onChange={(e) => setReliabilities((prev) => prev.map((x, j) => j === i ? { ...x, metric: e.target.value } : x))} />
-                  <button type="button" className="text-base-content/30 hover:text-error text-xs"
-                    onClick={() => setReliabilities((prev) => prev.filter((_, j) => j !== i))}>✕</button>
-                </div>
-              ))}
+          <div className="px-4 py-3 border-b border-base-200/60 bg-base-200/20 text-sm">
+            <div className="grid grid-cols-[130px_1fr] gap-x-3">
+              <span className="text-base-content/40 font-medium">Model answer</span>
+              <span className="text-base-content/70">{modelAnswers.participantLevelData ? "Yes" : "No"}</span>
             </div>
-          )}
-          <button type="button" className="btn btn-xs btn-primary ml-2"
-            onClick={() => setReliabilities((prev) => [...prev, { norm: "", value: "", metric: "" }])}>
-            + Add reliability
-          </button>
-          <ModelTag label="" snippet={snippets.reliabilities} />
-          <SnippetHint fieldKey="reliabilities" captured={capturedSnippets} active={activeSnippetField}
-            onActivate={setActiveSnippetField} onClear={clear} />
-        </Field>
+          </div>
+          <div className="px-4 py-3 flex flex-col gap-3">
+            <div>
+              <label className="text-sm font-medium text-base-content/50 mb-2 block">Your answer</label>
+              <label className="flex items-center gap-3 cursor-pointer">
+                <input type="checkbox" className="toggle toggle-primary toggle-sm" checked={participantLevelData}
+                  onChange={(e) => setParticipantLevelData(e.target.checked)} />
+                <span className={`text-sm font-medium ${participantLevelData ? "text-primary" : "text-base-content/40"}`}>
+                  {participantLevelData ? "Yes" : "No"}
+                </span>
+              </label>
+            </div>
+            <div>
+              <div className="flex items-center justify-between mb-1.5">
+                <label className="text-sm font-medium text-base-content/50">Your evidence</label>
+                <label className="flex items-center gap-1.5 cursor-pointer select-none">
+                  <input type="checkbox" className="checkbox checkbox-xs"
+                    checked={noEvidenceFields.has("participantLevelData")}
+                    onChange={() => setNoEvidenceFields((prev) => { const n = new Set(prev); n.has("participantLevelData") ? n.delete("participantLevelData") : n.add("participantLevelData"); return n })} />
+                  <span className="text-xs text-base-content/40">No evidence</span>
+                </label>
+              </div>
+              {noEvidenceFields.has("participantLevelData") ? (
+                <div className="rounded border border-dashed border-base-300 px-3 py-2 text-sm text-base-content/30 italic">
+                  Marked as not in paper — answer based on supplement or prior knowledge
+                </div>
+              ) : (
+                <>
+                  <textarea
+                    className="textarea textarea-bordered w-full text-sm leading-relaxed"
+                    rows={2}
+                    value={capturedSnippets["participantLevelData"] ?? ""}
+                    onChange={(e) => setCapturedSnippets((prev) => ({ ...prev, participantLevelData: e.target.value }))}
+                    placeholder="Paste the sentence(s) from the paper that support your answer…"
+                  />
+                  <button type="button"
+                    onClick={() => setActiveSnippetField(activeSnippetField === "participantLevelData" ? null : "participantLevelData")}
+                    className={`mt-1 text-sm ${activeSnippetField === "participantLevelData" ? "text-primary font-medium" : "text-base-content/40 hover:text-base-content"}`}>
+                    {activeSnippetField === "participantLevelData" ? "→ Select text in the paper panel to the right" : "Select from paper text →"}
+                  </button>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
 
-        <Field label="Website URL" hint="optional">
-          <input type="url" className="input input-bordered input-sm w-full" value={url}
-            onChange={(e) => setUrl(e.target.value)} placeholder="https://…" />
-        </Field>
+        {/* Reliabilities — no per-field evidence */}
+        <div className="rounded-lg border border-base-200 overflow-hidden">
+          <div className="px-4 py-2 bg-base-200/50 border-b border-base-200">
+            <span className="text-sm font-semibold">Reliabilities</span>
+          </div>
+          <div className="px-4 py-3 border-b border-base-200/60 bg-base-200/20 text-sm">
+            <div className="grid grid-cols-[130px_1fr] gap-x-3 gap-y-1.5">
+              <span className="text-base-content/40 font-medium">Model answer</span>
+              <span className="text-base-content/70 italic">
+                {Array.isArray(ext.reliabilities) && ext.reliabilities.length > 0
+                  ? (ext.reliabilities as { norm: string; value: number | null; metric: string }[])
+                      .map((r) => `${r.norm} ${r.value ?? "?"} (${r.metric})`).join("; ")
+                  : "—"}
+              </span>
+              <span className="text-base-content/40 font-medium">Model evidence</span>
+              <span className="text-base-content/50 italic">{snippetStr(snippets.reliabilities) || "—"}</span>
+            </div>
+          </div>
+          <div className="px-4 py-3 flex flex-col gap-2">
+            <label className="text-sm font-medium text-base-content/50">Your answer</label>
+            {reliabilities.length > 0 && (
+              <div className="flex flex-col gap-1.5">
+                {reliabilities.map((r, i) => (
+                  <div key={i} className="flex gap-2 items-center">
+                    <input type="text" className="input input-bordered input-xs flex-1" placeholder="norm"
+                      value={r.norm} onChange={(e) => setReliabilities((prev) => prev.map((x, j) => j === i ? { ...x, norm: e.target.value } : x))} />
+                    <input type="number" className="input input-bordered input-xs w-24" placeholder="value"
+                      value={r.value} step="0.01" onChange={(e) => setReliabilities((prev) => prev.map((x, j) => j === i ? { ...x, value: e.target.value } : x))} />
+                    <input type="text" className="input input-bordered input-xs flex-1" placeholder="metric"
+                      value={r.metric} onChange={(e) => setReliabilities((prev) => prev.map((x, j) => j === i ? { ...x, metric: e.target.value } : x))} />
+                    <button type="button" className="text-base-content/30 hover:text-error text-xs"
+                      onClick={() => setReliabilities((prev) => prev.filter((_, j) => j !== i))}>✕</button>
+                  </div>
+                ))}
+              </div>
+            )}
+            <button type="button" className="btn btn-xs btn-primary self-start"
+              onClick={() => setReliabilities((prev) => [...prev, { norm: "", value: "", metric: "" }])}>
+              + Add reliability
+            </button>
+            <div className="mt-2 pt-2 border-t border-base-200">
+              <div className="flex items-center justify-between mb-1.5">
+                <label className="text-sm font-medium text-base-content/50">Your evidence</label>
+                <label className="flex items-center gap-1.5 cursor-pointer select-none">
+                  <input type="checkbox" className="checkbox checkbox-xs"
+                    checked={noEvidenceFields.has("reliabilities")}
+                    onChange={() => setNoEvidenceFields((prev) => { const n = new Set(prev); n.has("reliabilities") ? n.delete("reliabilities") : n.add("reliabilities"); return n })} />
+                  <span className="text-xs text-base-content/40">No evidence</span>
+                </label>
+              </div>
+              {noEvidenceFields.has("reliabilities") ? (
+                <div className="rounded border border-dashed border-base-300 px-3 py-2 text-sm text-base-content/30 italic">
+                  Marked as not in paper — answer based on supplement or prior knowledge
+                </div>
+              ) : (
+                <>
+                  <textarea
+                    className="textarea textarea-bordered w-full text-sm leading-relaxed"
+                    rows={2}
+                    value={capturedSnippets["reliabilities"] ?? ""}
+                    onChange={(e) => setCapturedSnippets((prev) => ({ ...prev, reliabilities: e.target.value }))}
+                    placeholder="Paste the sentence(s) from the paper that report reliability statistics…"
+                  />
+                  <button type="button"
+                    onClick={() => setActiveSnippetField(activeSnippetField === "reliabilities" ? null : "reliabilities")}
+                    className={`mt-1 text-sm ${activeSnippetField === "reliabilities" ? "text-primary font-medium" : "text-base-content/40 hover:text-base-content"}`}>
+                    {activeSnippetField === "reliabilities" ? "→ Select text in the paper panel to the right" : "Select from paper text →"}
+                  </button>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
 
-        <Field label="Note" hint="optional — explain your changes">
-          <textarea className="textarea textarea-bordered w-full text-sm" rows={2} value={note}
-            onChange={(e) => setNote(e.target.value)} maxLength={1000}
-            placeholder="Any context that would help the reviewer…" />
-        </Field>
+        {/* URL + Note */}
+        <div className="rounded-lg border border-base-200 p-4 flex flex-col gap-3">
+          <div>
+            <label className="text-xs font-medium text-base-content/50 mb-1.5 block">Website URL <span className="font-normal">(optional)</span></label>
+            <input type="url" className="input input-bordered input-sm w-full" value={url}
+              onChange={(e) => setUrl(e.target.value)} placeholder="https://…" />
+          </div>
+          <div>
+            <label className="text-xs font-medium text-base-content/50 mb-1.5 block">Note <span className="font-normal">(optional — explain your changes)</span></label>
+            <textarea className="textarea textarea-bordered w-full text-sm" rows={2} value={note}
+              onChange={(e) => setNote(e.target.value)} maxLength={1000}
+              placeholder="Any context that would help the reviewer…" />
+          </div>
+        </div>
 
         <div className="flex gap-3 pt-2">
           <a href={`/norms/${paperId}`} className="btn btn-outline btn-sm">Cancel</a>
@@ -321,16 +461,18 @@ export function SuggestExtractionEditsPage({
         <div className="rounded-xl border border-base-200 overflow-hidden">
           <div className="px-4 py-3 border-b border-base-200 bg-base-200/40">
             <p className="text-xs font-semibold uppercase tracking-wider text-base-content/50">Paper text</p>
-            {activeSnippetField && (
+            {activeSnippetField ? (
               <p className="text-xs text-primary mt-0.5">
-                Capturing for: <strong>{activeSnippetField}</strong> — select text below
+                Capturing evidence for: <strong>{activeSnippetField}</strong> — highlight text below, then release
               </p>
+            ) : (
+              <p className="text-xs text-base-content/40 mt-0.5">Click &ldquo;Select from paper text&rdquo; on a field, then highlight a sentence here</p>
             )}
           </div>
           {ext.paperText ? (
             <div
               className="p-4 text-xs text-base-content/70 leading-relaxed whitespace-pre-wrap select-text cursor-text max-h-[75vh] overflow-y-auto font-mono"
-              onMouseUp={() => activeSnippetField && handleTextSelect(activeSnippetField)}
+              onMouseUp={handleTextSelect}
             >
               {ext.paperText}
             </div>
@@ -340,20 +482,6 @@ export function SuggestExtractionEditsPage({
             </div>
           )}
         </div>
-
-        {Object.keys(capturedSnippets).length > 0 && (
-          <div className="mt-4 rounded-xl border border-base-200 p-4">
-            <p className="text-xs font-semibold uppercase tracking-wider text-base-content/50 mb-2">Your captured evidence</p>
-            <div className="flex flex-col gap-2">
-              {Object.entries(capturedSnippets).map(([k, v]) => (
-                <div key={k} className="text-xs">
-                  <span className="font-medium text-base-content/60">{k}:</span>{" "}
-                  <span className="italic text-base-content/50">&ldquo;{v}&rdquo;</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
       </div>
     </div>
   )
