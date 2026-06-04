@@ -148,7 +148,7 @@ def main():
 
                 if save_extraction(conn, int(row["id"]), data, EXTRACTED_BY, paper_text=text):
                     conn.commit()
-                    flag = " ⚑ needs review" if (data or {}).get("confidence", 1) < 0.6 else ""
+                    flag = " ⚑ needs review" if ((data or {}).get("confidence") or 1) < 0.6 else ""
                     print(f"ok (confidence={data.get('confidence', '?')}){flag}")
                     done += 1
                 else:

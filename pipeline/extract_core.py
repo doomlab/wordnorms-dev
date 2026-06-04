@@ -148,15 +148,47 @@ def build_prompt(text):
     return PROMPT_TEMPLATE.replace("{text}", trim_text(text))
 
 
+def _escape_newlines_in_strings(raw):
+    """Replace literal newlines inside JSON strings with \\n (char-by-char state machine)."""
+    result = []
+    in_string = False
+    i = 0
+    while i < len(raw):
+        c = raw[i]
+        if c == "\\" and in_string:
+            result.append(c)
+            i += 1
+            if i < len(raw):
+                result.append(raw[i])
+                i += 1
+            continue
+        if c == '"':
+            in_string = not in_string
+        elif c == "\n" and in_string:
+            result.append("\\n")
+            i += 1
+            continue
+        result.append(c)
+        i += 1
+    return "".join(result)
+
+
 def _fix_llm_json(raw):
     """Fix common LLM JSON mistakes before parsing."""
-    # Replace inline arithmetic: "stimuliCount": 146 + 49  ->  195
-    def _sum(m):
+    # Strip "= result" from expressions like "741 + 852 = 1593" — just keep the result
+    raw = re.sub(r"(\d+(?:\s*[+*]\s*\d+)+)\s*=\s*(\d+)", r"\2", raw)
+    # Evaluate inline integer arithmetic: 146 + 49, 10 * 1000000, etc.
+    def _eval_op(m):
         try:
-            return str(int(m.group(1)) + int(m.group(2)))
+            a, op, b = int(m.group(1)), m.group(2), int(m.group(3))
+            result = (a + b) if op == "+" else (a * b)
+            return str(result)
         except Exception:
             return m.group(0)
-    raw = re.sub(r"(\d+)\s*\+\s*(\d+)", _sum, raw)
+    prev = None
+    while prev != raw:
+        prev = raw
+        raw = re.sub(r"(\d+)\s*([+*])\s*(\d+)", _eval_op, raw)
     # Strip // inline comments (outside strings — good enough for LLM output)
     raw = re.sub(r"//[^\n\"]*", "", raw)
     # Replace set-like array items {"valence"} -> "valence"
@@ -166,6 +198,8 @@ def _fix_llm_json(raw):
     # Fix thousands-separated numbers: 97,261 -> 97261 (applied twice for e.g. 1,234,567)
     for _ in range(2):
         raw = re.sub(r"(\d),(\d{3})(?!\d)", r"\1\2", raw)
+    # Escape literal newlines inside string values
+    raw = _escape_newlines_in_strings(raw)
     return raw
 
 

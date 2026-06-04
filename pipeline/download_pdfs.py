@@ -195,6 +195,28 @@ def unpaywall_pdf_url(doi):
     return None
 
 
+def plos_resolve(title):
+    """Search PLOS API by title, return (doi, pdf_url) or (None, None)."""
+    if not title:
+        return None, None
+    try:
+        r = requests.get(
+            "https://api.plos.org/search",
+            params={"q": f'title:"{title}"', "fl": "id,title", "wt": "json", "rows": 1},
+            timeout=15,
+        )
+        if r.status_code == 200:
+            docs = r.json().get("response", {}).get("docs", [])
+            if docs:
+                doi = docs[0].get("id", "")
+                if doi.startswith("10.1371/"):
+                    pdf_url = f"https://journals.plos.org/plosone/article/file?id={doi}&type=printable"
+                    return doi, pdf_url
+    except Exception:
+        pass
+    return None, None
+
+
 def semantic_scholar_pdf_url(doi):
     """Ask Semantic Scholar for an open-access PDF URL."""
     if not doi:
@@ -213,9 +235,27 @@ def semantic_scholar_pdf_url(doi):
     return None
 
 
-def get_pdf(pdf_url, doi, browser=None, semantic_scholar_only=False):
+def get_pdf(pdf_url, doi, browser=None, semantic_scholar_only=False, title=None, conn=None):
     """Try all strategies to retrieve PDF bytes. Returns (bytes, source) or (None, reason)."""
     reasons = []
+
+    # If no DOI, try PLOS title search first — many missing-DOI papers are PLOS ONE
+    if not doi and title:
+        found_doi, plos_url = plos_resolve(title)
+        if found_doi:
+            doi = found_doi
+            if conn:
+                cur = conn.cursor()
+                cur.execute('UPDATE "Paper" SET doi = %s WHERE doi IS NULL AND title = %s',
+                            (doi, title))
+                conn.commit()
+            if plos_url:
+                data, note = fetch_pdf(plos_url)
+                if data:
+                    return data, "plos"
+                reasons.append(f"plos:{note}")
+        else:
+            reasons.append("plos:not found")
 
     if not semantic_scholar_only:
         if pdf_url:
@@ -427,7 +467,8 @@ def main():
         if not isinstance(pdf_url, str):
             pdf_url = None
         pdf_bytes, source = get_pdf(pdf_url, doi, browser=browser,
-                                    semantic_scholar_only=args.semantic_scholar_only)
+                                    semantic_scholar_only=args.semantic_scholar_only,
+                                    title=str(row["title"]), conn=conn)
 
         if pdf_bytes is None:
             print(f"failed — {source}")
