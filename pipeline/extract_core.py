@@ -157,8 +157,15 @@ def _fix_llm_json(raw):
         except Exception:
             return m.group(0)
     raw = re.sub(r"(\d+)\s*\+\s*(\d+)", _sum, raw)
+    # Strip // inline comments (outside strings — good enough for LLM output)
+    raw = re.sub(r"//[^\n\"]*", "", raw)
     # Replace set-like array items {"valence"} -> "valence"
     raw = re.sub(r'\{"([^"{}]+)"\}', r'"\1"', raw)
+    # Remove trailing commas before closing braces/brackets
+    raw = re.sub(r",\s*([\]}])", r"\1", raw)
+    # Fix thousands-separated numbers: 97,261 -> 97261 (applied twice for e.g. 1,234,567)
+    for _ in range(2):
+        raw = re.sub(r"(\d),(\d{3})(?!\d)", r"\1\2", raw)
     return raw
 
 
@@ -256,6 +263,8 @@ def save_extraction(conn, paper_id, data, extracted_by, paper_text=None):
     reliabilities = _get(data, "reliabilities") or []
     if not isinstance(reliabilities, list):
         reliabilities = []
+    # Drop entries where norm is the string "null" or missing
+    reliabilities = [r for r in reliabilities if isinstance(r, dict) and r.get("norm") not in (None, "null", "")]
 
     raw_snippets = _get(data, "source_snippets", "sourceSnippets") or {}
     source_snippets = {k: v for k, v in raw_snippets.items() if v is not None} if raw_snippets else None

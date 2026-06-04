@@ -61,7 +61,7 @@ def load_pending(engine, limit=None, redo=False, retry_failed=False):
             FROM "Paper" p
             JOIN "PaperExtraction" pe ON pe."paperId" = p.id
             WHERE p.status = 'ACCEPTED'::"PaperStatus"
-              AND pe."extractedBy" LIKE 'failed:%'
+              AND pe."extractedBy" IN ('failed:parse_error', 'failed:llm_error')
             ORDER BY p.id
         """
     else:
