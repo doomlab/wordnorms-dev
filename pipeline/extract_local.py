@@ -46,13 +46,22 @@ def call_ollama(text):
     return r.json()["message"]["content"]
 
 
-def load_pending(engine, limit=None, redo=False):
+def load_pending(engine, limit=None, redo=False, retry_failed=False):
     import pandas as pd
     if redo:
         query = """
             SELECT p.id, p.title, p."pdfUrl"
             FROM "Paper" p
             WHERE p.status = 'ACCEPTED'::"PaperStatus"
+            ORDER BY p.id
+        """
+    elif retry_failed:
+        query = """
+            SELECT p.id, p.title, p."pdfUrl"
+            FROM "Paper" p
+            JOIN "PaperExtraction" pe ON pe."paperId" = p.id
+            WHERE p.status = 'ACCEPTED'::"PaperStatus"
+              AND pe."extractedBy" LIKE 'failed:%'
             ORDER BY p.id
         """
     else:
@@ -101,12 +110,13 @@ def main():
     parser.add_argument("--pdf-dir", default=None)
     parser.add_argument("--delay", type=float, default=4.0, help="Seconds to wait between papers (default: 4)")
     parser.add_argument("--redo", action="store_true", help="Re-extract all ACCEPTED papers, even already done")
+    parser.add_argument("--retry-failed", action="store_true", help="Re-extract only papers that previously failed")
     args = parser.parse_args()
 
     engine = get_engine()
     conn = get_conn()
 
-    df = load_pending(engine, limit=args.limit, redo=args.redo)
+    df = load_pending(engine, limit=args.limit, redo=args.redo, retry_failed=args.retry_failed)
     print(f"Found {len(df)} unextracted ACCEPTED papers")
 
     done = failed = skipped = 0
@@ -142,7 +152,8 @@ def main():
                     print(f"ok (confidence={data.get('confidence', '?')}){flag}")
                     done += 1
                 else:
-                    print(f"parse failed — raw response ({len(raw)} chars):\n...head: {raw[:300]}\n...tail: {raw[-200:]}")
+                    err = getattr(parse_response, "last_error", "")
+                    print(f"parse failed ({err}) — raw response ({len(raw)} chars):\n...head: {raw[:300]}\n...tail: {raw[-200:]}")
                     save_extraction_failure(conn, int(row["id"]), "failed:parse_error")
                     conn.commit()
                     failed += 1

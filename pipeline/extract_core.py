@@ -171,8 +171,8 @@ def parse_response(raw):
     raw = _fix_llm_json(raw)
     try:
         return json.loads(raw)
-    except json.JSONDecodeError:
-        pass
+    except json.JSONDecodeError as e:
+        _parse_error = str(e)
     # fall back: find the outermost { ... } block in case of leading/trailing prose
     m = re.search(r"\{.*\}", raw, re.DOTALL)
     if m:
@@ -180,6 +180,8 @@ def parse_response(raw):
             return json.loads(m.group())
         except json.JSONDecodeError:
             pass
+    # stash the error on the module so the caller can log it
+    parse_response.last_error = _parse_error
     return None
 
 
@@ -197,7 +199,11 @@ def save_extraction_failure(conn, paper_id, reason):
             language, "stimuliType", "normsCollected",
             confidence, "needsReview", "extractedBy", "extractedAt"
         ) VALUES (NOW(), NOW(), %s, %s, %s, %s, NULL, TRUE, %s, NOW())
-        ON CONFLICT ("paperId") DO NOTHING
+        ON CONFLICT ("paperId") DO UPDATE SET
+            "updatedAt"    = NOW(),
+            "needsReview"  = TRUE,
+            "extractedBy"  = EXCLUDED."extractedBy",
+            "extractedAt"  = NOW()
         """,
         (paper_id, [], [], [], reason),
     )

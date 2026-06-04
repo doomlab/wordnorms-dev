@@ -33,7 +33,19 @@ export default async function SuggestEditPage({ params }: { params: Promise<{ id
           <a href={`/norms/${paper.id}`} className="text-sm text-base-content/50 hover:text-base-content">
             ← Back to paper
           </a>
-          <h1 className="text-xl font-bold mt-2 mb-0.5">{paper.title}</h1>
+          <div className="flex items-start justify-between gap-4 mt-2 mb-0.5">
+            <h1 className="text-xl font-bold">{paper.title}</h1>
+            {paper.pdfUrl && (
+              <a
+                href={paper.pdfUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-outline btn-sm shrink-0"
+              >
+                View PDF
+              </a>
+            )}
+          </div>
           <p className="text-sm text-base-content/50">Suggest corrections to the extracted data</p>
         </div>
 
