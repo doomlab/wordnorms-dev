@@ -10,12 +10,12 @@ const STRETCH_GOAL = 1000
 export default async function ProgressPage() {
   const [users, totalPapers, withExtraction, verified, lastRun] = await Promise.all([
     db.user.count(),
-    db.paper.count({ where: { status: { in: ["ACCEPTED", "ADDED_TO_TRAINING"] }, canonicalPaperId: null } }),
-    db.paperExtraction.count({ where: { paper: { status: { in: ["ACCEPTED", "ADDED_TO_TRAINING"] }, canonicalPaperId: null } } }),
+    db.paper.count({ where: { status: "ACCEPTED", canonicalPaperId: null } }),
+    db.paperExtraction.count({ where: { paper: { status: "ACCEPTED", canonicalPaperId: null } } }),
     db.paperExtraction.count({
       where: {
         verifiedAt: { not: null },
-        paper: { status: { in: ["ACCEPTED", "ADDED_TO_TRAINING"] }, canonicalPaperId: null },
+        paper: { status: "ACCEPTED", canonicalPaperId: null },
       },
     }),
     db.modelRun.findFirst({ orderBy: { createdAt: "desc" } }),

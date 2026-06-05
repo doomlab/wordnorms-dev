@@ -27,7 +27,6 @@ enum PaperStatus {
   PENDING_PDF
   ACCEPTED
   EXCLUDED
-  ADDED_TO_TRAINING
 }
 
 enum DiscoverySource {

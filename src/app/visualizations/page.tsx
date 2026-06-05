@@ -5,7 +5,7 @@ import { DbCharts } from "./Charts"
 
 export const metadata = { title: "Visualizations – WordNorms" }
 
-const ACCEPTED = { in: ["ACCEPTED" as const, "ADDED_TO_TRAINING" as const] }
+const ACCEPTED = { in: ["ACCEPTED" as const] }
 
 export default async function VisualizationsPage() {
   const [acceptedPapers, citations, extractions, yearGroups, journalGroups, summaryCounts] = await Promise.all([

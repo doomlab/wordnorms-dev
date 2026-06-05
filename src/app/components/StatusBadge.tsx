@@ -3,7 +3,6 @@ const COLOR: Record<string, string> = {
   PENDING_REVIEW: "badge-warning",
   EXCLUDED: "badge-error",
   PENDING_PDF: "badge-info",
-  ADDED_TO_TRAINING: "badge-primary",
 }
 
 export function StatusBadge({ status, size = "sm" }: { status: string; size?: "xs" | "sm" }) {
