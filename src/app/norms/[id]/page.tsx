@@ -400,24 +400,24 @@ export default async function NormDetailPage({
                     </div>
                   </div>
                 )}
-                {ext.dataSource && (
+                {displayExt.dataSource && (
                   <div className="flex gap-3 py-1.5">
                     <span className="w-36 shrink-0 font-medium text-base-content/70">Data source</span>
                     <span className="text-base-content/80">
-                      {ext.dataSource === "ai" ? "AI generated" : "Human collected"}
+                      {displayExt.dataSource === "ai" ? "AI generated" : "Human collected"}
                     </span>
                   </div>
                 )}
-                {ext.licenseUrl && (
+                {displayExt.licenseUrl && (
                   <div className="flex gap-3 py-1.5">
                     <span className="w-36 shrink-0 font-medium text-base-content/70">License</span>
                     <a
-                      href={ext.licenseUrl}
+                      href={displayExt.licenseUrl}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="link link-primary break-all"
                     >
-                      {ext.licenseUrl}
+                      {displayExt.licenseUrl}
                     </a>
                   </div>
                 )}
@@ -434,8 +434,8 @@ export default async function NormDetailPage({
             <CollapsibleSection title="Edits / History" defaultOpen={false}>
               <div className="space-y-2">
                 <HistoryEvent
-                  label={`Extracted by ${ext.extractedBy ?? "AI"}`}
-                  date={ext.extractedAt}
+                  label={`Extracted by ${displayExt.extractedBy ?? "AI"}`}
+                  date={displayExt.extractedAt}
                 />
                 {paper.extractionEdits.map((edit, i) => (
                   <HistoryEvent
@@ -453,18 +453,18 @@ export default async function NormDetailPage({
                     resolved={edit.resolved}
                   />
                 ))}
-                {ext.verifiedAt && (
+                {displayExt.verifiedAt && (
                   <HistoryEvent
                     label={
                       <>
                         {"Verified by "}
-                        {ext.verifiedBy?.name ?? "admin"}
-                        {ext.verifiedBy && ext.verifiedBy.points > 0 && (
-                          <span className="badge badge-info badge-xs ml-1">{ext.verifiedBy.points} pts</span>
+                        {displayExt.verifiedBy?.name ?? "admin"}
+                        {displayExt.verifiedBy && displayExt.verifiedBy.points > 0 && (
+                          <span className="badge badge-info badge-xs ml-1">{displayExt.verifiedBy.points} pts</span>
                         )}
                       </>
                     }
-                    date={ext.verifiedAt}
+                    date={displayExt.verifiedAt}
                   />
                 )}
               </div>
