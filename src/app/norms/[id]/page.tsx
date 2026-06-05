@@ -373,7 +373,6 @@ export default async function NormDetailPage({
                 )}
             >
 
-              {(()=> (
               <div className="space-y-0.5">
                 <Row label="Language" value={displayExt.language.length ? displayExt.language.join(", ") : undefined} />
                 <Row label="Norms collected" value={displayExt.normsCollected.length ? displayExt.normsCollected.join(", ") : undefined} />
@@ -429,7 +428,6 @@ export default async function NormDetailPage({
                   </div>
                 )}
               </div>
-              ))()}
 
             </CollapsibleSection>
 
