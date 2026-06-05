@@ -18,14 +18,7 @@ export default async function AdminExtractPage({
   const ctx = await getBlitzContext()
 
   const hasPdfWhere = { status: "ACCEPTED" as const, canonicalPaperId: null, extraction: null, pdfUrl: { not: null } }
-  const noPdfWhere = {
-    status: "ACCEPTED" as const,
-    canonicalPaperId: null,
-    OR: [
-      { extraction: { is: null }, pdfUrl: null },
-      { extraction: { needsReview: true, confidence: null } },
-    ],
-  }
+  const noPdfWhere = { status: "ACCEPTED" as const, canonicalPaperId: null, extraction: null, pdfUrl: null }
 
   const activeWhere = tab === "new" ? hasPdfWhere : noPdfWhere
 
