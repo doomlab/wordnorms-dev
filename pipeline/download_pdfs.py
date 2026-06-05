@@ -441,14 +441,19 @@ def extract_emails(pdf_bytes):
 # DB helpers
 # ---------------------------------------------------------------------------
 
-def load_papers(engine, limit=None, all_missing=False, all_papers=False, before_id=None):
+def load_papers(engine, limit=None, all_missing=False, all_papers=False, before_id=None, from_id=None):
     import pandas as pd
-    id_filter = f"AND p.id < {int(before_id)}" if before_id else ""
+    id_filter = ""
+    if before_id:
+        id_filter += f" AND p.id < {int(before_id)}"
+    if from_id:
+        id_filter += f" AND p.id >= {int(from_id)}"
     if all_papers:
         query = f"""
             SELECT p.id, p.title, p.doi, p."pdfUrl"
             FROM "Paper" p
             WHERE p.status = 'ACCEPTED'::"PaperStatus"
+              AND p."canonicalPaperId" IS NULL
               {id_filter}
             ORDER BY p.id
         """
@@ -458,6 +463,7 @@ def load_papers(engine, limit=None, all_missing=False, all_papers=False, before_
             FROM "Paper" p
             LEFT JOIN "PaperExtraction" pe ON pe."paperId" = p.id
             WHERE p.status = 'ACCEPTED'::"PaperStatus"
+              AND p."canonicalPaperId" IS NULL
               AND (pe.id IS NULL OR pe."extractedBy" = 'failed:pdf_error')
               {id_filter}
             ORDER BY p.id
@@ -468,6 +474,7 @@ def load_papers(engine, limit=None, all_missing=False, all_papers=False, before_
             FROM "Paper" p
             JOIN "PaperExtraction" pe ON pe."paperId" = p.id
             WHERE p.status = 'ACCEPTED'::"PaperStatus"
+              AND p."canonicalPaperId" IS NULL
               AND pe."extractedBy" = 'failed:pdf_error'
               {id_filter}
             ORDER BY p.id
@@ -504,6 +511,8 @@ def main():
                         help="All accepted papers — for collecting emails across the full corpus")
     parser.add_argument("--before-id", type=int, default=None,
                         help="Only process papers with id < N")
+    parser.add_argument("--from-id", type=int, default=None,
+                        help="Only process papers with id >= N (resume from a specific point)")
     parser.add_argument("--semantic-scholar-only", action="store_true",
                         help="Skip all other sources; only try Semantic Scholar (good for re-runs after prior failures)")
     parser.add_argument("--scholar", action="store_true",
@@ -516,7 +525,7 @@ def main():
 
     engine = get_engine()
     conn = get_conn()
-    df = load_papers(engine, limit=args.limit, all_missing=args.all_missing, all_papers=args.all, before_id=args.before_id)
+    df = load_papers(engine, limit=args.limit, all_missing=args.all_missing, all_papers=args.all, before_id=args.before_id, from_id=args.from_id)
     print(f"Found {len(df)} papers to attempt\n")
 
     playwright_ctx = None
