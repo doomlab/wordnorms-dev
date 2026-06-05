@@ -30,10 +30,7 @@ export async function Navbar({ leftLinks, rightExtra, className }: NavbarProps) 
     ? await Promise.all([
         db.paper.count({ where: { status: "PENDING_REVIEW", canonicalPaperId: null } }),
         db.paper.count({ where: { status: "EXCLUDED", canonicalPaperId: null, reviewedById: null } }),
-        Promise.all([
-          db.paper.count({ where: { status: "ACCEPTED", canonicalPaperId: null, extraction: null, pdfUrl: { not: null } } }),
-          db.paper.count({ where: { status: "ACCEPTED", canonicalPaperId: null, OR: [{ extraction: { is: null }, pdfUrl: null }, { extraction: { needsReview: true, confidence: null } }] } }),
-        ]).then(([hasPdf, noPdf]) => hasPdf + noPdf),
+        db.paper.count({ where: { status: "ACCEPTED", canonicalPaperId: null, extraction: null } }),
         db.paperExtraction.count({ where: { verifiedAt: null, paper: { status: "ACCEPTED", canonicalPaperId: null } } }),
         db.paperReport.count({ where: { resolved: false } }),
         db.articleSuggestion.count({ where: { resolved: false } }),

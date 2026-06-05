@@ -8,7 +8,7 @@ export const metadata = { title: "Visualizations – WordNorms" }
 const ACCEPTED = { in: ["ACCEPTED" as const] }
 
 export default async function VisualizationsPage() {
-  const [acceptedPapers, citations, extractions, yearGroups, journalGroups, summaryCounts] = await Promise.all([
+  const [acceptedPapers, citations, extractions, yearGroups, journalGroups, unmatchedCount, summaryCounts] = await Promise.all([
     db.paper.findMany({
       where: { status: ACCEPTED, openAlexId: { not: null } },
       select: { id: true, title: true, year: true, openAlexId: true, canonicalPaperId: true },
@@ -33,6 +33,13 @@ export default async function VisualizationsPage() {
       orderBy: { _count: { journal: "desc" } },
       take: 10,
     }),
+    db.$queryRaw<[{ count: bigint }]>`
+      SELECT COUNT(DISTINCT c."citedOpenAlexId")::int AS count
+      FROM "PaperCitation" c
+      WHERE NOT EXISTS (
+        SELECT 1 FROM "Paper" p WHERE p."openAlexId" = c."citedOpenAlexId"
+      )
+    `.then((r) => Number(r[0]?.count ?? 0)),
     Promise.all([
       db.paper.count({ where: { canonicalPaperId: null } }),
       db.paper.count({ where: { status: { in: [...ACCEPTED.in] }, canonicalPaperId: null } }),
@@ -135,7 +142,7 @@ export default async function VisualizationsPage() {
 
   const vizData = {
     totalCitations: citations.length,
-    uniqueCited: unmatchedNodeMap.size,
+    uniqueCited: unmatchedCount,
   }
 
   const [totalAll, totalAccepted, totalPending, withDoi, withAlexId, withExtraction] = summaryCounts
@@ -189,7 +196,7 @@ export default async function VisualizationsPage() {
                   },
                   {
                     value: vizData.uniqueCited.toLocaleString(),
-                    label: "Cited papers not yet in database",
+                    label: "External citations",
                   },
                 ].map((s) => (
                   <div key={s.label}>

@@ -29,7 +29,7 @@ export default async function CitationsPage({
 
   const reviewedFilter = showAll ? "" : `AND c.reviewed = false`
 
-  const [groups, countResult] = await Promise.all([
+  const [groups, countResult, totalResult, unreviewedResult] = await Promise.all([
     db.$queryRawUnsafe<GroupRow[]>(`
       SELECT
         c."citedOpenAlexId",
@@ -55,10 +55,27 @@ export default async function CitationsPage({
       )
       ${reviewedFilter}
     `),
+    db.$queryRaw<[{ count: bigint }]>`
+      SELECT COUNT(DISTINCT c."citedOpenAlexId")::int AS count
+      FROM "PaperCitation" c
+      WHERE NOT EXISTS (
+        SELECT 1 FROM "Paper" p WHERE p."openAlexId" = c."citedOpenAlexId"
+      )
+    `.then((r) => Number(r[0]?.count ?? 0)),
+    db.$queryRaw<[{ count: bigint }]>`
+      SELECT COUNT(DISTINCT c."citedOpenAlexId")::int AS count
+      FROM "PaperCitation" c
+      WHERE NOT EXISTS (
+        SELECT 1 FROM "Paper" p WHERE p."openAlexId" = c."citedOpenAlexId"
+      )
+      AND c.reviewed = false
+    `.then((r) => Number(r[0]?.count ?? 0)),
   ])
 
   const total = Number(countResult[0]?.count ?? 0)
   const totalPages = Math.max(1, Math.ceil(total / PER_PAGE))
+  const grandTotal = totalResult
+  const unreviewedTotal = unreviewedResult
 
   // Fetch citing paper titles for this page's groups
   const citedIds = groups.map((g) => g.citedOpenAlexId)
@@ -79,7 +96,11 @@ export default async function CitationsPage({
     <>
       <div className="flex items-baseline justify-between mb-2">
         <h1 className="text-3xl font-bold">Citation Review</h1>
-        <span className="text-base-content/50 text-sm">{total} unmatched</span>
+        <span className="text-base-content/50 text-sm">
+          {showAll
+            ? `${grandTotal.toLocaleString()} external citations`
+            : `${unreviewedTotal.toLocaleString()} / ${grandTotal.toLocaleString()} external citations`}
+        </span>
       </div>
       <p className="text-base-content/60 mb-6 text-sm">
         Papers cited by accepted papers that are not yet in the database. Add any that belong.
