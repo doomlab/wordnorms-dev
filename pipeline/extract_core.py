@@ -203,6 +203,8 @@ def _fix_llm_json(raw):
     # Fix thousands-separated numbers: 97,261 -> 97261 (applied twice for e.g. 1,234,567)
     for _ in range(2):
         raw = re.sub(r"(\d),(\d{3})(?!\d)", r"\1\2", raw)
+    # Fix bare leading-dot numbers (invalid JSON): ": .99" -> ": 0.99"
+    raw = re.sub(r"([:\[,]\s*)(\.\d+)", r"\g<1>0\2", raw)
     # Strip "- from X section" annotations after string values: "foo" - from X] -> "foo"]
     raw = re.sub(r'"\s*-\s*from\s+[^\]},\n"]+', '"', raw)
     # Escape literal newlines inside string values
