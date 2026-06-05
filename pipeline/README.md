@@ -120,8 +120,11 @@ Downloads PDFs for all ACCEPTED papers using a resolution chain (direct URL → 
 | `--limit N` | | Stop after N papers (useful for test runs) |
 | `--delay N` | `2.0` | Seconds between papers; increase if publishers start blocking |
 | `--semantic-scholar-only` | | Skip all other sources and only try Semantic Scholar — useful after a prior run where direct/Unpaywall/Sci-Hub already failed |
+| `--scholar` | | Also search Google Scholar via the `scholarly` library for a direct PDF link — slow and rate-limited, use with `--delay 5` or higher |
 
 Sci-Hub fallback requires Playwright: `pip install playwright && playwright install chromium`. If not installed, Sci-Hub is skipped gracefully.
+
+CORE.ac.uk is included by default. For higher rate limits, get a free API key at [core.ac.uk/services/api](https://core.ac.uk/services/api) and set `export CORE_API_KEY=your_key` before running.
 
 For papers that still can't be downloaded automatically, find and place the PDF manually as `pdfs/{paper_id}.pdf`.
 

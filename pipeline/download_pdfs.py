@@ -9,8 +9,11 @@ Resolution strategy per paper:
   1. Try pdfUrl directly (if it's already a PDF)
   2. Resolve landing pages: Zenodo API, citation_pdf_url meta tag, .pdf href scan
   3. Try Unpaywall for an open-access PDF URL
-  4. Try Sci-Hub via headless Chromium (requires: pip install playwright && playwright install chromium)
-  5. Extract emails from first 2 pages of whatever we download
+  4. Try Semantic Scholar for an open-access PDF URL
+  5. Try CORE.ac.uk (set CORE_API_KEY env var for higher rate limits)
+  6. Try Google Scholar via scholarly (opt-in: --scholar)
+  7. Try Sci-Hub via headless Chromium (requires: pip install playwright && playwright install chromium)
+  8. Extract emails from first 2 pages of whatever we download
 
 Modes (pick one):
   (default)        Only papers that failed with pdf_error
@@ -261,7 +264,45 @@ def semantic_scholar_pdf_url(doi):
     return None
 
 
-def get_pdf(pdf_url, doi, browser=None, semantic_scholar_only=False, title=None, conn=None):
+def core_pdf_url(doi, title=None):
+    """Search CORE.ac.uk for an open-access PDF URL. Uses CORE_API_KEY env var if set."""
+    if not doi and not title:
+        return None
+    try:
+        params = {"limit": 1}
+        api_key = os.environ.get("CORE_API_KEY", "")
+        if api_key:
+            params["api_key"] = api_key
+        params["q"] = f'doi:"{doi}"' if doi else f'title:"{title}"'
+        r = requests.get(
+            "https://api.core.ac.uk/v3/search/outputs",
+            params=params,
+            timeout=15,
+        )
+        if r.status_code == 200:
+            results = r.json().get("results", [])
+            if results:
+                return results[0].get("downloadUrl")
+    except Exception:
+        pass
+    return None
+
+
+def scholarly_pdf_url(title, doi=None):
+    """Search Google Scholar via scholarly for a direct PDF link."""
+    try:
+        from scholarly import scholarly as _scholarly
+        query = doi if doi else title
+        results = _scholarly.search_pubs(query)
+        pub = next(results, None)
+        if pub:
+            return pub.get("eprint_url")
+    except Exception:
+        pass
+    return None
+
+
+def get_pdf(pdf_url, doi, browser=None, semantic_scholar_only=False, scholar=False, title=None, conn=None):
     """Try all strategies to retrieve PDF bytes. Returns (bytes, source) or (None, reason)."""
     reasons = []
 
@@ -336,6 +377,30 @@ def get_pdf(pdf_url, doi, browser=None, semantic_scholar_only=False, title=None,
         else:
             reasons.append("semanticscholar:no oa url")
         time.sleep(0.5)
+
+    # CORE.ac.uk
+    if not semantic_scholar_only:
+        resolved = core_pdf_url(doi, title=title)
+        if resolved:
+            data, note = fetch_pdf(resolved)
+            if data:
+                return data, "core"
+            reasons.append(f"core:{note}")
+        else:
+            reasons.append("core:no result")
+        time.sleep(0.5)
+
+    # Google Scholar via scholarly
+    if scholar and title:
+        resolved = scholarly_pdf_url(title, doi=doi)
+        if resolved:
+            data, note = fetch_pdf(resolved)
+            if data:
+                return data, "scholar"
+            reasons.append(f"scholar:{note}")
+        else:
+            reasons.append("scholar:no pdf link")
+        time.sleep(1)
 
     if not semantic_scholar_only:
         # Sci-Hub via headless browser (last resort — requires DOI)
@@ -441,6 +506,8 @@ def main():
                         help="Only process papers with id < N")
     parser.add_argument("--semantic-scholar-only", action="store_true",
                         help="Skip all other sources; only try Semantic Scholar (good for re-runs after prior failures)")
+    parser.add_argument("--scholar", action="store_true",
+                        help="Also search Google Scholar via scholarly (slow, rate-limited — use with --delay 5+)")
     parser.add_argument("--headed", action="store_true",
                         help="Run Playwright in headed mode (visible browser) for debugging")
     args = parser.parse_args()
@@ -500,6 +567,7 @@ def main():
             pdf_url = None
         pdf_bytes, source = get_pdf(pdf_url, doi, browser=browser,
                                     semantic_scholar_only=args.semantic_scholar_only,
+                                    scholar=args.scholar,
                                     title=str(row["title"]), conn=conn)
 
         if pdf_bytes is None:
