@@ -352,7 +352,7 @@ export default async function NormDetailPage({
             </Section>
           )}
 
-          {ext && (
+          {displayExt && (
             <>
             <CollapsibleSection
               title="Extracted information"
