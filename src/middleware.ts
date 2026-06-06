@@ -3,14 +3,23 @@ import type { NextRequest } from "next/server"
 
 const BYPASS_PREFIXES = ["/admin", "/api/", "/login", "/signup", "/maintenance", "/_next/"]
 
-export function middleware(request: NextRequest) {
-  const maintenance = request.cookies.get("site_maintenance")?.value === "1"
-  if (!maintenance) return NextResponse.next()
-
+export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
   if (BYPASS_PREFIXES.some((p) => pathname.startsWith(p))) return NextResponse.next()
 
-  return NextResponse.redirect(new URL("/maintenance", request.url))
+  try {
+    const res = await fetch(new URL("/api/maintenance-check", request.url))
+    if (res.ok) {
+      const { maintenance } = await res.json()
+      if (maintenance) {
+        return NextResponse.redirect(new URL("/maintenance", request.url))
+      }
+    }
+  } catch {
+    // fail open — don't block requests if the check fails
+  }
+
+  return NextResponse.next()
 }
 
 export const config = {

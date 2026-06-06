@@ -1,6 +1,6 @@
 "use server"
 
-import { cookies } from "next/headers"
+import { revalidateTag } from "next/cache"
 import { getBlitzContext } from "../../blitz-server"
 import db from "db"
 
@@ -14,16 +14,5 @@ export async function toggleMaintenanceMode(enabled: boolean) {
     update: { maintenanceMode: enabled },
   })
 
-  const cookieStore = await cookies()
-  if (enabled) {
-    cookieStore.set("site_maintenance", "1", {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      path: "/",
-      maxAge: 60 * 60 * 24 * 7,
-    })
-  } else {
-    cookieStore.delete("site_maintenance")
-  }
+  revalidateTag("maintenance")
 }
