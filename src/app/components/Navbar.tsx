@@ -98,6 +98,9 @@ export async function Navbar({ leftLinks, rightExtra, className }: NavbarProps) 
                 <li>
                   <Link href="/favorites">★ My Favorites</Link>
                 </li>
+                <li>
+                  <Link href="/tutorial">How to verify</Link>
+                </li>
               </ul>
             </div>
             <Link href="/dashboard/profile" className="btn btn-info btn-sm mr-2">
@@ -193,6 +196,9 @@ export async function Navbar({ leftLinks, rightExtra, className }: NavbarProps) 
                 </li>
                 <li>
                   <Link href="/visualizations">Visualizations</Link>
+                </li>
+                <li>
+                  <Link href="/tutorial">How to verify</Link>
                 </li>
               </ul>
             </div>

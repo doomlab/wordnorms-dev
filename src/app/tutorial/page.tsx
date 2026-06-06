@@ -46,7 +46,7 @@ export default function TutorialPage() {
   return (
     <div className="min-h-screen bg-base-100">
       <Navbar />
-      <div className="max-w-2xl mx-auto px-6 py-12">
+      <div className="max-w-4xl mx-auto px-6 py-12">
         <div className="mb-10">
           <h1 className="text-3xl font-bold mb-3">How to verify your paper</h1>
           <p className="text-base-content/60 leading-relaxed">
@@ -117,10 +117,12 @@ export default function TutorialPage() {
             </p>
             <Img src="/images/tutorial/field-block.jpg" alt="A single field block with the Language field filled in, showing model answer, model evidence, and a completed your-answer field" />
             <p>
-              If the information isn&apos;t in the paper at all (for example, participant count
-              wasn&apos;t reported), check the <strong>No evidence</strong> box for that field
-              instead of leaving the evidence blank. Also use this box if the evidence is only in a
-              supplement, since we currently only show the main manuscript text on the right.
+              If the supporting text isn&apos;t in the main manuscript — for example, the
+              participant count wasn&apos;t reported, or the evidence is only in a supplement —
+              check the <strong>No evidence</strong> box instead of leaving the evidence blank. You
+              can still enter the correct answer in the <strong>Your answer</strong> field if you
+              know it; we just won&apos;t use that field for model training since there&apos;s no
+              text to learn from.
             </p>
           </Step>
 
