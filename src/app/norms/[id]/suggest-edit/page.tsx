@@ -34,7 +34,7 @@ export default async function SuggestEditPage({ params }: { params: Promise<{ id
             ← Back to paper
           </a>
           <div className="flex items-start justify-between gap-4 mt-2 mb-0.5">
-            <h1 className="text-xl font-bold">{paper.title}</h1>
+            <h1 className="text-xl font-bold">{paper.title.charAt(0).toUpperCase() + paper.title.slice(1)}</h1>
             {paper.pdfUrl && (
               <a
                 href={paper.pdfUrl}
