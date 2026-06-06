@@ -36,6 +36,9 @@ It should only take a few minutes, and you'd be directly contributing to a commu
 
 {links}
 
+Not sure what to do? We've put together a short step-by-step guide:
+{base_url}/tutorial
+
 While you're there, feel free to explore — you can search across hundreds of language resource papers by language, stimuli type, and keyword tags, all in one place.
 
 Thank you so much for your time, and for the work that made it worth including!
@@ -59,6 +62,9 @@ The following papers of yours have been picked up by our system, and we'd love y
 It should only take a few minutes per paper, and you'd be directly contributing to a community resource used by psycholinguists worldwide.
 
 {links}
+
+Not sure what to do? We've put together a short step-by-step guide:
+{base_url}/tutorial
 
 While you're there, feel free to explore — you can search across hundreds of language resource papers by language, stimuli type, and keyword tags, all in one place.
 
@@ -136,14 +142,14 @@ def main():
             pid, title = papers[0]
             link = f"{args.base_url}/norms/{pid}/suggest-edit"
             links_block = f"👉 Check and validate your paper here:\n{link}"
-            body = BODY_SINGLE.format(links=links_block)
+            body = BODY_SINGLE.format(links=links_block, base_url=args.base_url)
         else:
             lines = []
             for pid, title in papers:
                 link = f"{args.base_url}/norms/{pid}/suggest-edit"
                 lines.append(f"  • {title}\n    {link}")
             links_block = "👉 Check and validate your papers here:\n\n" + "\n\n".join(lines)
-            body = BODY_MULTI.format(links=links_block)
+            body = BODY_MULTI.format(links=links_block, base_url=args.base_url)
 
         label = f"({len(papers)} paper{'s' if len(papers) > 1 else ''})"
         print(f"  {addr} {label}", end=" ... ", flush=True)
