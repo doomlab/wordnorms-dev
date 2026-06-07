@@ -35,10 +35,8 @@ export default async function AdminPage() {
       where: {
         status: "ACCEPTED",
         canonicalPaperId: null,
-        OR: [
-          { extraction: { is: null }, pdfUrl: null },
-          { extraction: { needsReview: true, confidence: null } },
-        ],
+        extraction: null,
+        pdfUrl: null,
       },
     }),
     db.paperExtraction.count({
