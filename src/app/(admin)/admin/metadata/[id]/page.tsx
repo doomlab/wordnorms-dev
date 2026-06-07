@@ -12,12 +12,16 @@ const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
 
 export default async function AdminMetadataDetailPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>
+  searchParams: Promise<{ from?: string }>
 }) {
   const { id } = await params
+  const { from } = await searchParams
+  const backHref = from === "updated" ? "/admin/metadata?view=updated" : "/admin/metadata"
   const paper = await db.paper.findUnique({
-    where: { id: Number(id), status: "ACCEPTED", extraction: { is: { verifiedAt: null } } },
+    where: { id: Number(id), status: "ACCEPTED" },
     include: { extraction: true },
   })
 
@@ -28,7 +32,7 @@ export default async function AdminMetadataDetailPage({
   return (
     <>
       <a
-        href="/admin/metadata"
+        href={backHref}
         className="text-sm text-base-content/50 hover:text-base-content mb-6 inline-block"
       >
         ← Back to metadata review

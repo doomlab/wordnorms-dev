@@ -122,7 +122,7 @@ export default async function AdminMetadataPage({
                       ) : "—"}
                     </td>
                     <td>
-                      <a href={`/admin/metadata/${p.id}`} className="btn btn-outline btn-xs">
+                      <a href={`/admin/metadata/${p.id}${showUpdated ? "?from=updated" : ""}`} className="btn btn-outline btn-xs">
                         Review
                       </a>
                     </td>
