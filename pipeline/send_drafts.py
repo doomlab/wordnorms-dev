@@ -18,6 +18,8 @@ from collections import defaultdict
 
 EMAILS_CSV = os.path.join(os.path.dirname(__file__), "pdfs", "emails.csv")
 
+SENDER = "ebuchanan@harrisburgu.edu"
+
 SUBJECT = "Your language resource paper is part of a community database"
 
 BODY_SINGLE = """\
@@ -35,6 +37,8 @@ Your paper has been picked up by our system, and we'd love your help: we're aski
 It should only take a few minutes, and you'd be directly contributing to a community resource used by psycholinguists worldwide.
 
 {links}
+
+You'll need to be logged in to submit corrections — if you don't have an account yet, you can create one for free at {base_url}/signup. The link above will redirect you back to your paper after sign-in.
 
 Not sure what to do? We've put together a short step-by-step guide:
 {base_url}/tutorial
@@ -63,6 +67,8 @@ It should only take a few minutes per paper, and you'd be directly contributing 
 
 {links}
 
+You'll need to be logged in to submit corrections — if you don't have an account yet, you can create one for free at {base_url}/signup. The link above will redirect you back to your paper after sign-in.
+
 Not sure what to do? We've put together a short step-by-step guide:
 {base_url}/tutorial
 
@@ -79,8 +85,7 @@ def create_outlook_draft(to_addr, subject, body, dry_run=False):
     if dry_run:
         print(f"\n  To: {to_addr}")
         print(f"  Subject: {subject}")
-        preview = body.split("\n")[0:4]
-        print("  " + "\n  ".join(preview) + "\n  ...")
+        print("  " + "\n  ".join(body.split("\n")))
         return True
 
     with tempfile.NamedTemporaryFile(mode="w", suffix=".txt", delete=False, encoding="utf-8") as f:
@@ -96,7 +101,6 @@ set bodyText to read bodyFile as «class utf8»
 tell application "Microsoft Outlook"
     set newMessage to make new outgoing message with properties {{subject:"{subject_esc}", plain text content:bodyText}}
     make new recipient at newMessage with properties {{email address:{{address:"{to_esc}"}}}}
-    save newMessage
 end tell
 do shell script "rm " & quoted form of "{tmp_path}"
 '''
@@ -119,13 +123,13 @@ def main():
     by_email = defaultdict(dict)  # email -> {paper_id: (paper_id, title)}
 
     with open(EMAILS_CSV, encoding="utf-8") as f:
-        reader = csv.DictReader(f)
+        reader = csv.DictReader(f, fieldnames=["paper_id", "doi", "title", "emails"])
         for row in reader:
             paper_id = row["paper_id"]
             title = row["title"]
             for addr in row.get("emails", "").split(";"):
                 addr = addr.strip().lower()
-                if addr and "@" in addr:
+                if addr and "@" in addr and not addr.startswith("."):
                     by_email[addr][paper_id] = (paper_id, title)
 
     total_papers = sum(len(v) for v in by_email.values())
