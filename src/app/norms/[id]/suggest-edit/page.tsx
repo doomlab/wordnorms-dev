@@ -20,6 +20,8 @@ export default async function SuggestEditPage({ params }: { params: Promise<{ id
 
   if (!paper || !paper.extraction) notFound()
 
+  if (paper.canonicalPaperId) redirect(`/norms/${paper.canonicalPaperId}/suggest-edit`)
+
   const ext = paper.extraction
   const hasPriorSuggestion = await db.extractionEditSuggestion
     .findUnique({ where: { userId_paperId: { userId, paperId: paper.id } } })
