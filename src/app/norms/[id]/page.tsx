@@ -356,7 +356,13 @@ export default async function NormDetailPage({
             <>
             <CollapsibleSection
               title="Extracted information"
-              subtitle={ext?.verifiedAt ? undefined : isAiExtracted ? "AI extracted" : undefined}
+              subtitle={
+                ext?.verifiedAt
+                  ? <span className="badge badge-success badge-sm">verified</span>
+                  : isAiExtracted
+                  ? "AI extracted"
+                  : undefined
+              }
               headerRight={userId ? (
                   <a
                     href={`/norms/${paper.id}/suggest-edit`}

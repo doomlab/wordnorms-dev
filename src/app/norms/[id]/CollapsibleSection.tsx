@@ -21,7 +21,7 @@ export function CollapsibleSection({
   children,
 }: {
   title: string
-  subtitle?: string
+  subtitle?: React.ReactNode
   headerRight?: React.ReactNode
   defaultOpen?: boolean
   children: React.ReactNode

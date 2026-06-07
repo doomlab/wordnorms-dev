@@ -9,19 +9,20 @@ const PAGE_SIZE = 50
 export default async function AdminMetadataPage({
   searchParams,
 }: {
-  searchParams: Promise<{ page?: string }>
+  searchParams: Promise<{ page?: string; view?: string }>
 }) {
-  const { page: pageParam } = await searchParams
+  const { page: pageParam, view } = await searchParams
+  const showUpdated = view === "updated"
   const page = Math.max(1, parseInt(pageParam ?? "1", 10) || 1)
   const skip = (page - 1) * PAGE_SIZE
 
+  const baseWhere = { status: "ACCEPTED" as const, canonicalPaperId: null }
   const where = {
-    status: "ACCEPTED" as const,
-    canonicalPaperId: null,
-    extraction: { is: { verifiedAt: null } },
+    ...baseWhere,
+    extraction: { is: showUpdated ? { verifiedAt: { not: null } } : { verifiedAt: null } },
   }
 
-  const [papers, total] = await Promise.all([
+  const [papers, total, pendingCount, updatedCount] = await Promise.all([
     db.paper.findMany({
       where,
       select: {
@@ -30,13 +31,15 @@ export default async function AdminMetadataPage({
         authors: true,
         year: true,
         doi: true,
-        extraction: { select: { normsCollected: true, confidence: true } },
+        extraction: { select: { normsCollected: true, confidence: true, verifiedAt: true } },
       },
       orderBy: { updatedAt: "desc" },
       skip,
       take: PAGE_SIZE,
     }),
     db.paper.count({ where }),
+    db.paper.count({ where: { ...baseWhere, extraction: { is: { verifiedAt: null } } } }),
+    db.paper.count({ where: { ...baseWhere, extraction: { is: { verifiedAt: { not: null } } } } }),
   ])
 
   const totalPages = Math.ceil(total / PAGE_SIZE)
@@ -44,16 +47,35 @@ export default async function AdminMetadataPage({
   return (
     <>
       <h1 className="text-3xl font-bold mb-2">Metadata Review</h1>
-      <p className="text-base-content/60 mb-8">
+      <p className="text-base-content/60 mb-6">
         Check the extracted metadata for each paper and verify it looks correct.
       </p>
 
+      <div role="tablist" className="tabs tabs-border mb-6">
+        <a
+          role="tab"
+          href="/admin/metadata"
+          className={`tab${!showUpdated ? " tab-active" : ""}`}
+        >
+          Pending <span className="ml-1.5 badge badge-sm">{pendingCount}</span>
+        </a>
+        <a
+          role="tab"
+          href="/admin/metadata?view=updated"
+          className={`tab${showUpdated ? " tab-active" : ""}`}
+        >
+          Updated <span className="ml-1.5 badge badge-sm badge-success">{updatedCount}</span>
+        </a>
+      </div>
+
       <p className="text-sm text-base-content/60 mb-4">
-        {total} paper{total !== 1 ? "s" : ""} pending review
+        {total} paper{total !== 1 ? "s" : ""}
       </p>
 
       {total === 0 ? (
-        <div className="text-base-content/40 py-10 text-center">All extractions verified.</div>
+        <div className="text-base-content/40 py-10 text-center">
+          {showUpdated ? "No updated extractions yet." : "All extractions verified."}
+        </div>
       ) : (
         <>
           <div className="overflow-x-auto">
@@ -109,7 +131,7 @@ export default async function AdminMetadataPage({
               </tbody>
             </table>
           </div>
-          <Pagination page={page} totalPages={totalPages} buildHref={(p) => `?page=${p}`} />
+          <Pagination page={page} totalPages={totalPages} buildHref={(p) => `?${showUpdated ? "view=updated&" : ""}page=${p}`} />
         </>
       )}
     </>
