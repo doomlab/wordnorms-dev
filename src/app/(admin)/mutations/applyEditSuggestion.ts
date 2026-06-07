@@ -5,7 +5,7 @@ import db from "db"
 export default resolver.pipe(
   resolver.zod(z.object({ suggestionId: z.number() })),
   resolver.authorize(["ADMIN", "SUPER_ADMIN"]),
-  async ({ suggestionId }) => {
+  async ({ suggestionId }, ctx) => {
     const suggestion = await db.extractionEditSuggestion.findUniqueOrThrow({
       where: { id: suggestionId },
     })
@@ -20,6 +20,8 @@ export default resolver.pipe(
           stimuliCount: suggestion.stimuliCount,
           normsCollected: suggestion.normsCollected,
           instructions: suggestion.instructions,
+          verifiedAt: new Date(),
+          verifiedById: ctx.session.userId,
         },
       }),
       db.extractionEditSuggestion.update({
