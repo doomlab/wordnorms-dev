@@ -197,7 +197,7 @@ export default async function DatasetsPage({
     cards = cards.filter((c) => selectedFlags.every((f) => c.flags.includes(f)))
   }
 
-  const hasFilters = q || selectedLanguages.length || selectedDecades.length || selectedFlags.length
+  const hasFilters = !!(q || selectedLanguages.length || selectedDecades.length || selectedFlags.length)
 
   const downloadParams = new URLSearchParams()
   if (q) downloadParams.set("q", q)
