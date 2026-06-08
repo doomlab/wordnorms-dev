@@ -293,52 +293,6 @@
       ]
     },
     {
-      "bibtex": "Li2024_R1",
-      "parentBibtex": "Li2024",
-      "citation": {
-        "author": "Bing Li, Ziyi Ding, Simon De Deyne, Qing Cai",
-        "year": 2024,
-        "title": "A large-scale database of Mandarin Chinese word associations from the Small World of Words Project",
-        "journal": "Behavior Research Methods",
-        "doi": "10.3758/s13428-024-02513-1"
-      },
-      "language": "chinese_simplified_cue, chinese_simplified_response",
-      "nRows": 202335,
-      "flags": [],
-      "wordColumns": [
-        "word_chinese_simplified_cue",
-        "word_chinese_simplified_response"
-      ],
-      "rawColumns": [
-        "word_chinese_simplified_cue",
-        "word_chinese_simplified_response",
-        "r1.strength"
-      ]
-    },
-    {
-      "bibtex": "Li2024_R123",
-      "parentBibtex": "Li2024",
-      "citation": {
-        "author": "Bing Li, Ziyi Ding, Simon De Deyne, Qing Cai",
-        "year": 2024,
-        "title": "A large-scale database of Mandarin Chinese word associations from the Small World of Words Project",
-        "journal": "Behavior Research Methods",
-        "doi": "10.3758/s13428-024-02513-1"
-      },
-      "language": "chinese_simplified_cue, chinese_simplified_response",
-      "nRows": 516639,
-      "flags": [],
-      "wordColumns": [
-        "word_chinese_simplified_cue",
-        "word_chinese_simplified_response"
-      ],
-      "rawColumns": [
-        "word_chinese_simplified_cue",
-        "word_chinese_simplified_response",
-        "r123.strength"
-      ]
-    },
-    {
       "bibtex": "Rami2022",
       "parentBibtex": null,
       "citation": {
@@ -489,56 +443,6 @@
         "clauses",
         "mean_token_per_clause",
         "syntactic_tree_depth"
-      ]
-    },
-    {
-      "bibtex": "Cabana2024_R1",
-      "parentBibtex": "Cabana2024",
-      "citation": {
-        "author": "Álvaro Cabana, Camila Zugarramurdi, Juan C. Valle-Lisboa, Simon De Deyne",
-        "year": 2023,
-        "title": "The \"Small World of Words\" free association norms for Rioplatense Spanish",
-        "journal": "Behavior Research Methods",
-        "doi": "10.3758/s13428-023-02070-z"
-      },
-      "language": "spanish_cue, spanish_response",
-      "nRows": 431933,
-      "flags": [],
-      "wordColumns": [
-        "word_spanish_cue",
-        "word_spanish_response"
-      ],
-      "rawColumns": [
-        "word_spanish_cue",
-        "word_spanish_response",
-        "r1",
-        "n",
-        "r1.strength"
-      ]
-    },
-    {
-      "bibtex": "Cabana2024_R123",
-      "parentBibtex": "Cabana2024",
-      "citation": {
-        "author": "Álvaro Cabana, Camila Zugarramurdi, Juan C. Valle-Lisboa, Simon De Deyne",
-        "year": 2023,
-        "title": "The \"Small World of Words\" free association norms for Rioplatense Spanish",
-        "journal": "Behavior Research Methods",
-        "doi": "10.3758/s13428-023-02070-z"
-      },
-      "language": "spanish_cue, spanish_response",
-      "nRows": 1059570,
-      "flags": [],
-      "wordColumns": [
-        "word_spanish_cue",
-        "word_spanish_response"
-      ],
-      "rawColumns": [
-        "word_spanish_cue",
-        "word_spanish_response",
-        "r123",
-        "n",
-        "r123.strength"
       ]
     },
     {
@@ -1406,56 +1310,6 @@
         "translate_word_english",
         "aoa_mean",
         "aoa_sd"
-      ]
-    },
-    {
-      "bibtex": "DeDeyne2019_R1",
-      "parentBibtex": "DeDeyne2019",
-      "citation": {
-        "author": "Simon De Deyne, Danielle J. Navarro, Amy Perfors, Marc Brysbaert, Gert Storms",
-        "year": 2019,
-        "title": "The “Small World of Words” English word association norms for over 12,000 cue words",
-        "journal": "Behavior Research Methods",
-        "doi": "10.3758/s13428-018-1115-7"
-      },
-      "language": "english_cue, english_response",
-      "nRows": 483636,
-      "flags": [],
-      "wordColumns": [
-        "word_english_cue",
-        "word_english_response"
-      ],
-      "rawColumns": [
-        "word_english_cue",
-        "word_english_response",
-        "r1",
-        "n",
-        "r1.strength"
-      ]
-    },
-    {
-      "bibtex": "DeDeyne2019_R123",
-      "parentBibtex": "DeDeyne2019",
-      "citation": {
-        "author": "Simon De Deyne, Danielle J. Navarro, Amy Perfors, Marc Brysbaert, Gert Storms",
-        "year": 2019,
-        "title": "The “Small World of Words” English word association norms for over 12,000 cue words",
-        "journal": "Behavior Research Methods",
-        "doi": "10.3758/s13428-018-1115-7"
-      },
-      "language": "english_cue, english_response",
-      "nRows": 1389711,
-      "flags": [],
-      "wordColumns": [
-        "word_english_cue",
-        "word_english_response"
-      ],
-      "rawColumns": [
-        "word_english_cue",
-        "word_english_response",
-        "r123",
-        "n",
-        "r123.strength"
       ]
     },
     {
@@ -7061,56 +6915,6 @@
         "log(lemmafreq)",
         "aoa_mean",
         "percent_known"
-      ]
-    },
-    {
-      "bibtex": "DeDeyne2008b_R1",
-      "parentBibtex": "DeDeyne2008b",
-      "citation": {
-        "author": "Simon De Deyne, Gert Storms",
-        "year": 2008,
-        "title": "Word associations: Norms for 1,424 Dutch words in a continuous task",
-        "journal": "Behavior Research Methods",
-        "doi": "10.3758/brm.40.1.198"
-      },
-      "language": "dutch_cue, dutch_response",
-      "nRows": 480862,
-      "flags": [],
-      "wordColumns": [
-        "word_dutch_cue",
-        "word_dutch_response"
-      ],
-      "rawColumns": [
-        "word_dutch_cue",
-        "word_dutch_response",
-        "r1",
-        "n",
-        "r1.strength"
-      ]
-    },
-    {
-      "bibtex": "DeDeyne2008b_R123",
-      "parentBibtex": "DeDeyne2008b",
-      "citation": {
-        "author": "Simon De Deyne, Gert Storms",
-        "year": 2008,
-        "title": "Word associations: Norms for 1,424 Dutch words in a continuous task",
-        "journal": "Behavior Research Methods",
-        "doi": "10.3758/brm.40.1.198"
-      },
-      "language": "dutch_cue, dutch_response",
-      "nRows": 1485378,
-      "flags": [],
-      "wordColumns": [
-        "word_dutch_cue",
-        "word_dutch_response"
-      ],
-      "rawColumns": [
-        "word_dutch_cue",
-        "word_dutch_response",
-        "r123",
-        "n",
-        "r123.strength"
       ]
     },
     {

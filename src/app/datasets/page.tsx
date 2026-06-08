@@ -151,16 +151,19 @@ export default async function DatasetsPage({
     )
   }
 
+  // Exclude R1/R123 sub-variants (response-level splits of the same study)
+  const baseCards = data.cards.filter((c) => !/_R1(23)?$/.test(c.bibtex))
+
   // Compute sidebar options from full card list
   const allLanguages = Array.from(
-    new Set(data.cards.flatMap((c) => (c.language ? extractBaseLanguages(c.language) : [])))
+    new Set(baseCards.flatMap((c) => (c.language ? extractBaseLanguages(c.language) : [])))
   ).sort()
 
-  const allFlagKeys = Array.from(new Set(data.cards.flatMap((c) => c.flags))).sort()
+  const allFlagKeys = Array.from(new Set(baseCards.flatMap((c) => c.flags))).sort()
   const allFlags = allFlagKeys.map((k) => ({ key: k, label: FLAG_LABELS[k] ?? k }))
 
   // Filter cards
-  let cards = data.cards
+  let cards = baseCards
 
   if (q) {
     cards = cards.filter(

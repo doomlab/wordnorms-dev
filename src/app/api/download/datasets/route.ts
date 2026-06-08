@@ -94,7 +94,8 @@ export async function GET(request: NextRequest) {
     return new NextResponse("Dataset index not found", { status: 404 })
   }
 
-  const { cards: allCards } = JSON.parse(fs.readFileSync(p, "utf8")) as { cards: Card[] }
+  const { cards: rawCards } = JSON.parse(fs.readFileSync(p, "utf8")) as { cards: Card[] }
+  const allCards = rawCards.filter((c) => !/_R1(23)?$/.test(c.bibtex))
 
   let cards = allCards
 

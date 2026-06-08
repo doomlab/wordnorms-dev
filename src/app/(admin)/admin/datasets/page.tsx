@@ -21,7 +21,7 @@ function loadCards(): Card[] {
 const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
 
 export default async function AdminDatasetsPage() {
-  const cards = loadCards()
+  const cards = loadCards().filter((c) => !/_R1(23)?$/.test(c.bibtex))
 
   // Build lookup sets for fast matching
   const dois = cards.map((c) => c.citation.doi).filter(Boolean) as string[]
