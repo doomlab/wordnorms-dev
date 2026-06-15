@@ -146,7 +146,7 @@ export default async function AdminMetadataPage({
                     <td>
                       <a
                         href={`/admin/metadata/${p.id}${showUpdated ? "?from=updated" : showSuggested ? "?from=suggested" : ""}`}
-                        className="btn btn-outline btn-xs"
+                        className={`btn btn-sm ${showSuggested ? "btn-primary" : "btn-outline"}`}
                       >
                         {showSuggested ? "Review suggestion" : "Review"}
                       </a>
