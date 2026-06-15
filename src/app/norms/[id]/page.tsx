@@ -224,7 +224,7 @@ export default async function NormDetailPage({
 
         <div className="flex items-start justify-between gap-4 mb-6">
           <div>
-            <h1 className="text-2xl font-bold leading-snug mb-1">{capFirst(paper.title)}</h1>
+            <h1 className="text-3xl font-bold leading-snug mb-1">{capFirst(paper.title)}</h1>
 
           </div>
           <div className="flex items-center gap-2 shrink-0 pt-1">
@@ -281,12 +281,12 @@ export default async function NormDetailPage({
           </div>
         )}
 
-        <div className="divide-y divide-base-200 text-sm">
+        <div className="divide-y divide-base-200 text-base">
           {/* Paper metadata */}
           <Section title="Publication">
             {paper.authors.length > 0 && (
               <div className="flex gap-3 py-1.5">
-                <span className="w-36 shrink-0 font-medium text-base-content/70">Authors</span>
+                <span className="w-40 shrink-0 font-medium text-base-content/70">Authors</span>
                 <span className="text-base-content/80 flex flex-wrap gap-x-3 gap-y-0.5">
                   {(() => {
                     const meta = Array.isArray(paper.authorMeta)
@@ -333,7 +333,7 @@ export default async function NormDetailPage({
             <Row label="Journal" value={paper.journal ?? undefined} italic />
             {paper.doi && (
               <div className="flex gap-3 py-1.5">
-                <span className="w-36 shrink-0 font-medium text-base-content/70">DOI</span>
+                <span className="w-40 shrink-0 font-medium text-base-content/70">DOI</span>
                 <a
                   href={`https://doi.org/${paper.doi}`}
                   target="_blank"
@@ -388,16 +388,16 @@ export default async function NormDetailPage({
                 <Row label="Participant count" value={displayExt.participantCount != null ? displayExt.participantCount.toLocaleString() : undefined} />
                 {displayExt.participantLevelData && (
                   <div className="flex gap-3 py-1.5">
-                    <span className="w-36 shrink-0 font-medium text-base-content/70">Participant data</span>
+                    <span className="w-40 shrink-0 font-medium text-base-content/70">Participant data</span>
                     <span className="text-base-content/80">Raw data available</span>
                   </div>
                 )}
                 {Array.isArray(displayExt.reliabilities) && (displayExt.reliabilities as { norm: string; value: number | null; metric: string | null }[]).length > 0 && (
                   <div className="flex gap-3 py-1.5">
-                    <span className="w-36 shrink-0 font-medium text-base-content/70">Reliabilities</span>
+                    <span className="w-40 shrink-0 font-medium text-base-content/70">Reliabilities</span>
                     <div className="space-y-0.5">
                       {(displayExt.reliabilities as { norm: string; value: number | null; metric: string | null }[]).map((r, i) => (
-                        <div key={i} className="text-base-content/80 text-sm">
+                        <div key={i} className="text-base-content/80">
                           {r.norm}
                           {r.value != null && <span> — {r.value}</span>}
                           {r.metric && <span className="text-base-content/40"> ({r.metric.replace(/_/g, " ")})</span>}
@@ -408,7 +408,7 @@ export default async function NormDetailPage({
                 )}
                 {displayExt.dataSource && (
                   <div className="flex gap-3 py-1.5">
-                    <span className="w-36 shrink-0 font-medium text-base-content/70">Data source</span>
+                    <span className="w-40 shrink-0 font-medium text-base-content/70">Data source</span>
                     <span className="text-base-content/80">
                       {displayExt.dataSource === "ai" ? "AI generated" : "Human collected"}
                     </span>
@@ -416,7 +416,7 @@ export default async function NormDetailPage({
                 )}
                 {displayExt.licenseUrl && (
                   <div className="flex gap-3 py-1.5">
-                    <span className="w-36 shrink-0 font-medium text-base-content/70">License</span>
+                    <span className="w-40 shrink-0 font-medium text-base-content/70">License</span>
                     <a
                       href={displayExt.licenseUrl}
                       target="_blank"
@@ -429,7 +429,7 @@ export default async function NormDetailPage({
                 )}
                 {displayExt.instructions && (
                   <div className="flex gap-3 py-1.5">
-                    <span className="w-36 shrink-0 font-medium text-base-content/70">Instructions</span>
+                    <span className="w-40 shrink-0 font-medium text-base-content/70">Instructions</span>
                     <p className="text-base-content/80 leading-relaxed">{displayExt.instructions}</p>
                   </div>
                 )}
@@ -523,7 +523,7 @@ function HistoryEvent({
     day: "numeric",
   })
   return (
-    <div className="flex items-baseline gap-2 text-xs text-base-content/40">
+    <div className="flex items-baseline gap-2 text-sm text-base-content/40">
       <span className="shrink-0">·</span>
       <span>{label}</span>
       <span className="shrink-0">{formatted}</span>
@@ -536,7 +536,7 @@ function HistoryEvent({
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div className="py-6">
-      <h2 className="text-xs font-semibold uppercase tracking-wider text-base-content/40 mb-3">
+      <h2 className="text-sm font-semibold uppercase tracking-wider text-base-content/40 mb-3">
         {title}
       </h2>
       <div className="space-y-0.5">{children}</div>
@@ -556,7 +556,7 @@ function Row({
   if (!value) return null
   return (
     <div className="flex gap-3 py-1.5">
-      <span className="w-36 shrink-0 font-medium text-base-content/70">{label}</span>
+      <span className="w-40 shrink-0 font-medium text-base-content/70">{label}</span>
       <span className={`text-base-content/80 ${italic ? "italic" : ""}`}>{value}</span>
     </div>
   )

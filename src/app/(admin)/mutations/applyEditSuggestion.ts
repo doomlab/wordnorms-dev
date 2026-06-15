@@ -20,6 +20,8 @@ export default resolver.pipe(
           stimuliCount: suggestion.stimuliCount,
           normsCollected: suggestion.normsCollected,
           instructions: suggestion.instructions,
+          ...(suggestion.licenseUrl !== null ? { licenseUrl: suggestion.licenseUrl } : {}),
+          ...(suggestion.dataSource !== null ? { dataSource: suggestion.dataSource } : {}),
           verifiedAt: new Date(),
           verifiedById: ctx.session.userId,
         },

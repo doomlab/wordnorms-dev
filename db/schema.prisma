@@ -192,6 +192,8 @@ model ExtractionEditSuggestion {
   normsCollected       String[]
   instructions         String?
   url                  String?
+  licenseUrl           String?
+  dataSource           String?
   participantLevelData Boolean?
   reliabilities        Json?
   note                 String?

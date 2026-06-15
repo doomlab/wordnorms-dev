@@ -16,6 +16,8 @@ type Ext = {
   instructions: string | null
   participantLevelData: boolean
   reliabilities: Prisma.JsonValue | null
+  licenseUrl?: string | null
+  dataSource?: string | null
   sourceSnippets?: Record<string, string> | null
   paperText?: string | null
 }
@@ -63,13 +65,13 @@ function FieldBlock({
   return (
     <div className="rounded-lg border border-base-200 overflow-hidden">
       <div className="px-4 py-2 bg-base-200/50 border-b border-base-200">
-        <span className="text-sm font-semibold">{label}</span>
-        {hint && <span className="text-xs font-normal text-base-content/50 ml-1">({hint})</span>}
+        <span className="text-base font-semibold">{label}</span>
+        {hint && <span className="text-sm font-normal text-base-content/50 ml-1">({hint})</span>}
       </div>
 
       {/* Model rows */}
       <div className="px-4 py-3 border-b border-base-200/60 bg-base-200/20">
-        <div className="grid grid-cols-[130px_1fr] gap-x-3 gap-y-1.5 text-sm">
+        <div className="grid grid-cols-[150px_1fr] gap-x-3 gap-y-1.5 text-base">
           <span className="text-base-content/40 font-medium">Model answer</span>
           <span className="text-base-content/70">
             {modelAnswer || <span className="italic text-base-content/30">—</span>}
@@ -96,25 +98,25 @@ function FieldBlock({
       {/* Human rows */}
       <div className="px-4 py-3 flex flex-col gap-3">
         <div>
-          <label className="text-sm font-medium text-base-content/50 mb-1.5 block">Your answer</label>
+          <label className="text-base font-medium text-base-content/50 mb-1.5 block">Your answer</label>
           {children}
         </div>
         <div>
           <div className="flex items-center justify-between mb-1.5">
-            <label className="text-sm font-medium text-base-content/50">Your evidence</label>
+            <label className="text-base font-medium text-base-content/50">Your evidence</label>
             <label className="flex items-center gap-1.5 cursor-pointer select-none">
               <input type="checkbox" className="checkbox checkbox-xs" checked={noEvidence} onChange={toggleNoEvidence} />
-              <span className="text-xs text-base-content/40">No evidence</span>
+              <span className="text-sm text-base-content/40">No evidence</span>
             </label>
           </div>
           {noEvidence ? (
-            <div className="rounded border border-dashed border-base-300 px-3 py-2 text-sm text-base-content/30 italic">
+            <div className="rounded border border-dashed border-base-300 px-3 py-2 text-base text-base-content/30 italic">
               Marked as not in paper — answer based on supplement or prior knowledge
             </div>
           ) : (
             <>
               <textarea
-                className="textarea textarea-bordered w-full text-sm leading-relaxed"
+                className="textarea textarea-bordered w-full text-base leading-relaxed"
                 rows={2}
                 value={capturedSnippets[fieldKey] ?? ""}
                 onChange={(e) => setCapturedSnippets((prev) => ({ ...prev, [fieldKey]: e.target.value }))}
@@ -122,7 +124,7 @@ function FieldBlock({
               />
               <button type="button"
                 onClick={() => setActiveSnippetField(isActive ? null : fieldKey)}
-                className={`mt-1 text-sm ${isActive ? "text-primary font-medium" : "text-base-content/40 hover:text-base-content"}`}>
+                className={`mt-1 text-base ${isActive ? "text-primary font-medium" : "text-base-content/40 hover:text-base-content"}`}>
                 {isActive ? "→ Select text in the paper panel to the right" : "Select from paper text →"}
               </button>
             </>
@@ -166,6 +168,8 @@ export function SuggestExtractionEditsPage({
   )
   const [noEvidenceFields, setNoEvidenceFields] = useState<Set<string>>(new Set())
   const [url, setUrl] = useState("")
+  const [licenseUrl, setLicenseUrl] = useState(ext.licenseUrl ?? "")
+  const [dataSource, setDataSource] = useState(ext.dataSource ?? "")
   const [note, setNote] = useState("")
 
   const snippets = ext.sourceSnippets ?? {}
@@ -209,6 +213,8 @@ export function SuggestExtractionEditsPage({
           ? reliabilities.map((r) => ({ norm: r.norm, value: r.value !== "" ? parseFloat(r.value) : null, metric: r.metric }))
           : null,
         url: url.trim() || null,
+        licenseUrl: licenseUrl.trim() || null,
+        dataSource: dataSource.trim() || null,
         note: note.trim() || undefined,
         sourceEvidence: (() => {
           const evidence = Object.fromEntries(
@@ -245,9 +251,9 @@ export function SuggestExtractionEditsPage({
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
 
         {/* Instructions banner */}
-        <div className="rounded-lg bg-info/10 border border-info/20 px-4 py-3 text-sm text-base-content/70 flex flex-col gap-1">
+        <div className="rounded-lg bg-info/10 border border-info/20 px-4 py-3 text-base text-base-content/70 flex flex-col gap-1">
           <p className="font-semibold text-base-content/90">How to use this page</p>
-          <ul className="list-disc list-inside text-sm gap-1 flex flex-col">
+          <ul className="list-disc list-inside text-base gap-1 flex flex-col">
             <li>Each field shows the model&apos;s answer and the sentence it used as evidence.</li>
             <li>Edit <strong>Your answer</strong> if the model got it wrong.</li>
             <li>Edit or replace <strong>Your evidence</strong> — paste the correct sentence, or click &ldquo;Select from paper text&rdquo; and highlight text in the panel on the right.</li>
@@ -299,50 +305,50 @@ export function SuggestExtractionEditsPage({
         <FieldBlock label="Instructions"
           modelAnswer={modelAnswers.instructions ?? ""} modelSnippet={snippets.instructions}
           fieldKey="instructions" {...fieldProps}>
-          <textarea className="textarea textarea-bordered w-full text-sm" rows={3} value={instructions}
+          <textarea className="textarea textarea-bordered w-full text-base" rows={3} value={instructions}
             onChange={(e) => setInstructions(e.target.value)} />
         </FieldBlock>
 
         {/* Participant-level data — no evidence field */}
         <div className="rounded-lg border border-base-200 overflow-hidden">
           <div className="px-4 py-2 bg-base-200/50 border-b border-base-200">
-            <span className="text-sm font-semibold">Participant-level data available</span>
+            <span className="text-base font-semibold">Participant-level data available</span>
           </div>
-          <div className="px-4 py-3 border-b border-base-200/60 bg-base-200/20 text-sm">
-            <div className="grid grid-cols-[130px_1fr] gap-x-3">
+          <div className="px-4 py-3 border-b border-base-200/60 bg-base-200/20 text-base">
+            <div className="grid grid-cols-[150px_1fr] gap-x-3">
               <span className="text-base-content/40 font-medium">Model answer</span>
               <span className="text-base-content/70">{modelAnswers.participantLevelData ? "Yes" : "No"}</span>
             </div>
           </div>
           <div className="px-4 py-3 flex flex-col gap-3">
             <div>
-              <label className="text-sm font-medium text-base-content/50 mb-2 block">Your answer</label>
+              <label className="text-base font-medium text-base-content/50 mb-2 block">Your answer</label>
               <label className="flex items-center gap-3 cursor-pointer">
                 <input type="checkbox" className="toggle toggle-primary toggle-sm" checked={participantLevelData}
                   onChange={(e) => setParticipantLevelData(e.target.checked)} />
-                <span className={`text-sm font-medium ${participantLevelData ? "text-primary" : "text-base-content/40"}`}>
+                <span className={`text-base font-medium ${participantLevelData ? "text-primary" : "text-base-content/40"}`}>
                   {participantLevelData ? "Yes" : "No"}
                 </span>
               </label>
             </div>
             <div>
               <div className="flex items-center justify-between mb-1.5">
-                <label className="text-sm font-medium text-base-content/50">Your evidence</label>
+                <label className="text-base font-medium text-base-content/50">Your evidence</label>
                 <label className="flex items-center gap-1.5 cursor-pointer select-none">
                   <input type="checkbox" className="checkbox checkbox-xs"
                     checked={noEvidenceFields.has("participantLevelData")}
                     onChange={() => setNoEvidenceFields((prev) => { const n = new Set(prev); n.has("participantLevelData") ? n.delete("participantLevelData") : n.add("participantLevelData"); return n })} />
-                  <span className="text-xs text-base-content/40">No evidence</span>
+                  <span className="text-sm text-base-content/40">No evidence</span>
                 </label>
               </div>
               {noEvidenceFields.has("participantLevelData") ? (
-                <div className="rounded border border-dashed border-base-300 px-3 py-2 text-sm text-base-content/30 italic">
+                <div className="rounded border border-dashed border-base-300 px-3 py-2 text-base text-base-content/30 italic">
                   Marked as not in paper — answer based on supplement or prior knowledge
                 </div>
               ) : (
                 <>
                   <textarea
-                    className="textarea textarea-bordered w-full text-sm leading-relaxed"
+                    className="textarea textarea-bordered w-full text-base leading-relaxed"
                     rows={2}
                     value={capturedSnippets["participantLevelData"] ?? ""}
                     onChange={(e) => setCapturedSnippets((prev) => ({ ...prev, participantLevelData: e.target.value }))}
@@ -362,10 +368,10 @@ export function SuggestExtractionEditsPage({
         {/* Reliabilities — no per-field evidence */}
         <div className="rounded-lg border border-base-200 overflow-hidden">
           <div className="px-4 py-2 bg-base-200/50 border-b border-base-200">
-            <span className="text-sm font-semibold">Reliabilities</span>
+            <span className="text-base font-semibold">Reliabilities</span>
           </div>
-          <div className="px-4 py-3 border-b border-base-200/60 bg-base-200/20 text-sm">
-            <div className="grid grid-cols-[130px_1fr] gap-x-3 gap-y-1.5">
+          <div className="px-4 py-3 border-b border-base-200/60 bg-base-200/20 text-base">
+            <div className="grid grid-cols-[150px_1fr] gap-x-3 gap-y-1.5">
               <span className="text-base-content/40 font-medium">Model answer</span>
               <span className="text-base-content/70 italic">
                 {Array.isArray(ext.reliabilities) && ext.reliabilities.length > 0
@@ -378,7 +384,7 @@ export function SuggestExtractionEditsPage({
             </div>
           </div>
           <div className="px-4 py-3 flex flex-col gap-2">
-            <label className="text-sm font-medium text-base-content/50">Your answer</label>
+            <label className="text-base font-medium text-base-content/50">Your answer</label>
             {reliabilities.length > 0 && (
               <div className="flex flex-col gap-1.5">
                 {reliabilities.map((r, i) => (
@@ -401,22 +407,22 @@ export function SuggestExtractionEditsPage({
             </button>
             <div className="mt-2 pt-2 border-t border-base-200">
               <div className="flex items-center justify-between mb-1.5">
-                <label className="text-sm font-medium text-base-content/50">Your evidence</label>
+                <label className="text-base font-medium text-base-content/50">Your evidence</label>
                 <label className="flex items-center gap-1.5 cursor-pointer select-none">
                   <input type="checkbox" className="checkbox checkbox-xs"
                     checked={noEvidenceFields.has("reliabilities")}
                     onChange={() => setNoEvidenceFields((prev) => { const n = new Set(prev); n.has("reliabilities") ? n.delete("reliabilities") : n.add("reliabilities"); return n })} />
-                  <span className="text-xs text-base-content/40">No evidence</span>
+                  <span className="text-sm text-base-content/40">No evidence</span>
                 </label>
               </div>
               {noEvidenceFields.has("reliabilities") ? (
-                <div className="rounded border border-dashed border-base-300 px-3 py-2 text-sm text-base-content/30 italic">
+                <div className="rounded border border-dashed border-base-300 px-3 py-2 text-base text-base-content/30 italic">
                   Marked as not in paper — answer based on supplement or prior knowledge
                 </div>
               ) : (
                 <>
                   <textarea
-                    className="textarea textarea-bordered w-full text-sm leading-relaxed"
+                    className="textarea textarea-bordered w-full text-base leading-relaxed"
                     rows={2}
                     value={capturedSnippets["reliabilities"] ?? ""}
                     onChange={(e) => setCapturedSnippets((prev) => ({ ...prev, reliabilities: e.target.value }))}
@@ -436,13 +442,23 @@ export function SuggestExtractionEditsPage({
         {/* URL + Note */}
         <div className="rounded-lg border border-base-200 p-4 flex flex-col gap-3">
           <div>
-            <label className="text-xs font-medium text-base-content/50 mb-1.5 block">Website URL <span className="font-normal">(optional)</span></label>
+            <label className="text-sm font-medium text-base-content/50 mb-1.5 block">Website URL <span className="font-normal">(optional)</span></label>
             <input type="url" className="input input-bordered input-sm w-full" value={url}
               onChange={(e) => setUrl(e.target.value)} placeholder="https://…" />
           </div>
           <div>
-            <label className="text-xs font-medium text-base-content/50 mb-1.5 block">Note <span className="font-normal">(optional — explain your changes)</span></label>
-            <textarea className="textarea textarea-bordered w-full text-sm" rows={2} value={note}
+            <label className="text-sm font-medium text-base-content/50 mb-1.5 block">License URL <span className="font-normal">(optional — link to data license or terms of use)</span></label>
+            <input type="url" className="input input-bordered input-sm w-full" value={licenseUrl}
+              onChange={(e) => setLicenseUrl(e.target.value)} placeholder="https://…" />
+          </div>
+          <div>
+            <label className="text-sm font-medium text-base-content/50 mb-1.5 block">Data source URL <span className="font-normal">(optional — link to where the data can be downloaded)</span></label>
+            <input type="url" className="input input-bordered input-sm w-full" value={dataSource}
+              onChange={(e) => setDataSource(e.target.value)} placeholder="https://…" />
+          </div>
+          <div>
+            <label className="text-sm font-medium text-base-content/50 mb-1.5 block">Note <span className="font-normal">(optional — explain your changes)</span></label>
+            <textarea className="textarea textarea-bordered w-full text-base" rows={2} value={note}
               onChange={(e) => setNote(e.target.value)} maxLength={1000}
               placeholder="Any context that would help the reviewer…" />
           </div>
@@ -460,13 +476,13 @@ export function SuggestExtractionEditsPage({
       <div className="lg:sticky lg:top-6">
         <div className="rounded-xl border border-base-200 overflow-hidden">
           <div className="px-4 py-3 border-b border-base-200 bg-base-200/40">
-            <p className="text-xs font-semibold uppercase tracking-wider text-base-content/50">Paper text</p>
+            <p className="text-sm font-semibold uppercase tracking-wider text-base-content/50">Paper text</p>
             {activeSnippetField ? (
-              <p className="text-xs text-primary mt-0.5">
+              <p className="text-sm text-primary mt-0.5">
                 Capturing evidence for: <strong>{activeSnippetField}</strong> — highlight text below, then release
               </p>
             ) : (
-              <p className="text-xs text-base-content/40 mt-0.5">Click &ldquo;Select from paper text&rdquo; on a field, then highlight a sentence here</p>
+              <p className="text-sm text-base-content/40 mt-0.5">Click &ldquo;Select from paper text&rdquo; on a field, then highlight a sentence here</p>
             )}
           </div>
           {ext.paperText ? (

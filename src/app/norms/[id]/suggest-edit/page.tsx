@@ -63,6 +63,8 @@ export default async function SuggestEditPage({ params }: { params: Promise<{ id
             instructions: ext.instructions,
             participantLevelData: ext.participantLevelData,
             reliabilities: ext.reliabilities,
+            licenseUrl: ext.licenseUrl,
+            dataSource: ext.dataSource,
             sourceSnippets: ext.sourceSnippets as Record<string, string> | null,
             paperText: ext.paperText,
           }}

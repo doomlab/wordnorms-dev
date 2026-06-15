@@ -35,10 +35,10 @@ export function CollapsibleSection({
           onClick={() => setOpen(!open)}
           className="flex items-center gap-3 group"
         >
-          <h2 className="text-xs font-semibold uppercase tracking-wider text-base-content/40">
+          <h2 className="text-sm font-semibold uppercase tracking-wider text-base-content/40">
             {title}
           </h2>
-          {subtitle && <span className="text-xs text-base-content/30">{subtitle}</span>}
+          {subtitle && <span className="text-sm text-base-content/30">{subtitle}</span>}
           <Chevron open={open} />
         </button>
         {headerRight}

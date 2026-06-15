@@ -30,8 +30,8 @@ export default async function ProgressPage() {
       <TrainingBanner />
 
       <div className="max-w-3xl mx-auto w-full px-6 py-12">
-        <h1 className="text-3xl font-bold mb-2">Training Dataset Progress</h1>
-        <p className="text-base-content/60 mb-10 text-sm">
+        <h1 className="text-4xl font-bold mb-3">Training Dataset Progress</h1>
+        <p className="text-base-content/60 mb-10 text-base">
           We&apos;re building a verified dataset to train a model that automatically extracts word
           norm metadata from papers. Every verification you submit helps improve the model.
         </p>
@@ -40,20 +40,20 @@ export default async function ProgressPage() {
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
           <div className="card bg-base-200 shadow-sm">
             <div className="card-body py-6 px-6">
-              <p className="text-4xl font-bold tabular-nums">{users.toLocaleString()}</p>
-              <p className="text-sm text-base-content/60 mt-1">Contributors</p>
+              <p className="text-5xl font-bold tabular-nums">{users.toLocaleString()}</p>
+              <p className="text-base text-base-content/60 mt-1">Contributors</p>
             </div>
           </div>
           <div className="card bg-base-200 shadow-sm">
             <div className="card-body py-6 px-6">
-              <p className="text-4xl font-bold tabular-nums">{totalPapers.toLocaleString()}</p>
-              <p className="text-sm text-base-content/60 mt-1">Papers in dataset</p>
+              <p className="text-5xl font-bold tabular-nums">{totalPapers.toLocaleString()}</p>
+              <p className="text-base text-base-content/60 mt-1">Papers in dataset</p>
             </div>
           </div>
           <div className="card bg-base-200 shadow-sm">
             <div className="card-body py-6 px-6">
-              <p className="text-4xl font-bold tabular-nums">{withExtraction.toLocaleString()}</p>
-              <p className="text-sm text-base-content/60 mt-1">Papers with extracted metadata</p>
+              <p className="text-5xl font-bold tabular-nums">{withExtraction.toLocaleString()}</p>
+              <p className="text-base text-base-content/60 mt-1">Papers with extracted metadata</p>
             </div>
           </div>
         </div>
@@ -62,8 +62,8 @@ export default async function ProgressPage() {
         <div className="card bg-base-200 shadow-sm mb-6">
           <div className="card-body px-6 py-6">
             <div className="flex items-baseline justify-between mb-1">
-              <h2 className="font-semibold text-base">Verified extractions</h2>
-              <span className="text-sm text-base-content/60 tabular-nums">
+              <h2 className="font-semibold text-lg">Verified extractions</h2>
+              <span className="text-base text-base-content/60 tabular-nums">
                 {verified.toLocaleString()} / {GOAL.toLocaleString()} goal
               </span>
             </div>
@@ -73,13 +73,13 @@ export default async function ProgressPage() {
                 style={{ width: `${goalPct}%` }}
               />
             </div>
-            <p className="text-xs text-base-content/50">{goalPct}% of first milestone</p>
+            <p className="text-sm text-base-content/50">{goalPct}% of first milestone</p>
 
             {verified >= GOAL && (
               <>
                 <div className="flex items-baseline justify-between mb-1 mt-5">
-                  <h2 className="font-semibold text-base">Stretch goal</h2>
-                  <span className="text-sm text-base-content/60 tabular-nums">
+                  <h2 className="font-semibold text-lg">Stretch goal</h2>
+                  <span className="text-base text-base-content/60 tabular-nums">
                     {verified.toLocaleString()} / {STRETCH_GOAL.toLocaleString()}
                   </span>
                 </div>
@@ -89,7 +89,7 @@ export default async function ProgressPage() {
                     style={{ width: `${stretchPct}%` }}
                   />
                 </div>
-                <p className="text-xs text-base-content/50">{stretchPct}% of stretch goal</p>
+                <p className="text-sm text-base-content/50">{stretchPct}% of stretch goal</p>
               </>
             )}
           </div>
@@ -98,8 +98,8 @@ export default async function ProgressPage() {
         {/* Why 500? */}
         <div className="card bg-base-200 shadow-sm mb-10">
           <div className="card-body px-6 py-5">
-            <h2 className="font-semibold text-base mb-2">Why 500 verifications?</h2>
-            <p className="text-sm text-base-content/70">
+            <h2 className="font-semibold text-lg mb-2">Why 500 verifications?</h2>
+            <p className="text-base text-base-content/70">
               500 human-verified extractions gives us enough labeled examples to train a supervised
               model that can reliably predict a paper&apos;s language, stimuli type, norms
               collected, and participant details directly from its title and abstract. Reaching 1,000
@@ -112,7 +112,7 @@ export default async function ProgressPage() {
         {/* Last model run */}
         {lastRun && (
           <div className="mb-10">
-            <h2 className="font-semibold text-base mb-3">Latest model run</h2>
+            <h2 className="font-semibold text-lg mb-3">Latest model run</h2>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               {[
                 { label: "Training samples", value: lastRun.trainSize.toLocaleString() },
@@ -122,24 +122,78 @@ export default async function ProgressPage() {
               ].map((s) => (
                 <div key={s.label} className="card bg-base-200 shadow-sm">
                   <div className="card-body py-4 px-5">
-                    <p className="text-2xl font-bold tabular-nums">{s.value}</p>
-                    <p className="text-xs text-base-content/60 mt-0.5">{s.label}</p>
+                    <p className="text-3xl font-bold tabular-nums">{s.value}</p>
+                    <p className="text-sm text-base-content/60 mt-0.5">{s.label}</p>
                   </div>
                 </div>
               ))}
             </div>
             {lastRun.notes && (
-              <p className="text-xs text-base-content/50 mt-2">{lastRun.notes}</p>
+              <p className="text-sm text-base-content/50 mt-2">{lastRun.notes}</p>
             )}
           </div>
         )}
+
+        {/* Dataset downloads */}
+        <div className="mb-10">
+          <h2 className="font-semibold text-lg mb-1">Download training data</h2>
+          <p className="text-base text-base-content/60 mb-4">
+            These datasets are suitable for training and evaluating models. Each download includes a
+            companion codebook describing all columns.
+          </p>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="card bg-base-200 shadow-sm">
+              <div className="card-body px-5 py-5">
+                <h3 className="font-semibold text-base mb-1">Inclusion labels</h3>
+                <p className="text-sm text-base-content/60 mb-4">
+                  Title, abstract, authors, and DOI for every reviewed paper, labeled
+                  &ldquo;included&rdquo; or &ldquo;excluded&rdquo;. Useful for training a
+                  relevance classifier.
+                </p>
+                <div className="flex gap-2">
+                  <a href="/api/download/training/inclusion" className="btn btn-primary btn-sm">
+                    Download CSV
+                  </a>
+                  <a
+                    href="/api/download/training/codebook-inclusion"
+                    className="btn btn-secondary btn-sm"
+                  >
+                    Codebook
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <div className="card bg-base-200 shadow-sm">
+              <div className="card-body px-5 py-5">
+                <h3 className="font-semibold text-base mb-1">Validated extractions</h3>
+                <p className="text-sm text-base-content/60 mb-4">
+                  All included papers with full metadata and extracted study information—AI
+                  extraction alongside any human-verified corrections.
+                </p>
+                <div className="flex gap-2">
+                  <a href="/api/download/training/validation" className="btn btn-primary btn-sm">
+                    Download CSV
+                  </a>
+                  <a
+                    href="/api/download/training/codebook-validation"
+                    className="btn btn-secondary btn-sm"
+                  >
+                    Codebook
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
         {/* CTA */}
         <div className="flex gap-3">
           <a href="/login" className="btn btn-primary btn-sm">
             Log in to verify papers
           </a>
-          <a href="/" className="btn btn-outline btn-sm">
+          <a href="/" className="btn btn-secondary btn-sm">
             Browse the database
           </a>
         </div>

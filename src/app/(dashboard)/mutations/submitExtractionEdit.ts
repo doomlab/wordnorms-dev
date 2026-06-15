@@ -13,6 +13,8 @@ const SubmitExtractionEdit = z.object({
   normsCollected: z.array(z.string()),
   instructions: z.string().nullable(),
   url: z.string().nullable(),
+  licenseUrl: z.string().nullable().optional(),
+  dataSource: z.string().nullable().optional(),
   participantLevelData: z.boolean().nullable().optional(),
   reliabilities: z.array(z.any()).nullable().optional(),
   note: z.string().max(1000).optional(),
