@@ -21,7 +21,8 @@ export default async function AdminMetadataPage({
 
   const suggestedWhere = {
     ...baseWhere,
-    extractionEdits: { some: { resolved: false } },
+    extractionEdits: { some: {} },
+    extraction: { is: { verifiedAt: null } },
   }
 
   const where = showSuggested
@@ -42,7 +43,6 @@ export default async function AdminMetadataPage({
         doi: true,
         extraction: { select: { normsCollected: true, confidence: true, verifiedAt: true } },
         extractionEdits: {
-          where: { resolved: false },
           select: { id: true },
           take: 1,
         },
