@@ -13,16 +13,25 @@ export default async function AdminMetadataPage({
 }) {
   const { page: pageParam, view } = await searchParams
   const showUpdated = view === "updated"
+  const showSuggested = view === "suggested"
   const page = Math.max(1, parseInt(pageParam ?? "1", 10) || 1)
   const skip = (page - 1) * PAGE_SIZE
 
   const baseWhere = { status: "ACCEPTED" as const, canonicalPaperId: null }
-  const where = {
+
+  const suggestedWhere = {
     ...baseWhere,
-    extraction: { is: showUpdated ? { verifiedAt: { not: null } } : { verifiedAt: null } },
+    extractionEdits: { some: { resolved: false } },
   }
 
-  const [papers, total, pendingCount, updatedCount] = await Promise.all([
+  const where = showSuggested
+    ? suggestedWhere
+    : {
+        ...baseWhere,
+        extraction: { is: showUpdated ? { verifiedAt: { not: null } } : { verifiedAt: null } },
+      }
+
+  const [papers, total, pendingCount, updatedCount, suggestedCount] = await Promise.all([
     db.paper.findMany({
       where,
       select: {
@@ -32,6 +41,11 @@ export default async function AdminMetadataPage({
         year: true,
         doi: true,
         extraction: { select: { normsCollected: true, confidence: true, verifiedAt: true } },
+        extractionEdits: {
+          where: { resolved: false },
+          select: { id: true },
+          take: 1,
+        },
       },
       orderBy: { updatedAt: "desc" },
       skip,
@@ -40,6 +54,7 @@ export default async function AdminMetadataPage({
     db.paper.count({ where }),
     db.paper.count({ where: { ...baseWhere, extraction: { is: { verifiedAt: null } } } }),
     db.paper.count({ where: { ...baseWhere, extraction: { is: { verifiedAt: { not: null } } } } }),
+    db.paper.count({ where: suggestedWhere }),
   ])
 
   const totalPages = Math.ceil(total / PAGE_SIZE)
@@ -55,16 +70,23 @@ export default async function AdminMetadataPage({
         <a
           role="tab"
           href="/admin/metadata"
-          className={`tab${!showUpdated ? " tab-active" : ""}`}
+          className={`tab${!showUpdated && !showSuggested ? " tab-active" : ""}`}
         >
           Pending <span className="ml-1.5 badge badge-sm">{pendingCount}</span>
+        </a>
+        <a
+          role="tab"
+          href="/admin/metadata?view=suggested"
+          className={`tab${showSuggested ? " tab-active" : ""}`}
+        >
+          Suggested edits <span className="ml-1.5 badge badge-sm badge-warning">{suggestedCount}</span>
         </a>
         <a
           role="tab"
           href="/admin/metadata?view=updated"
           className={`tab${showUpdated ? " tab-active" : ""}`}
         >
-          Updated <span className="ml-1.5 badge badge-sm badge-success">{updatedCount}</span>
+          Verified <span className="ml-1.5 badge badge-sm badge-success">{updatedCount}</span>
         </a>
       </div>
 
@@ -74,7 +96,7 @@ export default async function AdminMetadataPage({
 
       {total === 0 ? (
         <div className="text-base-content/40 py-10 text-center">
-          {showUpdated ? "No updated extractions yet." : "All extractions verified."}
+          {showSuggested ? "No pending suggestions." : showUpdated ? "No verified extractions yet." : "All extractions verified."}
         </div>
       ) : (
         <>
@@ -122,8 +144,11 @@ export default async function AdminMetadataPage({
                       ) : "—"}
                     </td>
                     <td>
-                      <a href={`/admin/metadata/${p.id}${showUpdated ? "?from=updated" : ""}`} className="btn btn-outline btn-xs">
-                        Review
+                      <a
+                        href={`/admin/metadata/${p.id}${showUpdated ? "?from=updated" : showSuggested ? "?from=suggested" : ""}`}
+                        className="btn btn-outline btn-xs"
+                      >
+                        {showSuggested ? "Review suggestion" : "Review"}
                       </a>
                     </td>
                   </tr>
@@ -131,7 +156,7 @@ export default async function AdminMetadataPage({
               </tbody>
             </table>
           </div>
-          <Pagination page={page} totalPages={totalPages} buildHref={(p) => `?${showUpdated ? "view=updated&" : ""}page=${p}`} />
+          <Pagination page={page} totalPages={totalPages} buildHref={(p) => `?${showUpdated ? "view=updated&" : showSuggested ? "view=suggested&" : ""}page=${p}`} />
         </>
       )}
     </>
