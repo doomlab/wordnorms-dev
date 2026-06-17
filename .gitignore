@@ -52,3 +52,4 @@ next-env.d.ts
 # model card raw YAMLs (synced by cron, not committed)
 /data/model-cards/*.yaml
 /data/model-cards/*.yml
+escience/*
