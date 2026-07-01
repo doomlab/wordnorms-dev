@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+type: software
+title: "ManyNorms: An Updated Linguistic Annotated Bibliography"
+abstract: >-
+  Web application and ML pipeline for collecting, curating, and serving
+  word-norms datasets (e.g. concreteness, imageability) from the
+  psycholinguistics literature.
+authors:
+  - family-names: Buchanan
+    given-names: Erin M.
+    orcid: "https://orcid.org/0000-0002-9689-4189"
+repository-code: "https://github.com/doomlab/wordnorms-dev"
+url: "https://wordnorms.com"
+license: MIT
+keywords:
+  - psycholinguistics
+  - word norms
+  - concreteness
+  - natural language processing

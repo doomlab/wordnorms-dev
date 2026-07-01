@@ -1,5 +1,7 @@
 # wordnorms-dev
 
+[![DOI](https://zenodo.org/badge/1260507039.svg)](https://zenodo.org/badge/latestdoi/1260507039)
+
 Development of the new wordnorms.com website.
 
 ## Stack

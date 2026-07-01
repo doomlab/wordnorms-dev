@@ -1,0 +1,19 @@
+{
+  "title": "ManyNorms: An Updated Linguistic Annotated Bibliography",
+  "description": "Web application and ML pipeline for collecting, curating, and serving word-norms datasets (e.g. concreteness, imageability) from the psycholinguistics literature.",
+  "creators": [
+    {
+      "name": "Buchanan, Erin M.",
+      "orcid": "0000-0002-9689-4189"
+    }
+  ],
+  "license": "MIT",
+  "upload_type": "software",
+  "access_right": "open",
+  "keywords": [
+    "psycholinguistics",
+    "word norms",
+    "concreteness",
+    "natural language processing"
+  ]
+}
