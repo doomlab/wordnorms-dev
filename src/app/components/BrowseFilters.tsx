@@ -20,21 +20,28 @@ export function BrowseFilters({
   const selectedDecades = searchParams.getAll("decade")
   const selectedStimuliTypes = searchParams.getAll("stimuli")
   const selectedStatuses = searchParams.getAll("status")
+  const year = searchParams.get("year") ?? ""
 
   const [inputValue, setInputValue] = useState(q)
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const [yearInput, setYearInput] = useState(year)
+  const yearDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   // Sync input when URL param changes externally (e.g. Reset)
   useEffect(() => {
     setInputValue(q)
   }, [q])
 
+  useEffect(() => {
+    setYearInput(year)
+  }, [year])
+
   const update = useCallback(
     (key: string, value: string, checked?: boolean) => {
       const params = new URLSearchParams(searchParams.toString())
-      if (key === "q") {
-        if (value) params.set("q", value)
-        else params.delete("q")
+      if (key === "q" || key === "year") {
+        if (value) params.set(key, value)
+        else params.delete(key)
       } else {
         const existing = params.getAll(key)
         params.delete(key)
@@ -54,7 +61,13 @@ export function BrowseFilters({
     debounceRef.current = setTimeout(() => update("q", value), 400)
   }
 
-  const hasFilters = q || selectedLanguages.length || selectedDecades.length || selectedStimuliTypes.length || selectedStatuses.length
+  const handleYearChange = (value: string) => {
+    setYearInput(value)
+    if (yearDebounceRef.current) clearTimeout(yearDebounceRef.current)
+    yearDebounceRef.current = setTimeout(() => update("year", value), 400)
+  }
+
+  const hasFilters = q || selectedLanguages.length || selectedDecades.length || selectedStimuliTypes.length || selectedStatuses.length || year
 
   return (
     <aside className="w-56 shrink-0">
@@ -182,6 +195,14 @@ export function BrowseFilters({
         <p className="text-xs font-medium uppercase tracking-wide text-base-content/50 mb-2">
           Publication Year
         </p>
+        <input
+          type="number"
+          inputMode="numeric"
+          value={yearInput}
+          onChange={(e) => handleYearChange(e.target.value)}
+          placeholder="Exact year, e.g. 2019"
+          className="input input-bordered input-sm w-full mb-2"
+        />
         <div className="flex flex-col gap-1.5">
           {Object.keys(DECADE_LABELS).map((decade) => (
             <label key={decade} className="flex items-center gap-2 cursor-pointer">

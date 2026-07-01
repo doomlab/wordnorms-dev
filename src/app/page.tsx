@@ -38,7 +38,7 @@ function loadDatasetLookup(): { byDoi: Map<string, string>; byTitle: Map<string,
 export default async function Home({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string; lang?: string | string[]; decade?: string | string[]; stimuli?: string | string[]; status?: string | string[]; page?: string }>
+  searchParams: Promise<{ q?: string; lang?: string | string[]; decade?: string | string[]; stimuli?: string | string[]; status?: string | string[]; year?: string; page?: string }>
 }) {
   const params = await searchParams
 
@@ -49,6 +49,7 @@ export default async function Home({
       ? params.decade
       : [params.decade]
     : []
+  const year = params.year?.trim() ? parseInt(params.year, 10) : undefined
   const stimuliTypes = params.stimuli
     ? Array.isArray(params.stimuli)
       ? params.stimuli
@@ -98,6 +99,10 @@ export default async function Home({
         return range ? [{ year: { gte: range[0], lte: range[1] } }] : []
       }),
     })
+  }
+
+  if (year !== undefined && !Number.isNaN(year)) {
+    andClauses.push({ year })
   }
 
   if (statuses.length) {

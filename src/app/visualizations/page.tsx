@@ -43,7 +43,7 @@ export default async function VisualizationsPage() {
     Promise.all([
       db.paper.count({ where: { canonicalPaperId: null } }),
       db.paper.count({ where: { status: { in: [...ACCEPTED.in] }, canonicalPaperId: null } }),
-      db.paper.count({ where: { status: "PENDING_REVIEW" } }),
+      db.paper.count({ where: { status: "PENDING_REVIEW", canonicalPaperId: null } }),
       db.paper.count({ where: { status: { in: [...ACCEPTED.in] }, canonicalPaperId: null, doi: { not: null } } }),
       db.paper.count({ where: { status: { in: [...ACCEPTED.in] }, canonicalPaperId: null, openAlexId: { not: null } } }),
       db.paperExtraction.count({ where: { paper: { status: { in: [...ACCEPTED.in] }, canonicalPaperId: null } } }),
