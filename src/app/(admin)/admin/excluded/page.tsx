@@ -29,10 +29,19 @@ export default async function AdminExcludedPage({
     db.paper.findMany({
       where,
       select: {
-        id: true, title: true, authors: true, year: true, doi: true, journal: true,
-        modelScore: true, reviewedById: true,
+        id: true,
+        title: true,
+        authors: true,
+        year: true,
+        doi: true,
+        journal: true,
+        modelScore: true,
+        reviewedById: true,
       },
-      orderBy: [{ reviewedById: { sort: "asc", nulls: "first" } }, { modelScore: { sort: "desc", nulls: "last" } }],
+      orderBy: [
+        { reviewedById: { sort: "asc", nulls: "first" } },
+        { modelScore: { sort: "desc", nulls: "last" } },
+      ],
       skip,
       take: PAGE_SIZE,
     }),
@@ -62,7 +71,7 @@ export default async function AdminExcludedPage({
             name="journal"
             defaultValue={journalQuery ?? ""}
             placeholder="e.g. Behavior Research Methods"
-            className="input input-bordered input-sm w-64"
+            className="input input-bordered input-sm w-64 m-2"
           />
         </div>
         <div>
@@ -74,7 +83,7 @@ export default async function AdminExcludedPage({
             name="year"
             defaultValue={yearQuery ?? ""}
             placeholder="e.g. 2020"
-            className="input input-bordered input-sm w-28"
+            className="input input-bordered input-sm w-28 m-2"
           />
         </div>
         <button type="submit" className="btn btn-primary btn-sm">
@@ -138,7 +147,9 @@ export default async function AdminExcludedPage({
                         {p.authors.length > 3 && " et al."}
                       </td>
                       <td>{p.year ?? "—"}</td>
-                      <td className="text-sm text-base-content/70 italic max-w-xs">{p.journal ?? "—"}</td>
+                      <td className="text-sm text-base-content/70 italic max-w-xs">
+                        {p.journal ?? "—"}
+                      </td>
                       <td>
                         {p.modelScore != null ? (
                           <span className="badge badge-outline badge-sm">
@@ -165,7 +176,9 @@ export default async function AdminExcludedPage({
           <Pagination
             page={page}
             totalPages={totalPages}
-            buildHref={(p) => `?${filterParams.toString()}${filterParams.toString() ? "&" : ""}page=${p}`}
+            buildHref={(p) =>
+              `?${filterParams.toString()}${filterParams.toString() ? "&" : ""}page=${p}`
+            }
           />
         </>
       )}
