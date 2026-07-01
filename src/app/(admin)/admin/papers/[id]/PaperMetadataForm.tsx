@@ -4,6 +4,7 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { useMutation } from "@blitzjs/rpc"
 import updatePaperMetadata from "../../../mutations/updatePaperMetadata"
+import lookupCrossref from "../../../mutations/lookupCrossref"
 
 type Paper = {
   id: number
@@ -19,9 +20,13 @@ type Paper = {
 
 export function PaperMetadataForm({ paper, backHref }: { paper: Paper; backHref: string }) {
   const [update] = useMutation(updatePaperMetadata)
+  const [lookup] = useMutation(lookupCrossref)
   const router = useRouter()
   const [status, setStatus] = useState<"idle" | "saving" | "saved" | "error">("idle")
   const [errorMsg, setErrorMsg] = useState<string | null>(null)
+  const [crossrefStatus, setCrossrefStatus] = useState<
+    "idle" | "loading" | "done" | "not_found" | "error"
+  >("idle")
 
   const [fields, setFields] = useState({
     title: paper.title,
@@ -62,7 +67,33 @@ export function PaperMetadataForm({ paper, backHref }: { paper: Paper; backHref:
     }
   }
 
+  const handleRefetchFromCrossref = async () => {
+    const doi = fields.doi.trim()
+    if (!doi) return
+    setCrossrefStatus("loading")
+    try {
+      const result = await lookup({ doi })
+      if (!result) {
+        setCrossrefStatus("not_found")
+        return
+      }
+      setFields((f) => ({
+        ...f,
+        title: result.title ?? f.title,
+        authors: result.authors.length ? result.authors.join(", ") : f.authors,
+        year: result.year?.toString() ?? f.year,
+        journal: result.journal ?? f.journal,
+        abstract: result.abstract ?? f.abstract,
+        pdfUrl: result.pdfUrl ?? f.pdfUrl,
+      }))
+      setCrossrefStatus("done")
+    } catch {
+      setCrossrefStatus("error")
+    }
+  }
+
   const busy = status === "saving"
+  const crossrefBusy = crossrefStatus === "loading"
 
   return (
     <div className="space-y-5">
@@ -95,13 +126,35 @@ export function PaperMetadataForm({ paper, backHref }: { paper: Paper; backHref:
       </Field>
 
       <Field label="DOI">
-        <input
-          className="input input-bordered w-full font-mono text-sm"
-          value={fields.doi}
-          onChange={set("doi")}
-          placeholder="10.xxxx/xxxxx"
-          disabled={busy}
-        />
+        <div className="flex gap-2">
+          <input
+            className="input input-bordered w-full font-mono text-sm"
+            value={fields.doi}
+            onChange={set("doi")}
+            placeholder="10.xxxx/xxxxx"
+            disabled={busy}
+          />
+          <button
+            type="button"
+            className="btn btn-outline btn-sm shrink-0"
+            onClick={handleRefetchFromCrossref}
+            disabled={!fields.doi.trim() || busy || crossrefBusy}
+          >
+            {crossrefBusy ? <span className="loading loading-spinner loading-xs" /> : null}
+            Re-fetch from CrossRef
+          </button>
+        </div>
+        {crossrefStatus === "done" && (
+          <p className="text-xs text-success mt-1">
+            Fields updated from CrossRef — review before saving.
+          </p>
+        )}
+        {crossrefStatus === "not_found" && (
+          <p className="text-xs text-warning mt-1">No CrossRef record found for this DOI.</p>
+        )}
+        {crossrefStatus === "error" && (
+          <p className="text-xs text-error mt-1">CrossRef lookup failed. Try again.</p>
+        )}
       </Field>
 
       <Field label="Journal">

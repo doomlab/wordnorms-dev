@@ -1,6 +1,7 @@
 import { resolver } from "@blitzjs/rpc"
 import { z } from "zod"
 import { fetchAndStoreCitations } from "src/lib/fetchAndStoreCitations"
+import { cleanMetadataText } from "src/lib/cleanMetadataText"
 
 const LookupOpenAlex = z.object({
   doi: z.string().optional(),
@@ -19,6 +20,18 @@ function reconstructAbstract(aii: Record<string, number[]> | null | undefined): 
   return words.filter(Boolean).join(" ")
 }
 
+// PLOS ONE works are heavily mirrored (PMC, Europe PMC, etc.), so primary_location
+// is often a repository copy rather than the journal itself — prefer any location
+// whose source is actually typed "journal" before falling back to primary_location.
+function pickJournal(work: any): string | null {
+  const primarySource = work.primary_location?.source
+  if (primarySource?.type === "journal" && primarySource.display_name) {
+    return primarySource.display_name
+  }
+  const journalLocation = work.locations?.find((l: any) => l.source?.type === "journal")
+  return journalLocation?.source?.display_name ?? primarySource?.display_name ?? null
+}
+
 function formatWork(work: any) {
   const doi = work.doi ? work.doi.replace("https://doi.org/", "") : null
   const openAlexId = work.id ? work.id.replace("https://openalex.org/", "") : null
@@ -28,11 +41,11 @@ function formatWork(work: any) {
     orcid: (a.author.orcid as string | null) ?? null,
     openAlexId: a.author.id ? (a.author.id as string).replace("https://openalex.org/", "") : null,
   })) ?? []
-  const abstract = reconstructAbstract(work.abstract_inverted_index)
-  const journal = work.primary_location?.source?.display_name ?? null
+  const abstract = cleanMetadataText(reconstructAbstract(work.abstract_inverted_index))
+  const journal = cleanMetadataText(pickJournal(work))
   const pdfUrl = work.primary_location?.pdf_url ?? work.open_access?.oa_url ?? null
   return {
-    title: (work.title as string | null) ?? null,
+    title: cleanMetadataText(work.title as string | null),
     authors,
     authorMeta,
     year: (work.publication_year as number | null) ?? null,
