@@ -168,6 +168,12 @@ export async function Navbar({ leftLinks, rightExtra, className }: NavbarProps) 
                     </Link>
                   </li>
                   <li>
+                    <Link href="/admin/citations/missing" className="flex justify-between">
+                      <span>Missing Citations</span>
+                      {missingCitationsCount > 0 && <span className="badge badge-warning badge-sm">{missingCitationsCount}</span>}
+                    </Link>
+                  </li>
+                  <li>
                     <Link href="/admin/duplicates" className="flex justify-between">
                       <span>Duplicates</span>
                       {duplicateSuggestionsCount > 0 && <span className="badge badge-warning badge-sm">{duplicateSuggestionsCount}</span>}

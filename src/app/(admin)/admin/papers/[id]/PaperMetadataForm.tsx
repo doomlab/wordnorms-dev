@@ -96,7 +96,7 @@ export function PaperMetadataForm({ paper, backHref }: { paper: Paper; backHref:
   const crossrefBusy = crossrefStatus === "loading"
 
   return (
-    <div className="space-y-5 max-w-2xl">
+    <div className="space-y-5">
       <Field label="Title">
         <input
           className="input input-bordered w-full"

@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation"
 import { getBlitzContext } from "../blitz-server"
 import { Navbar } from "../components/Navbar"
+import { AdminMain } from "./AdminMain"
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const ctx = await getBlitzContext()
@@ -16,7 +17,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
           </span>
         }
       />
-      <main className="max-w-7xl mx-auto px-6 py-10">{children}</main>
+      <AdminMain>{children}</AdminMain>
     </div>
   )
 }
