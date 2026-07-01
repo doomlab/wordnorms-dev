@@ -65,11 +65,11 @@ export default async function MissingCitationsPage({
             <table className="table table-sm w-full">
               <thead>
                 <tr className="text-base-content/50 text-xs uppercase">
-                  <th className="w-[40%]">Title</th>
-                  <th>Year</th>
-                  <th>Journal</th>
-                  <th>Last fetch</th>
-                  <th></th>
+                  <th className="w-[32%]">Title</th>
+                  <th className="w-16">Year</th>
+                  <th className="w-40">Journal</th>
+                  <th className="w-24">Last fetch</th>
+                  <th className="w-px"></th>
                 </tr>
               </thead>
               <tbody>
@@ -82,7 +82,10 @@ export default async function MissingCitationsPage({
                       {p.doi && <p className="text-xs text-base-content/40 font-mono">{p.doi}</p>}
                     </td>
                     <td className="text-sm text-base-content/60 align-top py-3">{p.year ?? "—"}</td>
-                    <td className="text-sm text-base-content/60 italic align-top py-3">
+                    <td
+                      className="text-sm text-base-content/60 italic align-top py-3 max-w-[10rem] truncate"
+                      title={p.journal ?? undefined}
+                    >
                       {p.journal ?? "—"}
                     </td>
                     <td className="text-sm text-base-content/60 align-top py-3">
@@ -92,8 +95,8 @@ export default async function MissingCitationsPage({
                         <span className="text-base-content/30">never</span>
                       )}
                     </td>
-                    <td className="align-top py-3">
-                      <FetchCitationsButton paperId={p.id} />
+                    <td className="align-top py-3 whitespace-nowrap">
+                      <FetchCitationsButton paperId={p.id} size="xs" />
                     </td>
                   </tr>
                 ))}

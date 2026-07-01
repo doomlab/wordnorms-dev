@@ -5,7 +5,13 @@ import { useRouter } from "next/navigation"
 import { useMutation } from "@blitzjs/rpc"
 import refetchCitations from "../../../mutations/refetchCitations"
 
-export function FetchCitationsButton({ paperId }: { paperId: number }) {
+export function FetchCitationsButton({
+  paperId,
+  size = "sm",
+}: {
+  paperId: number
+  size?: "xs" | "sm"
+}) {
   const [refetch] = useMutation(refetchCitations)
   const router = useRouter()
   const [state, setState] = useState<"idle" | "loading" | "done" | "error">("idle")
@@ -28,7 +34,7 @@ export function FetchCitationsButton({ paperId }: { paperId: number }) {
   return (
     <div className="flex items-center gap-3">
       <button
-        className="btn btn-sm btn-outline"
+        className={`btn btn-${size} btn-outline`}
         onClick={handleClick}
         disabled={state === "loading"}
       >
