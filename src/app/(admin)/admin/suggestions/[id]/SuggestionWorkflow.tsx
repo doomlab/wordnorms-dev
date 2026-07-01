@@ -51,6 +51,9 @@ export function SuggestionWorkflow({
   const [resultPaper, setResultPaper] = useState<{ id: number; title: string } | null>(
     existingPaper
   )
+  // Distinguishes a duplicate detected on load (not yet resolved server-side) from one
+  // returned by handleAdd, which already marks the suggestion resolved.
+  const [alreadyResolved, setAlreadyResolved] = useState(false)
 
   const [lookup] = useMutation(lookupOpenAlex)
   const [addPaper] = useMutation(addPaperFromSuggestion)
@@ -99,6 +102,7 @@ export function SuggestionWorkflow({
       if (result.type === "duplicate") {
         setResultPaper(result.paper)
         setAddStatus("duplicate")
+        setAlreadyResolved(true)
       } else {
         setResultPaper(result.paper)
         setAddStatus("done")
@@ -197,7 +201,11 @@ export function SuggestionWorkflow({
                   </a>
                 </p>
               )}
-              <p className="text-xs mt-2">The suggestion has been marked as resolved.</p>
+              <p className="text-xs mt-2">
+                {alreadyResolved
+                  ? "The suggestion has been marked as resolved."
+                  : 'Click "Dismiss suggestion" below to resolve it without adding a duplicate.'}
+              </p>
             </div>
           </div>
         )}
@@ -328,10 +336,14 @@ export function SuggestionWorkflow({
         </button>
         <button
           onClick={handleResolve}
-          disabled={addStatus === "resolving" || addStatus === "duplicate"}
+          disabled={addStatus === "resolving" || alreadyResolved}
           className="btn btn-secondary"
         >
-          {addStatus === "resolving" ? "Resolving…" : "Resolve without adding"}
+          {addStatus === "resolving"
+            ? "Resolving…"
+            : addStatus === "duplicate"
+            ? "Dismiss suggestion"
+            : "Resolve without adding"}
         </button>
         {addStatus === "error" && (
           <span className="text-error text-sm self-center">Something went wrong.</span>

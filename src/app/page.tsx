@@ -84,6 +84,7 @@ export default async function Home({
       OR: [
         { title: { contains: q, mode: "insensitive" } },
         { abstract: { contains: q, mode: "insensitive" } },
+        { doi: { contains: q, mode: "insensitive" } },
         { extraction: { normsCollected: { hasSome: [q] } } },
         ...(authorMatchIds.length ? [{ id: { in: authorMatchIds } }] : []),
       ],
