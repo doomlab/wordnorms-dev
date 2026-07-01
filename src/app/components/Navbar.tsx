@@ -25,6 +25,7 @@ export async function Navbar({ leftLinks, rightExtra, className }: NavbarProps) 
     reportsCount,
     suggestionsCount,
     citationsCount,
+    missingCitationsCount,
     duplicateSuggestionsCount,
   ] = isAdmin
     ? await Promise.all([
@@ -41,6 +42,14 @@ export async function Navbar({ leftLinks, rightExtra, className }: NavbarProps) 
           )
           AND pc.reviewed = false
         `.then((r) => Number(r[0]?.count ?? 0)),
+        db.paper.count({
+          where: {
+            status: "ACCEPTED",
+            canonicalPaperId: null,
+            openAlexId: { not: null },
+            citationsFrom: { none: {} },
+          },
+        }),
         Promise.all([
           db.$queryRaw<[{ count: bigint }]>`
             SELECT COUNT(*)::int AS count FROM (
@@ -60,7 +69,7 @@ export async function Navbar({ leftLinks, rightExtra, className }: NavbarProps) 
           `.then((r) => Number(r[0]?.count ?? 0)),
         ]).then(([doi, title]) => doi + title),
       ])
-    : [0, 0, 0, 0, 0, 0, 0, 0]
+    : [0, 0, 0, 0, 0, 0, 0, 0, 0]
 
   return (
     <div className={`navbar bg-base-200 px-6 shadow-sm sticky top-0 z-50 ${className ?? ""}`}>
