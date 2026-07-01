@@ -1,6 +1,6 @@
 # wordnorms-dev
 
-[![DOI](https://zenodo.org/badge/1260507039.svg)](https://zenodo.org/badge/latestdoi/1260507039)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21106188.svg)](https://doi.org/10.5281/zenodo.21106188)
 
 Development of the new wordnorms.com website.
 
