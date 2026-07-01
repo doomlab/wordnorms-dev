@@ -209,11 +209,11 @@ def fetch_openalex_range(lo, hi):
             r.raise_for_status()
             data = r.json()
         except Exception as e:
-            print(f"  {label} page {page}: request failed ({e}) — stopping this bucket")
+            print(f"  {label} page {page}: request failed ({e}) — stopping this bucket", flush=True)
             break
 
         if "results" not in data or "meta" not in data:
-            print(f"  {label} page {page}: unexpected response ({data.get('error', 'no results/meta')}) — stopping this bucket")
+            print(f"  {label} page {page}: unexpected response ({data.get('error', 'no results/meta')}) — stopping this bucket", flush=True)
             break
 
         for w in data["results"]:
@@ -224,7 +224,7 @@ def fetch_openalex_range(lo, hi):
             pages_needed = math.ceil(total / PER_PAGE) if total else 0
             max_page = min(pages_needed, MAX_PAGE)
             if pages_needed > MAX_PAGE:
-                print(f"  {label}: {total} results exceeds the {MAX_PAGE * PER_PAGE}-result pagination cap — only the top {MAX_PAGE * PER_PAGE} by relevance will be fetched")
+                print(f"  {label}: {total} results exceeds the {MAX_PAGE * PER_PAGE}-result pagination cap — only the top {MAX_PAGE * PER_PAGE} by relevance will be fetched", flush=True)
 
         if not data["results"]:
             break
@@ -242,10 +242,10 @@ def fetch_openalex(start_year=START_YEAR, end_year=None):
         label = str(lo) if lo == hi else f"{lo}-{hi}"
         bucket_papers = fetch_openalex_range(lo, hi)
         if bucket_papers:
-            print(f"  {label}: {len(bucket_papers)} collected")
+            print(f"  {label}: {len(bucket_papers)} collected", flush=True)
         papers.extend(bucket_papers)
 
-    print(f"OpenAlex: {len(papers)} results across {len(buckets)} buckets ({start_year}-{end_year})")
+    print(f"OpenAlex: {len(papers)} results across {len(buckets)} buckets ({start_year}-{end_year})", flush=True)
     return papers
 
 
@@ -300,6 +300,10 @@ def insert_paper(cur, paper):
 # Main
 # ---------------------------------------------------------------------------
 
+COMMIT_EVERY = 100  # papers between progress prints + DB commits, so a killed/crashed
+                     # run doesn't lose everything and progress is visible from outside
+
+
 def main(start_year=START_YEAR, end_year=None, dry_run=False):
     papers = fetch_openalex(start_year, end_year)
 
@@ -315,12 +319,13 @@ def main(start_year=START_YEAR, end_year=None, dry_run=False):
     conn = get_conn()
     try:
         existing_dois, existing_oa_ids = load_existing(conn)
-        print(f"DB already has {len(existing_dois)} DOIs, {len(existing_oa_ids)} OpenAlex IDs")
+        print(f"DB already has {len(existing_dois)} DOIs, {len(existing_oa_ids)} OpenAlex IDs", flush=True)
+        print(f"Processing {len(papers)} candidates from OpenAlex...", flush=True)
 
         cur = conn.cursor()
         inserted = skipped = enriched = 0
 
-        for paper in papers:
+        for i, paper in enumerate(papers, start=1):
             # skip if already in DB
             if paper["doi"] and paper["doi"] in existing_dois:
                 skipped += 1
@@ -344,6 +349,10 @@ def main(start_year=START_YEAR, end_year=None, dry_run=False):
                 existing_dois.add(paper["doi"])
             if paper["openalex_id"]:
                 existing_oa_ids.add(paper["openalex_id"])
+
+            if i % COMMIT_EVERY == 0:
+                conn.commit()
+                print(f"  {i}/{len(papers)} processed — inserted: {inserted}  |  enriched: {enriched}  |  skipped: {skipped}", flush=True)
 
         conn.commit()
     finally:
