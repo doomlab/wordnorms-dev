@@ -1,4 +1,5 @@
 import db from "db"
+import { withOpenAlexApiKey } from "src/lib/openAlexApiKey"
 
 const HEADERS = { "User-Agent": "mailto:buchananlab@gmail.com" }
 const BATCH_SIZE = 50
@@ -41,7 +42,7 @@ export async function fetchAndStoreCitations(
   let referencedIds: string[] = []
   try {
     const res = await fetch(
-      `https://api.openalex.org/works/openalex:${openAlexId}?select=referenced_works`,
+      withOpenAlexApiKey(`https://api.openalex.org/works/openalex:${openAlexId}?select=referenced_works`),
       { headers: HEADERS }
     )
     if (res.ok) {
@@ -70,7 +71,7 @@ export async function fetchAndStoreCitations(
     const chunk = referencedIds.slice(i, i + BATCH_SIZE)
     try {
       const res = await fetch(
-        `https://api.openalex.org/works?filter=ids.openalex:${chunk.join("|")}&per_page=${BATCH_SIZE}&select=id,title,authorships,publication_year,primary_location`,
+        withOpenAlexApiKey(`https://api.openalex.org/works?filter=ids.openalex:${chunk.join("|")}&per_page=${BATCH_SIZE}&select=id,title,authorships,publication_year,primary_location`),
         { headers: HEADERS }
       )
       if (res.ok) {
@@ -86,7 +87,7 @@ export async function fetchAndStoreCitations(
     const chunk = referenceDois.slice(i, i + BATCH_SIZE)
     try {
       const res = await fetch(
-        `https://api.openalex.org/works?filter=doi:${chunk.join("|")}&per_page=${BATCH_SIZE}&select=id,title,authorships,publication_year,primary_location`,
+        withOpenAlexApiKey(`https://api.openalex.org/works?filter=doi:${chunk.join("|")}&per_page=${BATCH_SIZE}&select=id,title,authorships,publication_year,primary_location`),
         { headers: HEADERS }
       )
       if (res.ok) {

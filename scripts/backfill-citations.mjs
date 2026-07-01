@@ -30,6 +30,13 @@ const DRY_RUN = args["dry-run"] === true
 
 const HEADERS = { "User-Agent": "mailto:buchananlab@gmail.com" }
 const OPENALEX_BATCH = 50
+const OPENALEX_API_KEY = process.env.OPENALEX_API_KEY
+
+// OpenAlex bills per call beyond a modest daily free quota; a free API key raises that quota.
+function withOpenAlexApiKey(url) {
+  if (!OPENALEX_API_KEY) return url
+  return `${url}${url.includes("?") ? "&" : "?"}api_key=${OPENALEX_API_KEY}`
+}
 
 const db = new PrismaClient()
 
@@ -39,7 +46,7 @@ function sleep(ms) {
 
 async function fetchReferencedIds(openAlexId) {
   const res = await fetch(
-    `https://api.openalex.org/works/openalex:${openAlexId}?select=referenced_works`,
+    withOpenAlexApiKey(`https://api.openalex.org/works/openalex:${openAlexId}?select=referenced_works`),
     { headers: HEADERS }
   )
   if (!res.ok) return []
@@ -52,7 +59,7 @@ async function fetchCitationMetadata(ids) {
   for (let i = 0; i < ids.length; i += OPENALEX_BATCH) {
     const chunk = ids.slice(i, i + OPENALEX_BATCH)
     const res = await fetch(
-      `https://api.openalex.org/works?filter=ids.openalex:${chunk.join("|")}&per_page=${OPENALEX_BATCH}&select=id,title,authorships,publication_year,primary_location`,
+      withOpenAlexApiKey(`https://api.openalex.org/works?filter=ids.openalex:${chunk.join("|")}&per_page=${OPENALEX_BATCH}&select=id,title,authorships,publication_year,primary_location`),
       { headers: HEADERS }
     )
     if (!res.ok) continue

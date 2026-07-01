@@ -1,6 +1,7 @@
 import { resolver } from "@blitzjs/rpc"
 import { z } from "zod"
 import db from "db"
+import { withOpenAlexApiKey } from "src/lib/openAlexApiKey"
 
 const PullCitedPaper = z.object({
   citedOpenAlexId: z.string(),
@@ -41,7 +42,7 @@ export default resolver.pipe(
     let authorMeta: { name: string; orcid: string | null; openAlexId: string | null }[] = []
 
     try {
-      const res = await fetch(`https://api.openalex.org/works/openalex:${citedOpenAlexId}`, {
+      const res = await fetch(withOpenAlexApiKey(`https://api.openalex.org/works/openalex:${citedOpenAlexId}`), {
         headers: HEADERS,
       })
       if (res.ok) {

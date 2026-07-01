@@ -62,6 +62,7 @@ All variables live in `.env.local` (not committed). The app and all scripts read
 | `APP_ORIGIN` | Yes | Full origin URL, e.g. `https://wordnorms.com` (used in email links) |
 | `PIPELINE_PYTHON` | No | Path to the Python binary to use when triggering pipeline from the admin panel (default: `python`) |
 | `GITHUB_TOKEN` | No | GitHub personal access token — raises sync-model-cards rate limit from 60 to 5000 req/hr |
+| `OPENALEX_API_KEY` | No | Free API key from openalex.org/rest-api — raises OpenAlex's daily free-usage quota (used everywhere the app or pipeline calls the OpenAlex API) |
 
 Pipeline-only variables (also read from `.env.local` by Python scripts):
 

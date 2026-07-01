@@ -1,6 +1,7 @@
 import { resolver } from "@blitzjs/rpc"
 import { z } from "zod"
 import db from "db"
+import { withOpenAlexApiKey } from "src/lib/openAlexApiKey"
 
 const Input = z.object({
   bibtex: z.string(),
@@ -44,14 +45,14 @@ export default resolver.pipe(
     if (doi) {
       const clean = doi.replace(/^https?:\/\/(dx\.)?doi\.org\//i, "")
       try {
-        const res = await fetch(`https://api.openalex.org/works/doi:${encodeURIComponent(clean)}`, { headers: HEADERS })
+        const res = await fetch(withOpenAlexApiKey(`https://api.openalex.org/works/doi:${encodeURIComponent(clean)}`), { headers: HEADERS })
         if (res.ok) work = await res.json()
       } catch {}
     }
     if (!work) {
       try {
         const res = await fetch(
-          `https://api.openalex.org/works?filter=title.search:${encodeURIComponent(title)}&per_page=1`,
+          withOpenAlexApiKey(`https://api.openalex.org/works?filter=title.search:${encodeURIComponent(title)}&per_page=1`),
           { headers: HEADERS }
         )
         if (res.ok) {

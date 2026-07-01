@@ -2,6 +2,7 @@ import { resolver } from "@blitzjs/rpc"
 import { z } from "zod"
 import { fetchAndStoreCitations } from "src/lib/fetchAndStoreCitations"
 import { cleanMetadataText } from "src/lib/cleanMetadataText"
+import { withOpenAlexApiKey } from "src/lib/openAlexApiKey"
 
 const LookupOpenAlex = z.object({
   doi: z.string().optional(),
@@ -68,7 +69,7 @@ export default resolver.pipe(
     if (doi) {
       const clean = doi.replace(/^https?:\/\/(dx\.)?doi\.org\//i, "")
       try {
-        const res = await fetch(`https://api.openalex.org/works/doi:${encodeURIComponent(clean)}`, {
+        const res = await fetch(withOpenAlexApiKey(`https://api.openalex.org/works/doi:${encodeURIComponent(clean)}`), {
           headers: HEADERS,
         })
         if (res.ok) work = formatWork(await res.json())
@@ -78,7 +79,7 @@ export default resolver.pipe(
     if (!work && title) {
       try {
         const res = await fetch(
-          `https://api.openalex.org/works?filter=title.search:${encodeURIComponent(title)}&per_page=1`,
+          withOpenAlexApiKey(`https://api.openalex.org/works?filter=title.search:${encodeURIComponent(title)}&per_page=1`),
           { headers: HEADERS }
         )
         if (res.ok) {

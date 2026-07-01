@@ -19,6 +19,7 @@ Usage:
 """
 
 import argparse
+import os
 import re
 import time
 
@@ -29,8 +30,9 @@ from db import get_conn
 CONTACT_EMAIL = "buchananlab@gmail.com"
 HEADERS = {
     "Accept": "application/json",
-    "User-Agent": f"wordnorms-repair ({CONTACT_EMAIL})",
+    "User-Agent": f"wordnorms-repair (mailto:{CONTACT_EMAIL})",
 }
+OPENALEX_API_KEY = os.environ.get("OPENALEX_API_KEY")
 
 
 # ---------------------------------------------------------------------------
@@ -73,7 +75,8 @@ def fetch_openalex(doi):
       openalex_id, year, abstract, journal, authors, pdf_url
     All values may be None.
     """
-    js, err = _safe_get(f"https://api.openalex.org/works/https://doi.org/{_clean_doi(doi)}")
+    params = {"api_key": OPENALEX_API_KEY} if OPENALEX_API_KEY else None
+    js, err = _safe_get(f"https://api.openalex.org/works/https://doi.org/{_clean_doi(doi)}", params=params)
     if err or not js:
         return None, err
 

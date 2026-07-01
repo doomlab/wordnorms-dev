@@ -34,6 +34,13 @@ const REFETCH_ALL = args["all"] === true
 const OPENALEX_CHUNK = 50
 
 const HEADERS = { "User-Agent": "mailto:buchananlab@gmail.com" }
+const OPENALEX_API_KEY = process.env.OPENALEX_API_KEY
+
+// OpenAlex bills per call beyond a modest daily free quota; a free API key raises that quota.
+function withOpenAlexApiKey(url) {
+  if (!OPENALEX_API_KEY) return url
+  return `${url}${url.includes("?") ? "&" : "?"}api_key=${OPENALEX_API_KEY}`
+}
 
 const db = new PrismaClient()
 
@@ -47,7 +54,7 @@ async function fetchAuthorships(openAlexIds) {
     const chunk = openAlexIds.slice(i, i + OPENALEX_CHUNK)
     try {
       const res = await fetch(
-        `https://api.openalex.org/works?filter=ids.openalex:${chunk.join("|")}&per_page=${OPENALEX_CHUNK}&select=id,authorships`,
+        withOpenAlexApiKey(`https://api.openalex.org/works?filter=ids.openalex:${chunk.join("|")}&per_page=${OPENALEX_CHUNK}&select=id,authorships`),
         { headers: HEADERS }
       )
       if (!res.ok) {
