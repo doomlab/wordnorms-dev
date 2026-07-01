@@ -20,6 +20,7 @@ export default async function AdminPage() {
     openSuggestions,
     borderlineExcluded,
     unmatchedCitations,
+    missingCitations,
     siteSettings,
   ] = await Promise.all([
     db.paper.groupBy({ by: ["status"], where: { canonicalPaperId: null }, _count: { _all: true } }),
@@ -59,6 +60,14 @@ export default async function AdminPage() {
           SELECT 1 FROM "Paper" p WHERE p."openAlexId" = pc."citedOpenAlexId"
         )
       `.then((r) => Number(r[0]?.count ?? 0)),
+    db.paper.count({
+      where: {
+        status: "ACCEPTED",
+        canonicalPaperId: null,
+        openAlexId: { not: null },
+        citationsFrom: { none: {} },
+      },
+    }),
     isSuperAdmin
       ? db.siteSettings.findFirst({ where: { id: 1 } })
       : Promise.resolve(null),
@@ -103,6 +112,12 @@ export default async function AdminPage() {
       label: "Citation Review",
       desc: "Cited papers not yet in the database — review and pull any that belong",
       badge: unmatchedCitations,
+    },
+    {
+      href: "/admin/citations/missing",
+      label: "Missing Citations",
+      desc: "Accepted papers with an OpenAlex ID but zero stored citations — retry the fetch",
+      badge: missingCitations,
     },
     {
       href: "/admin/duplicates",

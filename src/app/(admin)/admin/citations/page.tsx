@@ -103,7 +103,10 @@ export default async function CitationsPage({
         </span>
       </div>
       <p className="text-base-content/60 mb-6 text-sm">
-        Papers cited by accepted papers that are not yet in the database. Add any that belong.
+        Papers cited by accepted papers that are not yet in the database. Add any that belong.{" "}
+        <a href="/admin/citations/missing" className="link">
+          See papers with zero citations fetched →
+        </a>
       </p>
 
       <div className="flex gap-2 mb-6">
