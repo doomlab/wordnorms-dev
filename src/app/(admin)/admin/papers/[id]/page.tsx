@@ -52,7 +52,7 @@ export default async function AdminEditPaperPage({
 
       <div className="flex items-center gap-3 mb-2">
         <h1 className="text-3xl font-bold">Edit Paper</h1>
-        <span className="badge badge-ghost btn-outline badge-sm">#{paper.id}</span>
+        <span className="badge badge-outline badge-sm">#{paper.id}</span>
         <StatusBadge status={paper.status} />
       </div>
       <p className="text-base-content/60 mb-8 text-sm">

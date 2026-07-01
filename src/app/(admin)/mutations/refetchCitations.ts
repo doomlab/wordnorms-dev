@@ -13,12 +13,12 @@ export default resolver.pipe(
   async ({ paperId }) => {
     const paper = await db.paper.findUnique({
       where: { id: paperId },
-      select: { openAlexId: true },
+      select: { openAlexId: true, doi: true },
     })
 
     if (!paper?.openAlexId) throw new Error("Paper has no OpenAlex ID")
 
-    const count = await fetchAndStoreCitations(paperId, paper.openAlexId)
+    const count = await fetchAndStoreCitations(paperId, paper.openAlexId, paper.doi)
     return { count }
   }
 )

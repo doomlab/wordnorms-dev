@@ -91,7 +91,7 @@ export default resolver.pipe(
     if (!work) return null
 
     if (paperId && work.openAlexId) {
-      await fetchAndStoreCitations(paperId, work.openAlexId)
+      await fetchAndStoreCitations(paperId, work.openAlexId, work.doi)
     }
 
     return work

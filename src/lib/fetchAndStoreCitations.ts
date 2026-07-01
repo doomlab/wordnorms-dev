@@ -16,7 +16,28 @@ function formatCitation(work: any) {
   }
 }
 
-export async function fetchAndStoreCitations(paperId: number, openAlexId: string): Promise<number> {
+// OpenAlex's parsed reference list is sometimes empty even when the publisher deposited
+// references with CrossRef (common for PLOS ONE) — fall back to CrossRef's raw reference
+// DOIs so they can be resolved to OpenAlex works below.
+async function fetchCrossrefReferenceDois(doi: string): Promise<string[]> {
+  try {
+    const res = await fetch(`https://api.crossref.org/works/${encodeURIComponent(doi)}`, {
+      headers: HEADERS,
+    })
+    if (!res.ok) return []
+    const { message } = await res.json()
+    const refs: any[] = message.reference ?? []
+    return refs.map((r) => r.DOI as string | undefined).filter((d): d is string => Boolean(d))
+  } catch {
+    return []
+  }
+}
+
+export async function fetchAndStoreCitations(
+  paperId: number,
+  openAlexId: string,
+  doi?: string | null
+): Promise<number> {
   let referencedIds: string[] = []
   try {
     const res = await fetch(
@@ -33,11 +54,13 @@ export async function fetchAndStoreCitations(paperId: number, openAlexId: string
     return 0
   }
 
+  const referenceDois = referencedIds.length === 0 && doi ? await fetchCrossrefReferenceDois(doi) : []
+
   // Always stamp the timestamp — even if there are no references
   const stamp = () =>
     db.paper.update({ where: { id: paperId }, data: { citationsFetchedAt: new Date() } })
 
-  if (referencedIds.length === 0) {
+  if (referencedIds.length === 0 && referenceDois.length === 0) {
     await stamp()
     return 0
   }
@@ -48,6 +71,22 @@ export async function fetchAndStoreCitations(paperId: number, openAlexId: string
     try {
       const res = await fetch(
         `https://api.openalex.org/works?filter=ids.openalex:${chunk.join("|")}&per_page=${BATCH_SIZE}&select=id,title,authorships,publication_year,primary_location`,
+        { headers: HEADERS }
+      )
+      if (res.ok) {
+        const data = await res.json()
+        for (const work of data.results ?? []) {
+          citations.push(formatCitation(work))
+        }
+      }
+    } catch {}
+  }
+
+  for (let i = 0; i < referenceDois.length; i += BATCH_SIZE) {
+    const chunk = referenceDois.slice(i, i + BATCH_SIZE)
+    try {
+      const res = await fetch(
+        `https://api.openalex.org/works?filter=doi:${chunk.join("|")}&per_page=${BATCH_SIZE}&select=id,title,authorships,publication_year,primary_location`,
         { headers: HEADERS }
       )
       if (res.ok) {

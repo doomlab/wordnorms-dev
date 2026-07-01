@@ -64,7 +64,7 @@ export default resolver.pipe(
     ])
 
     if (paper.openAlexId) {
-      await fetchAndStoreCitations(paper.id, paper.openAlexId)
+      await fetchAndStoreCitations(paper.id, paper.openAlexId, paper.doi)
     }
 
     return { type: "created" as const, paper }
