@@ -11,7 +11,14 @@ export default async function VisualizationsPage() {
   const [acceptedPapers, citations, extractions, yearGroups, journalGroups, unmatchedCount, summaryCounts] = await Promise.all([
     db.paper.findMany({
       where: { status: ACCEPTED, openAlexId: { not: null } },
-      select: { id: true, title: true, year: true, openAlexId: true, canonicalPaperId: true },
+      select: {
+        id: true,
+        title: true,
+        year: true,
+        openAlexId: true,
+        canonicalPaperId: true,
+        extraction: { select: { normsCollected: true } },
+      },
     }),
     db.paperCitation.findMany({
       include: { citingPaper: { select: { openAlexId: true } } },
@@ -71,7 +78,12 @@ export default async function VisualizationsPage() {
     year: p.year ?? undefined,
     inDb: true as const,
     paperId: p.id,
+    norms: p.extraction?.normsCollected ?? [],
   }))
+
+  const allNormTags = Array.from(
+    new Set(canonicalPapers.flatMap((p) => p.extraction?.normsCollected ?? []))
+  ).sort()
 
   const unmatchedNodeMap = new Map<
     string,
@@ -214,7 +226,7 @@ export default async function VisualizationsPage() {
               </p>
             </div>
           </div>
-          <NetworkGraph graphData={graphData} />
+          <NetworkGraph graphData={graphData} allNormTags={allNormTags} />
 
           {topHubs.length > 0 && (
             <div className="mt-4">
