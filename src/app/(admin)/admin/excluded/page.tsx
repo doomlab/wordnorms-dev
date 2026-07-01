@@ -9,23 +9,27 @@ const PAGE_SIZE = 50
 export default async function AdminExcludedPage({
   searchParams,
 }: {
-  searchParams: Promise<{ page?: string }>
+  searchParams: Promise<{ page?: string; journal?: string; year?: string }>
 }) {
-  const { page: pageParam } = await searchParams
+  const { page: pageParam, journal: journalParam, year: yearParam } = await searchParams
   const page = Math.max(1, parseInt(pageParam ?? "1", 10) || 1)
   const skip = (page - 1) * PAGE_SIZE
+  const journalQuery = journalParam?.trim() || undefined
+  const yearQuery = yearParam?.trim() ? parseInt(yearParam, 10) : undefined
 
   const where = {
     status: "EXCLUDED" as const,
     canonicalPaperId: null,
     reviewedById: null,
+    ...(journalQuery ? { journal: { contains: journalQuery, mode: "insensitive" as const } } : {}),
+    ...(yearQuery !== undefined && !Number.isNaN(yearQuery) ? { year: yearQuery } : {}),
   }
 
   const [papers, total] = await Promise.all([
     db.paper.findMany({
       where,
       select: {
-        id: true, title: true, authors: true, year: true, doi: true,
+        id: true, title: true, authors: true, year: true, doi: true, journal: true,
         modelScore: true, reviewedById: true,
       },
       orderBy: [{ reviewedById: { sort: "asc", nulls: "first" } }, { modelScore: { sort: "desc", nulls: "last" } }],
@@ -36,6 +40,9 @@ export default async function AdminExcludedPage({
   ])
 
   const totalPages = Math.ceil(total / PAGE_SIZE)
+  const filterParams = new URLSearchParams()
+  if (journalQuery) filterParams.set("journal", journalQuery)
+  if (yearQuery !== undefined) filterParams.set("year", String(yearQuery))
 
   return (
     <>
@@ -44,6 +51,41 @@ export default async function AdminExcludedPage({
         Auto-excluded papers. Accept any that belong, or confirm exclusion to clear them from this
         queue.
       </p>
+
+      <form method="GET" className="flex flex-wrap items-end gap-3 mb-4">
+        <div>
+          <label className="label py-1">
+            <span className="label-text text-xs">Journal</span>
+          </label>
+          <input
+            type="text"
+            name="journal"
+            defaultValue={journalQuery ?? ""}
+            placeholder="e.g. Behavior Research Methods"
+            className="input input-bordered input-sm w-64"
+          />
+        </div>
+        <div>
+          <label className="label py-1">
+            <span className="label-text text-xs">Year</span>
+          </label>
+          <input
+            type="number"
+            name="year"
+            defaultValue={yearQuery ?? ""}
+            placeholder="e.g. 2020"
+            className="input input-bordered input-sm w-28"
+          />
+        </div>
+        <button type="submit" className="btn btn-primary btn-sm">
+          Filter
+        </button>
+        {(journalQuery || yearQuery !== undefined) && (
+          <a href="/admin/excluded" className="btn btn-outline btn-sm">
+            Reset
+          </a>
+        )}
+      </form>
 
       <p className="text-sm text-base-content/60 mb-4">
         {total} paper{total !== 1 ? "s" : ""} pending
@@ -60,6 +102,7 @@ export default async function AdminExcludedPage({
                   <th>Title</th>
                   <th>Authors</th>
                   <th>Year</th>
+                  <th>Journal</th>
                   <th>Score</th>
                   <th></th>
                 </tr>
@@ -95,6 +138,7 @@ export default async function AdminExcludedPage({
                         {p.authors.length > 3 && " et al."}
                       </td>
                       <td>{p.year ?? "—"}</td>
+                      <td className="text-sm text-base-content/70 italic max-w-xs">{p.journal ?? "—"}</td>
                       <td>
                         {p.modelScore != null ? (
                           <span className="badge badge-outline badge-sm">
@@ -118,7 +162,11 @@ export default async function AdminExcludedPage({
               </tbody>
             </table>
           </div>
-          <Pagination page={page} totalPages={totalPages} buildHref={(p) => `?page=${p}`} />
+          <Pagination
+            page={page}
+            totalPages={totalPages}
+            buildHref={(p) => `?${filterParams.toString()}${filterParams.toString() ? "&" : ""}page=${p}`}
+          />
         </>
       )}
     </>
