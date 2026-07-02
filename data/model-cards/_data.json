@@ -1,5 +1,5 @@
 {
-  "syncedAt": "2026-05-14T23:16:30.846Z",
+  "syncedAt": "2026-07-02T03:20:34.166Z",
   "cards": [
     {
       "bibtex": "Li2021",
@@ -7,7 +7,7 @@
       "citation": {
         "author": "Jia Liu, Lin Fan, Xiaokun Zhang, Zeming Xu",
         "year": 2026,
-        "title": "Affective and Psycholinguistic Norms for 1200 Two‐character Chinese Words",
+        "title": "Affective and Psycholinguistic Norms for 1200 Two\u2010character Chinese Words",
         "journal": "International Journal of Applied Linguistics",
         "doi": "10.1111/ijal.12829"
       },
@@ -37,7 +37,7 @@
       "citation": {
         "author": "Jia Liu, Lin Fan, Xiaokun Zhang, Zeming Xu",
         "year": 2026,
-        "title": "Affective and Psycholinguistic Norms for 1200 Two‐character Chinese Words",
+        "title": "Affective and Psycholinguistic Norms for 1200 Two\u2010character Chinese Words",
         "journal": "International Journal of Applied Linguistics",
         "doi": "10.1111/ijal.12829"
       },
@@ -68,10 +68,74 @@
       ]
     },
     {
+      "bibtex": "Volskaya2026",
+      "parentBibtex": null,
+      "citation": {
+        "author": "Yuliya A. Volskaya, Alena A. Toksubaeva, Valery D. Solovyev",
+        "year": 2026,
+        "title": "Affective VAD Norms for Russian: Correlation with Abstractness/Concreteness Ratings",
+        "journal": "RUDN Journal of Language Studies, Semiotics and Semantics",
+        "doi": "10.22363/2313-2299-2025-16-4-1225-1241"
+      },
+      "language": "russian",
+      "nRows": 1023,
+      "flags": [
+        "arousal",
+        "dominate",
+        "pos",
+        "valence"
+      ],
+      "wordColumns": [
+        "word_russian"
+      ],
+      "rawColumns": [
+        "word_russian",
+        "pos",
+        "arousal_mean",
+        "dominance_mean",
+        "valence_mean",
+        "abstract_mean"
+      ]
+    },
+    {
+      "bibtex": "Nemati2026",
+      "parentBibtex": null,
+      "citation": {
+        "author": "Fatemeh Nemati, Chris Westbury, Habib Rostami, Fatemeh Alavi",
+        "year": 2026,
+        "title": "Extrapolated Persian Lexical Affect Norms (E-PLAN) from best\u2013worst judgments of valence, arousal, dominance, and concreteness",
+        "journal": "Behavior Research Methods",
+        "doi": "10.3758/s13428-026-02963-9"
+      },
+      "language": "persian",
+      "nRows": 85716,
+      "flags": [
+        "arousal",
+        "concrete",
+        "dominate",
+        "valence"
+      ],
+      "wordColumns": [
+        "word_persian"
+      ],
+      "rawColumns": [
+        "word_persian",
+        "bw_sample_group",
+        "valence_mean_bw",
+        "arousal_mean_bw",
+        "dominance_mean_bw",
+        "concrete_mean_bw",
+        "valence_mean_extrapolated",
+        "arousal_mean_extrapolated",
+        "dominance_mean_extrapolated",
+        "concrete_mean_extrapolated"
+      ]
+    },
+    {
       "bibtex": "Conde2026_cvaa_gpt",
       "parentBibtex": "Conde2026",
       "citation": {
-        "author": "Javier Conde, Gonzalo Martínez, María Grandury, Carlos Arriaga, Juan Haro, Sascha Schroeder, et al.",
+        "author": "Javier Conde, Gonzalo Mart\u00ednez, Mar\u00eda Grandury, Carlos Arriaga, Juan Haro, Sascha Schroeder, et al.",
         "year": 2026,
         "title": "Updating the German Psycholinguistic Word Toolbox with AI-Generated Estimates of Concreteness, Valence, Arousal, Age of Acquisition, and Familiarity",
         "journal": "Journal of Cognition",
@@ -107,7 +171,7 @@
       "bibtex": "Conde2026_familiar_gpt",
       "parentBibtex": "Conde2026",
       "citation": {
-        "author": "Javier Conde, Gonzalo Martínez, María Grandury, Carlos Arriaga, Juan Haro, Sascha Schroeder, et al.",
+        "author": "Javier Conde, Gonzalo Mart\u00ednez, Mar\u00eda Grandury, Carlos Arriaga, Juan Haro, Sascha Schroeder, et al.",
         "year": 2026,
         "title": "Updating the German Psycholinguistic Word Toolbox with AI-Generated Estimates of Concreteness, Valence, Arousal, Age of Acquisition, and Familiarity",
         "journal": "Journal of Cognition",
@@ -135,7 +199,7 @@
       "bibtex": "Conde2026_familiar_human",
       "parentBibtex": "Conde2026",
       "citation": {
-        "author": "Javier Conde, Gonzalo Martínez, María Grandury, Carlos Arriaga, Juan Haro, Sascha Schroeder, et al.",
+        "author": "Javier Conde, Gonzalo Mart\u00ednez, Mar\u00eda Grandury, Carlos Arriaga, Juan Haro, Sascha Schroeder, et al.",
         "year": 2026,
         "title": "Updating the German Psycholinguistic Word Toolbox with AI-Generated Estimates of Concreteness, Valence, Arousal, Age of Acquisition, and Familiarity",
         "journal": "Journal of Cognition",
@@ -163,7 +227,7 @@
       "bibtex": "Conde2026_frequency",
       "parentBibtex": "Conde2026",
       "citation": {
-        "author": "Javier Conde, Gonzalo Martínez, María Grandury, Carlos Arriaga, Juan Haro, Sascha Schroeder, et al.",
+        "author": "Javier Conde, Gonzalo Mart\u00ednez, Mar\u00eda Grandury, Carlos Arriaga, Juan Haro, Sascha Schroeder, et al.",
         "year": 2026,
         "title": "Updating the German Psycholinguistic Word Toolbox with AI-Generated Estimates of Concreteness, Valence, Arousal, Age of Acquisition, and Familiarity",
         "journal": "Journal of Cognition",
@@ -188,6 +252,45 @@
         "frequency_google00pm",
         "frequency_zipfsubtlex",
         "frequency_zipfgoogle"
+      ]
+    },
+    {
+      "bibtex": "Zhao2025",
+      "parentBibtex": null,
+      "citation": {
+        "author": "Ying Zhao, Hairun Wang, Chi-Shing Tse, Qingrong Chen",
+        "year": 2025,
+        "title": "Chinese Onomatopoeia Database (COD): Concreteness, imageability, context availability, age of acquisition, familiarity, semantic transparency, emotional valence, and emotional arousal for Chinese onomatopoeic words",
+        "journal": "Behavior Research Methods",
+        "doi": "10.3758/s13428-025-02849-2"
+      },
+      "language": "chinese_simplified",
+      "nRows": 751,
+      "flags": [
+        "aoa",
+        "arousal",
+        "concrete",
+        "context",
+        "familiar",
+        "imagine",
+        "letters",
+        "semantic",
+        "valence"
+      ],
+      "wordColumns": [
+        "word_chinese_simplified"
+      ],
+      "rawColumns": [
+        "word_chinese_simplified",
+        "length",
+        "concrete_mean",
+        "imagine_mean",
+        "aoa_mean",
+        "familiar_mean",
+        "semantic_transparency_mean",
+        "context_availability_mean",
+        "valence_mean",
+        "arousal_mean"
       ]
     },
     {
@@ -219,6 +322,194 @@
         "aoa_sd",
         "aoa_minimum",
         "aoa_maximum"
+      ]
+    },
+    {
+      "bibtex": "Muraki2025",
+      "parentBibtex": null,
+      "citation": {
+        "author": "Emiko J. Muraki, Penny M. Pexman",
+        "year": 2025,
+        "title": "English verbs semantic norms database: Concreteness, embodiment, imageability, valence and arousal ratings for 3,500 verbs",
+        "journal": "Behavior Research Methods",
+        "doi": "10.3758/s13428-025-02675-6"
+      },
+      "language": "",
+      "nRows": 2938,
+      "flags": [
+        "arousal",
+        "concrete",
+        "imagine",
+        "valence"
+      ],
+      "wordColumns": [],
+      "rawColumns": [
+        "item",
+        "arousal_mean",
+        "arousal_sd",
+        "arousal_n",
+        "arousal_min",
+        "arousal_max",
+        "arousal_unknown",
+        "concrete_mean",
+        "concrete_sd",
+        "concrete_n",
+        "concrete_min",
+        "concrete_max",
+        "concrete_unknown",
+        "embodiment_mean",
+        "embodiment_sd",
+        "embodiment_n",
+        "embodiment_min",
+        "embodiment_max",
+        "embodiment_unknown",
+        "imagine_mean",
+        "imagine_sd",
+        "imagine_n",
+        "imagine_min",
+        "imagine_max",
+        "imagine_unknown",
+        "valence_mean",
+        "valence_sd",
+        "valence_n",
+        "valence_min",
+        "valence_max",
+        "valence_unknown"
+      ]
+    },
+    {
+      "bibtex": "Bogunovic2024",
+      "parentBibtex": null,
+      "citation": {
+        "author": "Irena Bogunovi\u0107, Bojana \u0106oso, Marc Guasch, Eva Pavlinu\u0161i\u0107 Vilus, Pilar Ferr\u00e9, Jos\u00e9 Antonio Hinojosa",
+        "year": 2025,
+        "title": "How do we feel about borrowed words? Affective and lexico-semantic norms for most frequent unadapted English loanwords in Croatian (ENGRI CROWD)",
+        "journal": "International Journal of Bilingualism",
+        "doi": "10.1177/13670069241280355"
+      },
+      "language": "english_loanword, croatian_incontext, croatian_outcontext, croatian_adaptedform",
+      "nRows": 391,
+      "flags": [
+        "arousal",
+        "concrete",
+        "familiar",
+        "valence"
+      ],
+      "wordColumns": [
+        "word_english_loanword",
+        "word_croatian_incontext",
+        "word_croatian_outcontext",
+        "word_croatian_adaptedform"
+      ],
+      "rawColumns": [
+        "word_english_loanword",
+        "word_croatian_incontext",
+        "word_croatian_outcontext",
+        "word_croatian_adaptedform",
+        "valence_mean_english_loanword",
+        "valence_sd_english_loanword",
+        "valence_unknown_english_loanword",
+        "valence_n_english_loanword",
+        "valence_mean_croatian_incontext",
+        "valence_sd_croatian_incontext",
+        "valence_unknown_croatian_incontext",
+        "valence_n_croatian_incontext",
+        "valence_mean_croatian_outcontext",
+        "valence_sd_croatian_outcontext",
+        "valence_unknown_croatian_outcontext",
+        "valence_n_croatian_outcontext",
+        "valence_mean_croatian_adaptedform",
+        "valence_sd_croatian_adaptedform",
+        "valence_unknown_croatian_adaptedform",
+        "valence_n_croatian_adaptedform",
+        "arousal_mean_english_loanword",
+        "arousal_sd_english_loanword",
+        "arousal_unknown_english_loanword",
+        "arousal_n_english_loanword",
+        "arousal_mean_croatian_incontext",
+        "arousal_sd_croatian_incontext",
+        "arousal_unknown_croatian_incontext",
+        "arousal_n_croatian_incontext",
+        "arousal_mean_croatian_outcontext",
+        "arousal_sd_croatian_outcontext",
+        "arousal_unknown_croatian_outcontext",
+        "arousal_n_croatian_outcontext",
+        "arousal_mean_croatian_adaptedform",
+        "arousal_sd_croatian_adaptedform",
+        "arousal_unknown_croatian_adaptedform",
+        "arousal_n_croatian_adaptedform",
+        "familiar_mean_english_loanword",
+        "familiar_sd_english_loanword",
+        "familiar_unknown_english_loanword",
+        "familiar_n_english_loanword",
+        "familiar_mean_croatian_incontext",
+        "familiar_sd_croatian_incontext",
+        "familiar_unknown_croatian_incontext",
+        "familiar_n_croatian_incontext",
+        "familiar_mean_croatian_outcontext",
+        "familiar_sd_croatian_outcontext",
+        "familiar_unknown_croatian_outcontext",
+        "familiar_n_croatian_outcontext",
+        "familiar_mean_croatian_adaptedform",
+        "familiar_sd_croatian_adaptedform",
+        "familiar_unknown_croatian_adaptedform",
+        "familiar_n_croatian_adaptedform",
+        "concrete_mean_english_loanword",
+        "concrete_sd_english_loanword",
+        "concrete_unknown_english_loanword",
+        "concrete_n_english_loanword",
+        "concrete_mean_croatian_incontext",
+        "concrete_sd_croatian_incontext",
+        "concrete_unknown_croatian_incontext",
+        "concrete_n_croatian_incontext",
+        "concrete_mean_croatian_outcontext",
+        "concrete_sd_croatian_outcontext",
+        "concrete_unknown_croatian_outcontext",
+        "concrete_n_croatian_outcontext",
+        "concrete_mean_croatian_adaptedform",
+        "concrete_sd_croatian_adaptedform",
+        "concrete_unknown_croatian_adaptedform",
+        "concrete_n_croatian_adaptedform"
+      ]
+    },
+    {
+      "bibtex": "Siew2025",
+      "parentBibtex": null,
+      "citation": {
+        "author": "Cynthia S. Q. Siew, Feria Chang, Jin Jye Wong",
+        "year": 2025,
+        "title": "Investigating the Effects of Valence, Arousal, Concreteness, and Humor on Words Unique to Singapore English",
+        "journal": "Journal of Cognition",
+        "doi": "10.5334/joc.470"
+      },
+      "language": "english_singapore",
+      "nRows": 287,
+      "flags": [
+        "arousal",
+        "concrete",
+        "valence"
+      ],
+      "wordColumns": [
+        "word_english_singapore"
+      ],
+      "rawColumns": [
+        "word_english_singapore",
+        "valence_n",
+        "valence_mean",
+        "valence_sd",
+        "arousal_n",
+        "arousal_mean",
+        "arousal_sd",
+        "concrete_n",
+        "concrete_mean",
+        "concrete_sd",
+        "humor_n",
+        "humor_mean",
+        "humor_sd",
+        "valence_mean_latent",
+        "arousal_mean_latent",
+        "concrete_mean_latent",
+        "humor_mean_latent"
       ]
     },
     {
@@ -256,10 +547,205 @@
       ]
     },
     {
+      "bibtex": "Hirosh2025",
+      "parentBibtex": null,
+      "citation": {
+        "author": "Zoya Hirosh, Hamutal Kreiner, Tamar Degani",
+        "year": 2025,
+        "title": "Limited predictive value of L1 picture-norms for L2 picture-naming performance",
+        "journal": "Applied Psycholinguistics",
+        "doi": "10.1017/s0142716425100179"
+      },
+      "language": "hebrew_modal_l1, english_modal_l1, modal_l2, english_modal_l2, modal_spelling_variations_l2",
+      "nRows": 323,
+      "flags": [
+        "accuracy",
+        "familiar",
+        "freq",
+        "nameagree",
+        "picture",
+        "rt",
+        "syllables",
+        "typical",
+        "visualcomp"
+      ],
+      "wordColumns": [
+        "word_hebrew_modal_l1",
+        "word_english_modal_l1",
+        "word_modal_l2",
+        "word_english_modal_l2",
+        "word_modal_spelling_variations_l2"
+      ],
+      "rawColumns": [
+        "order",
+        "item_id",
+        "word_hebrew_modal_l1",
+        "word_english_modal_l1",
+        "name_agreement_hebrew_l1",
+        "visual_complexity_hebrew_l1",
+        "familiar_mean_hebrew_l1",
+        "typicality_mean_hebrew_l1",
+        "response_n_hebrew_l1",
+        "other_responses_hebrew_l1",
+        "word_modal_l2",
+        "word_english_modal_l2",
+        "word_modal_spelling_variations_l2",
+        "modal_response_match_l1_proportion_l2",
+        "name_agreement_english_l2",
+        "visual_complexity_english_l2",
+        "familiar_mean_english_l2",
+        "typicality_mean_english_l2",
+        "response_n_english_l2",
+        "other_responses_english_l2",
+        "appeared_in_naming_task",
+        "accuracy_mean_hebrew_l1",
+        "accuracy_sd_hebrew_l1",
+        "accuracy_n_hebrew_l1",
+        "rt_mean_hebrew_l1",
+        "rt_sd_hebrew_l1",
+        "rt_n_hebrew_l1",
+        "accuracy_mean_english_l2",
+        "accuracy_sd_english_l2",
+        "accuracy_n_english_l2",
+        "rt_mean_english_l2",
+        "rt_sd_english_l2",
+        "rt_n_english_l2",
+        "syllables",
+        "frequency_per_million",
+        "is_two_words",
+        "picture_source"
+      ]
+    },
+    {
+      "bibtex": "Yi2025",
+      "parentBibtex": null,
+      "citation": {
+        "author": "Wei Yi, Haitao Xu, Kaiwen Man",
+        "year": 2025,
+        "title": "Perception of emotion across cultures: Norms of valence, arousal, and sensory experience for 4923 Chinese words translated from English in Warriner et al. (2013)",
+        "journal": "Behavior Research Methods",
+        "doi": "10.3758/s13428-024-02580-4"
+      },
+      "language": "english, chinese_simplified",
+      "nRows": 4923,
+      "flags": [
+        "arousal",
+        "category",
+        "concrete",
+        "familiar",
+        "freq",
+        "imagine",
+        "pos",
+        "rt",
+        "sensory",
+        "syllables",
+        "valence"
+      ],
+      "wordColumns": [
+        "word_english",
+        "word_chinese_simplified"
+      ],
+      "rawColumns": [
+        "word_english",
+        "word_chinese_simplified",
+        "pos",
+        "syllables",
+        "strokes",
+        "hsk",
+        "valence_mean_chinese",
+        "valence_sd_ch",
+        "valence_n_chinese",
+        "arousal_mean_chinese",
+        "arousal_sd_chinese",
+        "arousal_n_chinese",
+        "valence_mean_english",
+        "valence_sd_english",
+        "valence_n_english",
+        "arousal_mean_english",
+        "arousal_sd_english",
+        "arousal_n_english",
+        "sensory_mean_chinese",
+        "sensory_sd_chinese",
+        "sensory_n_chinese",
+        "valence_xu",
+        "arousal_xu",
+        "valence_yao",
+        "arousal_yao",
+        "imagine_su",
+        "familiar_su",
+        "concrete_xu",
+        "frequency_m_tsang",
+        "frequency_cncorpus",
+        "ao_a_xu",
+        "rt_tsang",
+        "z_rt_tsang",
+        "category"
+      ]
+    },
+    {
+      "bibtex": "Borsa2025",
+      "parentBibtex": null,
+      "citation": {
+        "author": "Virginia Maria Borsa, Maria Arioli, Riccardo Verni, Nicola Canessa, Stefano F. Cappa, Eleonora Catrical\u00e0",
+        "year": 2025,
+        "title": "Quantifying the Multidimensionality of Abstract Concepts: An Italian Database",
+        "journal": "Brain Sciences",
+        "doi": "10.3390/brainsci15030222"
+      },
+      "language": "italian",
+      "nRows": 964,
+      "flags": [
+        "aoa",
+        "arousal",
+        "concrete",
+        "familiar",
+        "imagine",
+        "semantic",
+        "valence"
+      ],
+      "wordColumns": [
+        "word_italian"
+      ],
+      "rawColumns": [
+        "word_italian",
+        "italian_code",
+        "concrete_mean",
+        "concrete_sd",
+        "imagine_mean",
+        "imagine_sd",
+        "familiar_mean",
+        "familiar_sd",
+        "aoa_mean",
+        "aoa_sd",
+        "valence_mean",
+        "valence_sd",
+        "arousal_mean",
+        "arousal_sd",
+        "semantic_diversity_mean",
+        "semantic_diversity_sd",
+        "introspection_mean",
+        "introspection_sd",
+        "mental_state_mean",
+        "mental_state_sd",
+        "social_mean",
+        "social_sd",
+        "moral_mean",
+        "moral_sd",
+        "economic_mean",
+        "economic_sd",
+        "theoretic_mean",
+        "theoretic_sd",
+        "space_mean",
+        "space_sd",
+        "quantity_mean",
+        "quantity_sd"
+      ]
+    },
+    {
       "bibtex": "Granja2025",
       "parentBibtex": null,
       "citation": {
-        "author": "María Álvarez de la Granja, María Carmen Parafita Couto, Ana Rita Sá-Leite, Isabel Fraga, Jon Andoni Duñabeitia, Christos Pliatsikas, et al.",
+        "author": "Mar\u00eda \u00c1lvarez de la Granja, Mar\u00eda Carmen Parafita Couto, Ana Rita S\u00e1-Leite, Isabel Fraga, Jon Andoni Du\u00f1abeitia, Christos Pliatsikas, et al.",
         "year": 2025,
         "title": "The Galician MultiPic: a picture dataset that captures lexical variation",
         "journal": "Frontiers in Psychology",
@@ -290,6 +776,208 @@
         "familiar_mean",
         "familiar_sd",
         "translate_word_english"
+      ]
+    },
+    {
+      "bibtex": "Cheng2025",
+      "parentBibtex": null,
+      "citation": {
+        "author": "Xi Cheng, Chi-Shing Tse, Yuen-Lai Chan, Kai Yan Lau, Yen Na Yum",
+        "year": 2025,
+        "title": "Unveiling the intensity\u2013ambiguity relationships among affective and lexico-semantic variables in Chinese characters and the character\u2013word relationships in Chinese two-character words",
+        "journal": "Behavior Research Methods",
+        "doi": "10.3758/s13428-025-02753-9"
+      },
+      "language": "chinese_traditional",
+      "nRows": 3971,
+      "flags": [
+        "arousal",
+        "valence"
+      ],
+      "wordColumns": [
+        "word_chinese_traditional"
+      ],
+      "rawColumns": [
+        "word_chinese_traditional",
+        "arousal_mean",
+        "arousal_sd",
+        "valence_mean",
+        "valence_sd",
+        "valance_z",
+        "arousal_z",
+        "valence_sd_z",
+        "arousal_sd_z"
+      ]
+    },
+    {
+      "bibtex": "Chan2024",
+      "parentBibtex": null,
+      "citation": {
+        "author": "Yuen-Lai Chan, Chi-Shing Tse",
+        "year": 2024,
+        "title": "Decoding the essence of two-character Chinese words: Unveiling valence, arousal, concreteness, familiarity, and imageability through word norming",
+        "journal": "Behavior Research Methods",
+        "doi": "10.3758/s13428-024-02437-w"
+      },
+      "language": "chinese_traditional, chinese_simplified",
+      "nRows": 25281,
+      "flags": [
+        "arousal",
+        "concrete",
+        "familiar",
+        "freq",
+        "imagine",
+        "valence"
+      ],
+      "wordColumns": [
+        "word_chinese_traditional",
+        "word_chinese_simplified"
+      ],
+      "rawColumns": [
+        "word_chinese_traditional",
+        "word_chinese_simplified",
+        "valence_mean",
+        "valence_sd",
+        "arousal_mean",
+        "arousal_sd",
+        "concrete_mean",
+        "concrete_sd",
+        "familiar_mean",
+        "familiar_sd",
+        "imagine_mean",
+        "imagine_sd",
+        "frequency_log_c1",
+        "frequency_log_c2",
+        "frequency_log_word",
+        "included_regression"
+      ]
+    },
+    {
+      "bibtex": "Mahjoubnavaz2024",
+      "parentBibtex": null,
+      "citation": {
+        "author": "Firouzeh Mahjoubnavaz, Setareh Mokhtari, Reza Khosrowabadi",
+        "year": 2024,
+        "title": "Norms for 718 Persian Words in Emotional Dimensions, Animacy, and Familiarity",
+        "journal": "Journal of Psycholinguistic Research",
+        "doi": "10.1007/s10936-024-10104-6"
+      },
+      "language": "english, persian",
+      "nRows": 718,
+      "flags": [
+        "arousal",
+        "familiar",
+        "valence"
+      ],
+      "wordColumns": [
+        "word_english",
+        "word_persian"
+      ],
+      "rawColumns": [
+        "word_english",
+        "word_persian",
+        "valence_mean_english",
+        "valence_sd_english",
+        "valence_mean_persian",
+        "valence_sd_persian",
+        "valence_n_persian",
+        "valence_mean_english_male",
+        "valence_sd_english_male",
+        "valence_mean_persian_male",
+        "valence_sd_persian_male",
+        "valence_n_persian_male",
+        "valence_mean_english_female",
+        "valence_sd_english_female",
+        "valence_mean_persian_female",
+        "valence_sd_persian_female",
+        "valence_n_persian_female",
+        "familiar_mean_persian",
+        "familiar_sd_persian",
+        "familiar_n_persian",
+        "familiar_mean_persian_male",
+        "familiar_sd_persian_male",
+        "familiar_n_persian_male",
+        "familiar_mean_persian_female",
+        "familiar_sd_persian_female",
+        "familiar_n_persian_female",
+        "animacy_mean_persian",
+        "animacy_sd_persian",
+        "animacy_n_persian",
+        "animacy_mean_persian_male",
+        "animacy_sd_persian_male",
+        "animacy_n_persian_male",
+        "animacy_mean_persian_female",
+        "animacy_sd_persian_female",
+        "animacy_n_persian_female",
+        "arousal_mean_english",
+        "arousal_sd_english",
+        "arousal_mean_persian",
+        "arousal_sd_persian",
+        "arousal_n_persian",
+        "arousal_mean_english_male",
+        "arousal_sd_english_male",
+        "arousal_mean_persian_male",
+        "arousal_sd_persian_male",
+        "arousal_n_persian_male",
+        "arousal_mean_english_female",
+        "arousal_sd_english_female",
+        "arousal_mean_persian_female",
+        "arousal_sd_persian_female",
+        "arousal_n_persian_female"
+      ]
+    },
+    {
+      "bibtex": "Conca2024",
+      "parentBibtex": null,
+      "citation": {
+        "author": "Francesca Conca, Daniela M. Gibbons, Ba\u015fak Bayram, Enise I. Incesoy, Marta Tacchini, Emrah D\u00fczel, et al.",
+        "year": 2024,
+        "title": "TACO: A Turkish database for abstract concepts",
+        "journal": "Behavior Research Methods",
+        "doi": "10.3758/s13428-024-02428-x"
+      },
+      "language": "turkish",
+      "nRows": 503,
+      "flags": [
+        "aoa",
+        "arousal",
+        "familiar",
+        "imagine",
+        "pos",
+        "valence"
+      ],
+      "wordColumns": [
+        "word_turkish"
+      ],
+      "rawColumns": [
+        "word_turkish",
+        "translate_word_italian",
+        "translate_word_english",
+        "pos",
+        "aoa_mean",
+        "aoa_sd",
+        "familiar_mean",
+        "familiar_sd",
+        "imagine_mean",
+        "imagine_sd",
+        "arousal_mean",
+        "arousal_sd",
+        "valence_mean",
+        "valence_sd",
+        "mental_state_mean",
+        "mental_state_sd",
+        "political_mean",
+        "political_sd",
+        "quantity_mean",
+        "quantity_sd",
+        "space_mean",
+        "space_sd",
+        "social_mean",
+        "social_sd",
+        "theoretic_mean",
+        "theoretic_sd",
+        "dominant_dimension",
+        "exclusivity_score"
       ]
     },
     {
@@ -329,12 +1017,138 @@
       ]
     },
     {
+      "bibtex": "Falcinelli2024",
+      "parentBibtex": null,
+      "citation": {
+        "author": "Ilenia Falcinelli, Chiara Fini, Claudia Mazzuca, Anna M. Borghi",
+        "year": 2024,
+        "title": "The TECo Database: Ecological and Technological Concepts at the Interface Between Abstractness and Concreteness",
+        "journal": "Collabra: Psychology",
+        "doi": "10.1525/collabra.120327"
+      },
+      "language": "italian, confidence_mean, confidence_sd",
+      "nRows": 200,
+      "flags": [
+        "aoa",
+        "arousal",
+        "category",
+        "concrete",
+        "context",
+        "dominate",
+        "emotion",
+        "familiar",
+        "freq",
+        "imagine",
+        "letters",
+        "modality",
+        "syllables",
+        "valence"
+      ],
+      "wordColumns": [
+        "word_italian",
+        "word_confidence_mean",
+        "word_confidence_sd"
+      ],
+      "rawColumns": [
+        "word_italian",
+        "translation_word_english",
+        "category",
+        "concrete_mean",
+        "concrete_sd",
+        "action_effector_mean",
+        "action_effector_sd",
+        "action_effector_feet_mean",
+        "action_effector_feet_sd",
+        "action_effector_hands_mean",
+        "action_effector_hands_sd",
+        "action_effector_mouth_mean",
+        "action_effector_mouth_sd",
+        "action_effector_torso_mean",
+        "action_effector_torso_sd",
+        "arousal_mean",
+        "arousal_sd",
+        "aoa_mean",
+        "aoa_sd",
+        "body_object_interact_mean",
+        "body_object_interact_sd",
+        "context_avail_mean",
+        "context_avail_sd",
+        "expert_confidence_mean",
+        "expert_confidence_sd",
+        "dominance_mean",
+        "dominance_sd",
+        "emotional_mean",
+        "emotional_sd",
+        "convo_ease_mean",
+        "convo_ease_sd",
+        "expert_social_meta_mean",
+        "expert_social_meta_sd",
+        "define_ease_mean",
+        "define_ease_sd",
+        "familiar_mean",
+        "familiar_sd",
+        "frequency_subjective_mean",
+        "frequency_subjective_sd",
+        "frequency_objective",
+        "imagine_mean",
+        "imagine_sd",
+        "interoception_mean",
+        "interoception_sd",
+        "metacognition_mean",
+        "metacognition_sd",
+        "modality_acquis_mean",
+        "modality_acquis_sd",
+        "natural_artific_mean",
+        "natural_artific_sd",
+        "open_negotiation_mean",
+        "open_negotiation_sd",
+        "perceived_distance_mean",
+        "perceived_distance_sd",
+        "personal_experience_mean",
+        "personal_experience_sd",
+        "perceived_impact_mean",
+        "perceived_impact_sd",
+        "perceived_impact_future_mean",
+        "perceived_impact_future_sd",
+        "perceived_impact_past_mean",
+        "perceived_impact_past_sd",
+        "perceived_impact_present_mean",
+        "perceived_impact_present_sd",
+        "political_relev_mean",
+        "political_relev_sd",
+        "percept_strength_mean",
+        "percept_strength_sd",
+        "percept_strength_hearing_mean",
+        "percept_strength_hearing_sd",
+        "percept_strength_smell_mean",
+        "percept_strength_smell_sd",
+        "percept_strength_taste_mean",
+        "percept_strength_taste_sd",
+        "percept_strength_touch_mean",
+        "percept_strength_touch_sd",
+        "percept_strength_vision_mean",
+        "percept_strength_vision_sd",
+        "scientificity_mean",
+        "scientificity_sd",
+        "social_meta_mean",
+        "social_meta_sd",
+        "social_valence_mean",
+        "social_valence_sd",
+        "valence_mean",
+        "valence_sd",
+        "word_confidence_mean",
+        "word_confidence_sd",
+        "letters",
+        "syllables"
+      ]
+    },
+    {
       "bibtex": "Bogunovic2023",
       "parentBibtex": null,
       "citation": {
-        "author": "Irena Bogunović",
+        "author": "Irena Bogunovi\u0107",
         "year": 2023,
-        "title": "A corpus-based approach to English loanwords,Korpusni pristup engleskim posuđenicama",
+        "title": "A corpus-based approach to English loanwords,Korpusni pristup engleskim posu\u0111enicama",
         "journal": "Fluminensia",
         "doi": "10.31820/f.35.2.1"
       },
@@ -446,10 +1260,212 @@
       ]
     },
     {
+      "bibtex": "Raslescu2023",
+      "parentBibtex": null,
+      "citation": {
+        "author": "Andreea Raslescu, Sophie Kreicker, Amy L Gillespie, William Berners-Lee, Susannah E Murphy, Catherine J Harmer",
+        "year": 2023,
+        "title": "Positive and negative personality descriptors: UK dataset of self-referential valence, imageability and subjective frequency ratings of 300 adjectives for use in cognitive-emotional tasks",
+        "journal": "Data in Brief",
+        "doi": "10.1016/j.dib.2022.108831"
+      },
+      "language": "english",
+      "nRows": 300,
+      "flags": [
+        "freq",
+        "imagine",
+        "letters",
+        "valence"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "word_english",
+        "length",
+        "valence_category",
+        "valence_n",
+        "valence_mean",
+        "valence_sd",
+        "valence_median",
+        "valence_min",
+        "valence_max",
+        "valence_range",
+        "valence_skew",
+        "valence_kurtosis",
+        "valence_se",
+        "imagine_n",
+        "imagine_mean",
+        "imagine_sd",
+        "imagine_median",
+        "imagine_min",
+        "imagine_max",
+        "imagine_range",
+        "imagine_skew",
+        "imagine_kurtosis",
+        "imagine_se",
+        "frequency_n",
+        "frequency_mean",
+        "frequency_sd",
+        "frequency_median",
+        "frequency_min",
+        "frequency_max",
+        "frequency_range",
+        "frequency_skew",
+        "frequency_kurtosis",
+        "frequency_se"
+      ]
+    },
+    {
+      "bibtex": "Speed2024",
+      "parentBibtex": null,
+      "citation": {
+        "author": "Laura J. Speed, Marc Brysbaert",
+        "year": 2023,
+        "title": "Ratings of valence, arousal, happiness, anger, fear, sadness, disgust, and surprise for 24,000 Dutch words",
+        "journal": "Behavior Research Methods",
+        "doi": "10.3758/s13428-023-02239-6"
+      },
+      "language": "dutch",
+      "nRows": 23986,
+      "flags": [
+        "accuracy",
+        "aoa",
+        "arousal",
+        "concrete",
+        "emotion",
+        "freq",
+        "imagine",
+        "letters",
+        "phonemes",
+        "pos",
+        "rt",
+        "syllables",
+        "valence"
+      ],
+      "wordColumns": [
+        "word_dutch"
+      ],
+      "rawColumns": [
+        "word_dutch",
+        "arousal_mean",
+        "valence_mean",
+        "valence_category",
+        "valence_vs_neutral",
+        "happiness_mean",
+        "anger_mean",
+        "fear_mean",
+        "sadness_mean",
+        "disgust",
+        "surprise_mean",
+        "dominant_emotion",
+        "n_arousal",
+        "n_valence",
+        "n_primary_emotion",
+        "n_unknown_arousal",
+        "n_unknown_valence",
+        "n_unknown_primary_emotion",
+        "concrete_mean",
+        "concrete_category",
+        "imagine_mean",
+        "imagine_category",
+        "source_imageability",
+        "frequency_zipf",
+        "prevalence",
+        "length",
+        "syllables",
+        "phonemes",
+        "pos",
+        "old20",
+        "aoa_mean",
+        "rt_mean_dlp",
+        "accuracy_dlp",
+        "rt_mean_dcp",
+        "accuracy_dcp"
+      ]
+    },
+    {
+      "bibtex": "Ballot2022",
+      "parentBibtex": null,
+      "citation": {
+        "author": "Claire Ballot, St\u00e9phanie Mathey, Christelle Robert",
+        "year": 2022,
+        "title": "Age-related evaluations of imageability and subjective frequency for 1286 neutral and emotional French words: ratings by young, middle-aged, and older adults",
+        "journal": "Behavior Research Methods",
+        "doi": "10.3758/s13428-021-01621-6"
+      },
+      "language": "french",
+      "nRows": 1286,
+      "flags": [
+        "arousal",
+        "freq",
+        "imagine",
+        "valence"
+      ],
+      "wordColumns": [
+        "word_french"
+      ],
+      "rawColumns": [
+        "word_french",
+        "frequency_subjective_mean_all",
+        "frequency_subjective_sd_all",
+        "frequency_subjective_mean_25",
+        "frequency_subjective_sd_25",
+        "frequency_subjective_mean_39",
+        "frequency_subjective_sd_39",
+        "frequency_subjective_mean_59",
+        "frequency_subjective_sd_59",
+        "frequency_subjective_mean_60plus",
+        "frequency_subjective_sd_60plus",
+        "frequency_subjective_pval_25v39",
+        "frequency_subjective_pval_25v59",
+        "frequency_subjective_pval_25v60plus",
+        "frequency_subjective_pval_39v59",
+        "frequency_subjective_pval_39v60plus",
+        "frequency_subjective_pval_59v60plus",
+        "imagine_mean_all",
+        "imagine_sd_all",
+        "imagine_mean_25",
+        "imagine_sd_25",
+        "imagine_mean_39",
+        "imagine_sd_39",
+        "imagine_mean_59",
+        "imagine_sd_59",
+        "imagine_mean_60plus",
+        "imagine_sd_60plus",
+        "imagine_pval_25v39",
+        "imagine_pval_25v59",
+        "imagine_pval_25v60plus",
+        "imagine_pval_39v59",
+        "imagine_pval_39v60plus",
+        "imagine_pval_59v60plus",
+        "valence_mean_all",
+        "valence_sd_all",
+        "valence_mean_25",
+        "valence_sd_25",
+        "valence_mean_39",
+        "valence_sd_39",
+        "valence_mean_59",
+        "valence_sd_59",
+        "valence_mean_60plus",
+        "valence_sd_60plus",
+        "arousal_mean_all",
+        "arousal_sd_all",
+        "arousal_mean_25",
+        "arousal_sd_25",
+        "arousal_mean_39",
+        "arousal_sd_39",
+        "arousal_mean_59",
+        "arousal_sd_59",
+        "arousal_mean_60plus",
+        "arousal_sd_60plus"
+      ]
+    },
+    {
       "bibtex": "Coso2023",
       "parentBibtex": null,
       "citation": {
-        "author": "Bojana Ćoso, Marc Guasch, Irena Bogunović, Pilar Ferré, José A. Hinojosa",
+        "author": "Bojana \u0106oso, Marc Guasch, Irena Bogunovi\u0107, Pilar Ferr\u00e9, Jos\u00e9 A. Hinojosa",
         "year": 2022,
         "title": "CROWD-5e: A Croatian psycholinguistic database of affective norms for five discrete emotions",
         "journal": "Behavior Research Methods",
@@ -562,7 +1578,7 @@
         "frequency_log",
         "number_stroke",
         "number_word_forms",
-        "number_homophose",
+        "number_homophones",
         "number_meanings",
         "aoa_raw",
         "familiar_raw",
@@ -572,10 +1588,41 @@
       ]
     },
     {
+      "bibtex": "Cai2021",
+      "parentBibtex": null,
+      "citation": {
+        "author": "Zhenguang G. Cai, Shuting Huang, Zebo Xu, Nan Zhao",
+        "year": 2022,
+        "title": "Objective ages of acquisition for 3300+ simplified Chinese characters",
+        "journal": "Behavior Research Methods",
+        "doi": "10.3758/s13428-021-01626-1"
+      },
+      "language": "chinese_simplified",
+      "nRows": 4237,
+      "flags": [
+        "aoa",
+        "freq"
+      ],
+      "wordColumns": [
+        "word_chinese_simplified"
+      ],
+      "rawColumns": [
+        "word_chinese_simplified",
+        "aoa_cai2001",
+        "aoa_cai2011",
+        "aoa_cai_mean",
+        "aoa_shu",
+        "aoa_liu",
+        "frequency_pku",
+        "n_meanings",
+        "n_strokes"
+      ]
+    },
+    {
       "bibtex": "Wolna2023",
       "parentBibtex": null,
       "citation": {
-        "author": "Agata Wolna, Magdalena Łuniewska, Ewa Haman, Zofia Wodniecka",
+        "author": "Agata Wolna, Magdalena \u0141uniewska, Ewa Haman, Zofia Wodniecka",
         "year": 2022,
         "title": "Polish norms for a set of colored drawings of 168 objects and 146 actions with predictors of naming performance",
         "journal": "Behavior Research Methods",
@@ -623,6 +1670,117 @@
       ]
     },
     {
+      "bibtex": "Tse2023",
+      "parentBibtex": null,
+      "citation": {
+        "author": "Chi-Shing Tse, Yuen-Lai Chan, Melvin J. Yap, Ho Chung Tsang",
+        "year": 2022,
+        "title": "The Chinese Lexicon Project II: A megastudy of speeded naming performance for 25,000+ traditional Chinese two-character words",
+        "journal": "Behavior Research Methods",
+        "doi": "10.3758/s13428-022-02022-z"
+      },
+      "language": "chinese_traditional, frequency",
+      "nRows": 25281,
+      "flags": [
+        "accuracy",
+        "meaning",
+        "pronounce",
+        "rt"
+      ],
+      "wordColumns": [
+        "word_chinese_traditional",
+        "word_frequency"
+      ],
+      "rawColumns": [
+        "word_chinese_traditional",
+        "translate_word_chinese_simplified",
+        "ntrials",
+        "accuracy",
+        "rt_mean",
+        "rt_sd",
+        "rt_z",
+        "pronunciation_1",
+        "pronunciation_2",
+        "initial_phoneme_feature_1",
+        "initial_phoneme_feature_2",
+        "initial_phoneme_feature_3",
+        "initial_phoneme_feature_4",
+        "initial_phoneme_feature_5",
+        "initial_phoneme_feature_6",
+        "initial_phoneme_feature_7",
+        "initial_phoneme_feature_8",
+        "initial_phoneme_feature_9",
+        "initial_phoneme_feature_10",
+        "initial_phoneme_feature_11",
+        "initial_phoneme_feature_12",
+        "initial_phoneme_feature_13",
+        "stroke_1",
+        "stroke_2",
+        "phoneme_1",
+        "phoneme_2",
+        "character_frequency_1",
+        "character_frequency_2",
+        "word_frequency",
+        "regularity_1_dummy_contrast_1",
+        "regularity_2_dummy_contrast_1",
+        "regularity_1_dummy_contrast_2",
+        "regularity_2_dummy_contrast_2",
+        "op_consistency_1",
+        "op_consistency_2",
+        "phono_consistency_1",
+        "phono_consistency_2",
+        "homophone_1",
+        "homophone_2",
+        "neighborhood_1",
+        "neighborhood_2",
+        "meaning_1",
+        "meaning_2",
+        "transparency_1",
+        "transparency_2"
+      ]
+    },
+    {
+      "bibtex": "Nemati2022",
+      "parentBibtex": null,
+      "citation": {
+        "author": "Fatemeh Nemati, Chris Westbury, Geoff Hollis, Hossein Haghbin",
+        "year": 2022,
+        "title": "The Persian Lexicon Project: minimized orthographic neighbourhood effects in a dense language",
+        "journal": "Journal of Psycholinguistic Research",
+        "doi": "10.1007/s10936-022-09863-x"
+      },
+      "language": "persian, type",
+      "nRows": 62113,
+      "flags": [
+        "accuracy",
+        "freq",
+        "letters",
+        "orthon",
+        "rt"
+      ],
+      "wordColumns": [
+        "word_persian",
+        "word_type"
+      ],
+      "rawColumns": [
+        "word_persian",
+        "frequency_bijankhan_per_million",
+        "frequency_wiki_per_million",
+        "frequency_webcorpus_per_million",
+        "frequency_newscorpus_per_million",
+        "frequency_cc100_per_million",
+        "word_type",
+        "frequency_mean_per_million",
+        "frequency_log",
+        "length",
+        "orthographic_neighbors_n",
+        "accuracy_mean",
+        "accuracy_n",
+        "rt_mean",
+        "rt_n"
+      ]
+    },
+    {
       "bibtex": "Xu2021",
       "parentBibtex": null,
       "citation": {
@@ -654,10 +1812,299 @@
       ]
     },
     {
+      "bibtex": "Liu2021",
+      "parentBibtex": null,
+      "citation": {
+        "author": "Pingping Liu, Qin Lu, Zhen Zhang, Jie Tang, Buxin Han",
+        "year": 2021,
+        "title": "Age-Related Differences in Affective Norms for Chinese Words (AANC)",
+        "journal": "Frontiers in Psychology",
+        "doi": "10.3389/fpsyg.2021.585666"
+      },
+      "language": "chinese_simplified",
+      "nRows": 2062,
+      "flags": [
+        "arousal",
+        "complex",
+        "dominate",
+        "familiar",
+        "freq",
+        "valence"
+      ],
+      "wordColumns": [
+        "word_chinese_simplified"
+      ],
+      "rawColumns": [
+        "word_chinese_simplified",
+        "translate_word_english",
+        "valence_mean_all",
+        "valence_sd_all",
+        "arousal_mean_all",
+        "arousal_sd_all",
+        "dominance_mean_all",
+        "dominance_sd_all",
+        "familiar_mean_all",
+        "familiar_sd_all",
+        "valence_mean_old",
+        "valence_sd_old",
+        "arousal_mean_old",
+        "arousal_sd_old",
+        "dominance_mean_old",
+        "dominance_sd_old",
+        "familiar_mean_old",
+        "familiar_sd_old",
+        "valence_mean_young",
+        "valence_sd_young",
+        "arousal_mean_young",
+        "arousal_sd_young",
+        "dominance_mean_young",
+        "dominance_sd_young",
+        "familiar_mean_young",
+        "familiar_sd_young",
+        "valence_n_all",
+        "valence_n_old",
+        "valance_n_young",
+        "df_n_all",
+        "df_n_old",
+        "df_n_young",
+        "frequency",
+        "complexity",
+        "char_1",
+        "char_1_frequency",
+        "char_1_stroke",
+        "char_2",
+        "char_2_frequency",
+        "char_2_stroke",
+        "char_3",
+        "char_3_frequency",
+        "char_3_stroke",
+        "char_4",
+        "char_4_frequency",
+        "char_4_stroke"
+      ]
+    },
+    {
+      "bibtex": "Sarli2022",
+      "parentBibtex": null,
+      "citation": {
+        "author": "Leticia Sarli, Nadia Justel",
+        "year": 2021,
+        "title": "Emotional words in Spanish: Adaptation and cross-cultural differences for the affective norms for English words (ANEW) on a sample of Argentinian adults",
+        "journal": "Behavior Research Methods",
+        "doi": "10.3758/s13428-021-01682-7"
+      },
+      "language": "spanish",
+      "nRows": 1034,
+      "flags": [
+        "arousal",
+        "concrete",
+        "dominate",
+        "familiar",
+        "freq",
+        "imagine",
+        "letters",
+        "pos",
+        "syllables",
+        "valence"
+      ],
+      "wordColumns": [
+        "word_spanish"
+      ],
+      "rawColumns": [
+        "translate_word_english",
+        "word_spanish",
+        "pos",
+        "valence_mean_all",
+        "valence_sd_all",
+        "valence_pct_answered_all",
+        "valence_n_all",
+        "arousal_mean_all",
+        "arousal_sd_all",
+        "arousal_pct_answered_all",
+        "arousal_n_all",
+        "dominance_mean_all",
+        "dominance_sd_all",
+        "dominance_pct_answered_all",
+        "dominance_n_all",
+        "valence_mean_female",
+        "valence_sd_female",
+        "arousal_mean_female",
+        "arousal_sd_female",
+        "dominance_mean_female",
+        "dominance_sd_female",
+        "valence_mean_male",
+        "valence_sd_male",
+        "arousal_mean_male",
+        "arousal_sd_male",
+        "dominance_mean_male",
+        "dominance_sd_male",
+        "familiar_mean_all",
+        "familiar_sd_all",
+        "familiar_pct_answered_all",
+        "familiar_n_all",
+        "imagine_mean_all",
+        "imagine_sd_all",
+        "imagine_pct_answered_all",
+        "imagine_n_all",
+        "concrete_mean_all",
+        "concrete_sd_all",
+        "concrete_pct_answered_all",
+        "concrete_n_all",
+        "letters",
+        "syllables",
+        "frequency_corpes_reg",
+        "frequency_corpes_general"
+      ]
+    },
+    {
+      "bibtex": "Garnham2020",
+      "parentBibtex": null,
+      "citation": {
+        "author": "Alan Garnham, Svenja Vorthmann, Karolina Kaplanova",
+        "year": 2021,
+        "title": "Implicit consequentiality bias in English: A corpus of 300+ verbs",
+        "journal": "Behavior Research Methods",
+        "doi": "10.3758/s13428-020-01507-z"
+      },
+      "language": "english",
+      "nRows": 305,
+      "flags": [
+        "freq",
+        "letters",
+        "semantic",
+        "valence"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "word_english",
+        "semantic_category",
+        "letters",
+        "frequency_subtlex",
+        "frequency_subtlex_zipf",
+        "valence_rating_subtlex",
+        "cont_total_np1_responses",
+        "cont_total_np2_responses",
+        "cont_other_responses",
+        "bias_conseq_bias_score",
+        "bias_causal_bias_score",
+        "cont_female",
+        "cont_male",
+        "bias_gender_fem_p_ps_np1_fem",
+        "bias_gender_fem_p_ps_np1_masc",
+        "bias_gender_male_p_ps_np1_fem",
+        "bias_gender_male_p_ps_np1_masc",
+        "bias_gender_fem_p_ps_overall",
+        "bias_gender_male_p_ps_overall",
+        "bias_gender_np1_fem_overall",
+        "bias_gender_np1_masc_overall",
+        "u_t_gender_effect"
+      ]
+    },
+    {
+      "bibtex": "DeLima2021",
+      "parentBibtex": null,
+      "citation": {
+        "author": "Marcos Felipe Rodrigues de Lima, Luciano Gr\u00fcdtner Buratto",
+        "year": 2021,
+        "title": "Norms for Familiarity, Concreteness, Valence, Arousal, Wordlikeness, and Recall Accuracy for Swahili\u2013Portuguese Word Pairs",
+        "journal": "Sage Open",
+        "doi": "10.1177/2158244020988524"
+      },
+      "language": "portuguese, likeness_mean, likeness_sd, likeness_median",
+      "nRows": 80,
+      "flags": [
+        "arousal",
+        "concrete",
+        "familiar",
+        "freq",
+        "letters",
+        "recall",
+        "valence"
+      ],
+      "wordColumns": [
+        "word_portuguese",
+        "word_likeness_mean",
+        "word_likeness_sd",
+        "word_likeness_median"
+      ],
+      "rawColumns": [
+        "paired_word_swahili",
+        "word_portuguese",
+        "translate_word_english",
+        "familiar_mean_portuguese",
+        "familiar_sd_portuguese",
+        "concrete_mean_portuguese",
+        "concrete_sd_portuguese",
+        "valence_mean_portuguese",
+        "valence_sd_portuguese",
+        "arousal_mean_portuguese",
+        "arousal_sd_portuguese",
+        "word_likeness_mean",
+        "word_likeness_sd",
+        "word_likeness_median",
+        "recall_trial1",
+        "recall_trial2",
+        "recall_trial3",
+        "recall_mean",
+        "frequency_log",
+        "length_swahili",
+        "length_portuguese",
+        "lage_2019",
+        "lima_2020_exp1",
+        "lima_2020_exp2"
+      ]
+    },
+    {
+      "bibtex": "Song2021",
+      "parentBibtex": null,
+      "citation": {
+        "author": "Dangui Song, Degao Li",
+        "year": 2021,
+        "title": "Psycholinguistic Norms for 3,783 Two-Character Words in Simplified Chinese",
+        "journal": "Sage Open",
+        "doi": "10.1177/21582440211054495"
+      },
+      "language": "chinese",
+      "nRows": 3783,
+      "flags": [
+        "aoa",
+        "concrete",
+        "emotion",
+        "familiar",
+        "freq",
+        "imagine",
+        "meaning",
+        "rt",
+        "sensory"
+      ],
+      "wordColumns": [
+        "word_chinese"
+      ],
+      "rawColumns": [
+        "word_chinese",
+        "meanings_n",
+        "frequency_subtitle",
+        "strokes_n",
+        "aoa_mean",
+        "compositionality_mean",
+        "concrete_mean",
+        "emotional_experience_mean",
+        "familiar_mean",
+        "imagine_mean",
+        "sensory_experience_mean",
+        "frequency_subjective_mean",
+        "meanings_subjective_mean",
+        "transparency_mean",
+        "rt_mean"
+      ]
+    },
+    {
       "bibtex": "Bonin2021",
       "parentBibtex": null,
       "citation": {
-        "author": "Patrick Bonin, Betty Laroche, Alain Méot",
+        "author": "Patrick Bonin, Betty Laroche, Alain M\u00e9ot",
         "year": 2021,
         "title": "Psycholinguistic norms for a set of 506 French compound words",
         "journal": "Behavior Research Methods",
@@ -682,6 +2129,270 @@
         "familiar_sd",
         "imagine_mean",
         "imagine_sd"
+      ]
+    },
+    {
+      "bibtex": "PetiStantic2021",
+      "parentBibtex": null,
+      "citation": {
+        "author": "Anita Peti-Stanti\u0107, Maja An\u0111el, Vedrana Gnjidi\u0107, Gordana Kereste\u0161, Nikola Ljube\u0161i\u0107, Irina Masnikosa, et al.",
+        "year": 2021,
+        "title": "The Croatian psycholinguistic database: Estimates for 6000 nouns, verbs, adjectives and adverbs",
+        "journal": "Behavior Research Methods",
+        "doi": "10.3758/s13428-020-01533-x"
+      },
+      "language": "croatian, class",
+      "nRows": 6000,
+      "flags": [
+        "aoa",
+        "concrete",
+        "freq",
+        "imagine",
+        "letters"
+      ],
+      "wordColumns": [
+        "word_croatian",
+        "word_class"
+      ],
+      "rawColumns": [
+        "word_croatian",
+        "data_round",
+        "word_class",
+        "gender",
+        "animacy",
+        "length",
+        "frequency_raw_hrwac",
+        "concrete_n",
+        "concrete_mean",
+        "concrete_median",
+        "concrete_sd",
+        "concrete_min",
+        "concrete_max",
+        "concrete_n_male",
+        "concrete_mean_male",
+        "concrete_median_male",
+        "concrete_sd_male",
+        "concrete_n_female",
+        "concrete_mean_female",
+        "concrete_median_female",
+        "concrete_sd_female",
+        "frequency_subjective_n",
+        "frequency_subjective_mean",
+        "frequency_subjective_median",
+        "frequency_subjective_sd",
+        "frequency_subjective_min",
+        "frequency_subjective_max",
+        "frequency_subjective_n_male",
+        "frequency_subjective_mean_male",
+        "frequency_subjective_median_male",
+        "frequency_subjective_sd_male",
+        "frequency_subjective_n_female",
+        "frequency_subjective_mean_female",
+        "frequency_subjective_median_female",
+        "frequency_subjective_sd_female",
+        "imagine_n",
+        "imagine_mean",
+        "imagine_median",
+        "imagine_sd",
+        "imagine_min",
+        "imagine_max",
+        "imagine_n_male",
+        "imagine_mean_male",
+        "imagine_median_male",
+        "imagine_sd_male",
+        "imagine_n_female",
+        "imagine_mean_female",
+        "imagine_median_female",
+        "imagine_sd_female",
+        "aoa_n",
+        "aoa_mean",
+        "aoa_median",
+        "aoa_sd",
+        "aoa_min",
+        "aoa_max",
+        "aoa_n_male",
+        "aoa_mean_male",
+        "aoa_median_male",
+        "aoa_sd_male",
+        "aoa_n_female",
+        "aoa_mean_female",
+        "aoa_median_female",
+        "aoa_sd_female"
+      ]
+    },
+    {
+      "bibtex": "Wang2020_en",
+      "parentBibtex": "Wang2020",
+      "citation": {
+        "author": "Jue Wang, Baoguo Chen",
+        "year": 2020,
+        "title": "A Database of Chinese-English Bilingual Speakers: Ratings of the Age of Acquisition and Familiarity",
+        "journal": "Frontiers in Psychology",
+        "doi": "10.3389/fpsyg.2020.554785"
+      },
+      "language": "english",
+      "nRows": 1916,
+      "flags": [
+        "aoa",
+        "concrete",
+        "familiar",
+        "freq",
+        "letters"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "word_english",
+        "aoa_mean_english_l2",
+        "aoa_recognition_percent_english_l2",
+        "aoa_recognition_n_english_l2",
+        "aol_english_l2",
+        "familiar_mean_english_l2",
+        "familiar_percent_english_l2",
+        "familiar_n_english_l2",
+        "concrete_english_l2",
+        "frequency_english_l2",
+        "letters_english_l2",
+        "translate_word_chinese",
+        "translate_n_dominant_chinese",
+        "translate_n_all_chinese",
+        "translate_percent_dominant_chinese",
+        "translate_other_chinese",
+        "translate_chinese_2",
+        "translate_n_chinese_2",
+        "translate_chinese_3",
+        "translate_n_chinese_3",
+        "translate_chinese_4",
+        "translate_n_chinese_4",
+        "translate_chinese_5",
+        "translate_n_chinese_5",
+        "translate_chinese_6",
+        "translate_n_chinese_6",
+        "translate_chinese_7",
+        "translate_n_chinese_7",
+        "translate_chinese_8",
+        "translate_n_chinese_8",
+        "translate_chinese_9",
+        "translate_n_chinese_9",
+        "translate_chinese_10",
+        "translate_n_chinese_10",
+        "translate_chinese_11",
+        "translate_n_chinese_11",
+        "translate_chinese_12",
+        "translate_n_chinese_12",
+        "translate_chinese_13",
+        "translate_n_chinese_13",
+        "translate_chinese_14",
+        "translate_n_chinese_14",
+        "translate_chinese_15",
+        "translate_n_chinese_15",
+        "translate_chinese_16",
+        "translate_n_chinese_16",
+        "translate_chinese_17",
+        "translate_n_chinese_17",
+        "translate_chinese_18",
+        "translate_n_chinese_18",
+        "translate_chinese_19",
+        "translate_n_chinese_19"
+      ]
+    },
+    {
+      "bibtex": "Wang2020_zh",
+      "parentBibtex": "Wang2020",
+      "citation": {
+        "author": "Jue Wang, Baoguo Chen",
+        "year": 2020,
+        "title": "A Database of Chinese-English Bilingual Speakers: Ratings of the Age of Acquisition and Familiarity",
+        "journal": "Frontiers in Psychology",
+        "doi": "10.3389/fpsyg.2020.554785"
+      },
+      "language": "chinese",
+      "nRows": 1053,
+      "flags": [
+        "aoa",
+        "concrete",
+        "familiar",
+        "freq"
+      ],
+      "wordColumns": [
+        "word_chinese"
+      ],
+      "rawColumns": [
+        "word_chinese",
+        "aoa_mean_chinese_l1",
+        "aoa_recognition_percent_chinese_l1",
+        "aoa_recognition_n_chinese_l1",
+        "aoa_source_chinese_l1",
+        "familiar_mean_chinese_l1",
+        "familiar_percent_chinese_l1",
+        "familiar_n_chinese_l1",
+        "familiar_source_chinese_l1",
+        "concrete_mean_chinese_l1",
+        "concrete_percent_chinese_l1",
+        "concrete_n_chinese_l1",
+        "strokes_chinese_l1",
+        "frequency_chinese_l1"
+      ]
+    },
+    {
+      "bibtex": "Wang2019",
+      "parentBibtex": null,
+      "citation": {
+        "author": "Ruiming Wang, Shuting Huang, Yacong Zhou, Zhenguang G. Cai",
+        "year": 2020,
+        "title": "Chinese character handwriting: A large-scale behavioral study and a database",
+        "journal": "Behavior Research Methods",
+        "doi": "10.3758/s13428-019-01206-4"
+      },
+      "language": "chinese_simplified, context_chinese",
+      "nRows": 1600,
+      "flags": [
+        "aoa",
+        "concrete",
+        "familiar",
+        "freq",
+        "imagine",
+        "rt"
+      ],
+      "wordColumns": [
+        "word_chinese_simplified",
+        "word_context_chinese"
+      ],
+      "rawColumns": [
+        "item_id",
+        "word_chinese_simplified",
+        "word_context_chinese",
+        "n_trials",
+        "n_accuracy",
+        "n_misheard",
+        "n_tip_pen",
+        "n_misspelt",
+        "n_misremembered",
+        "proportion_accuracy",
+        "proportion_misheard",
+        "proportion_tip_pen",
+        "proportion_misspelt",
+        "proportion_misremembered",
+        "rt_mean",
+        "duration_mean",
+        "rt_z",
+        "duration_z",
+        "frequency_count",
+        "frequency_context",
+        "aoa",
+        "n_meanings",
+        "imagine_z",
+        "concrete_z",
+        "phonogram",
+        "sro",
+        "regularity_z",
+        "homophone_density_log",
+        "n_strokes",
+        "n_radicals",
+        "composition_lr",
+        "composition_td",
+        "familiar_z"
       ]
     },
     {
@@ -738,6 +2449,116 @@
         "phonemes_dutchpond",
         "orthographic_neighbours_dutchpond",
         "phonographic_neighbours_dutchpond"
+      ]
+    },
+    {
+      "bibtex": "Verheyen2020",
+      "parentBibtex": null,
+      "citation": {
+        "author": "Steven Verheyen, Simon De Deyne, Sarah Linsen, Gert Storms",
+        "year": 2020,
+        "title": "Lexicosemantic, affective, and distributional norms for 1,000 Dutch adjectives",
+        "journal": "Behavior Research Methods",
+        "doi": "10.3758/s13428-019-01303-4"
+      },
+      "language": "dutch",
+      "nRows": 1000,
+      "flags": [
+        "aoa",
+        "arousal",
+        "concrete",
+        "dominate",
+        "familiar",
+        "freq",
+        "imagine",
+        "letters",
+        "syllables",
+        "valence"
+      ],
+      "wordColumns": [
+        "word_dutch"
+      ],
+      "rawColumns": [
+        "word_dutch",
+        "translate_word_english",
+        "origin",
+        "aoa_mean",
+        "aoa_sd",
+        "aoa_unknown",
+        "arousal_mean",
+        "arousal_sd",
+        "arousal_unknown",
+        "concrete_mean",
+        "concrete_sd",
+        "concrete_unknown",
+        "dominance_mean",
+        "dominance_sd",
+        "dominance_unknown",
+        "familiar_mean",
+        "familiar_sd",
+        "familiar_unknown",
+        "imagine_mean",
+        "imagine_sd",
+        "imagine_unknown",
+        "valence_mean",
+        "valence_sd",
+        "valence_unknown",
+        "length",
+        "syllables",
+        "bigram",
+        "neighbors",
+        "frequency_celex",
+        "frequency_subtlex",
+        "instrength",
+        "betweenness"
+      ]
+    },
+    {
+      "bibtex": "Vergallito2020",
+      "parentBibtex": null,
+      "citation": {
+        "author": "Alessandra Vergallito, Marco Alessandro Petilli, Marco Marelli",
+        "year": 2020,
+        "title": "Perceptual modality norms for 1,121 Italian words: A comparison with concreteness and imageability scores and an analysis of their impact in word processing tasks",
+        "journal": "Behavior Research Methods",
+        "doi": "10.3758/s13428-019-01337-8"
+      },
+      "language": "italian, class",
+      "nRows": 1121,
+      "flags": [
+        "accuracy",
+        "letters",
+        "rt",
+        "sensory",
+        "visualcomp"
+      ],
+      "wordColumns": [
+        "word_italian",
+        "word_class"
+      ],
+      "rawColumns": [
+        "word_italian",
+        "translate_word_english",
+        "length",
+        "word_class",
+        "accuracy_ldt",
+        "rt_mean_ldt",
+        "accuracy_nt",
+        "rt_mean_nt",
+        "rt_z_ldt",
+        "rt_z_nt",
+        "auditory_mean",
+        "gustatory_mean",
+        "haptic_mean",
+        "olfactory_mean",
+        "visual_mean",
+        "mod_e",
+        "mod_exc",
+        "max",
+        "min",
+        "mean",
+        "mag",
+        "mink"
       ]
     },
     {
@@ -865,10 +2686,48 @@
       ]
     },
     {
+      "bibtex": "Coso2019",
+      "parentBibtex": null,
+      "citation": {
+        "author": "Bojana \u0106oso, Marc Guasch, Pilar Ferr\u00e9, Jos\u00e9 Antonio Hinojosa",
+        "year": 2019,
+        "title": "Affective and concreteness norms for 3,022 Croatian words",
+        "journal": "Quarterly Journal of Experimental Psychology",
+        "doi": "10.1177/1747021819834226"
+      },
+      "language": "croatian",
+      "nRows": 3022,
+      "flags": [
+        "arousal",
+        "concrete",
+        "letters",
+        "valence"
+      ],
+      "wordColumns": [
+        "word_croatian"
+      ],
+      "rawColumns": [
+        "word_croatian",
+        "translate_word_english",
+        "translate_word_spanish",
+        "percent_knowledge",
+        "letters",
+        "valence_mean",
+        "valence_sd",
+        "valence_n",
+        "arousal_mean",
+        "arousal_sd",
+        "arousal_n",
+        "concrete_mean",
+        "concrete_sd",
+        "concrete_n"
+      ]
+    },
+    {
       "bibtex": "Luniewska2019_cs",
       "parentBibtex": "Luniewska2019",
       "citation": {
-        "author": "Magdalena Łuniewska, Zofia Wodniecka, Carol A. Miller, Filip Smolík, Morna Butcher, Vasiliki Chondrogianni, et al.",
+        "author": "Magdalena \u0141uniewska, Zofia Wodniecka, Carol A. Miller, Filip Smol\u00edk, Morna Butcher, Vasiliki Chondrogianni, et al.",
         "year": 2019,
         "title": "Age of acquisition of 299 words in seven languages: American English, Czech, Gaelic, Lebanese Arabic, Malay, Persian and Western Armenian",
         "journal": "PLOS ONE",
@@ -902,7 +2761,7 @@
       "bibtex": "Luniewska2019_en",
       "parentBibtex": "Luniewska2019",
       "citation": {
-        "author": "Magdalena Łuniewska, Zofia Wodniecka, Carol A. Miller, Filip Smolík, Morna Butcher, Vasiliki Chondrogianni, et al.",
+        "author": "Magdalena \u0141uniewska, Zofia Wodniecka, Carol A. Miller, Filip Smol\u00edk, Morna Butcher, Vasiliki Chondrogianni, et al.",
         "year": 2019,
         "title": "Age of acquisition of 299 words in seven languages: American English, Czech, Gaelic, Lebanese Arabic, Malay, Persian and Western Armenian",
         "journal": "PLOS ONE",
@@ -936,7 +2795,7 @@
       "bibtex": "Luniewska2019_fa",
       "parentBibtex": "Luniewska2019",
       "citation": {
-        "author": "Magdalena Łuniewska, Zofia Wodniecka, Carol A. Miller, Filip Smolík, Morna Butcher, Vasiliki Chondrogianni, et al.",
+        "author": "Magdalena \u0141uniewska, Zofia Wodniecka, Carol A. Miller, Filip Smol\u00edk, Morna Butcher, Vasiliki Chondrogianni, et al.",
         "year": 2019,
         "title": "Age of acquisition of 299 words in seven languages: American English, Czech, Gaelic, Lebanese Arabic, Malay, Persian and Western Armenian",
         "journal": "PLOS ONE",
@@ -970,7 +2829,7 @@
       "bibtex": "Luniewska2019_gd",
       "parentBibtex": "Luniewska2019",
       "citation": {
-        "author": "Magdalena Łuniewska, Zofia Wodniecka, Carol A. Miller, Filip Smolík, Morna Butcher, Vasiliki Chondrogianni, et al.",
+        "author": "Magdalena \u0141uniewska, Zofia Wodniecka, Carol A. Miller, Filip Smol\u00edk, Morna Butcher, Vasiliki Chondrogianni, et al.",
         "year": 2019,
         "title": "Age of acquisition of 299 words in seven languages: American English, Czech, Gaelic, Lebanese Arabic, Malay, Persian and Western Armenian",
         "journal": "PLOS ONE",
@@ -1004,7 +2863,7 @@
       "bibtex": "Luniewska2019_hy",
       "parentBibtex": "Luniewska2019",
       "citation": {
-        "author": "Magdalena Łuniewska, Zofia Wodniecka, Carol A. Miller, Filip Smolík, Morna Butcher, Vasiliki Chondrogianni, et al.",
+        "author": "Magdalena \u0141uniewska, Zofia Wodniecka, Carol A. Miller, Filip Smol\u00edk, Morna Butcher, Vasiliki Chondrogianni, et al.",
         "year": 2019,
         "title": "Age of acquisition of 299 words in seven languages: American English, Czech, Gaelic, Lebanese Arabic, Malay, Persian and Western Armenian",
         "journal": "PLOS ONE",
@@ -1038,7 +2897,7 @@
       "bibtex": "Luniewska2019_ms",
       "parentBibtex": "Luniewska2019",
       "citation": {
-        "author": "Magdalena Łuniewska, Zofia Wodniecka, Carol A. Miller, Filip Smolík, Morna Butcher, Vasiliki Chondrogianni, et al.",
+        "author": "Magdalena \u0141uniewska, Zofia Wodniecka, Carol A. Miller, Filip Smol\u00edk, Morna Butcher, Vasiliki Chondrogianni, et al.",
         "year": 2019,
         "title": "Age of acquisition of 299 words in seven languages: American English, Czech, Gaelic, Lebanese Arabic, Malay, Persian and Western Armenian",
         "journal": "PLOS ONE",
@@ -1069,10 +2928,70 @@
       ]
     },
     {
+      "bibtex": "Morucci2019",
+      "parentBibtex": null,
+      "citation": {
+        "author": "Piermatteo Morucci, Roberto Bottini, Davide Crepaldi",
+        "year": 2019,
+        "title": "Augmented Modality Exclusivity Norms for Concrete and Abstract Italian Property Words",
+        "journal": "Journal of Cognition",
+        "doi": "10.5334/joc.88"
+      },
+      "language": "italian",
+      "nRows": 643,
+      "flags": [
+        "aoa",
+        "context",
+        "familiar",
+        "freq",
+        "letters",
+        "modality",
+        "orthon",
+        "sensory",
+        "visualcomp"
+      ],
+      "wordColumns": [
+        "word_italian"
+      ],
+      "rawColumns": [
+        "word_italian",
+        "gustatory_z",
+        "gustatory_mean",
+        "olfactory_z",
+        "olfactory_mean",
+        "touch_z",
+        "touch_mean",
+        "auditory_z",
+        "auditory_mean",
+        "visual_z",
+        "visual_mean",
+        "max_perception_strength_z",
+        "max_perception_strengh_mean",
+        "dominant_sense",
+        "sum_perception_strength_z",
+        "sum_perception_strength_mean",
+        "entropy",
+        "modality_exclusivity",
+        "length",
+        "frequency_cdcount",
+        "zipf",
+        "frequency_pmw",
+        "frequency_pmw_log",
+        "orthographic_neighborhood",
+        "orthographic_levenshtein",
+        "familiar_z",
+        "familiar_mean",
+        "aoa_z",
+        "aoa_mean",
+        "context_availability_z",
+        "context_availability_mean"
+      ]
+    },
+    {
       "bibtex": "Durdevic2019",
       "parentBibtex": null,
       "citation": {
-        "author": "Dušica Filipović Đurđević",
+        "author": "Du\u0161ica Filipovi\u0107 \u0110ur\u0111evi\u0107",
         "year": 2019,
         "title": "BALANCE OF MEANING PROBABILITIES IN PROCESSING OF SERBIAN HOMONYMY",
         "journal": "Primenjena psihologija",
@@ -1291,7 +3210,7 @@
       "bibtex": "Diez-Alamo2018",
       "parentBibtex": null,
       "citation": {
-        "author": "Antonio M. Díez-Álamo, Emiliano Díez, Dominika Zofia Wojcik, María Angeles Alonso, Angel Fernandez",
+        "author": "Antonio M. D\u00edez-\u00c1lamo, Emiliano D\u00edez, Dominika Zofia Wojcik, Mar\u00eda Angeles Alonso, Angel Fernandez",
         "year": 2019,
         "title": "Sensory experience ratings for 5,500 Spanish words",
         "journal": "Behavior Research Methods",
@@ -1310,6 +3229,120 @@
         "translate_word_english",
         "aoa_mean",
         "aoa_sd"
+      ]
+    },
+    {
+      "bibtex": "Scott2017",
+      "parentBibtex": null,
+      "citation": {
+        "author": "Graham G. Scott, Anne Keitel, Marc Becirspahic, Bo Yao, Sara C. Sereno",
+        "year": 2019,
+        "title": "The Glasgow Norms: Ratings of 5,500 words on nine scales",
+        "journal": "Behavior Research Methods",
+        "doi": "10.3758/s13428-018-1099-3"
+      },
+      "language": "english",
+      "nRows": 5553,
+      "flags": [
+        "aoa",
+        "arousal",
+        "concrete",
+        "dominate",
+        "familiar",
+        "imagine",
+        "letters",
+        "valence"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "word_english",
+        "length",
+        "arousal_mean",
+        "arousal_sd",
+        "arousal_n",
+        "valence_mean",
+        "valence_sd",
+        "valence_n",
+        "dominance_mean",
+        "dominance_sd",
+        "dominance_n",
+        "concrete_mean",
+        "concrete_sd",
+        "concrete_n",
+        "imagine_mean",
+        "imagine_sd",
+        "imagine_n",
+        "familiar_mean",
+        "familiar_sd",
+        "familiar_n",
+        "aoa_mean",
+        "aoa_sd",
+        "aoa_n",
+        "size_mean",
+        "size_sd",
+        "size_n",
+        "gender_mean",
+        "gender_sd",
+        "gender_n"
+      ]
+    },
+    {
+      "bibtex": "Scott2019",
+      "parentBibtex": null,
+      "citation": {
+        "author": "Graham G. Scott, Anne Keitel, Marc Becirspahic, Bo Yao, Sara C. Sereno",
+        "year": 2019,
+        "title": "The Glasgow Norms: Ratings of 5,500 words on nine scales",
+        "journal": "Behavior Research Methods",
+        "doi": "10.3758/s13428-018-1099-3"
+      },
+      "language": "english",
+      "nRows": 5553,
+      "flags": [
+        "aoa",
+        "arousal",
+        "concrete",
+        "dominate",
+        "familiar",
+        "imagine",
+        "letters",
+        "valence"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "word_english",
+        "length",
+        "arousal_mean",
+        "arousal_sd",
+        "arousal_n",
+        "valence_mean",
+        "valence_sd",
+        "valence_n",
+        "dominance_mean",
+        "dominance_sd",
+        "dominance_n",
+        "concrete_mean",
+        "concrete_sd",
+        "concrete_n",
+        "imagine_mean",
+        "imagine_sd",
+        "imagine_n",
+        "familiar_mean",
+        "familiar_sd",
+        "familiar_n",
+        "aoa_mean",
+        "aoa_sd",
+        "aoa_n",
+        "size_mean",
+        "size_sd",
+        "size_n",
+        "gender_mean",
+        "gender_sd",
+        "gender_n"
       ]
     },
     {
@@ -1406,7 +3439,7 @@
       "bibtex": "Bonin2018",
       "parentBibtex": null,
       "citation": {
-        "author": "Patrick Bonin, Alain Méot, Aurélia Bugaiska",
+        "author": "Patrick Bonin, Alain M\u00e9ot, Aur\u00e9lia Bugaiska",
         "year": 2018,
         "title": "Concreteness norms for 1,659 French words: Relationships with other psycholinguistic variables and word recognition times",
         "journal": "Behavior Research Methods",
@@ -1440,7 +3473,7 @@
       "bibtex": "Roest2017",
       "parentBibtex": null,
       "citation": {
-        "author": "Sander A. Roest, Tessa A. Visser, René Zeelenberg",
+        "author": "Sander A. Roest, Tessa A. Visser, Ren\u00e9 Zeelenberg",
         "year": 2018,
         "title": "Dutch taboo norms",
         "journal": "Behavior Research Methods",
@@ -1583,10 +3616,103 @@
       ]
     },
     {
+      "bibtex": "Perry2018",
+      "parentBibtex": null,
+      "citation": {
+        "author": "Lynn K. Perry, Marcus Perlman, Bodo Winter, Dominic W. Massaro, Gary Lupyan",
+        "year": 2018,
+        "title": "Iconicity in the speech of children and adults",
+        "journal": "Developmental Science",
+        "doi": "10.1111/desc.12572"
+      },
+      "language": "english",
+      "nRows": 3001,
+      "flags": [
+        "aoa",
+        "concrete",
+        "freq",
+        "letters",
+        "morph",
+        "pos"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "word_english",
+        "iconicity_mean",
+        "list_identifier",
+        "aoa_mean_kuperman",
+        "frequency_raw_subtlex",
+        "pos_dominant_subtlex",
+        "pos_percent_dominant_subtlex",
+        "letters",
+        "frequency_raw_parental_input",
+        "frequency_childes_age_12",
+        "frequency_childes_age_15",
+        "frequency_childes_age_18",
+        "frequency_childes_age_21",
+        "frequency_childes_age_24",
+        "frequency_childes_age_27",
+        "frequency_childes_age_30",
+        "frequency_childes_age_33",
+        "frequency_childes_age_36",
+        "frequency_childes_age_39",
+        "frequency_childes_age_42",
+        "frequency_childes_age_45",
+        "frequency_childes_age_48",
+        "frequency_childes_age_51",
+        "frequency_childes_age_54",
+        "frequency_childes_age_57",
+        "frequency_childes_age_60",
+        "frequency_childes_age_63",
+        "frequency_childes_age_66",
+        "frequency_childes_age_69",
+        "concrete_mean",
+        "morphemes"
+      ]
+    },
+    {
+      "bibtex": "Kraljevic2018",
+      "parentBibtex": null,
+      "citation": {
+        "author": "Jelena Kuva\u010d Kraljevi\u0107, Marina Oluji\u0107",
+        "year": 2018,
+        "title": "Imageability and subjective frequency of the 500 rated nouns in the Croatian Lexical Database",
+        "journal": "Suvremena lingvistika",
+        "doi": "10.22210/suvlin.2018.085.04"
+      },
+      "language": "croatian",
+      "nRows": 2873,
+      "flags": [
+        "aoa",
+        "concrete",
+        "familiar",
+        "freq",
+        "imagine"
+      ],
+      "wordColumns": [
+        "word_croatian"
+      ],
+      "rawColumns": [
+        "word_croatian",
+        "imagine_mean",
+        "imagine_sd",
+        "frequency_mean",
+        "frequency_sd",
+        "concrete_mean",
+        "concrete_sd",
+        "familiar_mean",
+        "familiar_sd",
+        "aoa_mean",
+        "aoa_sd"
+      ]
+    },
+    {
       "bibtex": "Diez-Alamo2018a",
       "parentBibtex": null,
       "citation": {
-        "author": "Antonio M. Díez-Álamo, Emiliano Díez, María Ángeles Alonso, C. Alejandra Vargas, Angel Fernandez",
+        "author": "Antonio M. D\u00edez-\u00c1lamo, Emiliano D\u00edez, Mar\u00eda \u00c1ngeles Alonso, C. Alejandra Vargas, Angel Fernandez",
         "year": 2018,
         "title": "Normative ratings for perceptual and motor attributes of 750 object concepts in Spanish",
         "journal": "Behavior Research Methods",
@@ -1632,7 +3758,7 @@
       "bibtex": "Stadthagen-Gonzalez2017a",
       "parentBibtex": null,
       "citation": {
-        "author": "Hans Stadthagen-González, Pilar Ferré, Miguel A. Pérez-Sánchez, Constance Imbault, José Antonio Hinojosa",
+        "author": "Hans Stadthagen-Gonz\u00e1lez, Pilar Ferr\u00e9, Miguel A. P\u00e9rez-S\u00e1nchez, Constance Imbault, Jos\u00e9 Antonio Hinojosa",
         "year": 2018,
         "title": "Norms for 10,491 Spanish words for five discrete emotions: Happiness, disgust, anger, fear, and sadness",
         "journal": "Behavior Research Methods",
@@ -1675,6 +3801,198 @@
         "arousal_percent_raters",
         "pos_dominance",
         "pos_dominance_prop"
+      ]
+    },
+    {
+      "bibtex": "Miklashevsky2018",
+      "parentBibtex": null,
+      "citation": {
+        "author": "Alex Miklashevsky",
+        "year": 2018,
+        "title": "Perceptual Experience Norms for 506 Russian Nouns: Modality Rating, Spatial Localization, Manipulability, Imageability and Other Variables",
+        "journal": "Journal of Psycholinguistic Research",
+        "doi": "10.1007/s10936-017-9548-1"
+      },
+      "language": "russian",
+      "nRows": 506,
+      "flags": [
+        "aoa",
+        "category",
+        "freq",
+        "imagine",
+        "letters",
+        "sensory",
+        "visualcomp"
+      ],
+      "wordColumns": [
+        "word_russian"
+      ],
+      "rawColumns": [
+        "word_russian",
+        "transliteration",
+        "translation_word_english",
+        "category",
+        "abstractness_category",
+        "length",
+        "gender",
+        "frequency_log",
+        "visual_modality_mean",
+        "visual_modality_sd",
+        "auditory_modality_mean",
+        "auditory_modality_sd",
+        "olfactory_modality_mean",
+        "olfactory_modality_sd",
+        "gustatory_modality_mean",
+        "gustatory_modality_sd",
+        "haptic_modality_mean",
+        "haptic_modality_sd",
+        "imagine_mean",
+        "imagine_sd",
+        "manipulation_mean",
+        "manipulation_sd",
+        "spatial_localization_mean",
+        "spatial_localization_sd",
+        "aoa_mean",
+        "aoa_sd",
+        "frequency_mean",
+        "frequency_sd"
+      ]
+    },
+    {
+      "bibtex": "Saryazdi2018",
+      "parentBibtex": null,
+      "citation": {
+        "author": "Raheleh Saryazdi, Julie Bannon, Agatha Rodrigues, Chris Klammer, Craig G. Chambers",
+        "year": 2018,
+        "title": "Picture perfect: A stimulus set of 225 pairs of matched clipart and photographic images normed by Mechanical Turk and laboratory participants",
+        "journal": "Behavior Research Methods",
+        "doi": "10.3758/s13428-018-1028-5"
+      },
+      "language": "english",
+      "nRows": 225,
+      "flags": [
+        "aoa",
+        "category",
+        "familiar",
+        "imageagree",
+        "nameagree",
+        "picture",
+        "visualcomp"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "word_english",
+        "category",
+        "modal_verb",
+        "name_agreement_photo",
+        "name_agreement_clipart",
+        "naming_h_photo",
+        "naming_h_clipart",
+        "verb_agreement_photo",
+        "verb_agreement_clipart",
+        "verb_h_photo",
+        "verb_h_clipart",
+        "picture_name_agreement_photo",
+        "picture_name_agreement_clipart",
+        "familiar_photo",
+        "familiar_clipart",
+        "visual_complexity_photo",
+        "visual_complexity_clipart",
+        "image_agreement_photo",
+        "image_agreement_clipart",
+        "subtlex_freq",
+        "wordnet_senses",
+        "aoa_mean"
+      ]
+    },
+    {
+      "bibtex": "Smolka2018",
+      "parentBibtex": null,
+      "citation": {
+        "author": "Eva Smolka, Carsten Eulitz",
+        "year": 2018,
+        "title": "Psycholinguistic measures for German verb pairs: Semantic transparency, semantic relatedness, verb family size, and age of reading acquisition",
+        "journal": "Behavior Research Methods",
+        "doi": "10.3758/s13428-018-1052-5"
+      },
+      "language": "german_prime, german_target",
+      "nRows": 1186,
+      "flags": [
+        "aoa",
+        "complex",
+        "freq",
+        "letters",
+        "morph",
+        "prime",
+        "syllables"
+      ],
+      "wordColumns": [
+        "word_german_prime",
+        "word_german_target"
+      ],
+      "rawColumns": [
+        "word_german_prime",
+        "word_german_target",
+        "aoa_mean_prime",
+        "aoa_sd_prime",
+        "aoa_median_prime",
+        "aor_mean_prime",
+        "aor_sd_prime",
+        "aor_median_prime",
+        "aoa_mean_target",
+        "aoa_sd_target",
+        "aoa_median_target",
+        "aor_mean_target",
+        "aor_sd_target",
+        "aor_median_target",
+        "target_id",
+        "letters_target",
+        "syllables_target",
+        "frequency_lemma_absolute_celex_target",
+        "frequency_lemma_per_million_celex_target",
+        "frequency_wordform_absolute_celex_target",
+        "frequency_wordform_per_million_celex_target",
+        "morphology_celex_target",
+        "morphology_canoo_target",
+        "participle_stem_target",
+        "participle_suffix_target",
+        "regularity_target",
+        "family_size_celex_target",
+        "family_size_mater_target",
+        "prime_id",
+        "letters_prime",
+        "syllables_prime",
+        "frequency_lemma_absolute_celex_prime",
+        "frequency_lemma_per_million_celex_prime",
+        "frequency_wordform_absolute_celex_prime",
+        "frequency_wordform_per_million_celex_prime",
+        "complexity_prime",
+        "participle_stem_prime",
+        "participle_suffix_prime",
+        "regularity_prime",
+        "relation_type",
+        "transparency_wahrig_prime",
+        "transparency_duden_prime",
+        "transparency_combined_prime",
+        "relatedness_wahrig",
+        "relatedness_duden",
+        "relatedness_combined",
+        "rating_n",
+        "rating_mean",
+        "rating_median",
+        "rating_sd",
+        "rating_min",
+        "rating_max",
+        "frequency_wordform_absolute_dlexdb_prime",
+        "frequency_wordform_per_million_dlexdb_prime",
+        "frequency_lemma_absolute_dlexdb_prime",
+        "frequency_lemma_per_million_dlexdb_prime",
+        "frequency_wordform_absolute_dlexdb_target",
+        "frequency_wordform_per_million_dlexdb_target",
+        "frequency_lemma_absolute_dlexdb_target",
+        "frequency_lemma_per_million_dlexdb_target"
       ]
     },
     {
@@ -1802,10 +4120,144 @@
       ]
     },
     {
+      "bibtex": "Borelli2018",
+      "parentBibtex": null,
+      "citation": {
+        "author": "Eleonora Borelli, Davide Crepaldi, Carlo Adolfo Porro, Cristina Cacciari",
+        "year": 2018,
+        "title": "The psycholinguistic and affective structure of words conveying pain",
+        "journal": "PLOS ONE",
+        "doi": "10.1371/journal.pone.0199658"
+      },
+      "language": "italian",
+      "nRows": 4404,
+      "flags": [
+        "aoa",
+        "arousal",
+        "concrete",
+        "context",
+        "familiar",
+        "freq",
+        "imagine",
+        "intense",
+        "letters",
+        "pos",
+        "valence"
+      ],
+      "wordColumns": [
+        "word_italian"
+      ],
+      "rawColumns": [
+        "word_italian",
+        "type_pain",
+        "pos",
+        "psycho_social_pain",
+        "physical_pain",
+        "familiar_mean_all",
+        "familiar_z_all",
+        "familiar_know_meaning_percent_all",
+        "aoa_mean_all",
+        "aoa_z_all",
+        "aoa_known_meaning_percent_all",
+        "imagine_mean_all",
+        "imagine_z_all",
+        "imagine_known_meaning_percent_all",
+        "concrete_mean_all",
+        "concrete_z_all",
+        "concrete_known_meaning_percent_all",
+        "context_avaliability_mean_all",
+        "context_avaliability_z_all",
+        "context_avaliability_known_meaning_percent_all",
+        "valence_mean_all",
+        "valence_z_all",
+        "valence_known_meaning_percent_all",
+        "arousal_mean_all",
+        "arousal_z_all",
+        "arousal_known_meaning_percent_all",
+        "pain_mean_all",
+        "pain_z_all",
+        "pain_known_meaning_percent_all",
+        "intensity_mean_all",
+        "intensity_z_all",
+        "intensity_known_meaning_percent_all",
+        "unpleasant_mean_all",
+        "unpleasant_z_all",
+        "unpleasant_known_meaning_percent_all",
+        "familiar_mean_female",
+        "familiar_z_female",
+        "familiar_know_meaning_percent_female",
+        "aoa_mean_female",
+        "aoa_z_female",
+        "aoa_known_meaning_percent_female",
+        "imagine_mean_female",
+        "imagine_z_female",
+        "imagine_known_meaning_percent_female",
+        "concrete_mean_female",
+        "concrete_z_female",
+        "concrete_known_meaning_percent_female",
+        "context_avaliability_mean_female",
+        "context_avaliability_z_female",
+        "context_avaliability_known_meaning_percent_female",
+        "valence_mean_female",
+        "valence_z_female",
+        "valence_known_meaning_percent_female",
+        "arousal_mean_female",
+        "arousal_z_female",
+        "arousal_known_meaning_percent_female",
+        "pain_mean_female",
+        "pain_z_female",
+        "pain_known_meaning_percent_female",
+        "intensity_mean_female",
+        "intensity_z_female",
+        "intensity_known_meaning_percent_female",
+        "unpleasant_mean_female",
+        "unpleasant_z_female",
+        "unpleasant_known_meaning_percent_female",
+        "familiar_mean_male",
+        "familiar_z_male",
+        "familiar_know_meaning_percent_male",
+        "aoa_mean_male",
+        "aoa_z_male",
+        "aoa_known_meaning_percent_male",
+        "imagine_mean_male",
+        "imagine_z_male",
+        "imagine_known_meaning_percent_male",
+        "concrete_mean_male",
+        "concrete_z_male",
+        "concrete_known_meaning_percent_male",
+        "context_avaliability_mean_male",
+        "context_avaliability_z_male",
+        "context_avaliability_known_meaning_percent_male",
+        "valence_mean_male",
+        "valence_z_male",
+        "valence_known_meaning_percent_male",
+        "arousal_mean_male",
+        "arousal_z_male",
+        "arousal_known_meaning_percent_male",
+        "pain_mean_male",
+        "pain_z_male",
+        "pain_known_meaning_percent_male",
+        "intensity_mean_male",
+        "intensity_z_male",
+        "intensity_known_meaning_percent_male",
+        "unpleasant_mean_male",
+        "unpleasant_z_male",
+        "unpleasant_known_meaning_percent_male",
+        "zipf",
+        "n",
+        "old20",
+        "letters",
+        "frequency_max_n",
+        "frequency_mean_n",
+        "cd_count",
+        "coltheart_n"
+      ]
+    },
+    {
       "bibtex": "Torrance2018_bg",
       "parentBibtex": "Torrance2018",
       "citation": {
-        "author": "Mark Torrance, Guido Nottbusch, Rui A. Alves, Barbara Arfé, Lucile Chanquoy, Evgeny Chukharev-Hudilainen, et al.",
+        "author": "Mark Torrance, Guido Nottbusch, Rui A. Alves, Barbara Arf\u00e9, Lucile Chanquoy, Evgeny Chukharev-Hudilainen, et al.",
         "year": 2018,
         "title": "Timed written picture naming in 14 European languages",
         "journal": "Behavior Research Methods",
@@ -1866,7 +4318,7 @@
       "bibtex": "Torrance2018_de",
       "parentBibtex": "Torrance2018",
       "citation": {
-        "author": "Mark Torrance, Guido Nottbusch, Rui A. Alves, Barbara Arfé, Lucile Chanquoy, Evgeny Chukharev-Hudilainen, et al.",
+        "author": "Mark Torrance, Guido Nottbusch, Rui A. Alves, Barbara Arf\u00e9, Lucile Chanquoy, Evgeny Chukharev-Hudilainen, et al.",
         "year": 2018,
         "title": "Timed written picture naming in 14 European languages",
         "journal": "Behavior Research Methods",
@@ -1927,7 +4379,7 @@
       "bibtex": "Torrance2018_el",
       "parentBibtex": "Torrance2018",
       "citation": {
-        "author": "Mark Torrance, Guido Nottbusch, Rui A. Alves, Barbara Arfé, Lucile Chanquoy, Evgeny Chukharev-Hudilainen, et al.",
+        "author": "Mark Torrance, Guido Nottbusch, Rui A. Alves, Barbara Arf\u00e9, Lucile Chanquoy, Evgeny Chukharev-Hudilainen, et al.",
         "year": 2018,
         "title": "Timed written picture naming in 14 European languages",
         "journal": "Behavior Research Methods",
@@ -1988,7 +4440,7 @@
       "bibtex": "Torrance2018_en",
       "parentBibtex": "Torrance2018",
       "citation": {
-        "author": "Mark Torrance, Guido Nottbusch, Rui A. Alves, Barbara Arfé, Lucile Chanquoy, Evgeny Chukharev-Hudilainen, et al.",
+        "author": "Mark Torrance, Guido Nottbusch, Rui A. Alves, Barbara Arf\u00e9, Lucile Chanquoy, Evgeny Chukharev-Hudilainen, et al.",
         "year": 2018,
         "title": "Timed written picture naming in 14 European languages",
         "journal": "Behavior Research Methods",
@@ -2049,7 +4501,7 @@
       "bibtex": "Torrance2018_es",
       "parentBibtex": "Torrance2018",
       "citation": {
-        "author": "Mark Torrance, Guido Nottbusch, Rui A. Alves, Barbara Arfé, Lucile Chanquoy, Evgeny Chukharev-Hudilainen, et al.",
+        "author": "Mark Torrance, Guido Nottbusch, Rui A. Alves, Barbara Arf\u00e9, Lucile Chanquoy, Evgeny Chukharev-Hudilainen, et al.",
         "year": 2018,
         "title": "Timed written picture naming in 14 European languages",
         "journal": "Behavior Research Methods",
@@ -2110,7 +4562,7 @@
       "bibtex": "Torrance2018_fi",
       "parentBibtex": "Torrance2018",
       "citation": {
-        "author": "Mark Torrance, Guido Nottbusch, Rui A. Alves, Barbara Arfé, Lucile Chanquoy, Evgeny Chukharev-Hudilainen, et al.",
+        "author": "Mark Torrance, Guido Nottbusch, Rui A. Alves, Barbara Arf\u00e9, Lucile Chanquoy, Evgeny Chukharev-Hudilainen, et al.",
         "year": 2018,
         "title": "Timed written picture naming in 14 European languages",
         "journal": "Behavior Research Methods",
@@ -2171,7 +4623,7 @@
       "bibtex": "Torrance2018_fr",
       "parentBibtex": "Torrance2018",
       "citation": {
-        "author": "Mark Torrance, Guido Nottbusch, Rui A. Alves, Barbara Arfé, Lucile Chanquoy, Evgeny Chukharev-Hudilainen, et al.",
+        "author": "Mark Torrance, Guido Nottbusch, Rui A. Alves, Barbara Arf\u00e9, Lucile Chanquoy, Evgeny Chukharev-Hudilainen, et al.",
         "year": 2018,
         "title": "Timed written picture naming in 14 European languages",
         "journal": "Behavior Research Methods",
@@ -2232,7 +4684,7 @@
       "bibtex": "Torrance2018_is",
       "parentBibtex": "Torrance2018",
       "citation": {
-        "author": "Mark Torrance, Guido Nottbusch, Rui A. Alves, Barbara Arfé, Lucile Chanquoy, Evgeny Chukharev-Hudilainen, et al.",
+        "author": "Mark Torrance, Guido Nottbusch, Rui A. Alves, Barbara Arf\u00e9, Lucile Chanquoy, Evgeny Chukharev-Hudilainen, et al.",
         "year": 2018,
         "title": "Timed written picture naming in 14 European languages",
         "journal": "Behavior Research Methods",
@@ -2293,7 +4745,7 @@
       "bibtex": "Torrance2018_it",
       "parentBibtex": "Torrance2018",
       "citation": {
-        "author": "Mark Torrance, Guido Nottbusch, Rui A. Alves, Barbara Arfé, Lucile Chanquoy, Evgeny Chukharev-Hudilainen, et al.",
+        "author": "Mark Torrance, Guido Nottbusch, Rui A. Alves, Barbara Arf\u00e9, Lucile Chanquoy, Evgeny Chukharev-Hudilainen, et al.",
         "year": 2018,
         "title": "Timed written picture naming in 14 European languages",
         "journal": "Behavior Research Methods",
@@ -2354,7 +4806,7 @@
       "bibtex": "Torrance2018_nl",
       "parentBibtex": "Torrance2018",
       "citation": {
-        "author": "Mark Torrance, Guido Nottbusch, Rui A. Alves, Barbara Arfé, Lucile Chanquoy, Evgeny Chukharev-Hudilainen, et al.",
+        "author": "Mark Torrance, Guido Nottbusch, Rui A. Alves, Barbara Arf\u00e9, Lucile Chanquoy, Evgeny Chukharev-Hudilainen, et al.",
         "year": 2018,
         "title": "Timed written picture naming in 14 European languages",
         "journal": "Behavior Research Methods",
@@ -2415,7 +4867,7 @@
       "bibtex": "Torrance2018_no",
       "parentBibtex": "Torrance2018",
       "citation": {
-        "author": "Mark Torrance, Guido Nottbusch, Rui A. Alves, Barbara Arfé, Lucile Chanquoy, Evgeny Chukharev-Hudilainen, et al.",
+        "author": "Mark Torrance, Guido Nottbusch, Rui A. Alves, Barbara Arf\u00e9, Lucile Chanquoy, Evgeny Chukharev-Hudilainen, et al.",
         "year": 2018,
         "title": "Timed written picture naming in 14 European languages",
         "journal": "Behavior Research Methods",
@@ -2476,7 +4928,7 @@
       "bibtex": "Torrance2018_pt",
       "parentBibtex": "Torrance2018",
       "citation": {
-        "author": "Mark Torrance, Guido Nottbusch, Rui A. Alves, Barbara Arfé, Lucile Chanquoy, Evgeny Chukharev-Hudilainen, et al.",
+        "author": "Mark Torrance, Guido Nottbusch, Rui A. Alves, Barbara Arf\u00e9, Lucile Chanquoy, Evgeny Chukharev-Hudilainen, et al.",
         "year": 2018,
         "title": "Timed written picture naming in 14 European languages",
         "journal": "Behavior Research Methods",
@@ -2537,7 +4989,7 @@
       "bibtex": "Torrance2018_ru",
       "parentBibtex": "Torrance2018",
       "citation": {
-        "author": "Mark Torrance, Guido Nottbusch, Rui A. Alves, Barbara Arfé, Lucile Chanquoy, Evgeny Chukharev-Hudilainen, et al.",
+        "author": "Mark Torrance, Guido Nottbusch, Rui A. Alves, Barbara Arf\u00e9, Lucile Chanquoy, Evgeny Chukharev-Hudilainen, et al.",
         "year": 2018,
         "title": "Timed written picture naming in 14 European languages",
         "journal": "Behavior Research Methods",
@@ -2598,7 +5050,7 @@
       "bibtex": "Torrance2018_sr",
       "parentBibtex": "Torrance2018",
       "citation": {
-        "author": "Mark Torrance, Guido Nottbusch, Rui A. Alves, Barbara Arfé, Lucile Chanquoy, Evgeny Chukharev-Hudilainen, et al.",
+        "author": "Mark Torrance, Guido Nottbusch, Rui A. Alves, Barbara Arf\u00e9, Lucile Chanquoy, Evgeny Chukharev-Hudilainen, et al.",
         "year": 2018,
         "title": "Timed written picture naming in 14 European languages",
         "journal": "Behavior Research Methods",
@@ -2744,7 +5196,7 @@
       "bibtex": "Abdaoui2017",
       "parentBibtex": null,
       "citation": {
-        "author": "Amine Abdaoui, Jérôme Azé, Sandra Bringay, Pascal Poncelet",
+        "author": "Amine Abdaoui, J\u00e9r\u00f4me Az\u00e9, Sandra Bringay, Pascal Poncelet",
         "year": 2017,
         "title": "FEEL: a French Expanded Emotion Lexicon",
         "journal": "Language Resources and Evaluation",
@@ -2770,10 +5222,40 @@
       ]
     },
     {
+      "bibtex": "Kurdi2017",
+      "parentBibtex": null,
+      "citation": {
+        "author": "Benedek Kurdi, Shayn Lozano, Mahzarin R. Banaji",
+        "year": 2017,
+        "title": "Introducing the Open Affective Standardized Image Set (OASIS)",
+        "journal": "Behavior Research Methods",
+        "doi": "10.3758/s13428-016-0715-3"
+      },
+      "language": "",
+      "nRows": 900,
+      "flags": [
+        "arousal",
+        "category",
+        "valence"
+      ],
+      "wordColumns": [],
+      "rawColumns": [
+        "theme",
+        "category",
+        "source",
+        "valence_mean",
+        "valence_sd",
+        "valence_n",
+        "arousal_mean",
+        "arousal_sd",
+        "arousal_n"
+      ]
+    },
+    {
       "bibtex": "Ferre2017",
       "parentBibtex": null,
       "citation": {
-        "author": "Pilar Ferré, Marc Guasch, Natalia Martínez-García, Isabel Fraga, José Antonio Hinojosa",
+        "author": "Pilar Ferr\u00e9, Marc Guasch, Natalia Mart\u00ednez-Garc\u00eda, Isabel Fraga, Jos\u00e9 Antonio Hinojosa",
         "year": 2017,
         "title": "Moved by words: Affective ratings for a set of 2,266 Spanish words in five discrete emotion categories",
         "journal": "Behavior Research Methods",
@@ -2807,7 +5289,7 @@
       "bibtex": "Stadthagen-Gonzalez2017",
       "parentBibtex": null,
       "citation": {
-        "author": "Hans Stadthagen-Gonzalez, Constance Imbault, Miguel A. Pérez Sánchez, Marc Brysbaert",
+        "author": "Hans Stadthagen-Gonzalez, Constance Imbault, Miguel A. P\u00e9rez S\u00e1nchez, Marc Brysbaert",
         "year": 2017,
         "title": "Norms of valence and arousal for 14,031 Spanish words",
         "journal": "Behavior Research Methods",
@@ -2912,10 +5394,53 @@
       ]
     },
     {
+      "bibtex": "Soler2017",
+      "parentBibtex": null,
+      "citation": {
+        "author": "Mar\u00eda Jos\u00e9 Soler, Carmen Das\u00ed, Juan Carlos Ruiz, Teresa Cervera",
+        "year": 2017,
+        "title": "Spanish norms for completion of restricted length word stems",
+        "journal": "Behavior Research Methods",
+        "doi": "10.3758/s13428-016-0834-x"
+      },
+      "language": "spanish",
+      "nRows": 272,
+      "flags": [
+        "arousal",
+        "familiar",
+        "freq",
+        "letters",
+        "meaning",
+        "syllables",
+        "valence"
+      ],
+      "wordColumns": [
+        "word_spanish"
+      ],
+      "rawColumns": [
+        "id",
+        "word_spanish",
+        "stem",
+        "total_baseline_completion",
+        "priming_baseline_completion",
+        "priming_mean",
+        "completions_n",
+        "letters_blanks_ratio",
+        "syllabic_structure",
+        "frequency",
+        "familiar_mean",
+        "meanings_n",
+        "length",
+        "syllables",
+        "arousal_mean",
+        "valence_mean"
+      ]
+    },
+    {
       "bibtex": "Goz2017",
       "parentBibtex": null,
       "citation": {
-        "author": "İlyas Göz, Ali İ. Tekcan, Aslı Aktan Erciyes",
+        "author": "\u0130lyas G\u00f6z, Ali \u0130. Tekcan, Asl\u0131 Aktan Erciyes",
         "year": 2017,
         "title": "Subjective age-of-acquisition norms for 600 Turkish words from four age groups",
         "journal": "Behavior Research Methods",
@@ -3065,10 +5590,167 @@
       ]
     },
     {
+      "bibtex": "Schroter2017",
+      "parentBibtex": null,
+      "citation": {
+        "author": "Pauline Schr\u00f6ter, Sascha Schroeder",
+        "year": 2017,
+        "title": "The Developmental Lexicon Project: A behavioral database to investigate visual word recognition across the lifespan",
+        "journal": "Behavior Research Methods",
+        "doi": "10.3758/s13428-016-0851-9"
+      },
+      "language": "german",
+      "nRows": 1152,
+      "flags": [
+        "accuracy",
+        "aoa",
+        "arousal",
+        "freq",
+        "imagine",
+        "letters",
+        "morph",
+        "orthon",
+        "phonemes",
+        "pos",
+        "rt",
+        "syllables",
+        "valence"
+      ],
+      "wordColumns": [
+        "word_german"
+      ],
+      "rawColumns": [
+        "word_german",
+        "frequency_type_per_million_childlex",
+        "frequency_lemma_per_million_childlex",
+        "frequency_type_per_million_dwds",
+        "frequency_lemma_per_million_dwds",
+        "frequency_subjective_mean",
+        "aoa_mean",
+        "letters",
+        "frequency_unigram",
+        "frequency_bigram",
+        "frequency_trigram",
+        "orthographic_neighbors_n_childlex",
+        "orthographic_neighbors_n_dwds",
+        "old20_childlex",
+        "old20_dwds",
+        "phonetic_transcription_disc",
+        "phonemes_n",
+        "syllables_n",
+        "syllable_structure",
+        "syllable_parse",
+        "pos",
+        "morpheme_parse",
+        "morphemes_n",
+        "morphological_status",
+        "morphological_segmentation",
+        "imagine_mean",
+        "valence_mean",
+        "arousal_mean",
+        "accuracy_n_ld_g1",
+        "accuracy_mean_ld_g1",
+        "accuracy_se_ld_g1",
+        "accuracy_n_ld_g2",
+        "accuracy_mean_ld_g2",
+        "accuracy_se_ld_g2",
+        "accuracy_n_ld_g3",
+        "accuracy_mean_ld_g3",
+        "accuracy_se_ld_g3",
+        "accuracy_n_ld_g4",
+        "accuracy_mean_ld_g4",
+        "accuracy_se_ld_g4",
+        "accuracy_n_ld_g6",
+        "accuracy_mean_ld_g6",
+        "accuracy_se_ld_g6",
+        "accuracy_n_ld_ya",
+        "accuracy_mean_ld_ya",
+        "accuracy_se_ld_ya",
+        "accuracy_n_ld_oa",
+        "accuracy_mean_ld_oa",
+        "accuracy_se_ld_oa",
+        "rt_n_g1",
+        "rt_mean_g1",
+        "rt_se_g1",
+        "rt_n_g2",
+        "rt_mean_g2",
+        "rt_se_g2",
+        "rt_n_g3",
+        "rt_mean_g3",
+        "rt_se_g3",
+        "rt_n_g4",
+        "rt_mean_g4",
+        "rt_se_g4",
+        "rt_n_g6",
+        "rt_mean_g6",
+        "rt_se_g6",
+        "rt_n_ya",
+        "rt_mean_ya",
+        "rt_se_ya",
+        "rt_n_oa",
+        "rt_mean_oa",
+        "rt_se_oa",
+        "accuracy_n_naming_g1",
+        "accuracy_mean_naming_g1",
+        "accuracy_se_naming_g1",
+        "accuracy_n_naming_g2",
+        "accuracy_mean_naming_g2",
+        "accuracy_se_naming_g2",
+        "accuracy_n_naming_g3",
+        "accuracy_mean_naming_g3",
+        "accuracy_se_naming_g3",
+        "accuracy_n_naming_g4",
+        "accuracy_mean_naming_g4",
+        "accuracy_se_naming_g4",
+        "accuracy_n_naming_g6",
+        "accuracy_mean_naming_g6",
+        "accuracy_se_naming_g6",
+        "accuracy_n_naming_ya",
+        "accuracy_mean_naming_ya",
+        "accuracy_se_naming_ya",
+        "accuracy_n_naming_oa",
+        "accuracy_mean_naming_oa",
+        "accuracy_se_naming_oa",
+        "duration_n_g1",
+        "duration_mean_g1",
+        "duration_se_g1",
+        "duration_n_g2",
+        "duration_mean_g2",
+        "duration_se_g2",
+        "duration_n_g3",
+        "duration_mean_g3",
+        "duration_se_g3",
+        "duration_n_g4",
+        "duration_mean_g4",
+        "duration_se_g4",
+        "onset_n_g1",
+        "onset_mean_g1",
+        "onset_se_g1",
+        "onset_n_g2",
+        "onset_mean_g2",
+        "onset_se_g2",
+        "onset_n_g3",
+        "onset_mean_g3",
+        "onset_se_g3",
+        "onset_n_g4",
+        "onset_mean_g4",
+        "onset_se_g4",
+        "onset_n_g6",
+        "onset_mean_g6",
+        "onset_se_g6",
+        "onset_n_ya",
+        "onset_mean_ya",
+        "onset_se_ya",
+        "onset_n_oa",
+        "onset_mean_oa",
+        "onset_se_oa"
+      ]
+    },
+    {
       "bibtex": "Soares2017",
       "parentBibtex": null,
       "citation": {
-        "author": "Ana Paula Soares, Ana Santos Costa, João Machado, Montserrat Comesaña, Helena Mendes Oliveira",
+        "author": "Ana Paula Soares, Ana Santos Costa, Jo\u00e3o Machado, Montserrat Comesa\u00f1a, Helena Mendes Oliveira",
         "year": 2017,
         "title": "The Minho Word Pool: Norms for imageability, concreteness, and subjective frequency for 3,800 Portuguese words",
         "journal": "Behavior Research Methods",
@@ -3153,10 +5835,124 @@
       ]
     },
     {
+      "bibtex": "Chang2016",
+      "parentBibtex": null,
+      "citation": {
+        "author": "Ya-Ning Chang, Chun-Hsien Hsu, Jie-Li Tsai, Chien-Liang Chen, Chia-Ying Lee",
+        "year": 2016,
+        "title": "A psycholinguistic database for traditional Chinese character naming",
+        "journal": "Behavior Research Methods",
+        "doi": "10.3758/s13428-014-0559-7"
+      },
+      "language": "chinese_simplified, zhuyin",
+      "nRows": 3314,
+      "flags": [
+        "accuracy",
+        "ambiguity",
+        "familiar",
+        "freq",
+        "rt"
+      ],
+      "wordColumns": [
+        "word_chinese_simplified",
+        "word_zhuyin"
+      ],
+      "rawColumns": [
+        "word_chinese_simplified",
+        "word_zhuyin",
+        "frequency",
+        "familiar_mean",
+        "ambiguity_mean",
+        "accuracy_naming",
+        "rt_mean_naming"
+      ]
+    },
+    {
+      "bibtex": "Sianipar2016",
+      "parentBibtex": null,
+      "citation": {
+        "author": "Agnes Sianipar, Pieter van Groenestijn, Ton Dijkstra",
+        "year": 2016,
+        "title": "Affective Meaning, Concreteness, and Subjective Frequency Norms for Indonesian Words",
+        "journal": "Frontiers in Psychology",
+        "doi": "10.3389/fpsyg.2016.01907"
+      },
+      "language": "indonesian",
+      "nRows": 1490,
+      "flags": [
+        "arousal",
+        "concrete",
+        "dominate",
+        "freq",
+        "valence"
+      ],
+      "wordColumns": [
+        "word_indonesian"
+      ],
+      "rawColumns": [
+        "word_indonesian",
+        "translate_word_english",
+        "valence_n_male",
+        "valence_mean_male",
+        "valence_sd_male",
+        "arousal_n_male",
+        "arousal_mean_male",
+        "arousal_sd_male",
+        "dominance_n_male",
+        "dominance_mean_male",
+        "dominance_sd_male",
+        "predictability_n_male",
+        "predictability_mean_male",
+        "predictability_sd_male",
+        "concrete_n_male",
+        "concrete_mean_male",
+        "concrete_sd_male",
+        "frequency_n_male",
+        "frequency_mean_male",
+        "frequency_sd_male",
+        "valence_n_female",
+        "valence_mean_female",
+        "valence_sd_female",
+        "arousal_n_female",
+        "arousal_mean_female",
+        "arousal_sd_female",
+        "dominance_n_female",
+        "dominance_mean_female",
+        "dominance_sd_female",
+        "predictability_n_female",
+        "predictability_mean_female",
+        "predictability_sd_female",
+        "concrete_n_female",
+        "concrete_mean_female",
+        "concrete_sd_female",
+        "frequency_n_female",
+        "frequency_mean_female",
+        "frequency_sd_female",
+        "valence_n_all",
+        "valence_mean_all",
+        "valence_sd_all",
+        "arousal_n_all",
+        "arousal_mean_all",
+        "arousal_sd_all",
+        "dominance_n_all",
+        "dominance_mean_all",
+        "dominance_sd_all",
+        "predictability_n_all",
+        "predictability_mean_all",
+        "predictability_sd_all",
+        "concrete_n_all",
+        "concrete_mean_all",
+        "concrete_sd_all",
+        "frequency_n_all",
+        "frequency_mean_all",
+        "frequency_sd_all"
+      ]
+    },
+    {
       "bibtex": "Hinojosa2016a",
       "parentBibtex": null,
       "citation": {
-        "author": "J. A. Hinojosa, N. Martínez-García, C. Villalba-García, U. Fernández-Folgueiras, A. Sánchez-Carmona, M. A. Pozo, et al.",
+        "author": "J. A. Hinojosa, N. Mart\u00ednez-Garc\u00eda, C. Villalba-Garc\u00eda, U. Fern\u00e1ndez-Folgueiras, A. S\u00e1nchez-Carmona, M. A. Pozo, et al.",
         "year": 2016,
         "title": "Affective norms of 875 Spanish words for five discrete emotional categories and two emotional dimensions",
         "journal": "Behavior Research Methods",
@@ -3277,6 +6073,65 @@
       ]
     },
     {
+      "bibtex": "Gruhn2016",
+      "parentBibtex": null,
+      "citation": {
+        "author": "Daniel Gr\u00fchn",
+        "year": 2016,
+        "title": "An English Word Database of EMOtional TErms (EMOTE)",
+        "journal": "Psychological Reports",
+        "doi": "10.1177/0033294116658474"
+      },
+      "language": "english",
+      "nRows": 2197,
+      "flags": [
+        "arousal",
+        "concrete",
+        "emotion",
+        "familiar",
+        "freq",
+        "letters",
+        "meaning",
+        "syllables",
+        "valence"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "word_english",
+        "letters",
+        "syllables",
+        "frequency_kf",
+        "frequency_bnc",
+        "frequency_tv",
+        "frequency_pg",
+        "frequency_bn",
+        "noun",
+        "adjective",
+        "valence_mean_noun",
+        "arousal_mean_noun",
+        "imagery_mean_noun",
+        "concrete_mean_noun",
+        "meaningfulness_mean_noun",
+        "familiar_mean_noun",
+        "emotionality_mean_noun",
+        "valence_mean_adj",
+        "arousal_mean_adj",
+        "imagery_mean_adj",
+        "concrete_mean_adj",
+        "meaningfulness_mean_adj",
+        "familiar_mean_adj",
+        "emotionality_mean_adj",
+        "likeableness_mean_adj",
+        "desireability_mean_adj",
+        "control_mean_adj",
+        "memory_percent_hits",
+        "memory_percent_false_alarm",
+        "memory_d_prime"
+      ]
+    },
+    {
       "bibtex": "Boukadi2016",
       "parentBibtex": null,
       "citation": {
@@ -3363,35 +6218,105 @@
       ]
     },
     {
-      "bibtex": "Luniewska2015",
+      "bibtex": "Luniewska2016",
       "parentBibtex": null,
       "citation": {
-        "author": "Magdalena Łuniewska, Ewa Haman, Sharon Armon-Lotem, Bartłomiej Etenkowski, Frenette Southwood, Darinka Anđelković, et al.",
+        "author": "Magdalena \u0141uniewska, Ewa Haman, Sharon Armon-Lotem, Bart\u0142omiej Etenkowski, Frenette Southwood, Darinka An\u0111elkovi\u0107, et al.",
         "year": 2016,
         "title": "Ratings of age of acquisition of 299 words across 25 languages: Is there a cross-linguistic order of words?",
         "journal": "Behavior Research Methods",
         "doi": "10.3758/s13428-015-0636-6"
       },
-      "language": "english_translate, afrikaans",
-      "nRows": 299,
+      "language": "english, afrikaans, catalan, danish, dutch, finnish, german, greek, hebrew, hungarian, icelandic, irish, isixhosa, italian, lithuanian, luxembourgish, maltese, polish, russian, south_african_english, serbian, slovak, spanish, swedish, turkish",
+      "nRows": 250,
       "flags": [
         "aoa"
       ],
       "wordColumns": [
-        "word_english_translate",
-        "word_afrikaans"
+        "word_english",
+        "word_afrikaans",
+        "word_catalan",
+        "word_danish",
+        "word_dutch",
+        "word_finnish",
+        "word_german",
+        "word_greek",
+        "word_hebrew",
+        "word_hungarian",
+        "word_icelandic",
+        "word_irish",
+        "word_isixhosa",
+        "word_italian",
+        "word_lithuanian",
+        "word_luxembourgish",
+        "word_maltese",
+        "word_polish",
+        "word_russian",
+        "word_south_african_english",
+        "word_serbian",
+        "word_slovak",
+        "word_spanish",
+        "word_swedish",
+        "word_turkish"
       ],
       "rawColumns": [
-        "word_english_translate",
+        "word_english",
+        "aoa_mean_afrikaans",
         "word_afrikaans",
-        "aoa_mean_afrikaans"
+        "aoa_mean_catalan",
+        "word_catalan",
+        "aoa_mean_danish",
+        "word_danish",
+        "aoa_mean_dutch",
+        "word_dutch",
+        "aoa_mean_english",
+        "aoa_mean_finnish",
+        "word_finnish",
+        "aoa_mean_german",
+        "word_german",
+        "aoa_mean_greek",
+        "word_greek",
+        "aoa_mean_hebrew",
+        "word_hebrew",
+        "aoa_mean_hungarian",
+        "word_hungarian",
+        "aoa_mean_icelandic",
+        "word_icelandic",
+        "aoa_mean_irish",
+        "word_irish",
+        "aoa_mean_isixhosa",
+        "word_isixhosa",
+        "aoa_mean_italian",
+        "word_italian",
+        "aoa_mean_lithuanian",
+        "word_lithuanian",
+        "aoa_mean_luxembourgish",
+        "word_luxembourgish",
+        "aoa_mean_maltese",
+        "word_maltese",
+        "aoa_mean_polish",
+        "word_polish",
+        "aoa_mean_russian",
+        "word_russian",
+        "aoa_mean_south_african_english",
+        "word_south_african_english",
+        "aoa_mean_serbian",
+        "word_serbian",
+        "aoa_mean_slovak",
+        "word_slovak",
+        "aoa_mean_spanish",
+        "word_spanish",
+        "aoa_mean_swedish",
+        "word_swedish",
+        "aoa_mean_turkish",
+        "word_turkish"
       ]
     },
     {
       "bibtex": "Guasch2016",
       "parentBibtex": null,
       "citation": {
-        "author": "Marc Guasch, Pilar Ferré, Isabel Fraga",
+        "author": "Marc Guasch, Pilar Ferr\u00e9, Isabel Fraga",
         "year": 2016,
         "title": "Spanish norms for affective and lexico-semantic variables for 1,400 words",
         "journal": "Behavior Research Methods",
@@ -3438,7 +6363,7 @@
       "bibtex": "Alonso2016",
       "parentBibtex": null,
       "citation": {
-        "author": "María Ángeles Alonso, Emiliano Díez, Angel Fernandez",
+        "author": "Mar\u00eda \u00c1ngeles Alonso, Emiliano D\u00edez, Angel Fernandez",
         "year": 2016,
         "title": "Subjective age-of-acquisition norms for 4,640 verbs in Spanish",
         "journal": "Behavior Research Methods",
@@ -3504,7 +6429,7 @@
       "bibtex": "Hinojosa2016b",
       "parentBibtex": null,
       "citation": {
-        "author": "José A. Hinojosa, Irene Rincón-Pérez, Mª Verónica Romero-Ferreiro, Natalia Martínez-García, Cristina Villalba-García, Pedro R. Montoro, et al.",
+        "author": "Jos\u00e9 A. Hinojosa, Irene Rinc\u00f3n-P\u00e9rez, M\u00aa Ver\u00f3nica Romero-Ferreiro, Natalia Mart\u00ednez-Garc\u00eda, Cristina Villalba-Garc\u00eda, Pedro R. Montoro, et al.",
         "year": 2016,
         "title": "The Madrid Affective Database for Spanish (MADS): Ratings of Dominance, Familiarity, Subjective Age of Acquisition and Sensory Experience",
         "journal": "PLOS ONE",
@@ -3820,7 +6745,7 @@
       "bibtex": "Schauenburg2015",
       "parentBibtex": null,
       "citation": {
-        "author": "Gesche Schauenburg, Jens Ambrasat, Tobias Schröder, Christian von Scheve, Markus Conrad",
+        "author": "Gesche Schauenburg, Jens Ambrasat, Tobias Schr\u00f6der, Christian von Scheve, Markus Conrad",
         "year": 2015,
         "title": "Emotional connotations of words related to authority and community",
         "journal": "Behavior Research Methods",
@@ -3887,9 +6812,9 @@
       "bibtex": "Riegel2015",
       "parentBibtex": null,
       "citation": {
-        "author": "Monika Riegel, Małgorzata Wierzba, Marek Wypych, Łukasz Żurawski, Katarzyna Jednoróg, Anna Grabowska, et al.",
+        "author": "Monika Riegel, Ma\u0142gorzata Wierzba, Marek Wypych, \u0141ukasz \u017burawski, Katarzyna Jednor\u00f3g, Anna Grabowska, et al.",
         "year": 2015,
-        "title": "Nencki Affective Word List (NAWL): the cultural adaptation of the Berlin Affective Word List–Reloaded (BAWL-R) for Polish",
+        "title": "Nencki Affective Word List (NAWL): the cultural adaptation of the Berlin Affective Word List\u2013Reloaded (BAWL-R) for Polish",
         "journal": "Behavior Research Methods",
         "doi": "10.3758/s13428-014-0552-1"
       },
@@ -3942,7 +6867,7 @@
       "bibtex": "Bonin2015",
       "parentBibtex": null,
       "citation": {
-        "author": "Patrick Bonin, Alain Méot, Séverine Millotte, Aurélia Bugaiska",
+        "author": "Patrick Bonin, Alain M\u00e9ot, S\u00e9verine Millotte, Aur\u00e9lia Bugaiska",
         "year": 2015,
         "title": "Norms and reading times for acronyms in French",
         "journal": "Behavior Research Methods",
@@ -3982,7 +6907,7 @@
       "bibtex": "Lind2015",
       "parentBibtex": null,
       "citation": {
-        "author": "Marianne Lind, Hanne Gram Simonsen, Pernille Hansen, Elisabeth Holm, Bjørn-Helge Mevik",
+        "author": "Marianne Lind, Hanne Gram Simonsen, Pernille Hansen, Elisabeth Holm, Bj\u00f8rn-Helge Mevik",
         "year": 2015,
         "title": "Norwegian Words: A lexical database for clinicians and researchers",
         "journal": "Clinical Linguistics & Phonetics",
@@ -4032,10 +6957,46 @@
       ]
     },
     {
+      "bibtex": "Moldovan2015",
+      "parentBibtex": null,
+      "citation": {
+        "author": "Cornelia D. Moldovan, Pilar Ferr\u00e9, Josep Demestre, Rosa S\u00e1nchez-Casas",
+        "year": 2015,
+        "title": "Semantic similarity: normative ratings for 185 Spanish noun triplets",
+        "journal": "Behavior Research Methods",
+        "doi": "10.3758/s13428-014-0501-z"
+      },
+      "language": "spanish",
+      "nRows": 41,
+      "flags": [
+        "concrete",
+        "familiar",
+        "similar"
+      ],
+      "wordColumns": [
+        "word_spanish"
+      ],
+      "rawColumns": [
+        "word_spanish",
+        "concrete_mean",
+        "familiar_mean",
+        "similar_word",
+        "similarity_mean",
+        "similarity_sd",
+        "concrete_mean_similar_word",
+        "familiar_mean_similar_word",
+        "less_similar_word",
+        "less_similarity_mean",
+        "less_similarity_sd",
+        "concrete_mean_less_similar_word",
+        "familiar_mean_less_similar_word"
+      ]
+    },
+    {
       "bibtex": "Bonin2015a",
       "parentBibtex": null,
       "citation": {
-        "author": "Patrick Bonin, Alain Méot, Ludovic Ferrand, Aurélia Bugaïska",
+        "author": "Patrick Bonin, Alain M\u00e9ot, Ludovic Ferrand, Aur\u00e9lia Buga\u00efska",
         "year": 2015,
         "title": "Sensory experience ratings (SERs) for 1,659 French words: Relationships with other psycholinguistic variables and visual word recognition",
         "journal": "Behavior Research Methods",
@@ -4060,7 +7021,7 @@
       "bibtex": "Alonso2015",
       "parentBibtex": null,
       "citation": {
-        "author": "María Angeles Alonso, Angel Fernandez, Emiliano Díez",
+        "author": "Mar\u00eda Angeles Alonso, Angel Fernandez, Emiliano D\u00edez",
         "year": 2015,
         "title": "Subjective age-of-acquisition norms for 7,039 Spanish words",
         "journal": "Behavior Research Methods",
@@ -4098,7 +7059,7 @@
         "author": "Susanne Quadflieg, Caroline Michel, Henryk Bukowski, Dana Samson",
         "year": 2014,
         "title": "A database of psycholinguistic and lexical properties for French adjectives referring to human and/or nonhuman attributes.",
-        "journal": "Canadian Journal of Experimental Psychology / Revue canadienne de psychologie expérimentale",
+        "journal": "Canadian Journal of Experimental Psychology / Revue canadienne de psychologie exp\u00e9rimentale",
         "doi": "10.1037/cep0000001"
       },
       "language": "french",
@@ -4267,7 +7228,7 @@
       "bibtex": "Schmidtke2014",
       "parentBibtex": null,
       "citation": {
-        "author": "David S. Schmidtke, Tobias Schröder, Arthur M. Jacobs, Markus Conrad",
+        "author": "David S. Schmidtke, Tobias Schr\u00f6der, Arthur M. Jacobs, Markus Conrad",
         "year": 2014,
         "title": "ANGST: Affective norms for German sentiment terms, derived from the affective norms for English words",
         "journal": "Behavior Research Methods",
@@ -4317,6 +7278,40 @@
       ]
     },
     {
+      "bibtex": "Brodeur2014",
+      "parentBibtex": null,
+      "citation": {
+        "author": "Mathieu B. Brodeur, Katherine Gu\u00e9rard, Maria Bouras",
+        "year": 2014,
+        "title": "Bank of Standardized Stimuli (BOSS) Phase II: 930 New Normative Photos",
+        "journal": "PLoS ONE",
+        "doi": "10.1371/journal.pone.0106953"
+      },
+      "language": "english",
+      "nRows": 931,
+      "flags": [
+        "familiar",
+        "visualcomp"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "filename_english",
+        "dko_percent",
+        "dkn_percent",
+        "total_percent",
+        "word_english",
+        "modal_name_agreement_percent",
+        "hcat",
+        "familiar_mean",
+        "visual_complexity_mean",
+        "object_agreement_mean",
+        "viewpoint_agreement_mean",
+        "manipulability_mean"
+      ]
+    },
+    {
       "bibtex": "Brysbaert2014",
       "parentBibtex": null,
       "citation": {
@@ -4352,7 +7347,7 @@
       "citation": {
         "author": "David Allen, Kathy Conklin",
         "year": 2014,
-        "title": "Cross-linguistic similarity norms for Japanese–English translation equivalents",
+        "title": "Cross-linguistic similarity norms for Japanese\u2013English translation equivalents",
         "journal": "Behavior Research Methods",
         "doi": "10.3758/s13428-013-0389-z"
       },
@@ -4392,7 +7387,7 @@
       "bibtex": "Brysbaert2014a",
       "parentBibtex": null,
       "citation": {
-        "author": "Marc Brysbaert, Michaël Stevens, Simon De Deyne, Wouter Voorspoels, Gert Storms",
+        "author": "Marc Brysbaert, Micha\u00ebl Stevens, Simon De Deyne, Wouter Voorspoels, Gert Storms",
         "year": 2014,
         "title": "Norms of age of acquisition and concreteness for 30,000 Dutch words",
         "journal": "Acta Psychologica",
@@ -4423,10 +7418,48 @@
       ]
     },
     {
+      "bibtex": "Shao2014",
+      "parentBibtex": null,
+      "citation": {
+        "author": "Zeshu Shao, Ardi Roelofs, Antje S. Meyer",
+        "year": 2014,
+        "title": "Predicting naming latencies for action pictures: Dutch norms",
+        "journal": "Behavior Research Methods",
+        "doi": "10.3758/s13428-013-0358-6"
+      },
+      "language": "dutch",
+      "nRows": 124,
+      "flags": [
+        "aoa",
+        "familiar",
+        "imageagree",
+        "imagine",
+        "rt",
+        "visualcomp"
+      ],
+      "wordColumns": [
+        "word_dutch"
+      ],
+      "rawColumns": [
+        "word_dutch",
+        "translate_word_english",
+        "visual_complexity_mean",
+        "image_agreement_mean",
+        "familiar_mean",
+        "imagine_mean",
+        "aoa_mean_years",
+        "in_naming_task",
+        "n_names",
+        "prop_dominant",
+        "h_statistic",
+        "rt_mean_ms"
+      ]
+    },
+    {
       "bibtex": "Moreno-Martinez2014",
       "parentBibtex": null,
       "citation": {
-        "author": "F. Javier Moreno-Martínez, Pedro R. Montoro, Inmaculada C. Rodríguez-Rojo",
+        "author": "F. Javier Moreno-Mart\u00ednez, Pedro R. Montoro, Inmaculada C. Rodr\u00edguez-Rojo",
         "year": 2014,
         "title": "Spanish norms for age of acquisition, concept familiarity, lexical frequency, manipulability, typicality, and other variables for 820 words from 14 living/nonliving concepts",
         "journal": "Behavior Research Methods",
@@ -4550,7 +7583,7 @@
       "bibtex": "Rogic2013",
       "parentBibtex": null,
       "citation": {
-        "author": "Maja Rogić, Ana Jerončić, Marija Bošnjak, Ana Sedlar, Darko Hren, Vedran Deletis",
+        "author": "Maja Rogi\u0107, Ana Jeron\u010di\u0107, Marija Bo\u0161njak, Ana Sedlar, Darko Hren, Vedran Deletis",
         "year": 2013,
         "title": "A visual object naming task standardized for the Croatian language: A tool for research and clinical practice",
         "journal": "Behavior Research Methods",
@@ -4581,7 +7614,7 @@
       "bibtex": "Bonin2013",
       "parentBibtex": null,
       "citation": {
-        "author": "Patrick Bonin, Diana Guillemard-Tsaparina, Alain Méot",
+        "author": "Patrick Bonin, Diana Guillemard-Tsaparina, Alain M\u00e9ot",
         "year": 2013,
         "title": "Determinants of naming latencies, object comprehension times, and new norms for the Russian standardized set of the colorized version of the Snodgrass and Vanderwart pictures",
         "journal": "Behavior Research Methods",
@@ -4610,10 +7643,64 @@
       ]
     },
     {
+      "bibtex": "Ric2013",
+      "parentBibtex": null,
+      "citation": {
+        "author": "Fran\u00e7ois Ric, Theodore Alexopoulos, Dominique Muller, Beno\u00eete Aub\u00e9",
+        "year": 2013,
+        "title": "Emotional norms for 524 French personality trait words",
+        "journal": "Behavior Research Methods",
+        "doi": "10.3758/s13428-012-0276-z"
+      },
+      "language": "french",
+      "nRows": 524,
+      "flags": [
+        "emotion",
+        "freq",
+        "valence"
+      ],
+      "wordColumns": [
+        "word_french"
+      ],
+      "rawColumns": [
+        "word_french",
+        "translate_word_english",
+        "frequency_subtitle",
+        "frequency_books",
+        "valence_mean",
+        "valence_sd",
+        "valence_response_rate",
+        "consequences_possessor_mean",
+        "consequences_possessor_sd",
+        "consequences_possessor_response_rate",
+        "consequences_others_mean",
+        "consequences_others_sd",
+        "consequences_others_response_rate",
+        "approach_mean",
+        "approach_sd",
+        "approach_response_rate",
+        "anger_mean",
+        "anger_sd",
+        "anger_response_rate",
+        "disgust_mean",
+        "disgust_sd",
+        "disgust_response_rate",
+        "happiness_mean",
+        "happiness_sd",
+        "happiness_response_rate",
+        "fear_mean",
+        "fear_sd",
+        "fear_response_rate",
+        "sadness_mean",
+        "sadness_sd",
+        "sadness_response_rate"
+      ]
+    },
+    {
       "bibtex": "Duchon2013",
       "parentBibtex": null,
       "citation": {
-        "author": "Andrew Duchon, Manuel Perea, Nuria Sebastián-Gallés, Antonia Martí, Manuel Carreiras",
+        "author": "Andrew Duchon, Manuel Perea, Nuria Sebasti\u00e1n-Gall\u00e9s, Antonia Mart\u00ed, Manuel Carreiras",
         "year": 2013,
         "title": "EsPal: One-stop shopping for Spanish word properties",
         "journal": "Behavior Research Methods",
@@ -4637,10 +7724,34 @@
       ]
     },
     {
+      "bibtex": "Marques2004",
+      "parentBibtex": null,
+      "citation": {
+        "author": "J. Frederico Marques",
+        "year": 2013,
+        "title": "Normas de familiaridade para substantivos comuns",
+        "journal": "Laborat\u00f3rio de Psicologia",
+        "doi": "10.14417/lp.774"
+      },
+      "language": "spanish",
+      "nRows": 459,
+      "flags": [
+        "familiar"
+      ],
+      "wordColumns": [
+        "word_spanish"
+      ],
+      "rawColumns": [
+        "word_spanish",
+        "familiar_mean_reference",
+        "familiar_mean_meaning"
+      ]
+    },
+    {
       "bibtex": "Bonin2013a",
       "parentBibtex": null,
       "citation": {
-        "author": "Patrick Bonin, Alain Méot, Aurelia Bugaiska",
+        "author": "Patrick Bonin, Alain M\u00e9ot, Aurelia Bugaiska",
         "year": 2013,
         "title": "Norms and comprehension times for 305 French idiomatic expressions",
         "journal": "Behavior Research Methods",
@@ -4942,6 +8053,109 @@
       ]
     },
     {
+      "bibtex": "Montefinese2013_words",
+      "parentBibtex": "Montefinese2013",
+      "citation": {
+        "author": "Maria Montefinese, Ettore Ambrosini, Beth Fairfield, Nicola Mammarella",
+        "year": 2013,
+        "title": "Semantic memory: A feature-based analysis and new norms for Italian",
+        "journal": "Behavior Research Methods",
+        "doi": "10.3758/s13428-012-0263-4"
+      },
+      "language": "italian",
+      "nRows": 160,
+      "flags": [
+        "category",
+        "dist",
+        "dominate",
+        "familiar",
+        "freq",
+        "letters",
+        "syllables",
+        "typical"
+      ],
+      "wordColumns": [
+        "word_italian"
+      ],
+      "rawColumns": [
+        "domain",
+        "category",
+        "word_italian",
+        "translate_word_english",
+        "length_italian",
+        "length_english",
+        "syllables",
+        "frequency",
+        "frequency_log",
+        "familiar_mean",
+        "typicality_mean",
+        "exemplar_dominance_mean",
+        "exemplar_mean_rank",
+        "exemplar_1_occur",
+        "exemplar_availability",
+        "n",
+        "features",
+        "frequency_production_sum",
+        "frequency_production_mean",
+        "dominance_mean",
+        "n_feature_notax",
+        "production_frequency_notax",
+        "production_frequency_mean_notax",
+        "n_distinct_features",
+        "percent_distinct_features",
+        "n_distinct_features_notax",
+        "percent_distinct_features_notax",
+        "distinctiveness_mean",
+        "distinctiveness_mean_notax",
+        "cue_value_mean",
+        "cue_value_mean_notax",
+        "n_correlated_pairs",
+        "n_possible_correlated_pairs",
+        "percent_correlated_pairs",
+        "n_correlated_pairs_notax",
+        "n_possible_correlated_pairs_notax",
+        "percent_correlated_pairs_notax",
+        "intercorrelation_density",
+        "intercorrelation_density_mean",
+        "intercorrelation_density_notax",
+        "intercorrelation_density_mean_notax",
+        "relevance_mean",
+        "relevance_mean_notax",
+        "significance_mean",
+        "significance_mean_notax",
+        "n_sense_features",
+        "n_functional_features",
+        "n_encyc_features",
+        "n_taxonomic_features",
+        "percent_sense_features",
+        "percent_function_features",
+        "percent_encyc_features",
+        "percent_taxonomic_features",
+        "percent_sense_features_notax",
+        "percent_function_features_notax",
+        "percent_encyc_features_notax",
+        "n_sense_features_garrard",
+        "n_function_features_garrard",
+        "n_encyc_features_garrard",
+        "n_taxonomic_features_garrard",
+        "percent_sense_features_garrard",
+        "percent_functiopercent_features_garrard",
+        "percent_encyc_features_garrard",
+        "percent_taxonomic_features_garrard",
+        "percent_sense_features_notax_garrard",
+        "percent_functiopercent_features_notax_garrard",
+        "percent_encyc_features_notax_garrard",
+        "dominance_cos_mean",
+        "dominance_euc_mean",
+        "dominance_city_mean",
+        "binary_cos_mean",
+        "binary_euc_mean",
+        "binary_city_mean",
+        "n_neighbors",
+        "n_cosine_near_neighbors"
+      ]
+    },
+    {
       "bibtex": "Juhasz2013",
       "parentBibtex": null,
       "citation": {
@@ -5047,7 +8261,7 @@
       "bibtex": "Ferre2012",
       "parentBibtex": null,
       "citation": {
-        "author": "Pilar Ferré, Marc Guasch, Cornelia Moldovan, Rosa Sánchez-Casas",
+        "author": "Pilar Ferr\u00e9, Marc Guasch, Cornelia Moldovan, Rosa S\u00e1nchez-Casas",
         "year": 2012,
         "title": "Affective norms for 380 Spanish words belonging to three different semantic categories",
         "journal": "Behavior Research Methods",
@@ -5142,7 +8356,7 @@
       "bibtex": "Moreno-Martinez2012",
       "parentBibtex": null,
       "citation": {
-        "author": "Francisco Javier Moreno-Martínez, Pedro R. Montoro",
+        "author": "Francisco Javier Moreno-Mart\u00ednez, Pedro R. Montoro",
         "year": 2012,
         "title": "An Ecological Alternative to Snodgrass & Vanderwart: 360 High Quality Colour Images with Norms for Seven Psycholinguistic Variables",
         "journal": "PLoS ONE",
@@ -5219,6 +8433,48 @@
       ]
     },
     {
+      "bibtex": "Schroder2012",
+      "parentBibtex": null,
+      "citation": {
+        "author": "Astrid Schr\u00f6der, Teresa Gemballa, Steffie Ruppin, Isabell Wartenburger",
+        "year": 2012,
+        "title": "German norms for semantic typicality, age of acquisition, and concept familiarity",
+        "journal": "Behavior Research Methods",
+        "doi": "10.3758/s13428-011-0164-y"
+      },
+      "language": "german",
+      "nRows": 824,
+      "flags": [
+        "aoa",
+        "familiar",
+        "freq",
+        "phonemes",
+        "semantic",
+        "syllables",
+        "typical"
+      ],
+      "wordColumns": [
+        "word_german"
+      ],
+      "rawColumns": [
+        "word_german",
+        "translate_word_english",
+        "semantic_category",
+        "exemplar_n_total",
+        "exemplar_pct_total",
+        "typicality_mean",
+        "typicality_sd",
+        "aoa_mean",
+        "aoa_sd",
+        "familiar_mean",
+        "familiar_sd",
+        "frequency_per_million",
+        "frequency_log10",
+        "phonemes",
+        "syllables"
+      ]
+    },
+    {
       "bibtex": "Schock2011",
       "parentBibtex": null,
       "citation": {
@@ -5289,7 +8545,7 @@
       "bibtex": "Soares2012",
       "parentBibtex": null,
       "citation": {
-        "author": "Ana Paula Soares, Montserrat Comesaña, Ana P. Pinheiro, Alberto Simões, Carla Sofia Frade",
+        "author": "Ana Paula Soares, Montserrat Comesa\u00f1a, Ana P. Pinheiro, Alberto Sim\u00f5es, Carla Sofia Frade",
         "year": 2012,
         "title": "The adaptation of the Affective Norms for English Words (ANEW) for European Portuguese",
         "journal": "Behavior Research Methods",
@@ -5326,6 +8582,46 @@
         "dominance_sd_women",
         "dominance_mean_men",
         "dominance_sd_men"
+      ]
+    },
+    {
+      "bibtex": "Brodeur2012",
+      "parentBibtex": null,
+      "citation": {
+        "author": "Mathieu B. Brodeur, Eva Kehayia, Genevi\u00e8ve Dion-Lessard, M\u00e9lissa Chauret, Tina Montreuil, Emmanuelle Dionne-Dostie, et al.",
+        "year": 2012,
+        "title": "The bank of standardized stimuli (BOSS): comparison between French and English norms",
+        "journal": "Behavior Research Methods",
+        "doi": "10.3758/s13428-011-0184-7"
+      },
+      "language": "french_modal_name",
+      "nRows": 483,
+      "flags": [
+        "category",
+        "familiar",
+        "visualcomp"
+      ],
+      "wordColumns": [
+        "word_french_modal_name"
+      ],
+      "rawColumns": [
+        "filename_english",
+        "word_french_modal_name",
+        "modal_name_agreement_percent",
+        "h",
+        "dko_percent",
+        "dkn_percent",
+        "total_percent",
+        "modal_category",
+        "category_agreement_percent",
+        "hcat",
+        "familiar_mean",
+        "visual_complexity_mean",
+        "object_agreement_mean",
+        "viewpoint_agreement_mean",
+        "nmi_percent",
+        "manipulability_mean",
+        "object_size_mean"
       ]
     },
     {
@@ -5375,7 +8671,7 @@
         "doi": "10.3758/s13428-011-0176-7"
       },
       "language": "japanese_katana, japanese_romanized, japanese_katana_untimed, japanese_romanized_untimed",
-      "nRows": 363,
+      "nRows": 360,
       "flags": [
         "aoa",
         "complex",
@@ -5418,14 +8714,52 @@
         "mora",
         "word_japanese_katana_untimed",
         "word_japanese_romanized_untimed",
-        "translate_word_english_untimed"
+        "translate_word_english_untimed",
+        "rt_sd_strict",
+        "rt_skew_strict",
+        "rt_kurtosis_strict",
+        "rt_se_strict",
+        "rt_min_strict",
+        "rt_percentile_5_strict",
+        "rt_percentile_10_strict",
+        "rt_percentile_20_strict",
+        "rt_percentile_25_strict",
+        "rt_percentile_30_strict",
+        "rt_percentile_40_strict",
+        "rt_percentile_50_strict",
+        "rt_percentile_60_strict",
+        "rt_percentile_70_strict",
+        "rt_percentile_75_strict",
+        "rt_percentile_80_strict",
+        "rt_percentile_90_strict",
+        "rt_percentile_95_strict",
+        "rt_max_strict",
+        "rt_sd_liberal",
+        "rt_skew_liberal",
+        "rt_kurtosis_liberal",
+        "rt_se_liberal",
+        "rt_min_liberal",
+        "rt_percentile_5_liberal",
+        "rt_percentile_10_liberal",
+        "rt_percentile_20_liberal",
+        "rt_percentile_25_liberal",
+        "rt_percentile_30_liberal",
+        "rt_percentile_40_liberal",
+        "rt_percentile_50_liberal",
+        "rt_percentile_60_liberal",
+        "rt_percentile_70_liberal",
+        "rt_percentile_75_liberal",
+        "rt_percentile_80_liberal",
+        "rt_percentile_90_liberal",
+        "rt_percentile_95_liberal",
+        "rt_max_liberal"
       ]
     },
     {
       "bibtex": "Leveau2012",
       "parentBibtex": null,
       "citation": {
-        "author": "Nicolas Leveau, Sandra Jhean-Larose, Guy Denhière, Ba-Linh Nguyen",
+        "author": "Nicolas Leveau, Sandra Jhean-Larose, Guy Denhi\u00e8re, Ba-Linh Nguyen",
         "year": 2012,
         "title": "Validating an interlingual metanorm for emotional analysis of texts",
         "journal": "Behavior Research Methods",
@@ -5661,7 +8995,7 @@
       "citation": {
         "author": "Benny B. Briesemeister, Lars Kuchinke, Arthur M. Jacobs",
         "year": 2011,
-        "title": "Discrete emotion norms for nouns: Berlin affective word list (DENN–BAWL)",
+        "title": "Discrete emotion norms for nouns: Berlin affective word list (DENN\u2013BAWL)",
         "journal": "Behavior Research Methods",
         "doi": "10.3758/s13428-011-0059-y"
       },
@@ -5695,7 +9029,7 @@
       "citation": {
         "author": "Stephen D. R. Bennett, A. Nicole Burnett, Paul D. Siakaluk, Penny M. Pexman",
         "year": 2011,
-        "title": "Imageability and body–object interaction ratings for 599 multisyllabic nouns",
+        "title": "Imageability and body\u2013object interaction ratings for 599 multisyllabic nouns",
         "journal": "Behavior Research Methods",
         "doi": "10.3758/s13428-011-0117-5"
       },
@@ -5748,10 +9082,37 @@
       ]
     },
     {
+      "bibtex": "Bonin2011",
+      "parentBibtex": null,
+      "citation": {
+        "author": "Patrick Bonin, Alain M\u00e9ot, Ludovic Ferrand, S\u00e9bastien Roux",
+        "year": 2011,
+        "title": "L\u2019imageabilit\u00e9 : normes et relations avec d\u2019autres variables psycholinguistiques",
+        "journal": "L\u2019Ann\u00e9e psychologique",
+        "doi": "10.3917/anpsy.112.0327"
+      },
+      "language": "french",
+      "nRows": 1493,
+      "flags": [
+        "aoa",
+        "freq",
+        "imagine"
+      ],
+      "wordColumns": [
+        "word_french"
+      ],
+      "rawColumns": [
+        "word_french",
+        "frequency_subjective_mean",
+        "aoa_mean",
+        "imagine_mean"
+      ]
+    },
+    {
       "bibtex": "Tsaparina2011",
       "parentBibtex": null,
       "citation": {
-        "author": "Diana Tsaparina, Patrick Bonin, Alain Méot",
+        "author": "Diana Tsaparina, Patrick Bonin, Alain M\u00e9ot",
         "year": 2011,
         "title": "Russian norms for name agreement, image agreement for the colorized version of the Snodgrass and Vanderwart pictures and age of acquisition, conceptual familiarity, and imageability scores for modal object names",
         "journal": "Behavior Research Methods",
@@ -5885,7 +9246,7 @@
       "bibtex": "Cameirao2010",
       "parentBibtex": null,
       "citation": {
-        "author": "Manuela L. Cameirão, Selene G. Vicente",
+        "author": "Manuela L. Cameir\u00e3o, Selene G. Vicente",
         "year": 2010,
         "title": "Age-of-acquisition norms for a set of 1,749 Portuguese words",
         "journal": "Behavior Research Methods",
@@ -5930,9 +9291,9 @@
       "bibtex": "DellaRosa2010",
       "parentBibtex": null,
       "citation": {
-        "author": "Pasquale A. Della Rosa, Eleonora Catricalà, Gabriella Vigliocco, Stefano F. Cappa",
+        "author": "Pasquale A. Della Rosa, Eleonora Catrical\u00e0, Gabriella Vigliocco, Stefano F. Cappa",
         "year": 2010,
-        "title": "Beyond the abstract—concrete dichotomy: Mode of acquisition, concreteness, imageability, familiarity, age of acquisition, context availability, and abstractness norms for a set of 417 Italian words",
+        "title": "Beyond the abstract\u2014concrete dichotomy: Mode of acquisition, concreteness, imageability, familiarity, age of acquisition, context availability, and abstractness norms for a set of 417 Italian words",
         "journal": "Behavior Research Methods",
         "doi": "10.3758/brm.42.4.1042"
       },
@@ -5995,13 +9356,12 @@
         "word_english_gb"
       ],
       "rawColumns": [
-        "file_no",
         "word_english_us",
         "word_english_gb",
         "aoa_mean",
         "p_n",
         "familiar_mean",
-        "familiarity_cond",
+        "familiar_cond",
         "complexity_mean",
         "dominance_valid",
         "us_uk_match",
@@ -6065,7 +9425,7 @@
       "bibtex": "Manoiloff2010",
       "parentBibtex": null,
       "citation": {
-        "author": "Laura Manoiloff, Marcela Artstein, María Belén Canavoso, Laura Fernández, Juan Segui",
+        "author": "Laura Manoiloff, Marcela Artstein, Mar\u00eda Bel\u00e9n Canavoso, Laura Fern\u00e1ndez, Juan Segui",
         "year": 2010,
         "title": "Expanded norms for 400 experimental pictures in an Argentinean Spanish-speaking population",
         "journal": "Behavior Research Methods",
@@ -6287,10 +9647,79 @@
       ]
     },
     {
+      "bibtex": "Desrochers2010",
+      "parentBibtex": null,
+      "citation": {
+        "author": "Alain Desrochers, Juana M. Liceras, Raquel Fern\u00e1ndez-Fuertes, Glenn L. Thompson",
+        "year": 2010,
+        "title": "Subjective frequency norms for 330 Spanish simple and compound words",
+        "journal": "Behavior Research Methods",
+        "doi": "10.3758/brm.42.1.109"
+      },
+      "language": "french",
+      "nRows": 3600,
+      "flags": [
+        "freq",
+        "imagine"
+      ],
+      "wordColumns": [
+        "word_french"
+      ],
+      "rawColumns": [
+        "word_french",
+        "frequency_mean",
+        "frequency_sd",
+        "frequency_stresiduals",
+        "imagine_mean",
+        "imagine_sd",
+        "imagine_stresiduals"
+      ]
+    },
+    {
+      "bibtex": "Brodeur2010",
+      "parentBibtex": null,
+      "citation": {
+        "author": "Mathieu B. Brodeur, Emmanuelle Dionne-Dostie, Tina Montreuil, Martin Lepage",
+        "year": 2010,
+        "title": "The Bank of Standardized Stimuli (BOSS), a New Set of 480 Normative Photos of Objects to Be Used as Visual Stimuli in Cognitive Research",
+        "journal": "PLoS ONE",
+        "doi": "10.1371/journal.pone.0010773"
+      },
+      "language": "english",
+      "nRows": 480,
+      "flags": [
+        "category",
+        "familiar",
+        "visualcomp"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "filename_english",
+        "word_english",
+        "modal_name_agreement_percent",
+        "h_value",
+        "dko_percent",
+        "dkn_percent",
+        "total_percent",
+        "modal_category_modal_name",
+        "category_agreement_percent",
+        "hcat",
+        "familiar_mean",
+        "visual_complexity_mean",
+        "object_agreement_mean",
+        "viewpoint_agreement_mean",
+        "nmi",
+        "manipulability_mean",
+        "living_non_living"
+      ]
+    },
+    {
       "bibtex": "Dimitripoulou2009",
       "parentBibtex": null,
       "citation": {
-        "author": "María Dimitropoulou, Jon Andoni Duñabeitia, Panagiotis Blitsas, Manuel Carreiras",
+        "author": "Mar\u00eda Dimitropoulou, Jon Andoni Du\u00f1abeitia, Panagiotis Blitsas, Manuel Carreiras",
         "year": 2009,
         "title": "A standardized set of 260 pictures for Modern Greek: Norms for name agreement, age of acquisition, and visual complexity",
         "journal": "Behavior Research Methods",
@@ -6331,7 +9760,7 @@
       "citation": {
         "author": "Arielle Syssau, Catherine Monnier",
         "year": 2009,
-        "title": "Children’s emotional norms for 600 French words",
+        "title": "Children\u2019s emotional norms for 600 French words",
         "journal": "Behavior Research Methods",
         "doi": "10.3758/brm.41.1.213"
       },
@@ -6420,7 +9849,7 @@
       "bibtex": "Vo2009",
       "parentBibtex": null,
       "citation": {
-        "author": "Melissa L. H. Võ, Markus Conrad, Lars Kuchinke, Karolina Urton, Markus J. Hofmann, Arthur M. Jacobs",
+        "author": "Melissa L. H. V\u00f5, Markus Conrad, Lars Kuchinke, Karolina Urton, Markus J. Hofmann, Arthur M. Jacobs",
         "year": 2009,
         "title": "The Berlin Affective Word List Reloaded (BAWL-R)",
         "journal": "Behavior Research Methods",
@@ -6463,6 +9892,48 @@
       ]
     },
     {
+      "bibtex": "Toglia1978",
+      "parentBibtex": null,
+      "citation": {
+        "author": "Michael P. Toglia",
+        "year": 2009,
+        "title": "Withstanding the test of time: The 1978 semantic word norms",
+        "journal": "Behavior Research Methods",
+        "doi": "10.3758/brm.41.2.531"
+      },
+      "language": "english",
+      "nRows": 2854,
+      "flags": [
+        "category",
+        "concrete",
+        "emotion",
+        "familiar",
+        "imagine",
+        "meaning"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "word_english",
+        "list_id",
+        "imagine_mean",
+        "imagine_sd",
+        "concrete_mean",
+        "concrete_sd",
+        "category_mean",
+        "category_sd",
+        "meaning_mean",
+        "meaning_sd",
+        "familiar_mean",
+        "familiar_sd",
+        "no_attr",
+        "no_asd",
+        "pleasant_mean",
+        "pleasant_sd"
+      ]
+    },
+    {
       "bibtex": "Cortese2008",
       "parentBibtex": null,
       "citation": {
@@ -6494,7 +9965,7 @@
       "bibtex": "Ferrand2008",
       "parentBibtex": null,
       "citation": {
-        "author": "Ludovic Ferrand, Patrick Bonin, Alain Méot, Maria Augustinova, Boris New, Christophe Pallier, et al.",
+        "author": "Ludovic Ferrand, Patrick Bonin, Alain M\u00e9ot, Maria Augustinova, Boris New, Christophe Pallier, et al.",
         "year": 2008,
         "title": "Age-of-acquisition and subjective frequency estimates for all generally known monosyllabic French words and their relation with other psycholinguistic variables",
         "journal": "Behavior Research Methods",
@@ -6521,7 +9992,7 @@
       "bibtex": "Gruhn2008b",
       "parentBibtex": null,
       "citation": {
-        "author": "Daniel Grühn, Susanne Scheibe",
+        "author": "Daniel Gr\u00fchn, Susanne Scheibe",
         "year": 2008,
         "title": "Age-related differences in valence and arousal ratings of pictures from the International Affective Picture System (IAPS): Do ratings become more extreme with age?",
         "journal": "Behavior Research Methods",
@@ -6594,7 +10065,7 @@
       "bibtex": "Gruhn2008a",
       "parentBibtex": null,
       "citation": {
-        "author": "Daniel Grühn, Jacqui Smith",
+        "author": "Daniel Gr\u00fchn, Jacqui Smith",
         "year": 2008,
         "title": "Characteristics for 200 words rated by young and older adults: Age-dependent evaluations of German adjectives (AGE)",
         "journal": "Behavior Research Methods",
@@ -6874,7 +10345,7 @@
       ]
     },
     {
-      "bibtex": "DeDeyne2008b",
+      "bibtex": "DeDeyne2008",
       "parentBibtex": null,
       "citation": {
         "author": "Simon De Deyne, Gert Storms",
@@ -6918,10 +10389,73 @@
       ]
     },
     {
+      "bibtex": "Stevenson2007",
+      "parentBibtex": null,
+      "citation": {
+        "author": "Ryan A. Stevenson, Joseph A. Mikels, Thomas W. James",
+        "year": 2007,
+        "title": "Characterization of the Affective Norms for English Words by discrete emotional categories",
+        "journal": "Behavior Research Methods",
+        "doi": "10.3758/bf03192999"
+      },
+      "language": "english",
+      "nRows": 1034,
+      "flags": [
+        "category",
+        "emotion"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "word_english",
+        "anew_id",
+        "category",
+        "happiness_mean",
+        "happiness_sd",
+        "happiness_sex_diff",
+        "anger_mean",
+        "anger_sd",
+        "anger_sex_diff",
+        "sadness_mean",
+        "sadness_sd",
+        "sadness_sex_diff",
+        "fear_mean",
+        "fear_sd",
+        "fear_sex_diff",
+        "disgust_mean",
+        "disgust_sd",
+        "disgust_sex_diff",
+        "n",
+        "happiness_mean_female",
+        "happiness_sd_female",
+        "anger_mean_female",
+        "anger_sd_female",
+        "sadness_mean_female",
+        "sadness_sd_female",
+        "fear_mean_female",
+        "fear_sd_female",
+        "disgust_mean_female",
+        "disgust_sd_female",
+        "n_female",
+        "happiness_mean_male",
+        "happiness_sd_male",
+        "anger_mean_male",
+        "anger_sd_male",
+        "sadness_mean_male",
+        "sadness_sd_male",
+        "fear_mean_male",
+        "fear_sd_male",
+        "disgust_mean_male",
+        "disgust_sd_male",
+        "n_male"
+      ]
+    },
+    {
       "bibtex": "Marques2007",
       "parentBibtex": null,
       "citation": {
-        "author": "J. Frederico Marques, Francisca L. Fonseca, Sofia Morais, Inês A. Pinto",
+        "author": "J. Frederico Marques, Francisca L. Fonseca, Sofia Morais, In\u00eas A. Pinto",
         "year": 2007,
         "title": "Estimated age of acquisition norms for 834 Portuguese nouns and their relation with other psycholinguistic variables",
         "journal": "Behavior Research Methods",
@@ -6959,7 +10493,7 @@
       "bibtex": "Alvarez2007",
       "parentBibtex": null,
       "citation": {
-        "author": "Bernardo Álvarez, Fernando Cuetos",
+        "author": "Bernardo \u00c1lvarez, Fernando Cuetos",
         "year": 2007,
         "title": "Objective age of acquisition norms for a set of 328 words in Spanish",
         "journal": "Behavior Research Methods",
@@ -7027,33 +10561,289 @@
       "bibtex": "Redondo2007",
       "parentBibtex": null,
       "citation": {
-        "author": "Jaime Redondo, Isabel Fraga, Isabel Padrón, Montserrat Comesaña",
+        "author": "Jaime Redondo, Isabel Fraga, Isabel Padr\u00f3n, Montserrat Comesa\u00f1a",
         "year": 2007,
         "title": "The Spanish adaptation of ANEW (Affective Norms for English Words)",
         "journal": "Behavior Research Methods",
         "doi": "10.3758/bf03193031"
       },
-      "language": "italian, english",
-      "nRows": 519,
+      "language": "spanish",
+      "nRows": 1034,
       "flags": [
-        "imagine"
+        "arousal",
+        "concrete",
+        "dominate",
+        "familiar",
+        "freq",
+        "imagine",
+        "letters",
+        "orthon",
+        "syllables",
+        "valence"
       ],
       "wordColumns": [
-        "word_italian",
-        "word_english"
+        "word_spanish"
       ],
       "rawColumns": [
-        "word_italian",
+        "number",
+        "translate_word_english",
+        "word_spanish",
+        "valence_mean_all",
+        "valence_sd_all",
+        "arousal_mean_all",
+        "arousal_sd_all",
+        "dominance_mean_all",
+        "dominance_sd_all",
+        "valence_mean_female",
+        "valence_sd_female",
+        "arousal_mean_female",
+        "arousal_sd_female",
+        "dominance_mean_female",
+        "dominance_sd_female",
+        "valence_mean_male",
+        "valence_sd_male",
+        "arousal_mean_male",
+        "arousal_sd_male",
+        "dominance_mean_male",
+        "dominance_sd_male",
+        "letters",
+        "syllables",
+        "g_class",
+        "frequency",
+        "orthographic_neighbors",
+        "familiar_mean",
+        "concrete_mean",
+        "imagine_mean"
+      ]
+    },
+    {
+      "bibtex": "Prior2007_en",
+      "parentBibtex": null,
+      "citation": {
+        "author": "Anat Prior, Brian MacWhinney, Judith F. Kroll",
+        "year": 2007,
+        "title": "Translation norms for English and Spanish: The role of lexical variables, word class, and L2 proficiency in negotiating translation ambiguity",
+        "journal": "Behavior Research Methods",
+        "doi": "10.3758/bf03193001"
+      },
+      "language": "english, class",
+      "nRows": 670,
+      "flags": [
+        "aoa",
+        "concrete",
+        "familiar",
+        "freq",
+        "imagine",
+        "letters"
+      ],
+      "wordColumns": [
         "word_english",
-        "gramm_cat",
-        "cfv",
+        "word_class"
+      ],
+      "rawColumns": [
+        "word_english",
+        "frequency_per_million",
+        "length",
+        "word_class",
+        "aoa_mean",
+        "concrete_mean",
+        "familiar_mean",
         "imagine_mean",
-        "imagine_sd",
-        "cwfq",
-        "ccfq",
-        "cpfq",
-        "awfq",
-        "asfq"
+        "responses_n",
+        "responses_noun_n",
+        "responses_verb_n",
+        "responses_adjective_n",
+        "responses_noun_percent",
+        "responses_verb_percent",
+        "responses_adjective_percent",
+        "translations_n",
+        "translations_noun_n",
+        "translations_verb_n",
+        "translation1_spanish",
+        "translation1_class",
+        "translation1_probability",
+        "translation2_spanish",
+        "translation2_class",
+        "translation2_probability",
+        "translation3_spanish",
+        "translation3_class",
+        "translation3_probability",
+        "translation4_spanish",
+        "translation4_class",
+        "translation4_probability",
+        "translation5_spanish",
+        "translation5_class",
+        "translation5_probability",
+        "translation6_spanish",
+        "translation6_class",
+        "translation6_probability",
+        "translation7_spanish",
+        "translation7_class",
+        "translation7_probability",
+        "translation8_spanish",
+        "translation8_class",
+        "translation8_probability",
+        "translation9_spanish",
+        "translation9_class",
+        "translation9_probability"
+      ]
+    },
+    {
+      "bibtex": "Prior2007_en_pairs",
+      "parentBibtex": "Prior2007_en",
+      "citation": {
+        "author": "Anat Prior, Brian MacWhinney, Judith F. Kroll",
+        "year": 2007,
+        "title": "Translation norms for English and Spanish: The role of lexical variables, word class, and L2 proficiency in negotiating translation ambiguity",
+        "journal": "Behavior Research Methods",
+        "doi": "10.3758/bf03193001"
+      },
+      "language": "english, frequency_per_million, length, class, aoa_mean, concrete_mean, familiar_mean, imagine_mean, translations_n",
+      "nRows": 1408,
+      "flags": [],
+      "wordColumns": [
+        "word_english",
+        "word_frequency_per_million",
+        "word_length",
+        "word_class",
+        "word_aoa_mean",
+        "word_concrete_mean",
+        "word_familiar_mean",
+        "word_imagine_mean",
+        "word_translations_n"
+      ],
+      "rawColumns": [
+        "word_english",
+        "translation_spanish",
+        "word_frequency_per_million",
+        "word_length",
+        "word_class",
+        "word_aoa_mean",
+        "word_concrete_mean",
+        "word_familiar_mean",
+        "word_imagine_mean",
+        "word_translations_n",
+        "translation_frequency_per_million",
+        "translation_length",
+        "translation_class",
+        "translation_probability",
+        "translation_aoa_mean",
+        "translation_concrete_mean",
+        "translation_familiar_mean",
+        "translation_imagine_mean",
+        "cognate_rating"
+      ]
+    },
+    {
+      "bibtex": "Prior2007_es",
+      "parentBibtex": null,
+      "citation": {
+        "author": "Anat Prior, Brian MacWhinney, Judith F. Kroll",
+        "year": 2007,
+        "title": "Translation norms for English and Spanish: The role of lexical variables, word class, and L2 proficiency in negotiating translation ambiguity",
+        "journal": "Behavior Research Methods",
+        "doi": "10.3758/bf03193001"
+      },
+      "language": "spanish, class",
+      "nRows": 762,
+      "flags": [
+        "aoa",
+        "concrete",
+        "familiar",
+        "freq",
+        "imagine",
+        "letters"
+      ],
+      "wordColumns": [
+        "word_spanish",
+        "word_class"
+      ],
+      "rawColumns": [
+        "word_spanish",
+        "frequency_per_million",
+        "length",
+        "word_class",
+        "aoa_mean",
+        "concrete_mean",
+        "familiar_mean",
+        "imagine_mean",
+        "responses_n",
+        "responses_noun_n",
+        "responses_verb_n",
+        "responses_adjective_n",
+        "responses_noun_percent",
+        "responses_verb_percent",
+        "responses_adjective_percent",
+        "translations_n",
+        "translations_noun_n",
+        "translations_verb_n",
+        "translation1_english",
+        "translation1_class",
+        "translation1_probability",
+        "translation2_english",
+        "translation2_class",
+        "translation2_probability",
+        "translation3_english",
+        "translation3_class",
+        "translation3_probability",
+        "translation4_english",
+        "translation4_class",
+        "translation4_probability",
+        "translation5_english",
+        "translation5_class",
+        "translation5_probability",
+        "translation6_english",
+        "translation6_class",
+        "translation6_probability",
+        "translation7_english",
+        "translation7_class",
+        "translation7_probability"
+      ]
+    },
+    {
+      "bibtex": "Prior2007_es_pairs",
+      "parentBibtex": "Prior2007_es",
+      "citation": {
+        "author": "Anat Prior, Brian MacWhinney, Judith F. Kroll",
+        "year": 2007,
+        "title": "Translation norms for English and Spanish: The role of lexical variables, word class, and L2 proficiency in negotiating translation ambiguity",
+        "journal": "Behavior Research Methods",
+        "doi": "10.3758/bf03193001"
+      },
+      "language": "spanish, frequency_per_million, length, class, aoa_mean, familiar_mean, imagine_mean, concrete_mean, translations_n",
+      "nRows": 1394,
+      "flags": [],
+      "wordColumns": [
+        "word_spanish",
+        "word_frequency_per_million",
+        "word_length",
+        "word_class",
+        "word_aoa_mean",
+        "word_familiar_mean",
+        "word_imagine_mean",
+        "word_concrete_mean",
+        "word_translations_n"
+      ],
+      "rawColumns": [
+        "word_spanish",
+        "translation_english",
+        "word_frequency_per_million",
+        "word_length",
+        "word_class",
+        "word_aoa_mean",
+        "word_familiar_mean",
+        "word_imagine_mean",
+        "word_concrete_mean",
+        "word_translations_n",
+        "translation_frequency_per_million",
+        "translation_length",
+        "translation_class",
+        "translation_aoa_mean",
+        "translation_concrete_mean",
+        "translation_familiar_mean",
+        "translation_imagine_mean",
+        "translation_probability",
+        "cognate_rating"
       ]
     },
     {
@@ -7147,7 +10937,7 @@
       "bibtex": "Izura2005",
       "parentBibtex": null,
       "citation": {
-        "author": "Cristina Izura, Natividad Hernández-MuÑoz, Andrew W. Ellis",
+        "author": "Cristina Izura, Natividad Hern\u00e1ndez-Mu\u00d1oz, Andrew W. Ellis",
         "year": 2005,
         "title": "Category norms for 500 Spanish words in five semantic categories",
         "journal": "Behavior Research Methods",
@@ -7183,7 +10973,7 @@
       "bibtex": "Cordier2005",
       "parentBibtex": null,
       "citation": {
-        "author": "Françoise Cordier, Jean-François Le Ny",
+        "author": "Fran\u00e7oise Cordier, Jean-Fran\u00e7ois Le Ny",
         "year": 2005,
         "title": "Evidence for several components of word familiarity",
         "journal": "Behavior Research Methods",
@@ -7268,6 +11058,81 @@
       ]
     },
     {
+      "bibtex": "McRae2005",
+      "parentBibtex": null,
+      "citation": {
+        "author": "Ken McRae, George S. Cree, Mark S. Seidenberg, Chris Mcnorgan",
+        "year": 2005,
+        "title": "Semantic feature production norms for a large set of living and nonliving things",
+        "journal": "Behavior Research Methods",
+        "doi": "10.3758/bf03192726"
+      },
+      "language": "english_concept, english_feature",
+      "nRows": 7259,
+      "flags": [
+        "dist",
+        "familiar",
+        "freq",
+        "letters",
+        "phonemes",
+        "pronounce",
+        "syllables"
+      ],
+      "wordColumns": [
+        "word_english_concept",
+        "word_english_feature"
+      ],
+      "rawColumns": [
+        "word_english_concept",
+        "word_english_feature",
+        "wb_label",
+        "wb_maj",
+        "wb_min",
+        "br_label",
+        "prod_freq",
+        "rank_pf",
+        "sum_pf_no_tax",
+        "cpf",
+        "disting",
+        "distinct",
+        "cv_no_tax",
+        "intercorr_str_tax",
+        "intercorr_str_no_tax",
+        "feat_length_including_spaces",
+        "pronunciation",
+        "frequency_kf",
+        "frequency_kf_ln",
+        "frequency_bnc",
+        "frequency_ln_bnc",
+        "familiar_mean",
+        "letters",
+        "phonemes",
+        "syllables",
+        "bigram",
+        "trigram",
+        "coltheart_n",
+        "n_feats_tax",
+        "n_feats_no_tax",
+        "n_disting_feats_no_tax",
+        "disting_feats_percent_no_tax",
+        "mean_distinct_no_tax",
+        "mean_cv_no_tax",
+        "density_no_tax",
+        "n_corred_pairs_no_tax",
+        "percent_corred_pairs_no_tax",
+        "n_func",
+        "n_vis_mot",
+        "n_vis_f_and_s",
+        "n_vis_col",
+        "n_sound",
+        "n_taste",
+        "n_smell",
+        "n_tact",
+        "n_ency",
+        "n_tax"
+      ]
+    },
+    {
       "bibtex": "Morrow2005",
       "parentBibtex": null,
       "citation": {
@@ -7278,7 +11143,7 @@
         "doi": "10.3758/bf03192731"
       },
       "language": "english",
-      "nRows": 888,
+      "nRows": 889,
       "flags": [
         "aoa",
         "category",
@@ -7292,8 +11157,8 @@
         "word_english"
       ],
       "rawColumns": [
-        "category",
         "word_english",
+        "category",
         "typicality_mean_older",
         "typicality_sd_older",
         "familiar_mean_older",
@@ -7496,7 +11361,7 @@
       "bibtex": "Schwitter2004",
       "parentBibtex": null,
       "citation": {
-        "author": "Valérie Schwitter, Bruno Boyer, Alain Méot, Patrick Bonin, Marina Laganaro",
+        "author": "Val\u00e9rie Schwitter, Bruno Boyer, Alain M\u00e9ot, Patrick Bonin, Marina Laganaro",
         "year": 2004,
         "title": "French normative data and naming times for action pictures",
         "journal": "Behavior Research Methods, Instruments, & Computers",
@@ -7569,7 +11434,7 @@
       "bibtex": "Dasi2004",
       "parentBibtex": null,
       "citation": {
-        "author": "Carmen Dasí, María José Soler, Juan Carlos Ruiz",
+        "author": "Carmen Das\u00ed, Mar\u00eda Jos\u00e9 Soler, Juan Carlos Ruiz",
         "year": 2004,
         "title": "Normative data on the familiarity and difficulty of 196 Spanish word fragments",
         "journal": "Behavior Research Methods, Instruments, & Computers",
@@ -7595,6 +11460,41 @@
         "first_or_last_letters_given",
         "familiar_mean",
         "difficulty"
+      ]
+    },
+    {
+      "bibtex": "Rossion2004",
+      "parentBibtex": null,
+      "citation": {
+        "author": "Bruno Rossion, Gilles Pourtois",
+        "year": 2004,
+        "title": "Revisiting Snodgrass and Vanderwart's Object Pictorial Set: The Role of Surface Detail in Basic-Level Object Recognition",
+        "journal": "Perception",
+        "doi": "10.1068/p5117"
+      },
+      "language": "english",
+      "nRows": 260,
+      "flags": [
+        "familiar",
+        "imagine"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "word_english",
+        "familiar_mean_line",
+        "familiar_mean_gray",
+        "familiar_mean_color",
+        "familiar_sd_line",
+        "familiar_sd_gray",
+        "familiar_sd_color",
+        "imagine_mean_line",
+        "imagine_mean_gray",
+        "imagine_mean_color",
+        "imagine_sd_line",
+        "imagine_sd_gray",
+        "imagine_sd_color"
       ]
     },
     {
@@ -7682,7 +11582,7 @@
       "bibtex": "Bonin2003",
       "parentBibtex": null,
       "citation": {
-        "author": "Patrick Bonin, Ronald Peereman, Nathalie Malardier, Alain Méot, Marylène Chalard",
+        "author": "Patrick Bonin, Ronald Peereman, Nathalie Malardier, Alain M\u00e9ot, Maryl\u00e8ne Chalard",
         "year": 2003,
         "title": "A new set of 299 pictures for psycholinguistic studies: French norms for name agreement, image agreement, conceptual familiarity, visual complexity, image variability, age of acquisition, and naming latencies",
         "journal": "Behavior Research Methods, Instruments, & Computers",
@@ -7796,6 +11696,278 @@
       ]
     },
     {
+      "bibtex": "Bates2003",
+      "parentBibtex": null,
+      "citation": {
+        "author": "Elizabeth Bates, Simona D\u2019Amico, Thomas Jacobsen, Anna Sz\u00e9kely, Elena Andonova, Antonella Devescovi, et al.",
+        "year": 2003,
+        "title": "Timed picture naming in seven languages",
+        "journal": "Psychonomic Bulletin & Review",
+        "doi": "10.3758/bf03196494"
+      },
+      "language": "english, german, spanish, italian, bulgarian, hungarian, chinese",
+      "nRows": 520,
+      "flags": [
+        "freq",
+        "letters",
+        "nameagree",
+        "rt",
+        "syllables",
+        "visualcomp",
+        "wordcomp"
+      ],
+      "wordColumns": [
+        "word_english",
+        "word_german",
+        "word_spanish",
+        "word_italian",
+        "word_bulgarian",
+        "word_hungarian",
+        "word_chinese"
+      ],
+      "rawColumns": [
+        "pic_id",
+        "word_english",
+        "word_german",
+        "word_spanish",
+        "word_italian",
+        "word_bulgarian",
+        "word_hungarian",
+        "word_chinese",
+        "proportion_valid_english",
+        "proportion_valid_german",
+        "proportion_valid_spanish",
+        "proportion_valid_italian",
+        "proportion_valid_bulgarian",
+        "proportion_valid_hungarian",
+        "proportion_valid_chinese",
+        "proportion_noname_english",
+        "proportion_noname_german",
+        "proportion_noname_spanish",
+        "proportion_noname_italian",
+        "proportion_noname_bulgarian",
+        "proportion_noname_hungarian",
+        "proportion_noname_chinese",
+        "proportion_error_english",
+        "proportion_error_german",
+        "proportion_error_spanish",
+        "proportion_error_italian",
+        "proportion_error_bulgarian",
+        "proportion_error_hungarian",
+        "proportion_error_chinese",
+        "name_ntypes_english",
+        "name_ntypes_german",
+        "name_ntypes_spanish",
+        "name_ntypes_italian",
+        "name_ntypes_bulgarian",
+        "name_ntypes_hungarian",
+        "name_ntypes_chinese",
+        "name_h_english",
+        "name_h_german",
+        "name_h_spanish",
+        "name_h_italian",
+        "name_h_bulgarian",
+        "name_h_hungarian",
+        "name_h_chinese",
+        "nameagree_english",
+        "nameagree_german",
+        "nameagree_spanish",
+        "nameagree_italian",
+        "nameagree_bulgarian",
+        "nameagree_hungarian",
+        "nameagree_chinese",
+        "nameagree_phonetic_english",
+        "nameagree_phonetic_german",
+        "nameagree_phonetic_spanish",
+        "nameagree_phonetic_italian",
+        "nameagree_phonetic_bulgarian",
+        "nameagree_phonetic_hungarian",
+        "nameagree_phonetic_chinese",
+        "nameagree_synonym_english",
+        "nameagree_synonym_german",
+        "nameagree_synonym_spanish",
+        "nameagree_synonym_italian",
+        "nameagree_synonym_bulgarian",
+        "nameagree_synonym_hungarian",
+        "nameagree_synonym_chinese",
+        "nameagree_error_english",
+        "nameagree_error_german",
+        "nameagree_error_spanish",
+        "nameagree_error_italian",
+        "nameagree_error_bulgarian",
+        "nameagree_error_hungarian",
+        "nameagree_error_chinese",
+        "nameagree_lex13_english",
+        "nameagree_lex13_german",
+        "nameagree_lex13_spanish",
+        "nameagree_lex13_italian",
+        "nameagree_lex13_bulgarian",
+        "nameagree_lex13_hungarian",
+        "nameagree_lex13_chinese",
+        "rt_total_english",
+        "rt_total_german",
+        "rt_total_spanish",
+        "rt_total_italian",
+        "rt_total_bulgarian",
+        "rt_total_hungarian",
+        "rt_total_chinese",
+        "rt_sd_total_english",
+        "rt_sd_total_german",
+        "rt_sd_total_spanish",
+        "rt_sd_total_italian",
+        "rt_sd_total_bulgarian",
+        "rt_sd_total_hungarian",
+        "rt_sd_total_chinese",
+        "rt_target_english",
+        "rt_target_german",
+        "rt_target_spanish",
+        "rt_target_italian",
+        "rt_target_bulgarian",
+        "rt_target_hungarian",
+        "rt_target_chinese",
+        "rt_sd_target_english",
+        "rt_sd_target_german",
+        "rt_sd_target_spanish",
+        "rt_sd_target_italian",
+        "rt_sd_target_bulgarian",
+        "rt_sd_target_hungarian",
+        "rt_sd_target_chinese",
+        "rt_lex2_english",
+        "rt_lex2_german",
+        "rt_lex2_spanish",
+        "rt_lex2_italian",
+        "rt_lex2_bulgarian",
+        "rt_lex2_hungarian",
+        "rt_lex2_chinese",
+        "rt_lex3_english",
+        "rt_lex3_german",
+        "rt_lex3_spanish",
+        "rt_lex3_italian",
+        "rt_lex3_bulgarian",
+        "rt_lex3_hungarian",
+        "rt_lex3_chinese",
+        "rt_lex4_english",
+        "rt_lex4_german",
+        "rt_lex4_spanish",
+        "rt_lex4_italian",
+        "rt_lex4_bulgarian",
+        "rt_lex4_hungarian",
+        "rt_lex4_chinese",
+        "modal_name_universal",
+        "nameagree_z_english",
+        "nameagree_z_german",
+        "nameagree_z_spanish",
+        "nameagree_z_italian",
+        "nameagree_z_bulgarian",
+        "nameagree_z_hungarian",
+        "nameagree_z_chinese",
+        "nameagree_z_universal",
+        "nameagree_z_dev_english",
+        "nameagree_z_dev_german",
+        "nameagree_z_dev_spanish",
+        "nameagree_z_dev_italian",
+        "nameagree_z_dev_bulgarian",
+        "nameagree_z_dev_hungarian",
+        "nameagree_z_dev_chinese",
+        "nameagree_z_dev_d_english",
+        "nameagree_z_dev_d_german",
+        "nameagree_z_dev_d_spanish",
+        "nameagree_z_dev_d_italian",
+        "nameagree_z_dev_d_bulgarian",
+        "nameagree_z_dev_d_hungarian",
+        "nameagree_z_dev_d_chinese",
+        "rt_z_dispersion",
+        "rt_z_english",
+        "rt_z_german",
+        "rt_z_spanish",
+        "rt_z_italian",
+        "rt_z_bulgarian",
+        "rt_z_hungarian",
+        "rt_z_chinese",
+        "rt_z_universal",
+        "rt_z_dev_english",
+        "rt_z_dev_german",
+        "rt_z_dev_spanish",
+        "rt_z_dev_italian",
+        "rt_z_dev_bulgarian",
+        "rt_z_dev_hungarian",
+        "rt_z_dev_chinese",
+        "rt_z_dev_d_english",
+        "rt_z_dev_d_german",
+        "rt_z_dev_d_spanish",
+        "rt_z_dev_d_italian",
+        "rt_z_dev_d_bulgarian",
+        "rt_z_dev_d_hungarian",
+        "rt_z_dev_d_chinese",
+        "rt_z_dispersion2",
+        "samename_english",
+        "samename_german",
+        "samename_spanish",
+        "samename_italian",
+        "samename_bulgarian",
+        "samename_hungarian",
+        "samename_chinese",
+        "visualcomp",
+        "pic_num",
+        "syllables_english",
+        "syllables_german",
+        "syllables_spanish",
+        "syllables_italian",
+        "syllables_bulgarian",
+        "syllables_hungarian",
+        "syllables_chinese",
+        "letters_english",
+        "letters_german",
+        "letters_spanish",
+        "letters_italian",
+        "letters_bulgarian",
+        "letters_hungarian",
+        "syllable_type_freq_english",
+        "syllable_type_freq_german",
+        "syllable_type_freq_spanish",
+        "syllable_type_freq_italian",
+        "syllable_type_freq_bulgarian",
+        "syllable_type_freq_hungarian",
+        "syllable_type_freq_chinese",
+        "initial_frication_english",
+        "initial_frication_german",
+        "initial_frication_spanish",
+        "initial_frication_italian",
+        "initial_frication_bulgarian",
+        "initial_frication_hungarian",
+        "initial_frication_chinese",
+        "wordcomp_english",
+        "wordcomp_german",
+        "wordcomp_spanish",
+        "wordcomp_italian",
+        "wordcomp_bulgarian",
+        "wordcomp_hungarian",
+        "frequency_english",
+        "frequency_german",
+        "frequency_spanish",
+        "frequency_italian",
+        "frequency_bulgarian",
+        "frequency_hungarian",
+        "frequency_chinese",
+        "frequency_factor",
+        "frequency_factor_english",
+        "frequency_factor_german",
+        "frequency_factor_spanish",
+        "frequency_factor_italian",
+        "frequency_factor_bulgarian",
+        "frequency_factor_hungarian",
+        "frequency_factor_chinese",
+        "syllable_factor",
+        "syllable_factor_english",
+        "syllable_factor_german",
+        "syllable_factor_spanish",
+        "syllable_factor_italian",
+        "syllable_factor_bulgarian",
+        "syllable_factor_hungarian",
+        "syllable_factor_chinese"
+      ]
+    },
+    {
       "bibtex": "Barca2002",
       "parentBibtex": null,
       "citation": {
@@ -7892,6 +12064,33 @@
       ]
     },
     {
+      "bibtex": "Balota2001",
+      "parentBibtex": null,
+      "citation": {
+        "author": "David A. Balota, Maura Pilotti, Michael J. Cortese",
+        "year": 2001,
+        "title": "Subjective frequency estimates for 2,938 monosyllabic words",
+        "journal": "Memory & Cognition",
+        "doi": "10.3758/bf03200465"
+      },
+      "language": "english",
+      "nRows": 2942,
+      "flags": [
+        "freq"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "word_english",
+        "frequency_subjective_read_mean",
+        "frequency_subjective_heard_mean",
+        "frequency_subjective_written_mean",
+        "frequency_subjective_said_mean",
+        "frequency_subjective_encountered_mean"
+      ]
+    },
+    {
       "bibtex": "Ghyselinck2000",
       "parentBibtex": null,
       "citation": {
@@ -7919,7 +12118,7 @@
       "bibtex": "DellAcqua2000_2",
       "parentBibtex": "DellAcqua2000",
       "citation": {
-        "author": "Roberto Dell’acqua, Lorella Lotto, Remo Job",
+        "author": "Roberto Dell\u2019acqua, Lorella Lotto, Remo Job",
         "year": 2000,
         "title": "Naming times and standardized norms for the italian PD/DPSS set of 266 pictures: Direct comparisons with American, English, French, and Spanish published databases",
         "journal": "Behavior Research Methods, Instruments, & Computers",
@@ -7962,7 +12161,7 @@
       "bibtex": "Dellacqua2000_1",
       "parentBibtex": "Dellacqua2000",
       "citation": {
-        "author": "Roberto Dell’acqua, Lorella Lotto, Remo Job",
+        "author": "Roberto Dell\u2019acqua, Lorella Lotto, Remo Job",
         "year": 2000,
         "title": "Naming times and standardized norms for the italian PD/DPSS set of 266 pictures: Direct comparisons with American, English, French, and Spanish published databases",
         "journal": "Behavior Research Methods, Instruments, & Computers",
@@ -8050,6 +12249,38 @@
       ]
     },
     {
+      "bibtex": "VanderGoten1999",
+      "parentBibtex": null,
+      "citation": {
+        "author": "Koen Van Der Goten, Gino De Vooght, Eva Kemps",
+        "year": 1999,
+        "title": "Concreteness and Emotional Valence Ratings of 399 Dutch Nouns",
+        "journal": "Psychologica Belgica",
+        "doi": "10.5334/pb.941"
+      },
+      "language": "dutch",
+      "nRows": 399,
+      "flags": [
+        "concrete",
+        "freq",
+        "valence"
+      ],
+      "wordColumns": [
+        "word_dutch"
+      ],
+      "rawColumns": [
+        "word_dutch",
+        "translate_word_english",
+        "valence_mean",
+        "valence_sd",
+        "concrete_mean",
+        "concrete_sd",
+        "frequency",
+        "frequency_mlj",
+        "syllable_type"
+      ]
+    },
+    {
       "bibtex": "Altarriba1999",
       "parentBibtex": null,
       "citation": {
@@ -8080,7 +12311,7 @@
       "bibtex": "Surprenant1999",
       "parentBibtex": null,
       "citation": {
-        "author": "Aimée M. Surprenant, Susan L. Hura, Mary P. Harper, Leah H. Jamieson, Glenis Long, Scott M. Thede, et al.",
+        "author": "Aim\u00e9e M. Surprenant, Susan L. Hura, Mary P. Harper, Leah H. Jamieson, Glenis Long, Scott M. Thede, et al.",
         "year": 1999,
         "title": "Familiarity and pronounceability of nouns and names",
         "journal": "Behavior Research Methods, Instruments, & Computers",
@@ -8143,6 +12374,51 @@
       ]
     },
     {
+      "bibtex": "Cuetos1999",
+      "parentBibtex": null,
+      "citation": {
+        "author": "Fernando Cuetos, Andrew W. Ellis, Bernardo Alvarez",
+        "year": 1999,
+        "title": "Naming times for the Snodgrass and Vanderwart pictures in Spanish",
+        "journal": "Behavior Research Methods, Instruments, & Computers",
+        "doi": "10.3758/bf03200741"
+      },
+      "language": "spanish, english",
+      "nRows": 140,
+      "flags": [
+        "aoa",
+        "complex",
+        "familiar",
+        "freq",
+        "imageagree",
+        "phonemes",
+        "rt",
+        "syllables"
+      ],
+      "wordColumns": [
+        "word_spanish",
+        "word_english"
+      ],
+      "rawColumns": [
+        "word_spanish",
+        "word_english",
+        "rt_mean",
+        "proportion_error",
+        "phonemes",
+        "syllables",
+        "proportion_noname",
+        "imageagree_mean",
+        "familiar_mean",
+        "complexity_mean",
+        "frequency_adult",
+        "ice",
+        "mec_sp",
+        "mec_su",
+        "mec_to",
+        "aoa_mean"
+      ]
+    },
+    {
       "bibtex": "Masterson1998",
       "parentBibtex": null,
       "citation": {
@@ -8177,6 +12453,46 @@
         "visual_complexity_mean",
         "visual_complexity_sd",
         "pos"
+      ]
+    },
+    {
+      "bibtex": "Morrison1997",
+      "parentBibtex": null,
+      "citation": {
+        "author": "Catriona M. Morrison, Tameron D. Chappell, Andrew W. Ellis",
+        "year": 1997,
+        "title": "Age of Acquisition Norms for a Large Set of Object Names and Their Relation to Adult Estimates and Other Variables",
+        "journal": "The Quarterly Journal of Experimental Psychology Section A",
+        "doi": "10.1080/027249897392017"
+      },
+      "language": "",
+      "nRows": 297,
+      "flags": [
+        "aoa",
+        "familiar",
+        "freq",
+        "imagine",
+        "nameagree",
+        "phonemes",
+        "picture",
+        "syllables",
+        "visualcomp"
+      ],
+      "wordColumns": [],
+      "rawColumns": [
+        "name",
+        "aoa_objective_lr_months",
+        "aoa_objective_75_months",
+        "aoa_rated_scale",
+        "aoa_rated_months",
+        "imagine_mean",
+        "frequency_mean",
+        "familiar_mean",
+        "visual_complexity_mean",
+        "name_agreement",
+        "picture_name_agreement",
+        "phonemes",
+        "syllables"
       ]
     },
     {
@@ -8316,6 +12632,64 @@
       ]
     },
     {
+      "bibtex": "Sanfeliu1996",
+      "parentBibtex": null,
+      "citation": {
+        "author": "M. Carmen Sanfeliu, Angel Fernandez",
+        "year": 1996,
+        "title": "A set of 254 Snodgrass-Vanderwart pictures standardized for Spanish: Norms for name agreement, image agreement, familiarity, and visual complexity",
+        "journal": "Behavior Research Methods, Instruments & Computers",
+        "doi": "10.3758/bf03200541"
+      },
+      "language": "spanish, english",
+      "nRows": 260,
+      "flags": [
+        "familiar",
+        "imageagree",
+        "imagevar",
+        "nameagree",
+        "picture",
+        "visualcomp"
+      ],
+      "wordColumns": [
+        "word_spanish",
+        "word_english"
+      ],
+      "rawColumns": [
+        "picture_id",
+        "word_spanish",
+        "word_english",
+        "name_agreement_h_spanish",
+        "name_agreement_percent_spanish",
+        "name_agreement_h_english",
+        "name_agreement_percent_english",
+        "image_agreement_mean_spanish",
+        "image_agreement_sd_spanish",
+        "image_agreement_mean_english",
+        "image_agreement_sd_english",
+        "familiar_mean_spanish",
+        "familiar_sd_spanish",
+        "familiar_mean_english",
+        "familiar_sd_english",
+        "visual_complexity_mean_spanish",
+        "visual_complexity_sd_spanish",
+        "visual_complexity_mean_english",
+        "visual_complexity_sd_english",
+        "picture_name_agreement_mean_spanish",
+        "picture_name_agreement_sd_spanish",
+        "image_variability_mean_spanish",
+        "image_variability_sd_spanish",
+        "dont_know_name_n",
+        "dont_know_object_n",
+        "tip_of_tongue_n",
+        "dont_know_object_familiarity_n",
+        "no_image_n",
+        "different_object_imaged_n",
+        "nondominant_names",
+        "availability_note"
+      ]
+    },
+    {
       "bibtex": "Snodgrass1996",
       "parentBibtex": null,
       "citation": {
@@ -8404,7 +12778,7 @@
       "citation": {
         "author": "Amanda C. Walley, Jamie L. Metsala",
         "year": 1992,
-        "title": "Young children’s age-of-acquisition estimates for spoken words",
+        "title": "Young children\u2019s age-of-acquisition estimates for spoken words",
         "journal": "Memory & Cognition",
         "doi": "10.3758/bf03197166"
       },
@@ -8604,6 +12978,66 @@
         "second_order_approximation",
         "orthographic_neighborhood_ratio",
         "noun_percent"
+      ]
+    },
+    {
+      "bibtex": "Coltheart1981",
+      "parentBibtex": null,
+      "citation": {
+        "author": "Max Coltheart",
+        "year": 1981,
+        "title": "The MRC Psycholinguistic Database",
+        "journal": "The Quarterly Journal of Experimental Psychology Section A",
+        "doi": "10.1080/14640748108400805"
+      },
+      "language": "english, type",
+      "nRows": 150000,
+      "flags": [
+        "aoa",
+        "concrete",
+        "context",
+        "familiar",
+        "freq",
+        "imagine",
+        "letters",
+        "meaning",
+        "morph",
+        "phonemes",
+        "pos",
+        "pronounce",
+        "syllables"
+      ],
+      "wordColumns": [
+        "word_english",
+        "word_type"
+      ],
+      "rawColumns": [
+        "word_english",
+        "letters",
+        "phonemes",
+        "syllables",
+        "frequency_kf_written",
+        "kf_number_of_categories",
+        "kf_number_of_samples",
+        "frequency_thorndike_lorge",
+        "frequency_brown_verbal",
+        "familiar_mean",
+        "concrete_mean",
+        "imagine_mean",
+        "meaningfulness_coloradao_norms",
+        "meaningfulness_pavio_norms",
+        "aoa_mean",
+        "word_type",
+        "comprehensive_syntactic_category",
+        "pos",
+        "morphemic_status",
+        "contextual_status",
+        "pronunciation_variability",
+        "capitalization",
+        "irregular_plural",
+        "stress_marked_phonetic_transcription",
+        "syllabified_phonetic_transcription",
+        "stress_pattern"
       ]
     },
     {
@@ -8807,6 +13241,35 @@
       ]
     },
     {
+      "bibtex": "Klee1976",
+      "parentBibtex": null,
+      "citation": {
+        "author": "Hilary Klee, David Legge",
+        "year": 1976,
+        "title": "Estimates of concreteness and other indices for 200 transitive verbs.",
+        "journal": "Journal of Experimental Psychology: Human Learning and Memory",
+        "doi": "10.1037/0278-7393.2.4.497"
+      },
+      "language": "english",
+      "nRows": 200,
+      "flags": [
+        "concrete"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "word_english",
+        "concrete_mean",
+        "concrete_sd",
+        "ease_define_mean",
+        "ease_define_sd",
+        "observability_mean",
+        "subject_acceptable",
+        "objects_acceptable"
+      ]
+    },
+    {
       "bibtex": "Stration1975",
       "parentBibtex": null,
       "citation": {
@@ -8837,6 +13300,67 @@
         "familiar_sd",
         "meaningfulness_mean",
         "meaningfulness_sd"
+      ]
+    },
+    {
+      "bibtex": "Zechmeister1975",
+      "parentBibtex": null,
+      "citation": {
+        "author": "Eugene B. Zechmeister, Joseph King, Chris Gude, Bernadette Opera-nadi",
+        "year": 1975,
+        "title": "Ratings of frequency, familiarity, orthographic distinctiveness and pronunciability for 192 surnames",
+        "journal": "Behavior Research Methods & Instrumentation",
+        "doi": "10.3758/bf03201625"
+      },
+      "language": "english_name",
+      "nRows": 192,
+      "flags": [
+        "familiar",
+        "freq",
+        "orthon",
+        "pronounce"
+      ],
+      "wordColumns": [
+        "word_english_name"
+      ],
+      "rawColumns": [
+        "word_english_name",
+        "count",
+        "frequency_mean",
+        "frequency_sd",
+        "familiar_mean",
+        "familiar_sd",
+        "orthographic_mean",
+        "orthographic_sd",
+        "pronounce_mean",
+        "pronounce_sd"
+      ]
+    },
+    {
+      "bibtex": "Lippman1974",
+      "parentBibtex": null,
+      "citation": {
+        "author": "Marcia Z. Lippman",
+        "year": 1974,
+        "title": "Enactive imagery in paired-associate learning",
+        "journal": "Memory & Cognition",
+        "doi": "10.3758/bf03209014"
+      },
+      "language": "english",
+      "nRows": 226,
+      "flags": [
+        "freq",
+        "imagine"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "word_english",
+        "imagine_mean",
+        "imagine_sd",
+        "frequency_mean",
+        "frequency_sd"
       ]
     },
     {
@@ -8969,6 +13493,38 @@
       ]
     },
     {
+      "bibtex": "Paivio1968",
+      "parentBibtex": null,
+      "citation": {
+        "author": "Allan Paivio, John C. Yuille, Stephen A. Madigan",
+        "year": 1968,
+        "title": "Concreteness, imagery, and meaningfulness values for 925 nouns.",
+        "journal": "Journal of Experimental Psychology",
+        "doi": "10.1037/h0025327"
+      },
+      "language": "english",
+      "nRows": 925,
+      "flags": [
+        "concrete",
+        "freq",
+        "imagine",
+        "meaning"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "word_english",
+        "imagine_mean",
+        "imagine_sd",
+        "concrete_mean",
+        "concrete_sd",
+        "meaningfulness_mean",
+        "meaningfulness_sd",
+        "frequency"
+      ]
+    },
+    {
       "bibtex": "Silverstein1968",
       "parentBibtex": null,
       "citation": {
@@ -9024,6 +13580,78 @@
       ]
     },
     {
+      "bibtex": "Heise1965",
+      "parentBibtex": null,
+      "citation": {
+        "author": "David R. Heise",
+        "year": 1965,
+        "title": "Semantic differential profiles for 1,000 most frequent English words.",
+        "journal": "Psychological Monographs: General and Applied",
+        "doi": "10.1037/h0093884"
+      },
+      "language": "english",
+      "nRows": 1000,
+      "flags": [
+        "context"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "word_english",
+        "context",
+        "evaluation_dimension",
+        "activity_dimension",
+        "potency_dimension",
+        "polarization_distance",
+        "n_affiliation",
+        "n_achievement",
+        "V9"
+      ]
+    },
+    {
+      "bibtex": "Jenkins1958",
+      "parentBibtex": null,
+      "citation": {
+        "author": "James J. Jenkins, Wallace A. Russell, George J. Suci",
+        "year": 1958,
+        "title": "An Atlas of Semantic Profiles for 360 Words",
+        "journal": "The American Journal of Psychology",
+        "doi": "10.2307/1420326"
+      },
+      "language": "english",
+      "nRows": 360,
+      "flags": [
+        "sensory"
+      ],
+      "wordColumns": [
+        "word_english"
+      ],
+      "rawColumns": [
+        "word_english",
+        "cruel_kind_mean",
+        "curved_straight_mean",
+        "masculine_feminine_mean",
+        "untimely_timely_mean",
+        "active_passive_mean",
+        "savory_tasteless_mean",
+        "unsuccessful_successful_mean",
+        "hard_soft_mean",
+        "wise_foolish_mean",
+        "new_old_mean",
+        "good_bad_mean",
+        "weak_strong_mean",
+        "important_unimportant_mean",
+        "angular_rounded_mean",
+        "calm_excitable_mean",
+        "false_true_mean",
+        "colorless_colorful_mean",
+        "usual_unusual_mean",
+        "beautiful_ugly_mean",
+        "slow_fast_mean"
+      ]
+    },
+    {
       "bibtex": "Bradley1999",
       "parentBibtex": null,
       "citation": {
@@ -9065,6 +13693,85 @@
         "arousal_sd_female",
         "dominance_mean_female",
         "dominance_sd_female"
+      ]
+    },
+    {
+      "bibtex": "Chang2007",
+      "parentBibtex": null,
+      "citation": {
+        "author": "",
+        "year": null,
+        "title": "",
+        "journal": null,
+        "doi": null
+      },
+      "language": "english, type",
+      "nRows": 3076,
+      "flags": [
+        "aoa",
+        "familiar",
+        "freq",
+        "orthon"
+      ],
+      "wordColumns": [
+        "word_english",
+        "word_type"
+      ],
+      "rawColumns": [
+        "item_number",
+        "word_english",
+        "type",
+        "word_type",
+        "familiar_mean",
+        "aoa_mean",
+        "frequency_log_hal",
+        "orthographic_neighbors"
+      ]
+    },
+    {
+      "bibtex": "Clarke2024",
+      "parentBibtex": null,
+      "citation": {
+        "author": "",
+        "year": null,
+        "title": "",
+        "journal": null,
+        "doi": "10.17605/osf.io/npj4u"
+      },
+      "language": "english, thai, thai_ipa",
+      "nRows": 629,
+      "flags": [
+        "aoa",
+        "concrete",
+        "freq",
+        "imagine",
+        "letters",
+        "phonemes",
+        "syllables"
+      ],
+      "wordColumns": [
+        "word_english",
+        "word_thai",
+        "word_thai_ipa"
+      ],
+      "rawColumns": [
+        "item_id",
+        "word_english",
+        "word_thai",
+        "word_thai_ipa",
+        "concrete_category",
+        "length",
+        "phonemes_n",
+        "syllables_n",
+        "imagine_mean",
+        "imagine_sd",
+        "frequency_subjective_mean",
+        "frequency_subjective_sd",
+        "body_object_interaction_mean",
+        "body_object_interaction_sd",
+        "aoa_mean",
+        "aoa_sd",
+        "frequency_google_hits"
       ]
     },
     {
@@ -9156,8 +13863,8 @@
       "rawColumns": [
         "word_portuguese",
         "typicality_mean",
-        "familiar_mean_r",
-        "familiar_mean_s"
+        "familiar_mean_referent",
+        "familiar_mean_meaning"
       ]
     },
     {
@@ -9183,6 +13890,164 @@
         "word_portuguese",
         "imagine_mean",
         "concrete_mean"
+      ]
+    },
+    {
+      "bibtex": "Popovic2026_pseudowords",
+      "parentBibtex": "Popovic2026_words",
+      "citation": {
+        "author": "",
+        "year": null,
+        "title": "",
+        "journal": null,
+        "doi": "10.23668/psycharchives.21378"
+      },
+      "language": "pseudoword",
+      "nRows": 4200,
+      "flags": [
+        "accuracy",
+        "rt"
+      ],
+      "wordColumns": [
+        "word_pseudoword"
+      ],
+      "rawColumns": [
+        "word_pseudoword",
+        "accuracy_mean",
+        "accuracy_n",
+        "rt_mean",
+        "rt_n"
+      ]
+    },
+    {
+      "bibtex": "Popovic2026_words",
+      "parentBibtex": null,
+      "citation": {
+        "author": "",
+        "year": null,
+        "title": "",
+        "journal": null,
+        "doi": "10.23668/psycharchives.21378"
+      },
+      "language": "serbian",
+      "nRows": 2100,
+      "flags": [
+        "accuracy",
+        "aoa",
+        "arousal",
+        "concrete",
+        "context",
+        "familiar",
+        "freq",
+        "imagine",
+        "letters",
+        "modality",
+        "rt",
+        "sensory",
+        "valence",
+        "visualcomp"
+      ],
+      "wordColumns": [
+        "word_serbian"
+      ],
+      "rawColumns": [
+        "list_order",
+        "translate_word_english",
+        "word_serbian",
+        "frequency_per_million",
+        "frequency_log",
+        "length",
+        "imagine_mean",
+        "context_availability_mean",
+        "valence_mean",
+        "familiar_mean",
+        "concrete_mean",
+        "concrete_category",
+        "concrete_category_three",
+        "arousal_mean",
+        "aoa_mean",
+        "visual_strength_mean_possible",
+        "auditory_strength_mean_possible",
+        "gustatory_strength_mean_possible",
+        "olfactory_strength_mean_possible",
+        "tactile_strength_mean_possible",
+        "dominant_modality_possible",
+        "dominant_modality_numeric_possible",
+        "visual_category_possible",
+        "auditory_category_possible",
+        "gustatory_category_possible",
+        "olfactory_category_possible",
+        "tactile_category_possible",
+        "number_of_modalities_possible",
+        "visual_exclusivity_proportion_possible",
+        "auditory_exclusivity_proportion_possible",
+        "gustatory_exclusivity_proportion_possible",
+        "olfactory_exclusivity_proportion_possible",
+        "tactile_exclusivity_proportion_possible",
+        "visual_exclusivity_percent_possible",
+        "auditory_exclusivity_percent_possible",
+        "gustatory_exclusivity_percent_possible",
+        "olfactory_exclusivity_percent_possible",
+        "tactile_exclusivity_percent_possible",
+        "entropy_2_possible",
+        "entropy_4_possible",
+        "modality_exclusivity_proportion_possible",
+        "modality_exclusivity_possible",
+        "perceptual_strength_sum_possible",
+        "perceptual_strength_max_possible",
+        "vector_length_possible",
+        "minkowski_3_possible",
+        "minkowski_4_possible",
+        "minkowski_5_possible",
+        "minkowski_6_possible",
+        "minkowski_7_possible",
+        "minkowski_8_possible",
+        "minkowski_9_possible",
+        "minkowski_10_possible",
+        "modality_rating_mean_possible",
+        "visual_strength_mean_real",
+        "auditory_strength_mean_real",
+        "gustatory_strength_mean_real",
+        "olfactory_strength_mean_real",
+        "tactile_strength_mean_real",
+        "dominant_modality_real",
+        "dominant_modality_numeric_real",
+        "visual_category_real",
+        "auditory_category_real",
+        "gustatory_category_real",
+        "olfactory_category_real",
+        "tactile_category_real",
+        "number_of_modalities_real",
+        "visual_exclusivity_proportion_real",
+        "auditory_exclusivity_proportion_real",
+        "gustatory_exclusivity_proportion_real",
+        "olfactory_exclusivity_proportion_real",
+        "tactile_exclusivity_proportion_real",
+        "visual_exclusivity_percent_real",
+        "auditory_exclusivity_percent_real",
+        "gustatory_exclusivity_percent_real",
+        "olfactory_exclusivity_percent_real",
+        "tactile_exclusivity_percent_real",
+        "entropy_2_real",
+        "entropy_4_real",
+        "modality_exclusivity_proportion_real",
+        "modality_exclusivity_real",
+        "perceptual_strength_sum_real",
+        "modality_rating_mean_real",
+        "perceptual_strength_max_real",
+        "vector_length_real",
+        "minkowski_3_real",
+        "minkowski_4_real",
+        "minkowski_5_real",
+        "minkowski_6_real",
+        "minkowski_7_real",
+        "minkowski_8_real",
+        "minkowski_9_real",
+        "minkowski_10_real",
+        "accuracy_mean",
+        "accuracy_n",
+        "rt_mean",
+        "rt_n"
       ]
     },
     {
