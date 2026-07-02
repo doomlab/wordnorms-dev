@@ -1,43 +1,13 @@
 {
-  "syncedAt": "2026-07-02T03:20:34.166Z",
+  "syncedAt": "2026-07-02T04:59:55.277Z",
   "cards": [
-    {
-      "bibtex": "Li2021",
-      "parentBibtex": null,
-      "citation": {
-        "author": "Jia Liu, Lin Fan, Xiaokun Zhang, Zeming Xu",
-        "year": 2026,
-        "title": "Affective and Psycholinguistic Norms for 1200 Two\u2010character Chinese Words",
-        "journal": "International Journal of Applied Linguistics",
-        "doi": "10.1111/ijal.12829"
-      },
-      "language": "chinese_traditional",
-      "nRows": 72,
-      "flags": [
-        "familiar"
-      ],
-      "wordColumns": [
-        "word_chinese_traditional"
-      ],
-      "rawColumns": [
-        "word_chinese_traditional",
-        "translate_word_english",
-        "number_exemplars",
-        "number_exemplars_90_coverage",
-        "coverage_90_percent",
-        "invalid_exemplars_percent",
-        "first_examplar_percent",
-        "familiar_mean",
-        "familiar_sd"
-      ]
-    },
     {
       "bibtex": "Liu2025",
       "parentBibtex": null,
       "citation": {
         "author": "Jia Liu, Lin Fan, Xiaokun Zhang, Zeming Xu",
         "year": 2026,
-        "title": "Affective and Psycholinguistic Norms for 1200 Two\u2010character Chinese Words",
+        "title": "Affective and Psycholinguistic Norms for 1200 Two‐character Chinese Words",
         "journal": "International Journal of Applied Linguistics",
         "doi": "10.1111/ijal.12829"
       },
@@ -103,7 +73,7 @@
       "citation": {
         "author": "Fatemeh Nemati, Chris Westbury, Habib Rostami, Fatemeh Alavi",
         "year": 2026,
-        "title": "Extrapolated Persian Lexical Affect Norms (E-PLAN) from best\u2013worst judgments of valence, arousal, dominance, and concreteness",
+        "title": "Extrapolated Persian Lexical Affect Norms (E-PLAN) from best–worst judgments of valence, arousal, dominance, and concreteness",
         "journal": "Behavior Research Methods",
         "doi": "10.3758/s13428-026-02963-9"
       },
@@ -135,7 +105,7 @@
       "bibtex": "Conde2026_cvaa_gpt",
       "parentBibtex": "Conde2026",
       "citation": {
-        "author": "Javier Conde, Gonzalo Mart\u00ednez, Mar\u00eda Grandury, Carlos Arriaga, Juan Haro, Sascha Schroeder, et al.",
+        "author": "Javier Conde, Gonzalo Martínez, María Grandury, Carlos Arriaga, Juan Haro, Sascha Schroeder, et al.",
         "year": 2026,
         "title": "Updating the German Psycholinguistic Word Toolbox with AI-Generated Estimates of Concreteness, Valence, Arousal, Age of Acquisition, and Familiarity",
         "journal": "Journal of Cognition",
@@ -171,7 +141,7 @@
       "bibtex": "Conde2026_familiar_gpt",
       "parentBibtex": "Conde2026",
       "citation": {
-        "author": "Javier Conde, Gonzalo Mart\u00ednez, Mar\u00eda Grandury, Carlos Arriaga, Juan Haro, Sascha Schroeder, et al.",
+        "author": "Javier Conde, Gonzalo Martínez, María Grandury, Carlos Arriaga, Juan Haro, Sascha Schroeder, et al.",
         "year": 2026,
         "title": "Updating the German Psycholinguistic Word Toolbox with AI-Generated Estimates of Concreteness, Valence, Arousal, Age of Acquisition, and Familiarity",
         "journal": "Journal of Cognition",
@@ -199,7 +169,7 @@
       "bibtex": "Conde2026_familiar_human",
       "parentBibtex": "Conde2026",
       "citation": {
-        "author": "Javier Conde, Gonzalo Mart\u00ednez, Mar\u00eda Grandury, Carlos Arriaga, Juan Haro, Sascha Schroeder, et al.",
+        "author": "Javier Conde, Gonzalo Martínez, María Grandury, Carlos Arriaga, Juan Haro, Sascha Schroeder, et al.",
         "year": 2026,
         "title": "Updating the German Psycholinguistic Word Toolbox with AI-Generated Estimates of Concreteness, Valence, Arousal, Age of Acquisition, and Familiarity",
         "journal": "Journal of Cognition",
@@ -227,7 +197,7 @@
       "bibtex": "Conde2026_frequency",
       "parentBibtex": "Conde2026",
       "citation": {
-        "author": "Javier Conde, Gonzalo Mart\u00ednez, Mar\u00eda Grandury, Carlos Arriaga, Juan Haro, Sascha Schroeder, et al.",
+        "author": "Javier Conde, Gonzalo Martínez, María Grandury, Carlos Arriaga, Juan Haro, Sascha Schroeder, et al.",
         "year": 2026,
         "title": "Updating the German Psycholinguistic Word Toolbox with AI-Generated Estimates of Concreteness, Valence, Arousal, Age of Acquisition, and Familiarity",
         "journal": "Journal of Cognition",
@@ -381,7 +351,7 @@
       "bibtex": "Bogunovic2024",
       "parentBibtex": null,
       "citation": {
-        "author": "Irena Bogunovi\u0107, Bojana \u0106oso, Marc Guasch, Eva Pavlinu\u0161i\u0107 Vilus, Pilar Ferr\u00e9, Jos\u00e9 Antonio Hinojosa",
+        "author": "Irena Bogunović, Bojana Ćoso, Marc Guasch, Eva Pavlinušić Vilus, Pilar Ferré, José Antonio Hinojosa",
         "year": 2025,
         "title": "How do we feel about borrowed words? Affective and lexico-semantic norms for most frequent unadapted English loanwords in Croatian (ENGRI CROWD)",
         "journal": "International Journal of Bilingualism",
@@ -686,7 +656,7 @@
       "bibtex": "Borsa2025",
       "parentBibtex": null,
       "citation": {
-        "author": "Virginia Maria Borsa, Maria Arioli, Riccardo Verni, Nicola Canessa, Stefano F. Cappa, Eleonora Catrical\u00e0",
+        "author": "Virginia Maria Borsa, Maria Arioli, Riccardo Verni, Nicola Canessa, Stefano F. Cappa, Eleonora Catricalà",
         "year": 2025,
         "title": "Quantifying the Multidimensionality of Abstract Concepts: An Italian Database",
         "journal": "Brain Sciences",
@@ -745,7 +715,7 @@
       "bibtex": "Granja2025",
       "parentBibtex": null,
       "citation": {
-        "author": "Mar\u00eda \u00c1lvarez de la Granja, Mar\u00eda Carmen Parafita Couto, Ana Rita S\u00e1-Leite, Isabel Fraga, Jon Andoni Du\u00f1abeitia, Christos Pliatsikas, et al.",
+        "author": "María Álvarez de la Granja, María Carmen Parafita Couto, Ana Rita Sá-Leite, Isabel Fraga, Jon Andoni Duñabeitia, Christos Pliatsikas, et al.",
         "year": 2025,
         "title": "The Galician MultiPic: a picture dataset that captures lexical variation",
         "journal": "Frontiers in Psychology",
@@ -784,7 +754,7 @@
       "citation": {
         "author": "Xi Cheng, Chi-Shing Tse, Yuen-Lai Chan, Kai Yan Lau, Yen Na Yum",
         "year": 2025,
-        "title": "Unveiling the intensity\u2013ambiguity relationships among affective and lexico-semantic variables in Chinese characters and the character\u2013word relationships in Chinese two-character words",
+        "title": "Unveiling the intensity–ambiguity relationships among affective and lexico-semantic variables in Chinese characters and the character–word relationships in Chinese two-character words",
         "journal": "Behavior Research Methods",
         "doi": "10.3758/s13428-025-02753-9"
       },
@@ -930,7 +900,7 @@
       "bibtex": "Conca2024",
       "parentBibtex": null,
       "citation": {
-        "author": "Francesca Conca, Daniela M. Gibbons, Ba\u015fak Bayram, Enise I. Incesoy, Marta Tacchini, Emrah D\u00fczel, et al.",
+        "author": "Francesca Conca, Daniela M. Gibbons, Başak Bayram, Enise I. Incesoy, Marta Tacchini, Emrah Düzel, et al.",
         "year": 2024,
         "title": "TACO: A Turkish database for abstract concepts",
         "journal": "Behavior Research Methods",
@@ -1146,9 +1116,9 @@
       "bibtex": "Bogunovic2023",
       "parentBibtex": null,
       "citation": {
-        "author": "Irena Bogunovi\u0107",
+        "author": "Irena Bogunović",
         "year": 2023,
-        "title": "A corpus-based approach to English loanwords,Korpusni pristup engleskim posu\u0111enicama",
+        "title": "A corpus-based approach to English loanwords,Korpusni pristup engleskim posuđenicama",
         "journal": "Fluminensia",
         "doi": "10.31820/f.35.2.1"
       },
@@ -1388,7 +1358,7 @@
       "bibtex": "Ballot2022",
       "parentBibtex": null,
       "citation": {
-        "author": "Claire Ballot, St\u00e9phanie Mathey, Christelle Robert",
+        "author": "Claire Ballot, Stéphanie Mathey, Christelle Robert",
         "year": 2022,
         "title": "Age-related evaluations of imageability and subjective frequency for 1286 neutral and emotional French words: ratings by young, middle-aged, and older adults",
         "journal": "Behavior Research Methods",
@@ -1465,7 +1435,7 @@
       "bibtex": "Coso2023",
       "parentBibtex": null,
       "citation": {
-        "author": "Bojana \u0106oso, Marc Guasch, Irena Bogunovi\u0107, Pilar Ferr\u00e9, Jos\u00e9 A. Hinojosa",
+        "author": "Bojana Ćoso, Marc Guasch, Irena Bogunović, Pilar Ferré, José A. Hinojosa",
         "year": 2022,
         "title": "CROWD-5e: A Croatian psycholinguistic database of affective norms for five discrete emotions",
         "journal": "Behavior Research Methods",
@@ -1622,7 +1592,7 @@
       "bibtex": "Wolna2023",
       "parentBibtex": null,
       "citation": {
-        "author": "Agata Wolna, Magdalena \u0141uniewska, Ewa Haman, Zofia Wodniecka",
+        "author": "Agata Wolna, Magdalena Łuniewska, Ewa Haman, Zofia Wodniecka",
         "year": 2022,
         "title": "Polish norms for a set of colored drawings of 168 objects and 146 actions with predictors of naming performance",
         "journal": "Behavior Research Methods",
@@ -1884,6 +1854,36 @@
       ]
     },
     {
+      "bibtex": "Li2021",
+      "parentBibtex": null,
+      "citation": {
+        "author": "Bing Li, Qiduo Lin, Hoi Yan Mak, Ovid J. L. Tzeng, Chih-Mao Huang, Hsu-Wen Huang",
+        "year": 2021,
+        "title": "Category Exemplar Production Norms for Hong Kong Cantonese: Instance Probabilities and Word Familiarity",
+        "journal": "Frontiers in Psychology",
+        "doi": "10.3389/fpsyg.2021.657706"
+      },
+      "language": "chinese_traditional",
+      "nRows": 72,
+      "flags": [
+        "familiar"
+      ],
+      "wordColumns": [
+        "word_chinese_traditional"
+      ],
+      "rawColumns": [
+        "word_chinese_traditional",
+        "translate_word_english",
+        "number_exemplars",
+        "number_exemplars_90_coverage",
+        "coverage_90_percent",
+        "invalid_exemplars_percent",
+        "first_examplar_percent",
+        "familiar_mean",
+        "familiar_sd"
+      ]
+    },
+    {
       "bibtex": "Sarli2022",
       "parentBibtex": null,
       "citation": {
@@ -2006,9 +2006,9 @@
       "bibtex": "DeLima2021",
       "parentBibtex": null,
       "citation": {
-        "author": "Marcos Felipe Rodrigues de Lima, Luciano Gr\u00fcdtner Buratto",
+        "author": "Marcos Felipe Rodrigues de Lima, Luciano Grüdtner Buratto",
         "year": 2021,
-        "title": "Norms for Familiarity, Concreteness, Valence, Arousal, Wordlikeness, and Recall Accuracy for Swahili\u2013Portuguese Word Pairs",
+        "title": "Norms for Familiarity, Concreteness, Valence, Arousal, Wordlikeness, and Recall Accuracy for Swahili–Portuguese Word Pairs",
         "journal": "Sage Open",
         "doi": "10.1177/2158244020988524"
       },
@@ -2104,7 +2104,7 @@
       "bibtex": "Bonin2021",
       "parentBibtex": null,
       "citation": {
-        "author": "Patrick Bonin, Betty Laroche, Alain M\u00e9ot",
+        "author": "Patrick Bonin, Betty Laroche, Alain Méot",
         "year": 2021,
         "title": "Psycholinguistic norms for a set of 506 French compound words",
         "journal": "Behavior Research Methods",
@@ -2135,7 +2135,7 @@
       "bibtex": "PetiStantic2021",
       "parentBibtex": null,
       "citation": {
-        "author": "Anita Peti-Stanti\u0107, Maja An\u0111el, Vedrana Gnjidi\u0107, Gordana Kereste\u0161, Nikola Ljube\u0161i\u0107, Irina Masnikosa, et al.",
+        "author": "Anita Peti-Stantić, Maja Anđel, Vedrana Gnjidić, Gordana Keresteš, Nikola Ljubešić, Irina Masnikosa, et al.",
         "year": 2021,
         "title": "The Croatian psycholinguistic database: Estimates for 6000 nouns, verbs, adjectives and adverbs",
         "journal": "Behavior Research Methods",
@@ -2689,7 +2689,7 @@
       "bibtex": "Coso2019",
       "parentBibtex": null,
       "citation": {
-        "author": "Bojana \u0106oso, Marc Guasch, Pilar Ferr\u00e9, Jos\u00e9 Antonio Hinojosa",
+        "author": "Bojana Ćoso, Marc Guasch, Pilar Ferré, José Antonio Hinojosa",
         "year": 2019,
         "title": "Affective and concreteness norms for 3,022 Croatian words",
         "journal": "Quarterly Journal of Experimental Psychology",
@@ -2727,7 +2727,7 @@
       "bibtex": "Luniewska2019_cs",
       "parentBibtex": "Luniewska2019",
       "citation": {
-        "author": "Magdalena \u0141uniewska, Zofia Wodniecka, Carol A. Miller, Filip Smol\u00edk, Morna Butcher, Vasiliki Chondrogianni, et al.",
+        "author": "Magdalena Łuniewska, Zofia Wodniecka, Carol A. Miller, Filip Smolík, Morna Butcher, Vasiliki Chondrogianni, et al.",
         "year": 2019,
         "title": "Age of acquisition of 299 words in seven languages: American English, Czech, Gaelic, Lebanese Arabic, Malay, Persian and Western Armenian",
         "journal": "PLOS ONE",
@@ -2761,7 +2761,7 @@
       "bibtex": "Luniewska2019_en",
       "parentBibtex": "Luniewska2019",
       "citation": {
-        "author": "Magdalena \u0141uniewska, Zofia Wodniecka, Carol A. Miller, Filip Smol\u00edk, Morna Butcher, Vasiliki Chondrogianni, et al.",
+        "author": "Magdalena Łuniewska, Zofia Wodniecka, Carol A. Miller, Filip Smolík, Morna Butcher, Vasiliki Chondrogianni, et al.",
         "year": 2019,
         "title": "Age of acquisition of 299 words in seven languages: American English, Czech, Gaelic, Lebanese Arabic, Malay, Persian and Western Armenian",
         "journal": "PLOS ONE",
@@ -2795,7 +2795,7 @@
       "bibtex": "Luniewska2019_fa",
       "parentBibtex": "Luniewska2019",
       "citation": {
-        "author": "Magdalena \u0141uniewska, Zofia Wodniecka, Carol A. Miller, Filip Smol\u00edk, Morna Butcher, Vasiliki Chondrogianni, et al.",
+        "author": "Magdalena Łuniewska, Zofia Wodniecka, Carol A. Miller, Filip Smolík, Morna Butcher, Vasiliki Chondrogianni, et al.",
         "year": 2019,
         "title": "Age of acquisition of 299 words in seven languages: American English, Czech, Gaelic, Lebanese Arabic, Malay, Persian and Western Armenian",
         "journal": "PLOS ONE",
@@ -2829,7 +2829,7 @@
       "bibtex": "Luniewska2019_gd",
       "parentBibtex": "Luniewska2019",
       "citation": {
-        "author": "Magdalena \u0141uniewska, Zofia Wodniecka, Carol A. Miller, Filip Smol\u00edk, Morna Butcher, Vasiliki Chondrogianni, et al.",
+        "author": "Magdalena Łuniewska, Zofia Wodniecka, Carol A. Miller, Filip Smolík, Morna Butcher, Vasiliki Chondrogianni, et al.",
         "year": 2019,
         "title": "Age of acquisition of 299 words in seven languages: American English, Czech, Gaelic, Lebanese Arabic, Malay, Persian and Western Armenian",
         "journal": "PLOS ONE",
@@ -2863,7 +2863,7 @@
       "bibtex": "Luniewska2019_hy",
       "parentBibtex": "Luniewska2019",
       "citation": {
-        "author": "Magdalena \u0141uniewska, Zofia Wodniecka, Carol A. Miller, Filip Smol\u00edk, Morna Butcher, Vasiliki Chondrogianni, et al.",
+        "author": "Magdalena Łuniewska, Zofia Wodniecka, Carol A. Miller, Filip Smolík, Morna Butcher, Vasiliki Chondrogianni, et al.",
         "year": 2019,
         "title": "Age of acquisition of 299 words in seven languages: American English, Czech, Gaelic, Lebanese Arabic, Malay, Persian and Western Armenian",
         "journal": "PLOS ONE",
@@ -2897,7 +2897,7 @@
       "bibtex": "Luniewska2019_ms",
       "parentBibtex": "Luniewska2019",
       "citation": {
-        "author": "Magdalena \u0141uniewska, Zofia Wodniecka, Carol A. Miller, Filip Smol\u00edk, Morna Butcher, Vasiliki Chondrogianni, et al.",
+        "author": "Magdalena Łuniewska, Zofia Wodniecka, Carol A. Miller, Filip Smolík, Morna Butcher, Vasiliki Chondrogianni, et al.",
         "year": 2019,
         "title": "Age of acquisition of 299 words in seven languages: American English, Czech, Gaelic, Lebanese Arabic, Malay, Persian and Western Armenian",
         "journal": "PLOS ONE",
@@ -2991,7 +2991,7 @@
       "bibtex": "Durdevic2019",
       "parentBibtex": null,
       "citation": {
-        "author": "Du\u0161ica Filipovi\u0107 \u0110ur\u0111evi\u0107",
+        "author": "Dušica Filipović Đurđević",
         "year": 2019,
         "title": "BALANCE OF MEANING PROBABILITIES IN PROCESSING OF SERBIAN HOMONYMY",
         "journal": "Primenjena psihologija",
@@ -3210,7 +3210,7 @@
       "bibtex": "Diez-Alamo2018",
       "parentBibtex": null,
       "citation": {
-        "author": "Antonio M. D\u00edez-\u00c1lamo, Emiliano D\u00edez, Dominika Zofia Wojcik, Mar\u00eda Angeles Alonso, Angel Fernandez",
+        "author": "Antonio M. Díez-Álamo, Emiliano Díez, Dominika Zofia Wojcik, María Angeles Alonso, Angel Fernandez",
         "year": 2019,
         "title": "Sensory experience ratings for 5,500 Spanish words",
         "journal": "Behavior Research Methods",
@@ -3439,7 +3439,7 @@
       "bibtex": "Bonin2018",
       "parentBibtex": null,
       "citation": {
-        "author": "Patrick Bonin, Alain M\u00e9ot, Aur\u00e9lia Bugaiska",
+        "author": "Patrick Bonin, Alain Méot, Aurélia Bugaiska",
         "year": 2018,
         "title": "Concreteness norms for 1,659 French words: Relationships with other psycholinguistic variables and word recognition times",
         "journal": "Behavior Research Methods",
@@ -3473,7 +3473,7 @@
       "bibtex": "Roest2017",
       "parentBibtex": null,
       "citation": {
-        "author": "Sander A. Roest, Tessa A. Visser, Ren\u00e9 Zeelenberg",
+        "author": "Sander A. Roest, Tessa A. Visser, René Zeelenberg",
         "year": 2018,
         "title": "Dutch taboo norms",
         "journal": "Behavior Research Methods",
@@ -3676,7 +3676,7 @@
       "bibtex": "Kraljevic2018",
       "parentBibtex": null,
       "citation": {
-        "author": "Jelena Kuva\u010d Kraljevi\u0107, Marina Oluji\u0107",
+        "author": "Jelena Kuvač Kraljević, Marina Olujić",
         "year": 2018,
         "title": "Imageability and subjective frequency of the 500 rated nouns in the Croatian Lexical Database",
         "journal": "Suvremena lingvistika",
@@ -3712,7 +3712,7 @@
       "bibtex": "Diez-Alamo2018a",
       "parentBibtex": null,
       "citation": {
-        "author": "Antonio M. D\u00edez-\u00c1lamo, Emiliano D\u00edez, Mar\u00eda \u00c1ngeles Alonso, C. Alejandra Vargas, Angel Fernandez",
+        "author": "Antonio M. Díez-Álamo, Emiliano Díez, María Ángeles Alonso, C. Alejandra Vargas, Angel Fernandez",
         "year": 2018,
         "title": "Normative ratings for perceptual and motor attributes of 750 object concepts in Spanish",
         "journal": "Behavior Research Methods",
@@ -3758,7 +3758,7 @@
       "bibtex": "Stadthagen-Gonzalez2017a",
       "parentBibtex": null,
       "citation": {
-        "author": "Hans Stadthagen-Gonz\u00e1lez, Pilar Ferr\u00e9, Miguel A. P\u00e9rez-S\u00e1nchez, Constance Imbault, Jos\u00e9 Antonio Hinojosa",
+        "author": "Hans Stadthagen-González, Pilar Ferré, Miguel A. Pérez-Sánchez, Constance Imbault, José Antonio Hinojosa",
         "year": 2018,
         "title": "Norms for 10,491 Spanish words for five discrete emotions: Happiness, disgust, anger, fear, and sadness",
         "journal": "Behavior Research Methods",
@@ -4257,7 +4257,7 @@
       "bibtex": "Torrance2018_bg",
       "parentBibtex": "Torrance2018",
       "citation": {
-        "author": "Mark Torrance, Guido Nottbusch, Rui A. Alves, Barbara Arf\u00e9, Lucile Chanquoy, Evgeny Chukharev-Hudilainen, et al.",
+        "author": "Mark Torrance, Guido Nottbusch, Rui A. Alves, Barbara Arfé, Lucile Chanquoy, Evgeny Chukharev-Hudilainen, et al.",
         "year": 2018,
         "title": "Timed written picture naming in 14 European languages",
         "journal": "Behavior Research Methods",
@@ -4318,7 +4318,7 @@
       "bibtex": "Torrance2018_de",
       "parentBibtex": "Torrance2018",
       "citation": {
-        "author": "Mark Torrance, Guido Nottbusch, Rui A. Alves, Barbara Arf\u00e9, Lucile Chanquoy, Evgeny Chukharev-Hudilainen, et al.",
+        "author": "Mark Torrance, Guido Nottbusch, Rui A. Alves, Barbara Arfé, Lucile Chanquoy, Evgeny Chukharev-Hudilainen, et al.",
         "year": 2018,
         "title": "Timed written picture naming in 14 European languages",
         "journal": "Behavior Research Methods",
@@ -4379,7 +4379,7 @@
       "bibtex": "Torrance2018_el",
       "parentBibtex": "Torrance2018",
       "citation": {
-        "author": "Mark Torrance, Guido Nottbusch, Rui A. Alves, Barbara Arf\u00e9, Lucile Chanquoy, Evgeny Chukharev-Hudilainen, et al.",
+        "author": "Mark Torrance, Guido Nottbusch, Rui A. Alves, Barbara Arfé, Lucile Chanquoy, Evgeny Chukharev-Hudilainen, et al.",
         "year": 2018,
         "title": "Timed written picture naming in 14 European languages",
         "journal": "Behavior Research Methods",
@@ -4440,7 +4440,7 @@
       "bibtex": "Torrance2018_en",
       "parentBibtex": "Torrance2018",
       "citation": {
-        "author": "Mark Torrance, Guido Nottbusch, Rui A. Alves, Barbara Arf\u00e9, Lucile Chanquoy, Evgeny Chukharev-Hudilainen, et al.",
+        "author": "Mark Torrance, Guido Nottbusch, Rui A. Alves, Barbara Arfé, Lucile Chanquoy, Evgeny Chukharev-Hudilainen, et al.",
         "year": 2018,
         "title": "Timed written picture naming in 14 European languages",
         "journal": "Behavior Research Methods",
@@ -4501,7 +4501,7 @@
       "bibtex": "Torrance2018_es",
       "parentBibtex": "Torrance2018",
       "citation": {
-        "author": "Mark Torrance, Guido Nottbusch, Rui A. Alves, Barbara Arf\u00e9, Lucile Chanquoy, Evgeny Chukharev-Hudilainen, et al.",
+        "author": "Mark Torrance, Guido Nottbusch, Rui A. Alves, Barbara Arfé, Lucile Chanquoy, Evgeny Chukharev-Hudilainen, et al.",
         "year": 2018,
         "title": "Timed written picture naming in 14 European languages",
         "journal": "Behavior Research Methods",
@@ -4562,7 +4562,7 @@
       "bibtex": "Torrance2018_fi",
       "parentBibtex": "Torrance2018",
       "citation": {
-        "author": "Mark Torrance, Guido Nottbusch, Rui A. Alves, Barbara Arf\u00e9, Lucile Chanquoy, Evgeny Chukharev-Hudilainen, et al.",
+        "author": "Mark Torrance, Guido Nottbusch, Rui A. Alves, Barbara Arfé, Lucile Chanquoy, Evgeny Chukharev-Hudilainen, et al.",
         "year": 2018,
         "title": "Timed written picture naming in 14 European languages",
         "journal": "Behavior Research Methods",
@@ -4623,7 +4623,7 @@
       "bibtex": "Torrance2018_fr",
       "parentBibtex": "Torrance2018",
       "citation": {
-        "author": "Mark Torrance, Guido Nottbusch, Rui A. Alves, Barbara Arf\u00e9, Lucile Chanquoy, Evgeny Chukharev-Hudilainen, et al.",
+        "author": "Mark Torrance, Guido Nottbusch, Rui A. Alves, Barbara Arfé, Lucile Chanquoy, Evgeny Chukharev-Hudilainen, et al.",
         "year": 2018,
         "title": "Timed written picture naming in 14 European languages",
         "journal": "Behavior Research Methods",
@@ -4684,7 +4684,7 @@
       "bibtex": "Torrance2018_is",
       "parentBibtex": "Torrance2018",
       "citation": {
-        "author": "Mark Torrance, Guido Nottbusch, Rui A. Alves, Barbara Arf\u00e9, Lucile Chanquoy, Evgeny Chukharev-Hudilainen, et al.",
+        "author": "Mark Torrance, Guido Nottbusch, Rui A. Alves, Barbara Arfé, Lucile Chanquoy, Evgeny Chukharev-Hudilainen, et al.",
         "year": 2018,
         "title": "Timed written picture naming in 14 European languages",
         "journal": "Behavior Research Methods",
@@ -4745,7 +4745,7 @@
       "bibtex": "Torrance2018_it",
       "parentBibtex": "Torrance2018",
       "citation": {
-        "author": "Mark Torrance, Guido Nottbusch, Rui A. Alves, Barbara Arf\u00e9, Lucile Chanquoy, Evgeny Chukharev-Hudilainen, et al.",
+        "author": "Mark Torrance, Guido Nottbusch, Rui A. Alves, Barbara Arfé, Lucile Chanquoy, Evgeny Chukharev-Hudilainen, et al.",
         "year": 2018,
         "title": "Timed written picture naming in 14 European languages",
         "journal": "Behavior Research Methods",
@@ -4806,7 +4806,7 @@
       "bibtex": "Torrance2018_nl",
       "parentBibtex": "Torrance2018",
       "citation": {
-        "author": "Mark Torrance, Guido Nottbusch, Rui A. Alves, Barbara Arf\u00e9, Lucile Chanquoy, Evgeny Chukharev-Hudilainen, et al.",
+        "author": "Mark Torrance, Guido Nottbusch, Rui A. Alves, Barbara Arfé, Lucile Chanquoy, Evgeny Chukharev-Hudilainen, et al.",
         "year": 2018,
         "title": "Timed written picture naming in 14 European languages",
         "journal": "Behavior Research Methods",
@@ -4867,7 +4867,7 @@
       "bibtex": "Torrance2018_no",
       "parentBibtex": "Torrance2018",
       "citation": {
-        "author": "Mark Torrance, Guido Nottbusch, Rui A. Alves, Barbara Arf\u00e9, Lucile Chanquoy, Evgeny Chukharev-Hudilainen, et al.",
+        "author": "Mark Torrance, Guido Nottbusch, Rui A. Alves, Barbara Arfé, Lucile Chanquoy, Evgeny Chukharev-Hudilainen, et al.",
         "year": 2018,
         "title": "Timed written picture naming in 14 European languages",
         "journal": "Behavior Research Methods",
@@ -4928,7 +4928,7 @@
       "bibtex": "Torrance2018_pt",
       "parentBibtex": "Torrance2018",
       "citation": {
-        "author": "Mark Torrance, Guido Nottbusch, Rui A. Alves, Barbara Arf\u00e9, Lucile Chanquoy, Evgeny Chukharev-Hudilainen, et al.",
+        "author": "Mark Torrance, Guido Nottbusch, Rui A. Alves, Barbara Arfé, Lucile Chanquoy, Evgeny Chukharev-Hudilainen, et al.",
         "year": 2018,
         "title": "Timed written picture naming in 14 European languages",
         "journal": "Behavior Research Methods",
@@ -4989,7 +4989,7 @@
       "bibtex": "Torrance2018_ru",
       "parentBibtex": "Torrance2018",
       "citation": {
-        "author": "Mark Torrance, Guido Nottbusch, Rui A. Alves, Barbara Arf\u00e9, Lucile Chanquoy, Evgeny Chukharev-Hudilainen, et al.",
+        "author": "Mark Torrance, Guido Nottbusch, Rui A. Alves, Barbara Arfé, Lucile Chanquoy, Evgeny Chukharev-Hudilainen, et al.",
         "year": 2018,
         "title": "Timed written picture naming in 14 European languages",
         "journal": "Behavior Research Methods",
@@ -5050,7 +5050,7 @@
       "bibtex": "Torrance2018_sr",
       "parentBibtex": "Torrance2018",
       "citation": {
-        "author": "Mark Torrance, Guido Nottbusch, Rui A. Alves, Barbara Arf\u00e9, Lucile Chanquoy, Evgeny Chukharev-Hudilainen, et al.",
+        "author": "Mark Torrance, Guido Nottbusch, Rui A. Alves, Barbara Arfé, Lucile Chanquoy, Evgeny Chukharev-Hudilainen, et al.",
         "year": 2018,
         "title": "Timed written picture naming in 14 European languages",
         "journal": "Behavior Research Methods",
@@ -5196,7 +5196,7 @@
       "bibtex": "Abdaoui2017",
       "parentBibtex": null,
       "citation": {
-        "author": "Amine Abdaoui, J\u00e9r\u00f4me Az\u00e9, Sandra Bringay, Pascal Poncelet",
+        "author": "Amine Abdaoui, Jérôme Azé, Sandra Bringay, Pascal Poncelet",
         "year": 2017,
         "title": "FEEL: a French Expanded Emotion Lexicon",
         "journal": "Language Resources and Evaluation",
@@ -5255,7 +5255,7 @@
       "bibtex": "Ferre2017",
       "parentBibtex": null,
       "citation": {
-        "author": "Pilar Ferr\u00e9, Marc Guasch, Natalia Mart\u00ednez-Garc\u00eda, Isabel Fraga, Jos\u00e9 Antonio Hinojosa",
+        "author": "Pilar Ferré, Marc Guasch, Natalia Martínez-García, Isabel Fraga, José Antonio Hinojosa",
         "year": 2017,
         "title": "Moved by words: Affective ratings for a set of 2,266 Spanish words in five discrete emotion categories",
         "journal": "Behavior Research Methods",
@@ -5289,7 +5289,7 @@
       "bibtex": "Stadthagen-Gonzalez2017",
       "parentBibtex": null,
       "citation": {
-        "author": "Hans Stadthagen-Gonzalez, Constance Imbault, Miguel A. P\u00e9rez S\u00e1nchez, Marc Brysbaert",
+        "author": "Hans Stadthagen-Gonzalez, Constance Imbault, Miguel A. Pérez Sánchez, Marc Brysbaert",
         "year": 2017,
         "title": "Norms of valence and arousal for 14,031 Spanish words",
         "journal": "Behavior Research Methods",
@@ -5397,7 +5397,7 @@
       "bibtex": "Soler2017",
       "parentBibtex": null,
       "citation": {
-        "author": "Mar\u00eda Jos\u00e9 Soler, Carmen Das\u00ed, Juan Carlos Ruiz, Teresa Cervera",
+        "author": "María José Soler, Carmen Dasí, Juan Carlos Ruiz, Teresa Cervera",
         "year": 2017,
         "title": "Spanish norms for completion of restricted length word stems",
         "journal": "Behavior Research Methods",
@@ -5440,7 +5440,7 @@
       "bibtex": "Goz2017",
       "parentBibtex": null,
       "citation": {
-        "author": "\u0130lyas G\u00f6z, Ali \u0130. Tekcan, Asl\u0131 Aktan Erciyes",
+        "author": "İlyas Göz, Ali İ. Tekcan, Aslı Aktan Erciyes",
         "year": 2017,
         "title": "Subjective age-of-acquisition norms for 600 Turkish words from four age groups",
         "journal": "Behavior Research Methods",
@@ -5593,7 +5593,7 @@
       "bibtex": "Schroter2017",
       "parentBibtex": null,
       "citation": {
-        "author": "Pauline Schr\u00f6ter, Sascha Schroeder",
+        "author": "Pauline Schröter, Sascha Schroeder",
         "year": 2017,
         "title": "The Developmental Lexicon Project: A behavioral database to investigate visual word recognition across the lifespan",
         "journal": "Behavior Research Methods",
@@ -5750,7 +5750,7 @@
       "bibtex": "Soares2017",
       "parentBibtex": null,
       "citation": {
-        "author": "Ana Paula Soares, Ana Santos Costa, Jo\u00e3o Machado, Montserrat Comesa\u00f1a, Helena Mendes Oliveira",
+        "author": "Ana Paula Soares, Ana Santos Costa, João Machado, Montserrat Comesaña, Helena Mendes Oliveira",
         "year": 2017,
         "title": "The Minho Word Pool: Norms for imageability, concreteness, and subjective frequency for 3,800 Portuguese words",
         "journal": "Behavior Research Methods",
@@ -5952,7 +5952,7 @@
       "bibtex": "Hinojosa2016a",
       "parentBibtex": null,
       "citation": {
-        "author": "J. A. Hinojosa, N. Mart\u00ednez-Garc\u00eda, C. Villalba-Garc\u00eda, U. Fern\u00e1ndez-Folgueiras, A. S\u00e1nchez-Carmona, M. A. Pozo, et al.",
+        "author": "J. A. Hinojosa, N. Martínez-García, C. Villalba-García, U. Fernández-Folgueiras, A. Sánchez-Carmona, M. A. Pozo, et al.",
         "year": 2016,
         "title": "Affective norms of 875 Spanish words for five discrete emotional categories and two emotional dimensions",
         "journal": "Behavior Research Methods",
@@ -6076,7 +6076,7 @@
       "bibtex": "Gruhn2016",
       "parentBibtex": null,
       "citation": {
-        "author": "Daniel Gr\u00fchn",
+        "author": "Daniel Grühn",
         "year": 2016,
         "title": "An English Word Database of EMOtional TErms (EMOTE)",
         "journal": "Psychological Reports",
@@ -6221,7 +6221,7 @@
       "bibtex": "Luniewska2016",
       "parentBibtex": null,
       "citation": {
-        "author": "Magdalena \u0141uniewska, Ewa Haman, Sharon Armon-Lotem, Bart\u0142omiej Etenkowski, Frenette Southwood, Darinka An\u0111elkovi\u0107, et al.",
+        "author": "Magdalena Łuniewska, Ewa Haman, Sharon Armon-Lotem, Bartłomiej Etenkowski, Frenette Southwood, Darinka Anđelković, et al.",
         "year": 2016,
         "title": "Ratings of age of acquisition of 299 words across 25 languages: Is there a cross-linguistic order of words?",
         "journal": "Behavior Research Methods",
@@ -6316,7 +6316,7 @@
       "bibtex": "Guasch2016",
       "parentBibtex": null,
       "citation": {
-        "author": "Marc Guasch, Pilar Ferr\u00e9, Isabel Fraga",
+        "author": "Marc Guasch, Pilar Ferré, Isabel Fraga",
         "year": 2016,
         "title": "Spanish norms for affective and lexico-semantic variables for 1,400 words",
         "journal": "Behavior Research Methods",
@@ -6363,7 +6363,7 @@
       "bibtex": "Alonso2016",
       "parentBibtex": null,
       "citation": {
-        "author": "Mar\u00eda \u00c1ngeles Alonso, Emiliano D\u00edez, Angel Fernandez",
+        "author": "María Ángeles Alonso, Emiliano Díez, Angel Fernandez",
         "year": 2016,
         "title": "Subjective age-of-acquisition norms for 4,640 verbs in Spanish",
         "journal": "Behavior Research Methods",
@@ -6429,7 +6429,7 @@
       "bibtex": "Hinojosa2016b",
       "parentBibtex": null,
       "citation": {
-        "author": "Jos\u00e9 A. Hinojosa, Irene Rinc\u00f3n-P\u00e9rez, M\u00aa Ver\u00f3nica Romero-Ferreiro, Natalia Mart\u00ednez-Garc\u00eda, Cristina Villalba-Garc\u00eda, Pedro R. Montoro, et al.",
+        "author": "José A. Hinojosa, Irene Rincón-Pérez, Mª Verónica Romero-Ferreiro, Natalia Martínez-García, Cristina Villalba-García, Pedro R. Montoro, et al.",
         "year": 2016,
         "title": "The Madrid Affective Database for Spanish (MADS): Ratings of Dominance, Familiarity, Subjective Age of Acquisition and Sensory Experience",
         "journal": "PLOS ONE",
@@ -6745,7 +6745,7 @@
       "bibtex": "Schauenburg2015",
       "parentBibtex": null,
       "citation": {
-        "author": "Gesche Schauenburg, Jens Ambrasat, Tobias Schr\u00f6der, Christian von Scheve, Markus Conrad",
+        "author": "Gesche Schauenburg, Jens Ambrasat, Tobias Schröder, Christian von Scheve, Markus Conrad",
         "year": 2015,
         "title": "Emotional connotations of words related to authority and community",
         "journal": "Behavior Research Methods",
@@ -6812,9 +6812,9 @@
       "bibtex": "Riegel2015",
       "parentBibtex": null,
       "citation": {
-        "author": "Monika Riegel, Ma\u0142gorzata Wierzba, Marek Wypych, \u0141ukasz \u017burawski, Katarzyna Jednor\u00f3g, Anna Grabowska, et al.",
+        "author": "Monika Riegel, Małgorzata Wierzba, Marek Wypych, Łukasz Żurawski, Katarzyna Jednoróg, Anna Grabowska, et al.",
         "year": 2015,
-        "title": "Nencki Affective Word List (NAWL): the cultural adaptation of the Berlin Affective Word List\u2013Reloaded (BAWL-R) for Polish",
+        "title": "Nencki Affective Word List (NAWL): the cultural adaptation of the Berlin Affective Word List–Reloaded (BAWL-R) for Polish",
         "journal": "Behavior Research Methods",
         "doi": "10.3758/s13428-014-0552-1"
       },
@@ -6867,7 +6867,7 @@
       "bibtex": "Bonin2015",
       "parentBibtex": null,
       "citation": {
-        "author": "Patrick Bonin, Alain M\u00e9ot, S\u00e9verine Millotte, Aur\u00e9lia Bugaiska",
+        "author": "Patrick Bonin, Alain Méot, Séverine Millotte, Aurélia Bugaiska",
         "year": 2015,
         "title": "Norms and reading times for acronyms in French",
         "journal": "Behavior Research Methods",
@@ -6907,7 +6907,7 @@
       "bibtex": "Lind2015",
       "parentBibtex": null,
       "citation": {
-        "author": "Marianne Lind, Hanne Gram Simonsen, Pernille Hansen, Elisabeth Holm, Bj\u00f8rn-Helge Mevik",
+        "author": "Marianne Lind, Hanne Gram Simonsen, Pernille Hansen, Elisabeth Holm, Bjørn-Helge Mevik",
         "year": 2015,
         "title": "Norwegian Words: A lexical database for clinicians and researchers",
         "journal": "Clinical Linguistics & Phonetics",
@@ -6960,7 +6960,7 @@
       "bibtex": "Moldovan2015",
       "parentBibtex": null,
       "citation": {
-        "author": "Cornelia D. Moldovan, Pilar Ferr\u00e9, Josep Demestre, Rosa S\u00e1nchez-Casas",
+        "author": "Cornelia D. Moldovan, Pilar Ferré, Josep Demestre, Rosa Sánchez-Casas",
         "year": 2015,
         "title": "Semantic similarity: normative ratings for 185 Spanish noun triplets",
         "journal": "Behavior Research Methods",
@@ -6996,7 +6996,7 @@
       "bibtex": "Bonin2015a",
       "parentBibtex": null,
       "citation": {
-        "author": "Patrick Bonin, Alain M\u00e9ot, Ludovic Ferrand, Aur\u00e9lia Buga\u00efska",
+        "author": "Patrick Bonin, Alain Méot, Ludovic Ferrand, Aurélia Bugaïska",
         "year": 2015,
         "title": "Sensory experience ratings (SERs) for 1,659 French words: Relationships with other psycholinguistic variables and visual word recognition",
         "journal": "Behavior Research Methods",
@@ -7021,7 +7021,7 @@
       "bibtex": "Alonso2015",
       "parentBibtex": null,
       "citation": {
-        "author": "Mar\u00eda Angeles Alonso, Angel Fernandez, Emiliano D\u00edez",
+        "author": "María Angeles Alonso, Angel Fernandez, Emiliano Díez",
         "year": 2015,
         "title": "Subjective age-of-acquisition norms for 7,039 Spanish words",
         "journal": "Behavior Research Methods",
@@ -7059,7 +7059,7 @@
         "author": "Susanne Quadflieg, Caroline Michel, Henryk Bukowski, Dana Samson",
         "year": 2014,
         "title": "A database of psycholinguistic and lexical properties for French adjectives referring to human and/or nonhuman attributes.",
-        "journal": "Canadian Journal of Experimental Psychology / Revue canadienne de psychologie exp\u00e9rimentale",
+        "journal": "Canadian Journal of Experimental Psychology / Revue canadienne de psychologie expérimentale",
         "doi": "10.1037/cep0000001"
       },
       "language": "french",
@@ -7228,7 +7228,7 @@
       "bibtex": "Schmidtke2014",
       "parentBibtex": null,
       "citation": {
-        "author": "David S. Schmidtke, Tobias Schr\u00f6der, Arthur M. Jacobs, Markus Conrad",
+        "author": "David S. Schmidtke, Tobias Schröder, Arthur M. Jacobs, Markus Conrad",
         "year": 2014,
         "title": "ANGST: Affective norms for German sentiment terms, derived from the affective norms for English words",
         "journal": "Behavior Research Methods",
@@ -7281,7 +7281,7 @@
       "bibtex": "Brodeur2014",
       "parentBibtex": null,
       "citation": {
-        "author": "Mathieu B. Brodeur, Katherine Gu\u00e9rard, Maria Bouras",
+        "author": "Mathieu B. Brodeur, Katherine Guérard, Maria Bouras",
         "year": 2014,
         "title": "Bank of Standardized Stimuli (BOSS) Phase II: 930 New Normative Photos",
         "journal": "PLoS ONE",
@@ -7347,7 +7347,7 @@
       "citation": {
         "author": "David Allen, Kathy Conklin",
         "year": 2014,
-        "title": "Cross-linguistic similarity norms for Japanese\u2013English translation equivalents",
+        "title": "Cross-linguistic similarity norms for Japanese–English translation equivalents",
         "journal": "Behavior Research Methods",
         "doi": "10.3758/s13428-013-0389-z"
       },
@@ -7387,7 +7387,7 @@
       "bibtex": "Brysbaert2014a",
       "parentBibtex": null,
       "citation": {
-        "author": "Marc Brysbaert, Micha\u00ebl Stevens, Simon De Deyne, Wouter Voorspoels, Gert Storms",
+        "author": "Marc Brysbaert, Michaël Stevens, Simon De Deyne, Wouter Voorspoels, Gert Storms",
         "year": 2014,
         "title": "Norms of age of acquisition and concreteness for 30,000 Dutch words",
         "journal": "Acta Psychologica",
@@ -7459,7 +7459,7 @@
       "bibtex": "Moreno-Martinez2014",
       "parentBibtex": null,
       "citation": {
-        "author": "F. Javier Moreno-Mart\u00ednez, Pedro R. Montoro, Inmaculada C. Rodr\u00edguez-Rojo",
+        "author": "F. Javier Moreno-Martínez, Pedro R. Montoro, Inmaculada C. Rodríguez-Rojo",
         "year": 2014,
         "title": "Spanish norms for age of acquisition, concept familiarity, lexical frequency, manipulability, typicality, and other variables for 820 words from 14 living/nonliving concepts",
         "journal": "Behavior Research Methods",
@@ -7583,7 +7583,7 @@
       "bibtex": "Rogic2013",
       "parentBibtex": null,
       "citation": {
-        "author": "Maja Rogi\u0107, Ana Jeron\u010di\u0107, Marija Bo\u0161njak, Ana Sedlar, Darko Hren, Vedran Deletis",
+        "author": "Maja Rogić, Ana Jerončić, Marija Bošnjak, Ana Sedlar, Darko Hren, Vedran Deletis",
         "year": 2013,
         "title": "A visual object naming task standardized for the Croatian language: A tool for research and clinical practice",
         "journal": "Behavior Research Methods",
@@ -7614,7 +7614,7 @@
       "bibtex": "Bonin2013",
       "parentBibtex": null,
       "citation": {
-        "author": "Patrick Bonin, Diana Guillemard-Tsaparina, Alain M\u00e9ot",
+        "author": "Patrick Bonin, Diana Guillemard-Tsaparina, Alain Méot",
         "year": 2013,
         "title": "Determinants of naming latencies, object comprehension times, and new norms for the Russian standardized set of the colorized version of the Snodgrass and Vanderwart pictures",
         "journal": "Behavior Research Methods",
@@ -7646,7 +7646,7 @@
       "bibtex": "Ric2013",
       "parentBibtex": null,
       "citation": {
-        "author": "Fran\u00e7ois Ric, Theodore Alexopoulos, Dominique Muller, Beno\u00eete Aub\u00e9",
+        "author": "François Ric, Theodore Alexopoulos, Dominique Muller, Benoîte Aubé",
         "year": 2013,
         "title": "Emotional norms for 524 French personality trait words",
         "journal": "Behavior Research Methods",
@@ -7700,7 +7700,7 @@
       "bibtex": "Duchon2013",
       "parentBibtex": null,
       "citation": {
-        "author": "Andrew Duchon, Manuel Perea, Nuria Sebasti\u00e1n-Gall\u00e9s, Antonia Mart\u00ed, Manuel Carreiras",
+        "author": "Andrew Duchon, Manuel Perea, Nuria Sebastián-Gallés, Antonia Martí, Manuel Carreiras",
         "year": 2013,
         "title": "EsPal: One-stop shopping for Spanish word properties",
         "journal": "Behavior Research Methods",
@@ -7730,7 +7730,7 @@
         "author": "J. Frederico Marques",
         "year": 2013,
         "title": "Normas de familiaridade para substantivos comuns",
-        "journal": "Laborat\u00f3rio de Psicologia",
+        "journal": "Laboratório de Psicologia",
         "doi": "10.14417/lp.774"
       },
       "language": "spanish",
@@ -7745,40 +7745,6 @@
         "word_spanish",
         "familiar_mean_reference",
         "familiar_mean_meaning"
-      ]
-    },
-    {
-      "bibtex": "Bonin2013a",
-      "parentBibtex": null,
-      "citation": {
-        "author": "Patrick Bonin, Alain M\u00e9ot, Aurelia Bugaiska",
-        "year": 2013,
-        "title": "Norms and comprehension times for 305 French idiomatic expressions",
-        "journal": "Behavior Research Methods",
-        "doi": "10.3758/s13428-013-0331-4"
-      },
-      "language": "french",
-      "nRows": 1659,
-      "flags": [
-        "arousal",
-        "concrete",
-        "context",
-        "valence"
-      ],
-      "wordColumns": [
-        "word_french"
-      ],
-      "rawColumns": [
-        "word_french",
-        "translate_word_english",
-        "valence_mean",
-        "valence_sd",
-        "arousal_mean",
-        "arousal_sd",
-        "context_mean",
-        "context_sd",
-        "concrete_mean",
-        "concrete_sd"
       ]
     },
     {
@@ -8261,7 +8227,7 @@
       "bibtex": "Ferre2012",
       "parentBibtex": null,
       "citation": {
-        "author": "Pilar Ferr\u00e9, Marc Guasch, Cornelia Moldovan, Rosa S\u00e1nchez-Casas",
+        "author": "Pilar Ferré, Marc Guasch, Cornelia Moldovan, Rosa Sánchez-Casas",
         "year": 2012,
         "title": "Affective norms for 380 Spanish words belonging to three different semantic categories",
         "journal": "Behavior Research Methods",
@@ -8356,7 +8322,7 @@
       "bibtex": "Moreno-Martinez2012",
       "parentBibtex": null,
       "citation": {
-        "author": "Francisco Javier Moreno-Mart\u00ednez, Pedro R. Montoro",
+        "author": "Francisco Javier Moreno-Martínez, Pedro R. Montoro",
         "year": 2012,
         "title": "An Ecological Alternative to Snodgrass & Vanderwart: 360 High Quality Colour Images with Norms for Seven Psycholinguistic Variables",
         "journal": "PLoS ONE",
@@ -8436,7 +8402,7 @@
       "bibtex": "Schroder2012",
       "parentBibtex": null,
       "citation": {
-        "author": "Astrid Schr\u00f6der, Teresa Gemballa, Steffie Ruppin, Isabell Wartenburger",
+        "author": "Astrid Schröder, Teresa Gemballa, Steffie Ruppin, Isabell Wartenburger",
         "year": 2012,
         "title": "German norms for semantic typicality, age of acquisition, and concept familiarity",
         "journal": "Behavior Research Methods",
@@ -8545,7 +8511,7 @@
       "bibtex": "Soares2012",
       "parentBibtex": null,
       "citation": {
-        "author": "Ana Paula Soares, Montserrat Comesa\u00f1a, Ana P. Pinheiro, Alberto Sim\u00f5es, Carla Sofia Frade",
+        "author": "Ana Paula Soares, Montserrat Comesaña, Ana P. Pinheiro, Alberto Simões, Carla Sofia Frade",
         "year": 2012,
         "title": "The adaptation of the Affective Norms for English Words (ANEW) for European Portuguese",
         "journal": "Behavior Research Methods",
@@ -8588,7 +8554,7 @@
       "bibtex": "Brodeur2012",
       "parentBibtex": null,
       "citation": {
-        "author": "Mathieu B. Brodeur, Eva Kehayia, Genevi\u00e8ve Dion-Lessard, M\u00e9lissa Chauret, Tina Montreuil, Emmanuelle Dionne-Dostie, et al.",
+        "author": "Mathieu B. Brodeur, Eva Kehayia, Geneviève Dion-Lessard, Mélissa Chauret, Tina Montreuil, Emmanuelle Dionne-Dostie, et al.",
         "year": 2012,
         "title": "The bank of standardized stimuli (BOSS): comparison between French and English norms",
         "journal": "Behavior Research Methods",
@@ -8759,7 +8725,7 @@
       "bibtex": "Leveau2012",
       "parentBibtex": null,
       "citation": {
-        "author": "Nicolas Leveau, Sandra Jhean-Larose, Guy Denhi\u00e8re, Ba-Linh Nguyen",
+        "author": "Nicolas Leveau, Sandra Jhean-Larose, Guy Denhière, Ba-Linh Nguyen",
         "year": 2012,
         "title": "Validating an interlingual metanorm for emotional analysis of texts",
         "journal": "Behavior Research Methods",
@@ -8995,7 +8961,7 @@
       "citation": {
         "author": "Benny B. Briesemeister, Lars Kuchinke, Arthur M. Jacobs",
         "year": 2011,
-        "title": "Discrete emotion norms for nouns: Berlin affective word list (DENN\u2013BAWL)",
+        "title": "Discrete emotion norms for nouns: Berlin affective word list (DENN–BAWL)",
         "journal": "Behavior Research Methods",
         "doi": "10.3758/s13428-011-0059-y"
       },
@@ -9029,7 +8995,7 @@
       "citation": {
         "author": "Stephen D. R. Bennett, A. Nicole Burnett, Paul D. Siakaluk, Penny M. Pexman",
         "year": 2011,
-        "title": "Imageability and body\u2013object interaction ratings for 599 multisyllabic nouns",
+        "title": "Imageability and body–object interaction ratings for 599 multisyllabic nouns",
         "journal": "Behavior Research Methods",
         "doi": "10.3758/s13428-011-0117-5"
       },
@@ -9085,10 +9051,10 @@
       "bibtex": "Bonin2011",
       "parentBibtex": null,
       "citation": {
-        "author": "Patrick Bonin, Alain M\u00e9ot, Ludovic Ferrand, S\u00e9bastien Roux",
+        "author": "Patrick Bonin, Alain Méot, Ludovic Ferrand, Sébastien Roux",
         "year": 2011,
-        "title": "L\u2019imageabilit\u00e9 : normes et relations avec d\u2019autres variables psycholinguistiques",
-        "journal": "L\u2019Ann\u00e9e psychologique",
+        "title": "L’imageabilité : normes et relations avec d’autres variables psycholinguistiques",
+        "journal": "L’Année psychologique",
         "doi": "10.3917/anpsy.112.0327"
       },
       "language": "french",
@@ -9112,7 +9078,7 @@
       "bibtex": "Tsaparina2011",
       "parentBibtex": null,
       "citation": {
-        "author": "Diana Tsaparina, Patrick Bonin, Alain M\u00e9ot",
+        "author": "Diana Tsaparina, Patrick Bonin, Alain Méot",
         "year": 2011,
         "title": "Russian norms for name agreement, image agreement for the colorized version of the Snodgrass and Vanderwart pictures and age of acquisition, conceptual familiarity, and imageability scores for modal object names",
         "journal": "Behavior Research Methods",
@@ -9246,7 +9212,7 @@
       "bibtex": "Cameirao2010",
       "parentBibtex": null,
       "citation": {
-        "author": "Manuela L. Cameir\u00e3o, Selene G. Vicente",
+        "author": "Manuela L. Cameirão, Selene G. Vicente",
         "year": 2010,
         "title": "Age-of-acquisition norms for a set of 1,749 Portuguese words",
         "journal": "Behavior Research Methods",
@@ -9291,9 +9257,9 @@
       "bibtex": "DellaRosa2010",
       "parentBibtex": null,
       "citation": {
-        "author": "Pasquale A. Della Rosa, Eleonora Catrical\u00e0, Gabriella Vigliocco, Stefano F. Cappa",
+        "author": "Pasquale A. Della Rosa, Eleonora Catricalà, Gabriella Vigliocco, Stefano F. Cappa",
         "year": 2010,
-        "title": "Beyond the abstract\u2014concrete dichotomy: Mode of acquisition, concreteness, imageability, familiarity, age of acquisition, context availability, and abstractness norms for a set of 417 Italian words",
+        "title": "Beyond the abstract—concrete dichotomy: Mode of acquisition, concreteness, imageability, familiarity, age of acquisition, context availability, and abstractness norms for a set of 417 Italian words",
         "journal": "Behavior Research Methods",
         "doi": "10.3758/brm.42.4.1042"
       },
@@ -9425,7 +9391,7 @@
       "bibtex": "Manoiloff2010",
       "parentBibtex": null,
       "citation": {
-        "author": "Laura Manoiloff, Marcela Artstein, Mar\u00eda Bel\u00e9n Canavoso, Laura Fern\u00e1ndez, Juan Segui",
+        "author": "Laura Manoiloff, Marcela Artstein, María Belén Canavoso, Laura Fernández, Juan Segui",
         "year": 2010,
         "title": "Expanded norms for 400 experimental pictures in an Argentinean Spanish-speaking population",
         "journal": "Behavior Research Methods",
@@ -9650,7 +9616,7 @@
       "bibtex": "Desrochers2010",
       "parentBibtex": null,
       "citation": {
-        "author": "Alain Desrochers, Juana M. Liceras, Raquel Fern\u00e1ndez-Fuertes, Glenn L. Thompson",
+        "author": "Alain Desrochers, Juana M. Liceras, Raquel Fernández-Fuertes, Glenn L. Thompson",
         "year": 2010,
         "title": "Subjective frequency norms for 330 Spanish simple and compound words",
         "journal": "Behavior Research Methods",
@@ -9719,7 +9685,7 @@
       "bibtex": "Dimitripoulou2009",
       "parentBibtex": null,
       "citation": {
-        "author": "Mar\u00eda Dimitropoulou, Jon Andoni Du\u00f1abeitia, Panagiotis Blitsas, Manuel Carreiras",
+        "author": "María Dimitropoulou, Jon Andoni Duñabeitia, Panagiotis Blitsas, Manuel Carreiras",
         "year": 2009,
         "title": "A standardized set of 260 pictures for Modern Greek: Norms for name agreement, age of acquisition, and visual complexity",
         "journal": "Behavior Research Methods",
@@ -9760,7 +9726,7 @@
       "citation": {
         "author": "Arielle Syssau, Catherine Monnier",
         "year": 2009,
-        "title": "Children\u2019s emotional norms for 600 French words",
+        "title": "Children’s emotional norms for 600 French words",
         "journal": "Behavior Research Methods",
         "doi": "10.3758/brm.41.1.213"
       },
@@ -9849,7 +9815,7 @@
       "bibtex": "Vo2009",
       "parentBibtex": null,
       "citation": {
-        "author": "Melissa L. H. V\u00f5, Markus Conrad, Lars Kuchinke, Karolina Urton, Markus J. Hofmann, Arthur M. Jacobs",
+        "author": "Melissa L. H. Võ, Markus Conrad, Lars Kuchinke, Karolina Urton, Markus J. Hofmann, Arthur M. Jacobs",
         "year": 2009,
         "title": "The Berlin Affective Word List Reloaded (BAWL-R)",
         "journal": "Behavior Research Methods",
@@ -9965,7 +9931,7 @@
       "bibtex": "Ferrand2008",
       "parentBibtex": null,
       "citation": {
-        "author": "Ludovic Ferrand, Patrick Bonin, Alain M\u00e9ot, Maria Augustinova, Boris New, Christophe Pallier, et al.",
+        "author": "Ludovic Ferrand, Patrick Bonin, Alain Méot, Maria Augustinova, Boris New, Christophe Pallier, et al.",
         "year": 2008,
         "title": "Age-of-acquisition and subjective frequency estimates for all generally known monosyllabic French words and their relation with other psycholinguistic variables",
         "journal": "Behavior Research Methods",
@@ -9992,7 +9958,7 @@
       "bibtex": "Gruhn2008b",
       "parentBibtex": null,
       "citation": {
-        "author": "Daniel Gr\u00fchn, Susanne Scheibe",
+        "author": "Daniel Grühn, Susanne Scheibe",
         "year": 2008,
         "title": "Age-related differences in valence and arousal ratings of pictures from the International Affective Picture System (IAPS): Do ratings become more extreme with age?",
         "journal": "Behavior Research Methods",
@@ -10065,7 +10031,7 @@
       "bibtex": "Gruhn2008a",
       "parentBibtex": null,
       "citation": {
-        "author": "Daniel Gr\u00fchn, Jacqui Smith",
+        "author": "Daniel Grühn, Jacqui Smith",
         "year": 2008,
         "title": "Characteristics for 200 words rated by young and older adults: Age-dependent evaluations of German adjectives (AGE)",
         "journal": "Behavior Research Methods",
@@ -10455,7 +10421,7 @@
       "bibtex": "Marques2007",
       "parentBibtex": null,
       "citation": {
-        "author": "J. Frederico Marques, Francisca L. Fonseca, Sofia Morais, In\u00eas A. Pinto",
+        "author": "J. Frederico Marques, Francisca L. Fonseca, Sofia Morais, Inês A. Pinto",
         "year": 2007,
         "title": "Estimated age of acquisition norms for 834 Portuguese nouns and their relation with other psycholinguistic variables",
         "journal": "Behavior Research Methods",
@@ -10493,7 +10459,7 @@
       "bibtex": "Alvarez2007",
       "parentBibtex": null,
       "citation": {
-        "author": "Bernardo \u00c1lvarez, Fernando Cuetos",
+        "author": "Bernardo Álvarez, Fernando Cuetos",
         "year": 2007,
         "title": "Objective age of acquisition norms for a set of 328 words in Spanish",
         "journal": "Behavior Research Methods",
@@ -10561,7 +10527,7 @@
       "bibtex": "Redondo2007",
       "parentBibtex": null,
       "citation": {
-        "author": "Jaime Redondo, Isabel Fraga, Isabel Padr\u00f3n, Montserrat Comesa\u00f1a",
+        "author": "Jaime Redondo, Isabel Fraga, Isabel Padrón, Montserrat Comesaña",
         "year": 2007,
         "title": "The Spanish adaptation of ANEW (Affective Norms for English Words)",
         "journal": "Behavior Research Methods",
@@ -10937,7 +10903,7 @@
       "bibtex": "Izura2005",
       "parentBibtex": null,
       "citation": {
-        "author": "Cristina Izura, Natividad Hern\u00e1ndez-Mu\u00d1oz, Andrew W. Ellis",
+        "author": "Cristina Izura, Natividad Hernández-MuÑoz, Andrew W. Ellis",
         "year": 2005,
         "title": "Category norms for 500 Spanish words in five semantic categories",
         "journal": "Behavior Research Methods",
@@ -10973,7 +10939,7 @@
       "bibtex": "Cordier2005",
       "parentBibtex": null,
       "citation": {
-        "author": "Fran\u00e7oise Cordier, Jean-Fran\u00e7ois Le Ny",
+        "author": "Françoise Cordier, Jean-François Le Ny",
         "year": 2005,
         "title": "Evidence for several components of word familiarity",
         "journal": "Behavior Research Methods",
@@ -11361,7 +11327,7 @@
       "bibtex": "Schwitter2004",
       "parentBibtex": null,
       "citation": {
-        "author": "Val\u00e9rie Schwitter, Bruno Boyer, Alain M\u00e9ot, Patrick Bonin, Marina Laganaro",
+        "author": "Valérie Schwitter, Bruno Boyer, Alain Méot, Patrick Bonin, Marina Laganaro",
         "year": 2004,
         "title": "French normative data and naming times for action pictures",
         "journal": "Behavior Research Methods, Instruments, & Computers",
@@ -11434,7 +11400,7 @@
       "bibtex": "Dasi2004",
       "parentBibtex": null,
       "citation": {
-        "author": "Carmen Das\u00ed, Mar\u00eda Jos\u00e9 Soler, Juan Carlos Ruiz",
+        "author": "Carmen Dasí, María José Soler, Juan Carlos Ruiz",
         "year": 2004,
         "title": "Normative data on the familiarity and difficulty of 196 Spanish word fragments",
         "journal": "Behavior Research Methods, Instruments, & Computers",
@@ -11582,7 +11548,7 @@
       "bibtex": "Bonin2003",
       "parentBibtex": null,
       "citation": {
-        "author": "Patrick Bonin, Ronald Peereman, Nathalie Malardier, Alain M\u00e9ot, Maryl\u00e8ne Chalard",
+        "author": "Patrick Bonin, Ronald Peereman, Nathalie Malardier, Alain Méot, Marylène Chalard",
         "year": 2003,
         "title": "A new set of 299 pictures for psycholinguistic studies: French norms for name agreement, image agreement, conceptual familiarity, visual complexity, image variability, age of acquisition, and naming latencies",
         "journal": "Behavior Research Methods, Instruments, & Computers",
@@ -11699,7 +11665,7 @@
       "bibtex": "Bates2003",
       "parentBibtex": null,
       "citation": {
-        "author": "Elizabeth Bates, Simona D\u2019Amico, Thomas Jacobsen, Anna Sz\u00e9kely, Elena Andonova, Antonella Devescovi, et al.",
+        "author": "Elizabeth Bates, Simona D’Amico, Thomas Jacobsen, Anna Székely, Elena Andonova, Antonella Devescovi, et al.",
         "year": 2003,
         "title": "Timed picture naming in seven languages",
         "journal": "Psychonomic Bulletin & Review",
@@ -12118,7 +12084,7 @@
       "bibtex": "DellAcqua2000_2",
       "parentBibtex": "DellAcqua2000",
       "citation": {
-        "author": "Roberto Dell\u2019acqua, Lorella Lotto, Remo Job",
+        "author": "Roberto Dell’acqua, Lorella Lotto, Remo Job",
         "year": 2000,
         "title": "Naming times and standardized norms for the italian PD/DPSS set of 266 pictures: Direct comparisons with American, English, French, and Spanish published databases",
         "journal": "Behavior Research Methods, Instruments, & Computers",
@@ -12161,7 +12127,7 @@
       "bibtex": "Dellacqua2000_1",
       "parentBibtex": "Dellacqua2000",
       "citation": {
-        "author": "Roberto Dell\u2019acqua, Lorella Lotto, Remo Job",
+        "author": "Roberto Dell’acqua, Lorella Lotto, Remo Job",
         "year": 2000,
         "title": "Naming times and standardized norms for the italian PD/DPSS set of 266 pictures: Direct comparisons with American, English, French, and Spanish published databases",
         "journal": "Behavior Research Methods, Instruments, & Computers",
@@ -12311,7 +12277,7 @@
       "bibtex": "Surprenant1999",
       "parentBibtex": null,
       "citation": {
-        "author": "Aim\u00e9e M. Surprenant, Susan L. Hura, Mary P. Harper, Leah H. Jamieson, Glenis Long, Scott M. Thede, et al.",
+        "author": "Aimée M. Surprenant, Susan L. Hura, Mary P. Harper, Leah H. Jamieson, Glenis Long, Scott M. Thede, et al.",
         "year": 1999,
         "title": "Familiarity and pronounceability of nouns and names",
         "journal": "Behavior Research Methods, Instruments, & Computers",
@@ -12778,7 +12744,7 @@
       "citation": {
         "author": "Amanda C. Walley, Jamie L. Metsala",
         "year": 1992,
-        "title": "Young children\u2019s age-of-acquisition estimates for spoken words",
+        "title": "Young children’s age-of-acquisition estimates for spoken words",
         "journal": "Memory & Cognition",
         "doi": "10.3758/bf03197166"
       },
