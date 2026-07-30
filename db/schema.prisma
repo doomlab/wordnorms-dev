@@ -46,14 +46,14 @@ model User {
   groqApiKey     String?
   points         Int      @default(0)
 
-  tokens         Token[]
-  sessions       Session[]
-  papersReviewed Paper[]
-  favorites        UserFavorite[]
-  datasetFavorites UserDatasetFavorite[]
-  reports          PaperReport[]
-  metadataEdits    MetadataEditSuggestion[]
-  extractionEdits  ExtractionEditSuggestion[]
+  tokens              Token[]
+  sessions            Session[]
+  papersReviewed      Paper[]
+  favorites           UserFavorite[]
+  datasetFavorites    UserDatasetFavorite[]
+  reports             PaperReport[]
+  metadataEdits       MetadataEditSuggestion[]
+  extractionEdits     ExtractionEditSuggestion[]
   pipelineRuns        PipelineRun[]
   extractionsVerified PaperExtraction[]
   articleSuggestions  ArticleSuggestion[]
@@ -75,38 +75,37 @@ model Session {
 }
 
 model Paper {
-  id               Int               @id @default(autoincrement())
-  createdAt        DateTime          @default(now())
-  updatedAt        DateTime          @updatedAt
-  title            String
-  authors          String[]
-  year             Int?
-  doi              String?           @unique
-  openAlexId       String?           @unique
-  abstract         String?
-  journal          String?
-  pdfUrl           String?
-  modelScore       Float?
-  status           PaperStatus       @default(PENDING_REVIEW)
-  reviewNote       String?
-  isValidation     Boolean           @default(false)
-  reviewedBy       User?             @relation(fields: [reviewedById], references: [id])
-  reviewedById     Int?
-  canonicalPaperId    Int?
-  canonical           Paper?            @relation("duplicates", fields: [canonicalPaperId], references: [id])
-  duplicates          Paper[]           @relation("duplicates")
-  discoverySource     DiscoverySource   @default(DIRECT)
-  citationsFetchedAt  DateTime?
-  authorMeta          Json?
-  extraction       PaperExtraction?
-  favorites        UserFavorite[]
-  reports          PaperReport[]
-  metadataEdits    MetadataEditSuggestion[]
-  extractionEdits  ExtractionEditSuggestion[]
-  citationsFrom    PaperCitation[]
-  datasetLinks     DatasetLink[]
+  id                 Int                        @id @default(autoincrement())
+  createdAt          DateTime                   @default(now())
+  updatedAt          DateTime                   @updatedAt
+  title              String
+  authors            String[]
+  year               Int?
+  doi                String?                    @unique
+  openAlexId         String?                    @unique
+  abstract           String?
+  journal            String?
+  pdfUrl             String?
+  modelScore         Float?
+  status             PaperStatus                @default(PENDING_REVIEW)
+  reviewNote         String?
+  isValidation       Boolean                    @default(false)
+  reviewedBy         User?                      @relation(fields: [reviewedById], references: [id])
+  reviewedById       Int?
+  canonicalPaperId   Int?
+  canonical          Paper?                     @relation("duplicates", fields: [canonicalPaperId], references: [id])
+  duplicates         Paper[]                    @relation("duplicates")
+  discoverySource    DiscoverySource            @default(DIRECT)
+  citationsFetchedAt DateTime?
+  authorMeta         Json?
+  extraction         PaperExtraction?
+  favorites          UserFavorite[]
+  reports            PaperReport[]
+  metadataEdits      MetadataEditSuggestion[]
+  extractionEdits    ExtractionEditSuggestion[]
+  citationsFrom      PaperCitation[]
+  datasetLinks       DatasetLink[]
 }
-
 
 model PaperCitation {
   id              Int      @id @default(autoincrement())
@@ -153,8 +152,8 @@ model PaperReport {
   note      String?
   resolved  Boolean  @default(false)
 
-  paper     Paper    @relation(fields: [paperId], references: [id], onDelete: Cascade)
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  paper Paper @relation(fields: [paperId], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, paperId])
 }
@@ -173,8 +172,8 @@ model MetadataEditSuggestion {
   note      String?
   resolved  Boolean  @default(false)
 
-  paper     Paper    @relation(fields: [paperId], references: [id], onDelete: Cascade)
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  paper Paper @relation(fields: [paperId], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, paperId])
 }
@@ -209,44 +208,44 @@ model ExtractionEditSuggestion {
 }
 
 model PaperExtraction {
-  id               Int      @id @default(autoincrement())
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
-  paperId          Int      @unique
-  paper            Paper    @relation(fields: [paperId], references: [id])
-  language         String[]
-  participantCount Int?
-  participantType  String?
-  stimuliType      String[]
-  stimuliCount     Int?
-  normsCollected   String[]
-  instructions     String?
-  licenseUrl       String?
-  dataSource       String?
-  participantLevelData Boolean  @default(false)
+  id                   Int       @id @default(autoincrement())
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+  paperId              Int       @unique
+  paper                Paper     @relation(fields: [paperId], references: [id])
+  language             String[]
+  participantCount     Int?
+  participantType      String?
+  stimuliType          String[]
+  stimuliCount         Int?
+  normsCollected       String[]
+  instructions         String?
+  licenseUrl           String?
+  dataSource           String?
+  participantLevelData Boolean   @default(false)
   reliabilities        Json?
   confidence           Float?
   needsReview          Boolean   @default(false)
   sourceSnippets       Json?
-  paperText        String?
-  extractedBy      String?
-  extractedAt      DateTime
-  verifiedAt       DateTime?
-  verifiedById     Int?
-  verifiedBy       User?     @relation(fields: [verifiedById], references: [id])
+  paperText            String?
+  extractedBy          String?
+  extractedAt          DateTime
+  verifiedAt           DateTime?
+  verifiedById         Int?
+  verifiedBy           User?     @relation(fields: [verifiedById], references: [id])
 }
 
 model ModelRun {
-  id             Int      @id @default(autoincrement())
-  createdAt      DateTime @default(now())
-  trainSize      Int
-  valSize        Int
-  accuracy       Float
-  precision      Float
-  recall         Float
-  f1             Float
-  valRebalanced  Boolean  @default(false)
-  notes          String?
+  id            Int      @id @default(autoincrement())
+  createdAt     DateTime @default(now())
+  trainSize     Int
+  valSize       Int
+  accuracy      Float
+  precision     Float
+  recall        Float
+  f1            Float
+  valRebalanced Boolean  @default(false)
+  notes         String?
 }
 
 enum PipelineStatus {
@@ -278,7 +277,7 @@ model ArticleSuggestion {
   note      String?
   resolved  Boolean  @default(false)
 
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Token {
@@ -319,4 +318,11 @@ model SiteSettings {
   id              Int      @id @default(1)
   maintenanceMode Boolean  @default(false)
   updatedAt       DateTime @updatedAt
+}
+
+model NormsCard {
+  bibtex    String   @id
+  card      Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

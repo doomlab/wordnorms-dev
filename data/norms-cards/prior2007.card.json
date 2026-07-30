@@ -1,0 +1,66 @@
+{
+  "schema_version": "0.6.0",
+  "field_status": {
+    "layer1.version": "none",
+    "layer1.license": "not_reported",
+    "layer1.lineage.extends": "none",
+    "layer1.lineage.adapted_from": "none",
+    "layer2.corpus_source": "not_applicable",
+    "layer2.stimuli.source": "none",
+    "layer2.constructs.0.reliability": "not_reported",
+    "layer2.constructs.1.reliability": "not_reported"
+  },
+  "layer1": {
+    "dataset_name": "English-Spanish Translation Norms (Prior)",
+    "data_type": ["subjective"],
+    "languages": ["English", "Spanish"],
+    "language_glottocodes": ["stan1293", "stan1288"],
+    "authors": ["Prior, A.", "MacWhinney, B.", "Kroll, J. F."],
+    "year": 2007,
+    "journal": "Behavior Research Methods",
+    "doi": "10.3758/bf03193001",
+    "data_url": "https://www.psychonomic.org/archive",
+    "participant_level_data_available": false,
+    "lineage": {
+      "extends": null,
+      "adapted_from": null
+    }
+  },
+  "layer2": {
+    "participants": {
+      "count": 80,
+      "type": "bilingual participants (English-dominant and Spanish-dominant; forward and backward translation)",
+      "population": "paid, highly proficient bilinguals recruited in Pittsburgh (minimum five to six college semesters of L2 study or equivalent)",
+      "subgroup_reporting": "40 Spanish-dominant and 40 English-dominant bilinguals; half of each group translated in each direction; language-history and proficiency measures reported per subgroup (Table 1)"
+    },
+    "stimuli": {
+      "type": ["words"],
+      "count": 1432,
+      "source": null
+    },
+    "corpus_source": null,
+    "aggregation_procedure": "translations produced per word across participants; number of distinct translations per word (1 to 9 for English, 1 to 7 for Spanish) and translation probabilities",
+    "constructs": [
+      {
+        "name": "translation production",
+        "scale": {
+          "type": "open-response",
+          "points": null,
+          "range_min": null,
+          "range_max": null,
+          "anchor_min": null,
+          "anchor_max": null,
+          "instructions": "participants translate each word"
+        },
+        "ratings_per_item": 20,
+        "reliability": null
+      },
+      {
+        "name": "translation variability (number of translations)",
+        "scale": null,
+        "ratings_per_item": 20,
+        "reliability": null
+      }
+    ]
+  }
+}

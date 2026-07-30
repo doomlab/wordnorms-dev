@@ -138,6 +138,10 @@ export default async function DatasetDetailPage({
         .then(Boolean)
     : false
 
+  const hasNormsCard = await db.normsCard
+    .findUnique({ where: { bibtex }, select: { bibtex: true } })
+    .then(Boolean)
+
   return (
     <div className="min-h-screen bg-base-100 flex flex-col">
       <Navbar />
@@ -184,6 +188,11 @@ export default async function DatasetDetailPage({
           {linkedPaper && (
             <a href={`/norms/${linkedPaper.id}`} className="btn btn-ghost btn-outline btn-sm">
               View Database Entry
+            </a>
+          )}
+          {hasNormsCard && (
+            <a href={`/datasets/${bibtex}/norms-card`} className="btn btn-outline btn-sm">
+              View Norms Card
             </a>
           )}
         </div>
