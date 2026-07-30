@@ -1,0 +1,178 @@
+{
+  "schema_version": "0.6.0",
+  "field_status": {
+    "layer1.version": "not_reported",
+    "layer1.lineage.extends": "none",
+    "layer1.lineage.adapted_from": "none",
+    "layer2.corpus_source": "not_applicable",
+    "layer2.constructs.0.reliability": "not_reported",
+    "layer2.constructs.1.reliability": "not_reported",
+    "layer2.constructs.2.reliability": "not_reported",
+    "layer2.constructs.3.reliability": "not_reported",
+    "layer2.constructs.4.reliability": "not_reported",
+    "layer2.constructs.5.reliability": "not_reported",
+    "layer2.constructs.6.reliability": "not_reported",
+    "layer2.constructs.7.reliability": "not_reported",
+    "layer2.constructs.8.reliability": "not_reported"
+  },
+  "layer1": {
+    "dataset_name": "Glasgow Norms",
+    "data_type": ["subjective"],
+    "languages": ["English"],
+    "language_glottocodes": ["stan1293"],
+    "authors": ["Scott, G. G.", "Keitel, A.", "Becirspahic, M.", "Yao, B.", "Sereno, S. C."],
+    "year": 2019,
+    "journal": "Behavior Research Methods",
+    "doi": "10.3758/s13428-018-1099-3",
+    "license": "CC BY 4.0",
+    "data_url": "https://doi.org/10.3758/s13428-018-1099-3",
+    "participant_level_data_available": false,
+    "lineage": {
+      "extends": null,
+      "adapted_from": null
+    }
+  },
+  "layer2": {
+    "participants": {
+      "count": 829,
+      "type": "native English speakers (University of Glasgow community)",
+      "population": "the same participant provided ratings across all nine dimensions for a given word",
+      "subgroup_reporting": "age and gender profile reported (599 female, 230 male; mean age and number of lists completed per subgroup; Table 2)"
+    },
+    "stimuli": {
+      "type": ["words"],
+      "count": 5553,
+      "source": "assembled from an initial set of 808 words and a subsequent set of 4,800 words"
+    },
+    "corpus_source": null,
+    "aggregation_procedure": "mean rating per word per dimension across participants",
+    "constructs": [
+      {
+        "name": "arousal",
+        "scale": {
+          "type": "likert",
+          "points": 9,
+          "range_min": 1,
+          "range_max": 9,
+          "anchor_min": null,
+          "anchor_max": null,
+          "instructions": "rated on a 9-point scale"
+        },
+        "ratings_per_item": 33,
+        "reliability": null
+      },
+      {
+        "name": "valence",
+        "scale": {
+          "type": "likert",
+          "points": 9,
+          "range_min": 1,
+          "range_max": 9,
+          "anchor_min": null,
+          "anchor_max": null,
+          "instructions": "rated on a 9-point scale"
+        },
+        "ratings_per_item": 33,
+        "reliability": null
+      },
+      {
+        "name": "dominance",
+        "scale": {
+          "type": "likert",
+          "points": 9,
+          "range_min": 1,
+          "range_max": 9,
+          "anchor_min": null,
+          "anchor_max": null,
+          "instructions": "rated on a 9-point scale"
+        },
+        "ratings_per_item": 33,
+        "reliability": null
+      },
+      {
+        "name": "concreteness",
+        "scale": {
+          "type": "likert",
+          "points": 7,
+          "range_min": 1,
+          "range_max": 7,
+          "anchor_min": null,
+          "anchor_max": null,
+          "instructions": "rated on a 7-point scale"
+        },
+        "ratings_per_item": 33,
+        "reliability": null
+      },
+      {
+        "name": "imageability",
+        "scale": {
+          "type": "likert",
+          "points": 7,
+          "range_min": 1,
+          "range_max": 7,
+          "anchor_min": null,
+          "anchor_max": null,
+          "instructions": "rated on a 7-point scale"
+        },
+        "ratings_per_item": 33,
+        "reliability": null
+      },
+      {
+        "name": "familiarity",
+        "scale": {
+          "type": "likert",
+          "points": 7,
+          "range_min": 1,
+          "range_max": 7,
+          "anchor_min": null,
+          "anchor_max": null,
+          "instructions": "rated on a 7-point scale"
+        },
+        "ratings_per_item": 33,
+        "reliability": null
+      },
+      {
+        "name": "age of acquisition",
+        "scale": {
+          "type": "likert",
+          "points": 7,
+          "range_min": 1,
+          "range_max": 7,
+          "anchor_min": "0-2 years",
+          "anchor_max": "13+ years",
+          "instructions": "7-point scale of 2-year periods from 0-12 years and a final 13+ period"
+        },
+        "ratings_per_item": 33,
+        "reliability": null
+      },
+      {
+        "name": "semantic size",
+        "scale": {
+          "type": "likert",
+          "points": 7,
+          "range_min": 1,
+          "range_max": 7,
+          "anchor_min": null,
+          "anchor_max": null,
+          "instructions": "rated on a 7-point scale"
+        },
+        "ratings_per_item": 33,
+        "reliability": null
+      },
+      {
+        "name": "gender association",
+        "scale": {
+          "type": "likert",
+          "points": 7,
+          "range_min": 1,
+          "range_max": 7,
+          "anchor_min": null,
+          "anchor_max": null,
+          "instructions": "rated on a 7-point scale"
+        },
+        "ratings_per_item": 33,
+        "reliability": null
+      }
+    ]
+  }
+}
