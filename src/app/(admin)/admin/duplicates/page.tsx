@@ -6,6 +6,7 @@ import { AutomergeVersionsButton } from "./AutomergeVersionsButton"
 import { AutomergeZenodoButton } from "./AutomergeZenodoButton"
 import { MergeGroupButton } from "./MergeGroupButton"
 import { DismissGroupButton } from "./DismissGroupButton"
+import { UnmergeButton } from "./UnmergeButton"
 
 export const metadata = { title: "Duplicates – Admin" }
 
@@ -365,73 +366,15 @@ export default async function AdminDuplicatesPage({ searchParams }: Props) {
       ) : isMergedTab ? (
         <>
           <p className="text-base-content/60 mb-6 text-sm">
-            Papers marked as duplicates. Click Undo to restore a paper as independent.
+            Papers marked as duplicates, grouped by canonical. Click Undo to restore a paper as
+            independent — it doesn&apos;t affect the others merged into the same canonical.
           </p>
           {mergedPapers!.length === 0 ? (
             <p className="text-base-content/40 text-sm text-center py-10">
               No merges recorded yet.
             </p>
           ) : (
-            <div className="overflow-x-auto">
-              <table className="table table-zebra text-sm">
-                <thead>
-                  <tr>
-                    <th>Duplicate</th>
-                    <th>→ Canonical</th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {mergedPapers!.map((p) => (
-                    <tr key={p.id}>
-                      <td className="max-w-xs">
-                        <p className="line-clamp-2 font-medium">{cap(p.title)}</p>
-                        <div className="flex gap-3 mt-0.5">
-                          <span className="font-mono text-xs text-base-content/40">#{p.id}</span>
-                          {p.doi && (
-                            <span className="font-mono text-xs text-base-content/40">{p.doi}</span>
-                          )}
-                          {p.year && (
-                            <span className="text-xs text-base-content/40">{p.year}</span>
-                          )}
-                        </div>
-                      </td>
-                      <td className="max-w-xs">
-                        <a
-                          href={`/admin/duplicates?a=${p.canonical!.id}`}
-                          className="line-clamp-2 font-medium link link-hover"
-                        >
-                          {cap(p.canonical!.title)}
-                        </a>
-                        <div className="flex gap-3 mt-0.5">
-                          <span className="font-mono text-xs text-base-content/40">
-                            #{p.canonical!.id}
-                          </span>
-                          {p.canonical!.doi && (
-                            <span className="font-mono text-xs text-base-content/40">
-                              {p.canonical!.doi}
-                            </span>
-                          )}
-                          {p.canonical!.year && (
-                            <span className="text-xs text-base-content/40">
-                              {p.canonical!.year}
-                            </span>
-                          )}
-                        </div>
-                      </td>
-                      <td>
-                        <a
-                          href={`/admin/duplicates/${p.id}`}
-                          className="btn btn-ghost btn-xs"
-                        >
-                          View
-                        </a>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+            <MergedGroups papers={mergedPapers!.map((p) => ({ ...p, canonical: p.canonical! }))} />
           )}
         </>
       ) : (
@@ -610,6 +553,77 @@ function GroupTable({ groups, groupType }: { groups: GroupMember[][], groupType:
           </details>
         )
       })}
+    </div>
+  )
+}
+
+type MergedPaper = {
+  id: number
+  title: string
+  doi: string | null
+  year: number | null
+  canonical: { id: number; title: string; doi: string | null; year: number | null }
+}
+
+function MergedGroups({ papers }: { papers: MergedPaper[] }) {
+  const groups = new Map<number, { canonical: MergedPaper["canonical"]; duplicates: MergedPaper[] }>()
+  for (const p of papers) {
+    const g = groups.get(p.canonical.id) ?? { canonical: p.canonical, duplicates: [] }
+    g.duplicates.push(p)
+    groups.set(p.canonical.id, g)
+  }
+
+  return (
+    <div className="space-y-4">
+      {[...groups.values()].map(({ canonical, duplicates }) => (
+        <div key={canonical.id} className="border border-base-300 rounded-lg overflow-hidden">
+          <div className="bg-primary/5 px-4 py-3 flex items-center justify-between gap-4">
+            <div className="min-w-0">
+              <span className="badge badge-primary badge-sm mr-2">canonical</span>
+              <a
+                href={`/admin/duplicates?a=${canonical.id}`}
+                className="font-medium link link-hover"
+              >
+                {cap(canonical.title)}
+              </a>
+              <div className="flex gap-3 mt-0.5">
+                <span className="font-mono text-xs text-base-content/40">#{canonical.id}</span>
+                {canonical.doi && (
+                  <span className="font-mono text-xs text-base-content/40">{canonical.doi}</span>
+                )}
+                {canonical.year && (
+                  <span className="text-xs text-base-content/40">{canonical.year}</span>
+                )}
+              </div>
+            </div>
+            <span className="badge badge-outline badge-sm shrink-0">
+              {duplicates.length} merged
+            </span>
+          </div>
+          <div className="divide-y divide-base-200">
+            {duplicates.map((d) => (
+              <div key={d.id} className="flex items-center justify-between gap-4 px-4 py-3 text-sm">
+                <div className="min-w-0">
+                  <p className="line-clamp-2 font-medium">{cap(d.title)}</p>
+                  <div className="flex gap-3 mt-0.5">
+                    <span className="font-mono text-xs text-base-content/40">#{d.id}</span>
+                    {d.doi && (
+                      <span className="font-mono text-xs text-base-content/40">{d.doi}</span>
+                    )}
+                    {d.year && <span className="text-xs text-base-content/40">{d.year}</span>}
+                  </div>
+                </div>
+                <div className="flex items-center gap-2 shrink-0">
+                  <a href={`/admin/duplicates/${d.id}`} className="btn btn-ghost btn-xs">
+                    View
+                  </a>
+                  <UnmergeButton paperId={d.id} size="btn-xs" />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
     </div>
   )
 }

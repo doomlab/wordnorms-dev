@@ -8,9 +8,11 @@ import unmergePaper from "../../mutations/unmergePaper"
 export function UnmergeButton({
   paperId,
   redirectTo,
+  size = "btn-sm",
 }: {
   paperId: number
   redirectTo?: string
+  size?: string
 }) {
   const [unmerge] = useMutation(unmergePaper)
   const router = useRouter()
@@ -31,7 +33,7 @@ export function UnmergeButton({
 
   return (
     <button
-      className="btn btn-error btn-outline btn-sm"
+      className={`btn btn-error btn-outline ${size}`}
       disabled={pending}
       onClick={handleUnmerge}
     >
