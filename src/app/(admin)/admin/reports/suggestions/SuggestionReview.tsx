@@ -86,6 +86,7 @@ export function SuggestionReview({
     normsCollected: values.normsCollected.split(",").map((s) => s.trim()).filter(Boolean),
     instructions: values.instructions || null,
     licenseUrl: null,
+    dataUrl: null,
     dataSource: null,
     participantLevelData: false,
     reliabilities: [],

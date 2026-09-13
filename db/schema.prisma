@@ -221,6 +221,7 @@ model PaperExtraction {
   normsCollected       String[]
   instructions         String?
   licenseUrl           String?
+  dataUrl              String?
   dataSource           String?
   participantLevelData Boolean   @default(false)
   reliabilities        Json?

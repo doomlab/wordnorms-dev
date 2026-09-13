@@ -100,6 +100,7 @@ export default async function AdminMetadataDetailPage({
               normsCollected: ext.normsCollected,
               instructions: ext.instructions,
               licenseUrl: ext.licenseUrl,
+              dataUrl: ext.dataUrl,
               dataSource: ext.dataSource,
               reliabilities: (ext.reliabilities ?? []) as { norm: string; value: number | null; metric: string | null }[],
               confidence: ext.confidence,
