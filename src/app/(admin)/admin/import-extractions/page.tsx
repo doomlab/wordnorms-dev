@@ -2,14 +2,20 @@ import { ImportExtractionsForm } from "./ImportExtractionsForm"
 
 export const metadata = { title: "Import Extractions – Admin" }
 
-export default function ImportExtractionsPage() {
+export default async function ImportExtractionsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ paperId?: string; from?: string }>
+}) {
+  const { paperId, from } = await searchParams
+
   return (
     <>
       <a
-        href="/admin"
+        href={from ?? "/admin"}
         className="text-sm text-base-content/50 hover:text-base-content mb-6 inline-block"
       >
-        ← Back to admin
+        ← Back
       </a>
 
       <h1 className="text-3xl font-bold mb-2">Import Extractions</h1>
@@ -19,7 +25,7 @@ export default function ImportExtractionsPage() {
         <code>doi</code>, then upserted into that paper&apos;s extracted metadata.
       </p>
 
-      <ImportExtractionsForm />
+      <ImportExtractionsForm paperId={paperId ? Number(paperId) : undefined} />
     </>
   )
 }

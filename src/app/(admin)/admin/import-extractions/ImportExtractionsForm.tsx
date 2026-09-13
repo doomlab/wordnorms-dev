@@ -19,7 +19,7 @@ const STATUS_BADGE: Record<ResultRow["status"], string> = {
   error: "badge-error",
 }
 
-export function ImportExtractionsForm() {
+export function ImportExtractionsForm({ paperId }: { paperId?: number }) {
   const [run] = useMutation(bulkImportExtractions)
   const [text, setText] = useState("")
   const [markVerified, setMarkVerified] = useState(false)
@@ -57,6 +57,9 @@ export function ImportExtractionsForm() {
       return
     }
     const entries = Array.isArray(parsed) ? parsed : [parsed]
+    if (paperId && entries.length === 1 && !entries[0].paperId && !entries[0].doi) {
+      entries[0].paperId = paperId
+    }
     if (markVerified) {
       for (const e of entries) e.markVerified = true
     }
@@ -74,6 +77,13 @@ export function ImportExtractionsForm() {
 
   return (
     <div className="space-y-4">
+      {paperId && (
+        <div className="alert alert-info text-sm py-2">
+          Importing for paper <strong>#{paperId}</strong> — if the pasted JSON omits{" "}
+          <code>paperId</code>, it&apos;ll be filled in automatically.
+        </div>
+      )}
+
       <div className="flex items-center gap-3">
         <button
           type="button"

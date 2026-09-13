@@ -87,7 +87,17 @@ export default async function AdminMetadataDetailPage({
           />
         </Section>
 
-        <Section title="Extracted Metadata">
+        <Section
+          title="Extracted Metadata"
+          headerRight={
+            <a
+              href={`/admin/import-extractions?paperId=${paper.id}&from=/admin/metadata/${paper.id}`}
+              className="btn btn-outline btn-xs"
+            >
+              Import LLM extraction →
+            </a>
+          }
+        >
           <MetadataForm
             paperId={paper.id}
             extraction={{
@@ -113,12 +123,23 @@ export default async function AdminMetadataDetailPage({
   )
 }
 
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
+function Section({
+  title,
+  headerRight,
+  children,
+}: {
+  title: string
+  headerRight?: React.ReactNode
+  children: React.ReactNode
+}) {
   return (
     <div className="py-6">
-      <h2 className="text-xs font-semibold uppercase tracking-wider text-base-content/40 mb-3">
-        {title}
-      </h2>
+      <div className="flex items-center justify-between mb-3">
+        <h2 className="text-xs font-semibold uppercase tracking-wider text-base-content/40">
+          {title}
+        </h2>
+        {headerRight}
+      </div>
       <div className="space-y-0.5">{children}</div>
     </div>
   )
