@@ -20,6 +20,12 @@ type Ext = {
   dataSource?: string | null
   sourceSnippets?: Record<string, string> | null
   paperText?: string | null
+  extractedBy?: string | null
+  extractedAt?: Date | null
+  confidence?: number | null
+  isAiExtracted?: boolean | null
+  verifiedAt?: Date | null
+  verifiedByName?: string | null
 }
 
 function toList(arr: string[]) { return arr.join(", ") }
@@ -249,6 +255,32 @@ export function SuggestExtractionEditsPage({
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
       {/* Left: form */}
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+
+        {/* Provenance banner — where this data came from, kept to one line */}
+        <div className="flex flex-wrap items-center gap-2 text-sm text-base-content/60">
+          {ext.verifiedAt ? (
+            <span className="badge badge-success badge-sm">verified</span>
+          ) : ext.isAiExtracted ? (
+            <span className="badge badge-warning badge-sm">unverified AI extraction</span>
+          ) : null}
+          {ext.isAiExtracted && ext.extractedBy && (
+            <span>
+              Extracted by <span className="font-medium text-base-content/80">{ext.extractedBy}</span>
+              {ext.extractedAt && ` on ${new Date(ext.extractedAt).toLocaleDateString()}`}
+            </span>
+          )}
+          {ext.confidence != null && (
+            <span className={ext.confidence < 0.6 ? "text-warning" : ""}>
+              · {(ext.confidence * 100).toFixed(0)}% model confidence
+            </span>
+          )}
+          {ext.verifiedAt && (
+            <span>
+              · verified{ext.verifiedByName ? ` by ${ext.verifiedByName}` : ""} on{" "}
+              {new Date(ext.verifiedAt).toLocaleDateString()}
+            </span>
+          )}
+        </div>
 
         {/* Instructions banner */}
         <div className="rounded-lg bg-info/10 border border-info/20 px-4 py-3 text-base text-base-content/70 flex flex-col gap-1">

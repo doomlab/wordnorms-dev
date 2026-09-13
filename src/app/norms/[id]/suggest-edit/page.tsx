@@ -23,6 +23,7 @@ export default async function SuggestEditPage({ params }: { params: Promise<{ id
   if (paper.canonicalPaperId) redirect(`/norms/${paper.canonicalPaperId}/suggest-edit`)
 
   const ext = paper.extraction
+  const isAiExtracted = !!ext.extractedBy && !ext.extractedBy.startsWith("failed:")
   const hasPriorSuggestion = await db.extractionEditSuggestion
     .findUnique({ where: { userId_paperId: { userId, paperId: paper.id } } })
     .then(Boolean)
@@ -67,6 +68,12 @@ export default async function SuggestEditPage({ params }: { params: Promise<{ id
             dataSource: ext.dataSource,
             sourceSnippets: ext.sourceSnippets as Record<string, string> | null,
             paperText: ext.paperText,
+            extractedBy: ext.extractedBy,
+            extractedAt: ext.extractedAt,
+            confidence: ext.confidence,
+            isAiExtracted,
+            verifiedAt: ext.verifiedAt,
+            verifiedByName: ext.verifiedBy?.name ?? null,
           }}
           hasPriorSuggestion={hasPriorSuggestion}
         />

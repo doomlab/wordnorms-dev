@@ -126,7 +126,7 @@ export default async function NormDetailPage({
     reliabilities: latestEdit.reliabilities ?? ext.reliabilities,
   } : ext
   const doiUrl = paper.doi ? `https://doi.org/${paper.doi}` : null
-  const isAiExtracted = ext && ["groq", "ollama"].includes(ext.extractedBy ?? "")
+  const isAiExtracted = ext && !!ext.extractedBy && !ext.extractedBy.startsWith("failed:")
   const linkedDatasets = await findDatasetCards(paper.id, paper.doi, paper.title)
 
   // Resolve which cited papers are in the DB, following canonical resolution for duplicates
