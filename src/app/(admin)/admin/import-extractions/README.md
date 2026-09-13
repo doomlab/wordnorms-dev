@@ -6,18 +6,29 @@ through a stronger model by hand instead. Read a PDF, prompt a large model for
 structured metadata, then paste the result into `/admin/import-extractions` to upsert
 it into the paper's `PaperExtraction` row.
 
-## 1. Prompt
+## 1. Before you start: name the PDF by its paper ID
 
-Feed this alongside the PDF to any strong long-document model (Claude Opus, GPT-5,
-etc.):
+Rename the PDF to `<paperId>.pdf` (e.g. `3269.pdf`) before uploading it to the
+model — find the ID in the URL of `/admin/metadata/[id]` or `/admin/papers/[id]`.
+The prompt below tells the model to read that number back out of the filename, so
+you don't have to fill in `paperId` yourself afterward.
 
-```
+## 2. Prompt — copy/paste this whole block
+
+Paste this exactly, together with the PDF, into any strong long-document model
+(Claude Opus, GPT-5, etc.):
+
+````
 You are extracting structured metadata from a psycholinguistic/psychology norming
-study PDF for a research database. Read the full paper carefully, including
-supplementary/appendix sections, and return ONLY a single JSON object (no markdown
-fences, no commentary) matching exactly this shape:
+study PDF for a research database. The PDF's filename is its paper ID (e.g.
+"3269.pdf" means paperId 3269) — read that number from the filename.
+
+Read the full paper carefully, including supplementary/appendix sections, then
+return ONLY a single fenced ```json code block containing one JSON object matching
+exactly this shape — no other text before or after the code block:
 
 {
+  "paperId": 3269,                         // the number from the PDF's filename
   "language": ["English"],                 // languages the norms were collected in
   "participantCount": 120,                 // total N, or null if not reported
   "participantType": "undergraduate students",  // who the participants were
@@ -37,19 +48,27 @@ fences, no commentary) matching exactly this shape:
   ],                                        // metric one of: cronbach_alpha, split_half, icc, pearson_r, kappa
   "confidence": 0.92,                       // your own confidence (0-1) in the overall extraction
   "sourceSnippets": {
-    "participantCount": "\"A total of 120 undergraduates (mean age = 20.3)...\"",
-    "normsCollected": "\"...norms for valence, arousal, and concreteness...\""
-  }                                          // short verbatim quotes backing each non-obvious field, for a human reviewer to spot-check
+    "participantCount": "A total of 120 undergraduates (mean age = 20.3)...",
+    "normsCollected": "norms for valence, arousal, and concreteness..."
+  }                                          // short paraphrases or excerpts backing each non-obvious field, for a human reviewer to spot-check
 }
 
-Rules:
+Formatting rules — these matter, the output goes straight into a JSON parser:
+- Use plain straight double quotes (") only. Never use curly/smart quotes (" " ' ').
+- sourceSnippets values must be plain text with NO surrounding quotation marks. If you
+  need to quote the paper verbatim inside a snippet, use single quotes ('...') around
+  that inner quotation, never double quotes — double quotes inside a JSON string must
+  otherwise be backslash-escaped, and it's easy to get wrong.
+- Output nothing but the fenced ```json code block — no commentary before or after it.
+
+Content rules:
 - If a field genuinely isn't reported in the paper, use null (or [] for array fields) —
   do not guess.
 - confidence should reflect the whole extraction, not any one field; use <0.6 if you
   had to infer several fields rather than read them directly.
 - Always include sourceSnippets for participantCount, stimuliCount, normsCollected,
   and reliabilities, since those are the easiest to hallucinate.
-```
+````
 
 Optionally, if you also want the paper's full extracted text stored (useful for
 future reprocessing or search — not shown in any admin UI), have the model or your
@@ -57,18 +76,18 @@ PDF-to-text step include a top-level `"paperText"` string field alongside the ob
 above; it isn't part of the JSON structure the model needs to reason about, so it's
 fine to attach it after the fact.
 
-## 2. Import template
+## 3. Import template
 
-Each paper is one JSON object. Add `paperId` (visible in the URL of
-`/admin/metadata/[id]` or `/admin/papers/[id]`) or `doi` so it can be matched to an
-existing `Paper` row — `paperId` is tried first, `doi` is the fallback. Collect one
-object per paper into a `[ ... ]` array, or paste a single object.
+The model's output already has `paperId` filled in from the filename (step 1), so
+you can usually paste its code block straight in as-is. `doi` is an optional
+fallback match key if you ever build the JSON by hand without a `paperId`. Collect
+one object per paper into a `[ ... ]` array to import several at once, or paste a
+single object.
 
 ```json
 [
   {
     "paperId": 1234,
-    "doi": "10.xxxx/xxxxx",
     "extractedBy": "claude-opus-4.6-manual",
     "language": ["English"],
     "participantCount": 120,
@@ -86,8 +105,8 @@ object per paper into a `[ ... ]` array, or paste a single object.
     ],
     "confidence": 0.92,
     "sourceSnippets": {
-      "participantCount": "\"A total of 120 undergraduates (mean age = 20.3)...\"",
-      "normsCollected": "\"...norms for valence, arousal, and concreteness...\""
+      "participantCount": "A total of 120 undergraduates (mean age = 20.3)...",
+      "normsCollected": "norms for valence, arousal, and concreteness..."
     }
   }
 ]
@@ -97,7 +116,7 @@ object per paper into a `[ ... ]` array, or paste a single object.
 model name/version you used for provenance, so it's obvious later which extractions
 came from the automated pipeline vs. a manual run.
 
-## 3. Importing
+## 4. Importing
 
 Go to `/admin/import-extractions` (linked from the admin dashboard), paste the JSON
 (single object or array), and click **Import**. Each row is reported as:

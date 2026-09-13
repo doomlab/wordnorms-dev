@@ -35,11 +35,24 @@ export function ImportExtractionsForm() {
   const handleImport = async () => {
     setErrorMsg(null)
     setResults(null)
+
+    // Tolerate pasting a model's raw response: strip a ```json ... ``` fence if
+    // present, and normalize smart/curly quotes to plain ones — both are common
+    // artifacts of copying LLM output through a chat UI.
+    const cleaned = text
+      .trim()
+      .replace(/^```(?:json)?\s*/i, "")
+      .replace(/```\s*$/, "")
+      .replace(/[“”]/g, '"')
+      .replace(/[‘’]/g, "'")
+
     let parsed: any
     try {
-      parsed = JSON.parse(text)
+      parsed = JSON.parse(cleaned)
     } catch {
-      setErrorMsg("That isn't valid JSON.")
+      setErrorMsg(
+        "That isn't valid JSON, even after stripping a code fence and normalizing curly quotes. Check for unescaped quotes inside a text field."
+      )
       setStatus("error")
       return
     }
