@@ -13,10 +13,12 @@ function cap(s: string) {
   return s.charAt(0).toUpperCase() + s.slice(1)
 }
 
-type Props = { searchParams: Promise<{ q?: string; a?: string; b?: string; tab?: string; next?: string; from?: string }> }
+type Props = { searchParams: Promise<{ q?: string; a?: string; b?: string; tab?: string; next?: string; from?: string; page?: string }> }
 
 export default async function AdminDuplicatesPage({ searchParams }: Props) {
-  const { q, a, b, tab, next: nextParam, from: fromParam } = await searchParams
+  const { q, a, b, tab, next: nextParam, from: fromParam, page: pageParam } = await searchParams
+  const searchPageSize = 30
+  const searchPage = Math.max(1, parseInt(pageParam ?? "1", 10) || 1)
 
   const isMergedTab = tab === "merged"
   const isSuggestionsTab = tab === "suggestions"
@@ -191,6 +193,7 @@ export default async function AdminDuplicatesPage({ searchParams }: Props) {
   // similarity) with a threshold that scales with title length — short titles need
   // a closer match to avoid noise, longer titles can tolerate more drift.
   const isSearching = !isMergedTab && !isSuggestionsTab && !isDismissedTab && !!q && q.trim().length > 1
+  const searchOffset = (searchPage - 1) * searchPageSize
   const candidateIds = isSearching
     ? await db.$queryRaw<{ id: number }[]>`
         SELECT id FROM "Paper" p
@@ -206,13 +209,16 @@ export default async function AdminDuplicatesPage({ searchParams }: Props) {
           (p.title ILIKE '%' || ${q} || '%') DESC,
           similarity(p.title, ${q}) DESC,
           p."createdAt" DESC
-        LIMIT 30
+        LIMIT ${searchPageSize + 1}
+        OFFSET ${searchOffset}
       `
     : null
 
+  const hasNextSearchPage = (candidateIds?.length ?? 0) > searchPageSize
+
   const results = candidateIds
     ? await (async () => {
-        const ids = candidateIds.map((r) => r.id)
+        const ids = candidateIds.slice(0, searchPageSize).map((r) => r.id)
         if (ids.length === 0) return []
         const rows = await db.paper.findMany({
           where: { id: { in: ids } },
@@ -456,6 +462,24 @@ export default async function AdminDuplicatesPage({ searchParams }: Props) {
           )}
 
           {results && results.length > 0 && <DuplicateResultsTable papers={results} />}
+
+          {results && (searchPage > 1 || hasNextSearchPage) && (
+            <div className="flex items-center justify-center gap-4 mt-6">
+              <a
+                href={`/admin/duplicates?q=${encodeURIComponent(q!)}&page=${searchPage - 1}`}
+                className={`btn btn-outline btn-sm ${searchPage <= 1 ? "btn-disabled" : ""}`}
+              >
+                ← Prev
+              </a>
+              <span className="text-sm text-base-content/50">Page {searchPage}</span>
+              <a
+                href={`/admin/duplicates?q=${encodeURIComponent(q!)}&page=${searchPage + 1}`}
+                className={`btn btn-outline btn-sm ${!hasNextSearchPage ? "btn-disabled" : ""}`}
+              >
+                Next →
+              </a>
+            </div>
+          )}
         </>
       )}
     </>
