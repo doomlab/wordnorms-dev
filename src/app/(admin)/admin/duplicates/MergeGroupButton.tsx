@@ -5,15 +5,29 @@ import { useRouter } from "next/navigation"
 import { useState } from "react"
 import mergeGroup from "src/app/(admin)/mutations/mergeGroup"
 
-type Props = { canonicalId: number; duplicateIds: number[] }
+type Props = {
+  canonicalId: number
+  duplicateIds: number[]
+  label?: string
+  confirmMessage?: string
+  className?: string
+}
 
-export function MergeGroupButton({ canonicalId, duplicateIds }: Props) {
+export function MergeGroupButton({
+  canonicalId,
+  duplicateIds,
+  label = "Make canonical",
+  confirmMessage,
+  className = "btn-warning btn-xs",
+}: Props) {
   const [run] = useMutation(mergeGroup)
   const router = useRouter()
   const [state, setState] = useState<"idle" | "loading" | "done">("idle")
 
-  const handleClick = async () => {
-    if (!confirm(`Merge ${duplicateIds.length} other paper(s) into #${canonicalId}?`)) return
+  const handleClick = async (e: React.MouseEvent) => {
+    e.stopPropagation()
+    e.preventDefault()
+    if (!confirm(confirmMessage ?? `Merge ${duplicateIds.length} other paper(s) into #${canonicalId}?`)) return
     setState("loading")
     try {
       await run({ canonicalId, duplicateIds })
@@ -28,16 +42,8 @@ export function MergeGroupButton({ canonicalId, duplicateIds }: Props) {
   if (state === "done") return <span className="text-xs text-success">Merged ✓</span>
 
   return (
-    <button
-      className="btn btn-warning btn-xs"
-      onClick={handleClick}
-      disabled={state === "loading"}
-    >
-      {state === "loading" ? (
-        <span className="loading loading-spinner loading-xs" />
-      ) : (
-        "Make canonical"
-      )}
+    <button className={`btn ${className}`} onClick={handleClick} disabled={state === "loading"}>
+      {state === "loading" ? <span className="loading loading-spinner loading-xs" /> : label}
     </button>
   )
 }

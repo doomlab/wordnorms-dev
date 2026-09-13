@@ -21,6 +21,7 @@ export default resolver.pipe(
       normsCollected: z.array(z.string()),
       instructions: z.string().nullable(),
       licenseUrl: z.string().nullable(),
+      dataUrl: z.string().nullable(),
       dataSource: z.enum(["ai", "human"]).nullable(),
       reliabilities: z.array(ReliabilityEntry),
     })

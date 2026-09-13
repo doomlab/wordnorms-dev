@@ -18,6 +18,7 @@ type ExtractionData = {
   normsCollected: string[]
   instructions: string | null
   licenseUrl: string | null
+  dataUrl: string | null
   dataSource: string | null
   reliabilities: ReliabilityEntry[]
   confidence: number | null
@@ -46,6 +47,7 @@ export function MetadataForm({
     normsCollected: extraction.normsCollected.join(", "),
     instructions: extraction.instructions ?? "",
     licenseUrl: extraction.licenseUrl ?? "",
+    dataUrl: extraction.dataUrl ?? "",
     dataSource: (extraction.dataSource ?? "") as "" | "ai" | "human",
   })
   const [reliabilities, setReliabilities] = useState<{ norm: string; value: string; metric: string }[]>(
@@ -67,6 +69,7 @@ export function MetadataForm({
     normsCollected: fields.normsCollected.split(",").map((s) => s.trim()).filter(Boolean),
     instructions: fields.instructions || null,
     licenseUrl: fields.licenseUrl || null,
+    dataUrl: fields.dataUrl || null,
     dataSource: (fields.dataSource || null) as "ai" | "human" | null,
     reliabilities: reliabilities
       .filter((r) => r.norm.trim())
@@ -197,6 +200,16 @@ export function MetadataForm({
           placeholder="https://creativecommons.org/licenses/…"
           value={fields.licenseUrl}
           onChange={set("licenseUrl")}
+          disabled={busy}
+        />
+      </Field>
+      <Field label="Data URL" hint="where the raw norms/stimuli data can be downloaded">
+        <input
+          className="input input-bordered input-sm w-full"
+          type="url"
+          placeholder="https://osf.io/…"
+          value={fields.dataUrl}
+          onChange={set("dataUrl")}
           disabled={busy}
         />
       </Field>

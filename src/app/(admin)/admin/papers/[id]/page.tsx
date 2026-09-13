@@ -32,6 +32,7 @@ export default async function AdminEditPaperPage({
       abstract: true,
       pdfUrl: true,
       openAlexId: true,
+      authorMeta: true,
       status: true,
       _count: { select: { citationsFrom: true } },
     },
@@ -65,7 +66,15 @@ export default async function AdminEditPaperPage({
         </div>
       )}
 
-      <PaperMetadataForm paper={paper} backHref={backHref} />
+      <PaperMetadataForm
+        paper={{
+          ...paper,
+          authorMeta: Array.isArray(paper.authorMeta)
+            ? (paper.authorMeta as unknown as { name: string; orcid: string | null; openAlexId: string | null }[])
+            : null,
+        }}
+        backHref={backHref}
+      />
     </>
   )
 }

@@ -1,6 +1,6 @@
 import { resolver } from "@blitzjs/rpc"
 import { z } from "zod"
-import db from "db"
+import db, { Prisma } from "db"
 
 export default resolver.pipe(
   resolver.zod(
@@ -14,13 +14,26 @@ export default resolver.pipe(
       abstract: z.string().nullable(),
       pdfUrl: z.string().nullable(),
       openAlexId: z.string().nullable(),
+      authorMeta: z
+        .array(
+          z.object({
+            name: z.string(),
+            orcid: z.string().nullable(),
+            openAlexId: z.string().nullable(),
+          })
+        )
+        .nullable(),
     })
   ),
   resolver.authorize(["ADMIN", "SUPER_ADMIN"]),
-  async ({ paperId, openAlexId, ...data }) => {
+  async ({ paperId, openAlexId, authorMeta, ...data }) => {
     return db.paper.update({
       where: { id: paperId },
-      data: { ...data, openAlexId: openAlexId?.replace("https://openalex.org/", "") ?? null },
+      data: {
+        ...data,
+        openAlexId: openAlexId?.replace("https://openalex.org/", "") ?? null,
+        authorMeta: authorMeta ?? Prisma.DbNull,
+      },
     })
   }
 )

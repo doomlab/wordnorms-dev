@@ -6,6 +6,7 @@ import { AutomergeVersionsButton } from "./AutomergeVersionsButton"
 import { AutomergeZenodoButton } from "./AutomergeZenodoButton"
 import { MergeGroupButton } from "./MergeGroupButton"
 import { DismissGroupButton } from "./DismissGroupButton"
+import { UnmergeButton } from "./UnmergeButton"
 
 export const metadata = { title: "Duplicates – Admin" }
 
@@ -13,10 +14,12 @@ function cap(s: string) {
   return s.charAt(0).toUpperCase() + s.slice(1)
 }
 
-type Props = { searchParams: Promise<{ q?: string; a?: string; b?: string; tab?: string; next?: string; from?: string }> }
+type Props = { searchParams: Promise<{ q?: string; a?: string; b?: string; tab?: string; next?: string; from?: string; page?: string }> }
 
 export default async function AdminDuplicatesPage({ searchParams }: Props) {
-  const { q, a, b, tab, next: nextParam, from: fromParam } = await searchParams
+  const { q, a, b, tab, next: nextParam, from: fromParam, page: pageParam } = await searchParams
+  const searchPageSize = 30
+  const searchPage = Math.max(1, parseInt(pageParam ?? "1", 10) || 1)
 
   const isMergedTab = tab === "merged"
   const isSuggestionsTab = tab === "suggestions"
@@ -106,11 +109,12 @@ export default async function AdminDuplicatesPage({ searchParams }: Props) {
     `,
     db.$queryRaw<[{ count: bigint }]>`
       SELECT COUNT(*)::int AS count FROM (
-        SELECT left(regexp_replace(regexp_replace(lower(title), '[^a-z0-9 ]', '', 'g'), '\s+', ' ', 'g'), 80)
+        SELECT left(regexp_replace(regexp_replace(lower(title), '[^a-z0-9 ]', '', 'g'), '\\s+', ' ', 'g'), 80)
         FROM "Paper"
         WHERE doi ~ '^10[.]5281/zenodo[.][0-9]+$'
           AND "canonicalPaperId" IS NULL
           AND length(title) > 20
+          AND length(trim(left(regexp_replace(regexp_replace(lower(title), '[^a-z0-9 ]', '', 'g'), '\\s+', ' ', 'g'), 80))) >= 10
         GROUP BY 1
         HAVING COUNT(*) > 1
       ) sub
@@ -137,17 +141,18 @@ export default async function AdminDuplicatesPage({ searchParams }: Props) {
     `,
     db.$queryRaw<GroupMember[]>`
       WITH dup_titles AS (
-        SELECT left(regexp_replace(regexp_replace(lower(title), '[^a-z0-9 ]', '', 'g'), '\s+', ' ', 'g'), 80) AS ntitle
+        SELECT left(regexp_replace(regexp_replace(lower(title), '[^a-z0-9 ]', '', 'g'), '\\s+', ' ', 'g'), 80) AS ntitle
         FROM "Paper"
         WHERE "canonicalPaperId" IS NULL AND length(title) > 20
+          AND length(trim(left(regexp_replace(regexp_replace(lower(title), '[^a-z0-9 ]', '', 'g'), '\\s+', ' ', 'g'), 80))) >= 10
         GROUP BY ntitle HAVING COUNT(*) > 1
         ORDER BY COUNT(*) DESC LIMIT 50
       )
       SELECT p.id, p.title, p.year, p.status::text AS status, p.doi, p.authors, p.journal,
              EXISTS (SELECT 1 FROM "PaperExtraction" pe WHERE pe."paperId" = p.id) AS has_extraction,
-             left(regexp_replace(regexp_replace(lower(p.title), '[^a-z0-9 ]', '', 'g'), '\s+', ' ', 'g'), 80) AS groupkey
+             left(regexp_replace(regexp_replace(lower(p.title), '[^a-z0-9 ]', '', 'g'), '\\s+', ' ', 'g'), 80) AS groupkey
       FROM "Paper" p
-      JOIN dup_titles d ON left(regexp_replace(regexp_replace(lower(p.title), '[^a-z0-9 ]', '', 'g'), '\s+', ' ', 'g'), 80) = d.ntitle
+      JOIN dup_titles d ON left(regexp_replace(regexp_replace(lower(p.title), '[^a-z0-9 ]', '', 'g'), '\\s+', ' ', 'g'), 80) = d.ntitle
       WHERE p."canonicalPaperId" IS NULL
       ORDER BY groupkey, p.id
     `,
@@ -160,9 +165,10 @@ export default async function AdminDuplicatesPage({ searchParams }: Props) {
     `,
     db.$queryRaw<[GroupCount]>`
       SELECT COUNT(*)::int AS count FROM (
-        SELECT left(regexp_replace(regexp_replace(lower(title), '[^a-z0-9 ]', '', 'g'), '\s+', ' ', 'g'), 80)
+        SELECT left(regexp_replace(regexp_replace(lower(title), '[^a-z0-9 ]', '', 'g'), '\\s+', ' ', 'g'), 80)
         FROM "Paper"
         WHERE "canonicalPaperId" IS NULL AND length(title) > 20
+          AND length(trim(left(regexp_replace(regexp_replace(lower(title), '[^a-z0-9 ]', '', 'g'), '\\s+', ' ', 'g'), 80))) >= 10
         GROUP BY 1 HAVING COUNT(*) > 1
         LIMIT 50
       ) sub
@@ -187,21 +193,45 @@ export default async function AdminDuplicatesPage({ searchParams }: Props) {
   const titleGroups = groupBy(titleRows).filter(g => !ignoredTitleKeys.has(g[0]!.groupkey))
   const suggestionsCount = doiGroups.length + titleGroups.length
 
-  // Search mode
-  const results =
-    !isMergedTab && !isSuggestionsTab && !isDismissedTab && q && q.trim().length > 1
-      ? await db.paper.findMany({
-          where: {
-            OR: [
-              { title: { contains: q, mode: "insensitive" } },
-              { doi: { contains: q, mode: "insensitive" } },
-            ],
-          },
-          orderBy: { createdAt: "desc" },
-          take: 30,
+  // Search mode: substring match on title/DOI, plus fuzzy title matching (trigram
+  // similarity) with a threshold that scales with title length — short titles need
+  // a closer match to avoid noise, longer titles can tolerate more drift.
+  const isSearching = !isMergedTab && !isSuggestionsTab && !isDismissedTab && !!q && q.trim().length > 1
+  const searchOffset = (searchPage - 1) * searchPageSize
+  const candidateIds = isSearching
+    ? await db.$queryRaw<{ id: number }[]>`
+        SELECT id FROM "Paper" p
+        WHERE p.title ILIKE '%' || ${q} || '%'
+          OR p.doi ILIKE '%' || ${q} || '%'
+          OR similarity(p.title, ${q}) >= CASE
+            WHEN length(p.title) < 20 THEN 0.5
+            WHEN length(p.title) < 40 THEN 0.4
+            WHEN length(p.title) < 80 THEN 0.3
+            ELSE 0.25
+          END
+        ORDER BY
+          (p.title ILIKE '%' || ${q} || '%') DESC,
+          similarity(p.title, ${q}) DESC,
+          p."createdAt" DESC
+        LIMIT ${searchPageSize + 1}
+        OFFSET ${searchOffset}
+      `
+    : null
+
+  const hasNextSearchPage = (candidateIds?.length ?? 0) > searchPageSize
+
+  const results = candidateIds
+    ? await (async () => {
+        const ids = candidateIds.slice(0, searchPageSize).map((r) => r.id)
+        if (ids.length === 0) return []
+        const rows = await db.paper.findMany({
+          where: { id: { in: ids } },
           include: { canonical: { select: { id: true, title: true } }, duplicates: true },
         })
-      : null
+        const order = new Map(ids.map((id, i) => [id, i]))
+        return rows.sort((a, b) => order.get(a.id)! - order.get(b.id)!)
+      })()
+    : null
 
   return (
     <>
@@ -336,79 +366,22 @@ export default async function AdminDuplicatesPage({ searchParams }: Props) {
       ) : isMergedTab ? (
         <>
           <p className="text-base-content/60 mb-6 text-sm">
-            Papers marked as duplicates. Click Undo to restore a paper as independent.
+            Papers marked as duplicates, grouped by canonical. Click Undo to restore a paper as
+            independent — it doesn&apos;t affect the others merged into the same canonical.
           </p>
           {mergedPapers!.length === 0 ? (
             <p className="text-base-content/40 text-sm text-center py-10">
               No merges recorded yet.
             </p>
           ) : (
-            <div className="overflow-x-auto">
-              <table className="table table-zebra text-sm">
-                <thead>
-                  <tr>
-                    <th>Duplicate</th>
-                    <th>→ Canonical</th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {mergedPapers!.map((p) => (
-                    <tr key={p.id}>
-                      <td className="max-w-xs">
-                        <p className="line-clamp-2 font-medium">{cap(p.title)}</p>
-                        <div className="flex gap-3 mt-0.5">
-                          <span className="font-mono text-xs text-base-content/40">#{p.id}</span>
-                          {p.doi && (
-                            <span className="font-mono text-xs text-base-content/40">{p.doi}</span>
-                          )}
-                          {p.year && (
-                            <span className="text-xs text-base-content/40">{p.year}</span>
-                          )}
-                        </div>
-                      </td>
-                      <td className="max-w-xs">
-                        <a
-                          href={`/admin/duplicates?a=${p.canonical!.id}`}
-                          className="line-clamp-2 font-medium link link-hover"
-                        >
-                          {cap(p.canonical!.title)}
-                        </a>
-                        <div className="flex gap-3 mt-0.5">
-                          <span className="font-mono text-xs text-base-content/40">
-                            #{p.canonical!.id}
-                          </span>
-                          {p.canonical!.doi && (
-                            <span className="font-mono text-xs text-base-content/40">
-                              {p.canonical!.doi}
-                            </span>
-                          )}
-                          {p.canonical!.year && (
-                            <span className="text-xs text-base-content/40">
-                              {p.canonical!.year}
-                            </span>
-                          )}
-                        </div>
-                      </td>
-                      <td>
-                        <a
-                          href={`/admin/duplicates/${p.id}`}
-                          className="btn btn-ghost btn-xs"
-                        >
-                          View
-                        </a>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+            <MergedGroups papers={mergedPapers!.map((p) => ({ ...p, canonical: p.canonical! }))} />
           )}
         </>
       ) : (
         <>
           <p className="text-base-content/60 mb-6 text-sm">
-            Search for papers by title or DOI, then check two to compare and merge.
+            Search for papers by title or DOI, then check two to compare and merge, or check
+            three or more to pick a canonical and merge them all at once.
           </p>
 
           <form className="flex gap-2 mb-8" method="get">
@@ -435,6 +408,24 @@ export default async function AdminDuplicatesPage({ searchParams }: Props) {
           )}
 
           {results && results.length > 0 && <DuplicateResultsTable papers={results} />}
+
+          {results && (searchPage > 1 || hasNextSearchPage) && (
+            <div className="flex items-center justify-center gap-4 mt-6">
+              <a
+                href={`/admin/duplicates?q=${encodeURIComponent(q!)}&page=${searchPage - 1}`}
+                className={`btn btn-outline btn-sm ${searchPage <= 1 ? "btn-disabled" : ""}`}
+              >
+                ← Prev
+              </a>
+              <span className="text-sm text-base-content/50">Page {searchPage}</span>
+              <a
+                href={`/admin/duplicates?q=${encodeURIComponent(q!)}&page=${searchPage + 1}`}
+                className={`btn btn-outline btn-sm ${!hasNextSearchPage ? "btn-disabled" : ""}`}
+              >
+                Next →
+              </a>
+            </div>
+          )}
         </>
       )}
     </>
@@ -446,12 +437,55 @@ type GroupMember = {
   authors: string[]; journal: string | null; has_extraction: boolean; groupkey: string
 }
 
+// Repositories/preprint servers that commonly host a copy of a paper alongside its
+// eventual journal publication — used to auto-suggest merging into the journal version.
+const PREPRINT_DOI_PREFIXES = [
+  "10.6084/m9.figshare",
+  "10.31219/osf.io",
+  "10.17605/osf.io",
+  "10.48550/arxiv",
+  "10.2139/ssrn",
+  "10.5281/zenodo",
+]
+const PREPRINT_NAME_PATTERN = /figshare|osf|open science framework|arxiv|ssrn|zenodo/i
+
+function isPreprintSource(m: GroupMember) {
+  const doi = m.doi?.toLowerCase() ?? ""
+  if (PREPRINT_DOI_PREFIXES.some((p) => doi.startsWith(p))) return true
+  if (m.journal && PREPRINT_NAME_PATTERN.test(m.journal)) return true
+  return false
+}
+
+function authorKey(a: string) {
+  return a.trim().toLowerCase().split(/[\s,]+/).filter(Boolean).pop() ?? ""
+}
+
+function sharesAuthor(a: string[], b: string[]) {
+  const keys = new Set(a.map(authorKey).filter(Boolean))
+  return b.some((x) => keys.has(authorKey(x)))
+}
+
+// A group auto-qualifies for one-click merge when exactly one member is a "real"
+// journal publication, every other member is a known preprint/repository host, and
+// they share at least one author with the journal version (sanity check against
+// same-title-different-paper false positives).
+function journalMergeCandidate(members: GroupMember[]) {
+  const journalMembers = members.filter((m) => m.journal && !isPreprintSource(m))
+  const preprintMembers = members.filter((m) => isPreprintSource(m))
+  if (journalMembers.length !== 1) return null
+  const journal = journalMembers[0]!
+  if (preprintMembers.length === 0 || preprintMembers.length !== members.length - 1) return null
+  if (!preprintMembers.every((p) => sharesAuthor(journal.authors, p.authors))) return null
+  return { journal, preprints: preprintMembers }
+}
+
 function GroupTable({ groups, groupType }: { groups: GroupMember[][], groupType: "doi" | "title" }) {
   return (
     <div className="space-y-4 mb-6">
       {groups.map((members) => {
         const allIds = members.map((m) => m.id)
         const defaultOpen = members.length <= 5
+        const journalMerge = journalMergeCandidate(members)
         return (
           <details
             key={members[0]!.groupkey}
@@ -463,6 +497,15 @@ function GroupTable({ groups, groupType }: { groups: GroupMember[][], groupType:
                 {cap(members[0]!.title)} — {members.length} {members.length === 1 ? "copy" : "copies"}
               </span>
               <div className="flex items-center gap-2 shrink-0">
+                {journalMerge && (
+                  <MergeGroupButton
+                    canonicalId={journalMerge.journal.id}
+                    duplicateIds={journalMerge.preprints.map((p) => p.id)}
+                    label={`Merge into journal (${journalMerge.journal.journal}) →`}
+                    confirmMessage={`Merge ${journalMerge.preprints.length} preprint/repository copy(ies) into the journal version #${journalMerge.journal.id} (${journalMerge.journal.journal})?`}
+                    className="btn-success btn-xs"
+                  />
+                )}
                 <span className="text-xs text-base-content/30">▾</span>
                 <DismissGroupButton
                   groupKey={members[0]!.groupkey}
@@ -510,6 +553,77 @@ function GroupTable({ groups, groupType }: { groups: GroupMember[][], groupType:
           </details>
         )
       })}
+    </div>
+  )
+}
+
+type MergedPaper = {
+  id: number
+  title: string
+  doi: string | null
+  year: number | null
+  canonical: { id: number; title: string; doi: string | null; year: number | null }
+}
+
+function MergedGroups({ papers }: { papers: MergedPaper[] }) {
+  const groups = new Map<number, { canonical: MergedPaper["canonical"]; duplicates: MergedPaper[] }>()
+  for (const p of papers) {
+    const g = groups.get(p.canonical.id) ?? { canonical: p.canonical, duplicates: [] }
+    g.duplicates.push(p)
+    groups.set(p.canonical.id, g)
+  }
+
+  return (
+    <div className="space-y-4">
+      {[...groups.values()].map(({ canonical, duplicates }) => (
+        <div key={canonical.id} className="border border-base-300 rounded-lg overflow-hidden">
+          <div className="bg-primary/5 px-4 py-3 flex items-center justify-between gap-4">
+            <div className="min-w-0">
+              <span className="badge badge-primary badge-sm mr-2">canonical</span>
+              <a
+                href={`/admin/duplicates?a=${canonical.id}`}
+                className="font-medium link link-hover"
+              >
+                {cap(canonical.title)}
+              </a>
+              <div className="flex gap-3 mt-0.5">
+                <span className="font-mono text-xs text-base-content/40">#{canonical.id}</span>
+                {canonical.doi && (
+                  <span className="font-mono text-xs text-base-content/40">{canonical.doi}</span>
+                )}
+                {canonical.year && (
+                  <span className="text-xs text-base-content/40">{canonical.year}</span>
+                )}
+              </div>
+            </div>
+            <span className="badge badge-outline badge-sm shrink-0">
+              {duplicates.length} merged
+            </span>
+          </div>
+          <div className="divide-y divide-base-200">
+            {duplicates.map((d) => (
+              <div key={d.id} className="flex items-center justify-between gap-4 px-4 py-3 text-sm">
+                <div className="min-w-0">
+                  <p className="line-clamp-2 font-medium">{cap(d.title)}</p>
+                  <div className="flex gap-3 mt-0.5">
+                    <span className="font-mono text-xs text-base-content/40">#{d.id}</span>
+                    {d.doi && (
+                      <span className="font-mono text-xs text-base-content/40">{d.doi}</span>
+                    )}
+                    {d.year && <span className="text-xs text-base-content/40">{d.year}</span>}
+                  </div>
+                </div>
+                <div className="flex items-center gap-2 shrink-0">
+                  <a href={`/admin/duplicates/${d.id}`} className="btn btn-ghost btn-xs">
+                    View
+                  </a>
+                  <UnmergeButton paperId={d.id} size="btn-xs" />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
     </div>
   )
 }

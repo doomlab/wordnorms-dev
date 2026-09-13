@@ -126,6 +126,12 @@ export default async function AdminPage() {
       badge: null,
     },
     {
+      href: "/admin/import-extractions",
+      label: "Import Extractions",
+      desc: "Bulk-import metadata extracted from PDFs by an external LLM",
+      badge: null,
+    },
+    {
       href: "/admin/stats",
       label: "Pipeline Stats",
       desc: "Model performance and validation metrics",

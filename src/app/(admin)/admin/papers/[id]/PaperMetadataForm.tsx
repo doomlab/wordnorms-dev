@@ -6,6 +6,8 @@ import { useMutation } from "@blitzjs/rpc"
 import updatePaperMetadata from "../../../mutations/updatePaperMetadata"
 import lookupCrossref from "../../../mutations/lookupCrossref"
 
+type AuthorMetaEntry = { name: string; orcid: string | null; openAlexId: string | null }
+
 type Paper = {
   id: number
   title: string
@@ -16,6 +18,7 @@ type Paper = {
   abstract: string | null
   pdfUrl: string | null
   openAlexId: string | null
+  authorMeta: AuthorMetaEntry[] | null
 }
 
 export function PaperMetadataForm({ paper, backHref }: { paper: Paper; backHref: string }) {
@@ -39,6 +42,21 @@ export function PaperMetadataForm({ paper, backHref }: { paper: Paper; backHref:
     openAlexId: paper.openAlexId ?? "",
   })
 
+  const [authorMetaRows, setAuthorMetaRows] = useState<{ orcid: string; openAlexId: string }[]>(
+    paper.authors.map((name) => {
+      const m = paper.authorMeta?.find((a) => a.name === name)
+      return { orcid: m?.orcid ?? "", openAlexId: m?.openAlexId ?? "" }
+    })
+  )
+
+  const authorNames = fields.authors.split(",").map((s) => s.trim()).filter(Boolean)
+  const setAuthorMeta = (i: number, key: "orcid" | "openAlexId", value: string) =>
+    setAuthorMetaRows((rows) => {
+      const next = authorNames.map((_, j) => rows[j] ?? { orcid: "", openAlexId: "" })
+      next[i] = { ...next[i]!, [key]: value }
+      return next
+    })
+
   const set =
     (key: keyof typeof fields) =>
     (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
@@ -58,6 +76,13 @@ export function PaperMetadataForm({ paper, backHref }: { paper: Paper; backHref:
         abstract: fields.abstract.trim() || null,
         pdfUrl: fields.pdfUrl.trim() || null,
         openAlexId: fields.openAlexId.trim() || null,
+        authorMeta: authorNames.length
+          ? authorNames.map((name, i) => ({
+              name,
+              orcid: authorMetaRows[i]?.orcid.trim() || null,
+              openAlexId: authorMetaRows[i]?.openAlexId.trim() || null,
+            }))
+          : null,
       })
       setStatus("saved")
       router.refresh()
@@ -114,6 +139,34 @@ export function PaperMetadataForm({ paper, backHref }: { paper: Paper; backHref:
           disabled={busy}
         />
       </Field>
+
+      {authorNames.length > 0 && (
+        <Field label="Author links" hint="ORCID URL & OpenAlex author ID, per author">
+          <div className="space-y-2">
+            {authorNames.map((name, i) => (
+              <div key={i} className="flex gap-2 items-center">
+                <span className="w-32 shrink-0 truncate text-sm text-base-content/60" title={name}>
+                  {name}
+                </span>
+                <input
+                  className="input input-bordered input-sm flex-1 min-w-0 font-mono text-xs"
+                  placeholder="https://orcid.org/0000-0000-0000-0000"
+                  value={authorMetaRows[i]?.orcid ?? ""}
+                  onChange={(e) => setAuthorMeta(i, "orcid", e.target.value)}
+                  disabled={busy}
+                />
+                <input
+                  className="input input-bordered input-sm w-40 font-mono text-xs"
+                  placeholder="A…"
+                  value={authorMetaRows[i]?.openAlexId ?? ""}
+                  onChange={(e) => setAuthorMeta(i, "openAlexId", e.target.value)}
+                  disabled={busy}
+                />
+              </div>
+            ))}
+          </div>
+        </Field>
+      )}
 
       <Field label="Year">
         <input
