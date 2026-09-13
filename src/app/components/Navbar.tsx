@@ -3,6 +3,7 @@ import db from "db"
 import { getBlitzContext } from "../blitz-server"
 import { LogoutButton } from "../(auth)/components/LogoutButton"
 import { ThemeToggle } from "./ThemeToggle"
+import { getDuplicateSuggestionsCount } from "../(admin)/getDuplicateSuggestionsCount"
 
 interface NavbarProps {
   leftLinks?: React.ReactNode
@@ -50,24 +51,7 @@ export async function Navbar({ leftLinks, rightExtra, className }: NavbarProps) 
             citationsFrom: { none: {} },
           },
         }),
-        Promise.all([
-          db.$queryRaw<[{ count: bigint }]>`
-            SELECT COUNT(*)::int AS count FROM (
-              SELECT doi FROM "Paper"
-              WHERE doi IS NOT NULL AND "canonicalPaperId" IS NULL
-              GROUP BY doi HAVING COUNT(*) > 1
-              LIMIT 50
-            ) sub
-          `.then((r) => Number(r[0]?.count ?? 0)),
-          db.$queryRaw<[{ count: bigint }]>`
-            SELECT COUNT(*)::int AS count FROM (
-              SELECT lower(left(title, 80)) FROM "Paper"
-              WHERE "canonicalPaperId" IS NULL AND length(title) > 20 AND doi IS NULL
-              GROUP BY lower(left(title, 80)) HAVING COUNT(*) > 1
-              LIMIT 50
-            ) sub
-          `.then((r) => Number(r[0]?.count ?? 0)),
-        ]).then(([doi, title]) => doi + title),
+        getDuplicateSuggestionsCount(),
       ])
     : [0, 0, 0, 0, 0, 0, 0, 0, 0]
 
@@ -179,6 +163,7 @@ export async function Navbar({ leftLinks, rightExtra, className }: NavbarProps) 
                       {duplicateSuggestionsCount > 0 && <span className="badge badge-warning badge-sm">{duplicateSuggestionsCount}</span>}
                     </Link>
                   </li>
+                  <li><Link href="/admin/import-extractions">Import Extractions</Link></li>
                   <li><Link href="/admin/datasets" className="flex justify-between">
                     <span>Datasets</span>
                   </Link></li>

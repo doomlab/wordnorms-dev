@@ -2,6 +2,7 @@ import db from "db"
 import { getBlitzContext } from "../../blitz-server"
 import { PipelineButton } from "./PipelineButton"
 import { MaintenanceCard } from "./MaintenanceCard"
+import { getDuplicateSuggestionsCount } from "../getDuplicateSuggestionsCount"
 
 export const metadata = { title: "Admin" }
 
@@ -21,6 +22,7 @@ export default async function AdminPage() {
     borderlineExcluded,
     unmatchedCitations,
     missingCitations,
+    duplicateSuggestions,
     siteSettings,
   ] = await Promise.all([
     db.paper.groupBy({ by: ["status"], where: { canonicalPaperId: null }, _count: { _all: true } }),
@@ -68,6 +70,7 @@ export default async function AdminPage() {
         citationsFrom: { none: {} },
       },
     }),
+    getDuplicateSuggestionsCount(),
     isSuperAdmin
       ? db.siteSettings.findFirst({ where: { id: 1 } })
       : Promise.resolve(null),
@@ -123,7 +126,7 @@ export default async function AdminPage() {
       href: "/admin/duplicates",
       label: "Duplicates",
       desc: "Find and merge duplicate paper entries (e.g. preprint + published version)",
-      badge: null,
+      badge: duplicateSuggestions,
     },
     {
       href: "/admin/import-extractions",
