@@ -7,6 +7,8 @@ import { AutomergeZenodoButton } from "./AutomergeZenodoButton"
 import { MergeGroupButton } from "./MergeGroupButton"
 import { DismissGroupButton } from "./DismissGroupButton"
 import { UnmergeButton } from "./UnmergeButton"
+import { AutomergeJournalButton } from "./AutomergeJournalButton"
+import { journalMergeCandidate, sameRepositoryMergeCandidate, type GroupMember } from "./preprintDetection"
 
 export const metadata = { title: "Duplicates – Admin" }
 
@@ -14,12 +16,37 @@ function cap(s: string) {
   return s.charAt(0).toUpperCase() + s.slice(1)
 }
 
-type Props = { searchParams: Promise<{ q?: string; a?: string; b?: string; tab?: string; next?: string; from?: string; page?: string }> }
+type Props = {
+  searchParams: Promise<{
+    q?: string
+    a?: string
+    b?: string
+    tab?: string
+    next?: string
+    from?: string
+    page?: string
+    doiPage?: string
+    titlePage?: string
+  }>
+}
 
 export default async function AdminDuplicatesPage({ searchParams }: Props) {
-  const { q, a, b, tab, next: nextParam, from: fromParam, page: pageParam } = await searchParams
+  const {
+    q,
+    a,
+    b,
+    tab,
+    next: nextParam,
+    from: fromParam,
+    page: pageParam,
+    doiPage: doiPageParam,
+    titlePage: titlePageParam,
+  } = await searchParams
   const searchPageSize = 30
   const searchPage = Math.max(1, parseInt(pageParam ?? "1", 10) || 1)
+  const groupsPageSize = 20
+  const doiPage = Math.max(1, parseInt(doiPageParam ?? "1", 10) || 1)
+  const titlePage = Math.max(1, parseInt(titlePageParam ?? "1", 10) || 1)
 
   const isMergedTab = tab === "merged"
   const isSuggestionsTab = tab === "suggestions"
@@ -92,11 +119,6 @@ export default async function AdminDuplicatesPage({ searchParams }: Props) {
     : null
 
   // Suggestions: group by DOI and title (not pairwise — avoids N*(N-1)/2 explosion)
-  type GroupMember = {
-    id: number; title: string; year: number | null; status: string; doi: string | null
-    authors: string[]; journal: string | null; has_extraction: boolean; groupkey: string
-  }
-
   const [[versionPairsResult], [zenodoGroupsResult]] = await Promise.all([
     db.$queryRaw<[{ count: bigint }]>`
       SELECT COUNT(*)::int AS count
@@ -123,14 +145,45 @@ export default async function AdminDuplicatesPage({ searchParams }: Props) {
   const versionPairsCount = Number(versionPairsResult?.count ?? 0)
   const zenodoGroupsCount = Number(zenodoGroupsResult?.count ?? 0)
 
+  // Count title-groups eligible for one-click preprint/repository → journal (or
+  // same-repository → the copy with a DOI) merge, scanning every group (unpaginated).
+  const preprintCandidateRows = await db.$queryRaw<
+    { id: number; title: string; doi: string | null; authors: string[]; journal: string | null; groupkey: string }[]
+  >`
+    WITH dup_titles AS (
+      SELECT left(regexp_replace(regexp_replace(lower(title), '[^a-z0-9 ]', '', 'g'), '\\s+', ' ', 'g'), 80) AS ntitle
+      FROM "Paper"
+      WHERE "canonicalPaperId" IS NULL AND length(title) > 20
+        AND length(trim(left(regexp_replace(regexp_replace(lower(title), '[^a-z0-9 ]', '', 'g'), '\\s+', ' ', 'g'), 80))) >= 10
+      GROUP BY ntitle HAVING COUNT(*) > 1
+    )
+    SELECT p.id, p.title, p.doi, p.authors, p.journal,
+           left(regexp_replace(regexp_replace(lower(p.title), '[^a-z0-9 ]', '', 'g'), '\\s+', ' ', 'g'), 80) AS groupkey
+    FROM "Paper" p
+    JOIN dup_titles d ON left(regexp_replace(regexp_replace(lower(p.title), '[^a-z0-9 ]', '', 'g'), '\\s+', ' ', 'g'), 80) = d.ntitle
+    WHERE p."canonicalPaperId" IS NULL
+  `
+  const preprintCandidateGroups = new Map<string, typeof preprintCandidateRows>()
+  for (const r of preprintCandidateRows) {
+    const list = preprintCandidateGroups.get(r.groupkey) ?? []
+    list.push(r)
+    preprintCandidateGroups.set(r.groupkey, list)
+  }
+  const preprintMergeGroupsCount = [...preprintCandidateGroups.values()].filter((members) => {
+    const gm = members.map((m) => ({ ...m, year: null, status: "", has_extraction: false }))
+    return journalMergeCandidate(gm) ?? sameRepositoryMergeCandidate(gm)
+  }).length
+
   type GroupCount = { count: bigint }
+  const doiOffset = (doiPage - 1) * groupsPageSize
+  const titleOffset = (titlePage - 1) * groupsPageSize
   const [doiRows, titleRows, doiGroupCount, titleGroupCount, ignoredGroups] = await Promise.all([
     db.$queryRaw<GroupMember[]>`
       WITH dup_dois AS (
         SELECT doi FROM "Paper"
         WHERE doi IS NOT NULL AND "canonicalPaperId" IS NULL
         GROUP BY doi HAVING COUNT(*) > 1
-        ORDER BY COUNT(*) DESC LIMIT 50
+        ORDER BY COUNT(*) DESC LIMIT ${groupsPageSize} OFFSET ${doiOffset}
       )
       SELECT p.id, p.title, p.year, p.status::text AS status, p.doi, p.authors, p.journal,
              EXISTS (SELECT 1 FROM "PaperExtraction" pe WHERE pe."paperId" = p.id) AS has_extraction,
@@ -146,7 +199,7 @@ export default async function AdminDuplicatesPage({ searchParams }: Props) {
         WHERE "canonicalPaperId" IS NULL AND length(title) > 20
           AND length(trim(left(regexp_replace(regexp_replace(lower(title), '[^a-z0-9 ]', '', 'g'), '\\s+', ' ', 'g'), 80))) >= 10
         GROUP BY ntitle HAVING COUNT(*) > 1
-        ORDER BY COUNT(*) DESC LIMIT 50
+        ORDER BY COUNT(*) DESC LIMIT ${groupsPageSize} OFFSET ${titleOffset}
       )
       SELECT p.id, p.title, p.year, p.status::text AS status, p.doi, p.authors, p.journal,
              EXISTS (SELECT 1 FROM "PaperExtraction" pe WHERE pe."paperId" = p.id) AS has_extraction,
@@ -160,7 +213,7 @@ export default async function AdminDuplicatesPage({ searchParams }: Props) {
       SELECT COUNT(*)::int AS count FROM (
         SELECT doi FROM "Paper"
         WHERE doi IS NOT NULL AND "canonicalPaperId" IS NULL
-        GROUP BY doi HAVING COUNT(*) > 1 LIMIT 50
+        GROUP BY doi HAVING COUNT(*) > 1
       ) sub
     `,
     db.$queryRaw<[GroupCount]>`
@@ -170,11 +223,14 @@ export default async function AdminDuplicatesPage({ searchParams }: Props) {
         WHERE "canonicalPaperId" IS NULL AND length(title) > 20
           AND length(trim(left(regexp_replace(regexp_replace(lower(title), '[^a-z0-9 ]', '', 'g'), '\\s+', ' ', 'g'), 80))) >= 10
         GROUP BY 1 HAVING COUNT(*) > 1
-        LIMIT 50
       ) sub
     `,
     db.duplicateGroupIgnore.findMany({ orderBy: { createdAt: "desc" } }),
   ])
+  const doiTotalGroups = Number(doiGroupCount[0]?.count ?? 0)
+  const titleTotalGroups = Number(titleGroupCount[0]?.count ?? 0)
+  const doiHasNextPage = doiPage * groupsPageSize < doiTotalGroups
+  const titleHasNextPage = titlePage * groupsPageSize < titleTotalGroups
 
   // Group rows by key, filtering out dismissed groups
   const ignoredDoiKeys = new Set(ignoredGroups.filter(g => g.groupType === "doi").map(g => g.groupKey))
@@ -191,7 +247,7 @@ export default async function AdminDuplicatesPage({ searchParams }: Props) {
   }
   const doiGroups = groupBy(doiRows).filter(g => !ignoredDoiKeys.has(g[0]!.groupkey))
   const titleGroups = groupBy(titleRows).filter(g => !ignoredTitleKeys.has(g[0]!.groupkey))
-  const suggestionsCount = doiGroups.length + titleGroups.length
+  const suggestionsCount = doiTotalGroups + titleTotalGroups
 
   // Search mode: substring match on title/DOI, plus fuzzy title matching (trigram
   // similarity) with a threshold that scales with title length — short titles need
@@ -261,6 +317,20 @@ export default async function AdminDuplicatesPage({ searchParams }: Props) {
         </div>
       )}
 
+      {preprintMergeGroupsCount > 0 && (
+        <div className="alert mb-6 flex items-center justify-between">
+          <div>
+            <p className="font-semibold text-sm">Preprint/repository duplicates detected</p>
+            <p className="text-sm text-base-content/60">
+              {preprintMergeGroupsCount} groups have a matching title (and shared author) between
+              a figshare/OSF/arXiv/SSRN/Zenodo/Open Research Europe copy and either a journal
+              publication or a sibling copy with a DOI. These can be safely auto-merged.
+            </p>
+          </div>
+          <AutomergeJournalButton groupCount={preprintMergeGroupsCount} />
+        </div>
+      )}
+
       <div role="tablist" className="tabs tabs-bordered mb-8">
         <a
           href="/admin/duplicates"
@@ -310,18 +380,30 @@ export default async function AdminDuplicatesPage({ searchParams }: Props) {
           {doiGroups.length > 0 && (
             <>
               <h2 className="font-semibold text-sm mb-3 text-base-content/70 uppercase tracking-wide">
-                Same DOI ({doiGroups.length} groups)
+                Same DOI ({doiTotalGroups} groups)
               </h2>
               <GroupTable groups={doiGroups} groupType="doi" />
+              <GroupsPager
+                page={doiPage}
+                hasNextPage={doiHasNextPage}
+                paramName="doiPage"
+                otherParams={{ titlePage: String(titlePage) }}
+              />
             </>
           )}
 
           {titleGroups.length > 0 && (
             <>
               <h2 className={`font-semibold text-sm mb-3 text-base-content/70 uppercase tracking-wide ${doiGroups.length > 0 ? "mt-10" : ""}`}>
-                Similar title ({titleGroups.length} groups)
+                Similar title ({titleTotalGroups} groups)
               </h2>
               <GroupTable groups={titleGroups} groupType="title" />
+              <GroupsPager
+                page={titlePage}
+                hasNextPage={titleHasNextPage}
+                paramName="titlePage"
+                otherParams={{ doiPage: String(doiPage) }}
+              />
             </>
           )}
 
@@ -432,51 +514,41 @@ export default async function AdminDuplicatesPage({ searchParams }: Props) {
   )
 }
 
-type GroupMember = {
-  id: number; title: string; year: number | null; status: string; doi: string | null
-  authors: string[]; journal: string | null; has_extraction: boolean; groupkey: string
-}
+function GroupsPager({
+  page,
+  hasNextPage,
+  paramName,
+  otherParams,
+}: {
+  page: number
+  hasNextPage: boolean
+  paramName: "doiPage" | "titlePage"
+  otherParams: Record<string, string>
+}) {
+  if (page <= 1 && !hasNextPage) return null
 
-// Repositories/preprint servers that commonly host a copy of a paper alongside its
-// eventual journal publication — used to auto-suggest merging into the journal version.
-const PREPRINT_DOI_PREFIXES = [
-  "10.6084/m9.figshare",
-  "10.31219/osf.io",
-  "10.17605/osf.io",
-  "10.48550/arxiv",
-  "10.2139/ssrn",
-  "10.5281/zenodo",
-]
-const PREPRINT_NAME_PATTERN = /figshare|osf|open science framework|arxiv|ssrn|zenodo/i
+  const hrefFor = (p: number) => {
+    const sp = new URLSearchParams({ tab: "suggestions", ...otherParams, [paramName]: String(p) })
+    return `/admin/duplicates?${sp.toString()}`
+  }
 
-function isPreprintSource(m: GroupMember) {
-  const doi = m.doi?.toLowerCase() ?? ""
-  if (PREPRINT_DOI_PREFIXES.some((p) => doi.startsWith(p))) return true
-  if (m.journal && PREPRINT_NAME_PATTERN.test(m.journal)) return true
-  return false
-}
-
-function authorKey(a: string) {
-  return a.trim().toLowerCase().split(/[\s,]+/).filter(Boolean).pop() ?? ""
-}
-
-function sharesAuthor(a: string[], b: string[]) {
-  const keys = new Set(a.map(authorKey).filter(Boolean))
-  return b.some((x) => keys.has(authorKey(x)))
-}
-
-// A group auto-qualifies for one-click merge when exactly one member is a "real"
-// journal publication, every other member is a known preprint/repository host, and
-// they share at least one author with the journal version (sanity check against
-// same-title-different-paper false positives).
-function journalMergeCandidate(members: GroupMember[]) {
-  const journalMembers = members.filter((m) => m.journal && !isPreprintSource(m))
-  const preprintMembers = members.filter((m) => isPreprintSource(m))
-  if (journalMembers.length !== 1) return null
-  const journal = journalMembers[0]!
-  if (preprintMembers.length === 0 || preprintMembers.length !== members.length - 1) return null
-  if (!preprintMembers.every((p) => sharesAuthor(journal.authors, p.authors))) return null
-  return { journal, preprints: preprintMembers }
+  return (
+    <div className="flex items-center justify-center gap-4 mt-4 mb-2">
+      <a
+        href={hrefFor(page - 1)}
+        className={`btn btn-outline btn-sm ${page <= 1 ? "btn-disabled" : ""}`}
+      >
+        ← Prev
+      </a>
+      <span className="text-sm text-base-content/50">Page {page}</span>
+      <a
+        href={hrefFor(page + 1)}
+        className={`btn btn-outline btn-sm ${!hasNextPage ? "btn-disabled" : ""}`}
+      >
+        Next →
+      </a>
+    </div>
+  )
 }
 
 function GroupTable({ groups, groupType }: { groups: GroupMember[][], groupType: "doi" | "title" }) {
@@ -486,6 +558,7 @@ function GroupTable({ groups, groupType }: { groups: GroupMember[][], groupType:
         const allIds = members.map((m) => m.id)
         const defaultOpen = members.length <= 5
         const journalMerge = journalMergeCandidate(members)
+        const sameRepoMerge = !journalMerge ? sameRepositoryMergeCandidate(members) : null
         return (
           <details
             key={members[0]!.groupkey}
@@ -499,10 +572,19 @@ function GroupTable({ groups, groupType }: { groups: GroupMember[][], groupType:
               <div className="flex items-center gap-2 shrink-0">
                 {journalMerge && (
                   <MergeGroupButton
-                    canonicalId={journalMerge.journal.id}
-                    duplicateIds={journalMerge.preprints.map((p) => p.id)}
-                    label={`Merge into journal (${journalMerge.journal.journal}) →`}
-                    confirmMessage={`Merge ${journalMerge.preprints.length} preprint/repository copy(ies) into the journal version #${journalMerge.journal.id} (${journalMerge.journal.journal})?`}
+                    canonicalId={journalMerge.canonical.id}
+                    duplicateIds={journalMerge.duplicates.map((p) => p.id)}
+                    label={`Merge into ${journalMerge.canonical.journal ?? `#${journalMerge.canonical.id}`} →`}
+                    confirmMessage={`Merge ${journalMerge.duplicates.length} preprint/repository copy(ies) into #${journalMerge.canonical.id}${journalMerge.canonical.journal ? ` (${journalMerge.canonical.journal})` : ""}?`}
+                    className="btn-success btn-xs"
+                  />
+                )}
+                {sameRepoMerge && (
+                  <MergeGroupButton
+                    canonicalId={sameRepoMerge.canonical.id}
+                    duplicateIds={sameRepoMerge.duplicates.map((p) => p.id)}
+                    label={`Merge into the one with a DOI →`}
+                    confirmMessage={`Merge ${sameRepoMerge.duplicates.length} duplicate ${sameRepoMerge.source} copy(ies) into #${sameRepoMerge.canonical.id} (the one with a DOI)?`}
                     className="btn-success btn-xs"
                   />
                 )}
