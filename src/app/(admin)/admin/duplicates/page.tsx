@@ -108,11 +108,12 @@ export default async function AdminDuplicatesPage({ searchParams }: Props) {
     `,
     db.$queryRaw<[{ count: bigint }]>`
       SELECT COUNT(*)::int AS count FROM (
-        SELECT left(regexp_replace(regexp_replace(lower(title), '[^a-z0-9 ]', '', 'g'), '\s+', ' ', 'g'), 80)
+        SELECT left(regexp_replace(regexp_replace(lower(title), '[^a-z0-9 ]', '', 'g'), '\\s+', ' ', 'g'), 80)
         FROM "Paper"
         WHERE doi ~ '^10[.]5281/zenodo[.][0-9]+$'
           AND "canonicalPaperId" IS NULL
           AND length(title) > 20
+          AND length(trim(left(regexp_replace(regexp_replace(lower(title), '[^a-z0-9 ]', '', 'g'), '\\s+', ' ', 'g'), 80))) >= 10
         GROUP BY 1
         HAVING COUNT(*) > 1
       ) sub
@@ -139,17 +140,18 @@ export default async function AdminDuplicatesPage({ searchParams }: Props) {
     `,
     db.$queryRaw<GroupMember[]>`
       WITH dup_titles AS (
-        SELECT left(regexp_replace(regexp_replace(lower(title), '[^a-z0-9 ]', '', 'g'), '\s+', ' ', 'g'), 80) AS ntitle
+        SELECT left(regexp_replace(regexp_replace(lower(title), '[^a-z0-9 ]', '', 'g'), '\\s+', ' ', 'g'), 80) AS ntitle
         FROM "Paper"
         WHERE "canonicalPaperId" IS NULL AND length(title) > 20
+          AND length(trim(left(regexp_replace(regexp_replace(lower(title), '[^a-z0-9 ]', '', 'g'), '\\s+', ' ', 'g'), 80))) >= 10
         GROUP BY ntitle HAVING COUNT(*) > 1
         ORDER BY COUNT(*) DESC LIMIT 50
       )
       SELECT p.id, p.title, p.year, p.status::text AS status, p.doi, p.authors, p.journal,
              EXISTS (SELECT 1 FROM "PaperExtraction" pe WHERE pe."paperId" = p.id) AS has_extraction,
-             left(regexp_replace(regexp_replace(lower(p.title), '[^a-z0-9 ]', '', 'g'), '\s+', ' ', 'g'), 80) AS groupkey
+             left(regexp_replace(regexp_replace(lower(p.title), '[^a-z0-9 ]', '', 'g'), '\\s+', ' ', 'g'), 80) AS groupkey
       FROM "Paper" p
-      JOIN dup_titles d ON left(regexp_replace(regexp_replace(lower(p.title), '[^a-z0-9 ]', '', 'g'), '\s+', ' ', 'g'), 80) = d.ntitle
+      JOIN dup_titles d ON left(regexp_replace(regexp_replace(lower(p.title), '[^a-z0-9 ]', '', 'g'), '\\s+', ' ', 'g'), 80) = d.ntitle
       WHERE p."canonicalPaperId" IS NULL
       ORDER BY groupkey, p.id
     `,
@@ -162,9 +164,10 @@ export default async function AdminDuplicatesPage({ searchParams }: Props) {
     `,
     db.$queryRaw<[GroupCount]>`
       SELECT COUNT(*)::int AS count FROM (
-        SELECT left(regexp_replace(regexp_replace(lower(title), '[^a-z0-9 ]', '', 'g'), '\s+', ' ', 'g'), 80)
+        SELECT left(regexp_replace(regexp_replace(lower(title), '[^a-z0-9 ]', '', 'g'), '\\s+', ' ', 'g'), 80)
         FROM "Paper"
         WHERE "canonicalPaperId" IS NULL AND length(title) > 20
+          AND length(trim(left(regexp_replace(regexp_replace(lower(title), '[^a-z0-9 ]', '', 'g'), '\\s+', ' ', 'g'), 80))) >= 10
         GROUP BY 1 HAVING COUNT(*) > 1
         LIMIT 50
       ) sub
@@ -491,12 +494,55 @@ type GroupMember = {
   authors: string[]; journal: string | null; has_extraction: boolean; groupkey: string
 }
 
+// Repositories/preprint servers that commonly host a copy of a paper alongside its
+// eventual journal publication — used to auto-suggest merging into the journal version.
+const PREPRINT_DOI_PREFIXES = [
+  "10.6084/m9.figshare",
+  "10.31219/osf.io",
+  "10.17605/osf.io",
+  "10.48550/arxiv",
+  "10.2139/ssrn",
+  "10.5281/zenodo",
+]
+const PREPRINT_NAME_PATTERN = /figshare|osf|open science framework|arxiv|ssrn|zenodo/i
+
+function isPreprintSource(m: GroupMember) {
+  const doi = m.doi?.toLowerCase() ?? ""
+  if (PREPRINT_DOI_PREFIXES.some((p) => doi.startsWith(p))) return true
+  if (m.journal && PREPRINT_NAME_PATTERN.test(m.journal)) return true
+  return false
+}
+
+function authorKey(a: string) {
+  return a.trim().toLowerCase().split(/[\s,]+/).filter(Boolean).pop() ?? ""
+}
+
+function sharesAuthor(a: string[], b: string[]) {
+  const keys = new Set(a.map(authorKey).filter(Boolean))
+  return b.some((x) => keys.has(authorKey(x)))
+}
+
+// A group auto-qualifies for one-click merge when exactly one member is a "real"
+// journal publication, every other member is a known preprint/repository host, and
+// they share at least one author with the journal version (sanity check against
+// same-title-different-paper false positives).
+function journalMergeCandidate(members: GroupMember[]) {
+  const journalMembers = members.filter((m) => m.journal && !isPreprintSource(m))
+  const preprintMembers = members.filter((m) => isPreprintSource(m))
+  if (journalMembers.length !== 1) return null
+  const journal = journalMembers[0]!
+  if (preprintMembers.length === 0 || preprintMembers.length !== members.length - 1) return null
+  if (!preprintMembers.every((p) => sharesAuthor(journal.authors, p.authors))) return null
+  return { journal, preprints: preprintMembers }
+}
+
 function GroupTable({ groups, groupType }: { groups: GroupMember[][], groupType: "doi" | "title" }) {
   return (
     <div className="space-y-4 mb-6">
       {groups.map((members) => {
         const allIds = members.map((m) => m.id)
         const defaultOpen = members.length <= 5
+        const journalMerge = journalMergeCandidate(members)
         return (
           <details
             key={members[0]!.groupkey}
@@ -508,6 +554,15 @@ function GroupTable({ groups, groupType }: { groups: GroupMember[][], groupType:
                 {cap(members[0]!.title)} — {members.length} {members.length === 1 ? "copy" : "copies"}
               </span>
               <div className="flex items-center gap-2 shrink-0">
+                {journalMerge && (
+                  <MergeGroupButton
+                    canonicalId={journalMerge.journal.id}
+                    duplicateIds={journalMerge.preprints.map((p) => p.id)}
+                    label={`Merge into journal (${journalMerge.journal.journal}) →`}
+                    confirmMessage={`Merge ${journalMerge.preprints.length} preprint/repository copy(ies) into the journal version #${journalMerge.journal.id} (${journalMerge.journal.journal})?`}
+                    className="btn-success btn-xs"
+                  />
+                )}
                 <span className="text-xs text-base-content/30">▾</span>
                 <DismissGroupButton
                   groupKey={members[0]!.groupkey}
