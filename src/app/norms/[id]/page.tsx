@@ -98,7 +98,7 @@ export default async function NormDetailPage({
           instructions: true,
           participantLevelData: true,
           reliabilities: true,
-          user: { select: { name: true, points: true } },
+          user: { select: { name: true, points: true, email: true } },
         },
         orderBy: { createdAt: "asc" },
       },
@@ -448,7 +448,7 @@ export default async function NormDetailPage({
                     key={i}
                     label={
                       <>
-                        {edit.user.name ?? "A user"}
+                        {edit.user.name ?? edit.user.email.split("@")[0]}
                         {edit.user.points > 0 && (
                           <span className="badge badge-info badge-xs ml-1">{edit.user.points} pts</span>
                         )}
@@ -487,6 +487,7 @@ export default async function NormDetailPage({
                 subtitle={parts.join(" · ")}
                 papers={citedByInDb}
                 emptyMessage="No citing papers are currently in WordNorms"
+                defaultOpen={false}
               />
             )
           })()}
@@ -500,6 +501,7 @@ export default async function NormDetailPage({
               }
               papers={referencedInDb}
               otherRefs={otherCitations}
+              defaultOpen={false}
             />
           )}
         </div>
