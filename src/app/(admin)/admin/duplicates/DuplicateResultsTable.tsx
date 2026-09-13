@@ -1,7 +1,9 @@
 "use client"
 
 import { useRouter } from "next/navigation"
-import { useState } from "react"
+import { useMemo, useState } from "react"
+import { useMutation } from "@blitzjs/rpc"
+import mergeGroup from "src/app/(admin)/mutations/mergeGroup"
 import { StatusBadge } from "src/app/components/StatusBadge"
 
 type ResultPaper = {
@@ -21,37 +23,98 @@ function cap(s: string) {
 
 export function DuplicateResultsTable({ papers }: { papers: ResultPaper[] }) {
   const router = useRouter()
+  const [run] = useMutation(mergeGroup)
   const [checked, setChecked] = useState<number[]>([])
+  const [canonicalId, setCanonicalId] = useState<number | null>(null)
+  const [mergeState, setMergeState] = useState<"idle" | "loading" | "error">("idle")
 
   const toggle = (id: number) => {
-    setChecked((prev) =>
-      prev.includes(id) ? prev.filter((x) => x !== id) : prev.length < 2 ? [...prev, id] : prev
-    )
+    setChecked((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]))
+    setCanonicalId(null)
+    setMergeState("idle")
   }
 
   const canCompare = checked.length === 2
+  const canMergeGroup = checked.length > 2
+
+  const checkedPapers = useMemo(
+    () => papers.filter((p) => checked.includes(p.id)),
+    [papers, checked]
+  )
+
+  const handleMergeGroup = async () => {
+    if (!canonicalId) return
+    const duplicateIds = checked.filter((id) => id !== canonicalId)
+    if (!confirm(`Merge ${duplicateIds.length} other paper(s) into #${canonicalId}?`)) return
+    setMergeState("loading")
+    try {
+      await run({ canonicalId, duplicateIds })
+      setChecked([])
+      setCanonicalId(null)
+      setMergeState("idle")
+      router.refresh()
+    } catch (e: any) {
+      alert(e.message)
+      setMergeState("error")
+    }
+  }
 
   return (
     <>
       {checked.length > 0 && (
-        <div className="mb-4 flex items-center gap-3">
-          <span className="text-sm text-base-content/60">
-            {checked.length === 1 ? "1 paper selected — select one more" : "2 papers selected"}
-          </span>
-          {canCompare && (
-            <button
-              className="btn btn-primary btn-sm"
-              onClick={() => router.push(`/admin/duplicates?a=${checked[0]}&b=${checked[1]}`)}
-            >
-              Compare &amp; Merge →
+        <div className="mb-4 flex flex-col gap-3">
+          <div className="flex items-center gap-3">
+            <span className="text-sm text-base-content/60">
+              {checked.length === 1
+                ? "1 paper selected — select at least one more"
+                : `${checked.length} papers selected`}
+            </span>
+            {canCompare && (
+              <button
+                className="btn btn-primary btn-sm"
+                onClick={() => router.push(`/admin/duplicates?a=${checked[0]}&b=${checked[1]}`)}
+              >
+                Compare &amp; Merge →
+              </button>
+            )}
+            <button className="btn btn-ghost btn-xs" onClick={() => setChecked([])}>
+              Clear
             </button>
+          </div>
+
+          {canMergeGroup && (
+            <div className="rounded-lg border border-base-300 p-3">
+              <p className="text-xs text-base-content/60 mb-2">
+                Pick which paper is canonical — the rest will be merged into it.
+              </p>
+              <div className="space-y-1 mb-3">
+                {checkedPapers.map((p) => (
+                  <label key={p.id} className="flex items-center gap-2 cursor-pointer text-sm">
+                    <input
+                      type="radio"
+                      name="canonical"
+                      className="radio radio-sm"
+                      checked={canonicalId === p.id}
+                      onChange={() => setCanonicalId(p.id)}
+                    />
+                    <span className="font-mono text-xs text-base-content/40">#{p.id}</span>
+                    <span className="truncate">{cap(p.title)}</span>
+                  </label>
+                ))}
+              </div>
+              <button
+                className="btn btn-warning btn-sm"
+                onClick={handleMergeGroup}
+                disabled={!canonicalId || mergeState === "loading"}
+              >
+                {mergeState === "loading" ? (
+                  <span className="loading loading-spinner loading-xs" />
+                ) : (
+                  `Merge ${checked.length - 1} into canonical`
+                )}
+              </button>
+            </div>
           )}
-          <button
-            className="btn btn-ghost btn-xs"
-            onClick={() => setChecked([])}
-          >
-            Clear
-          </button>
         </div>
       )}
 
@@ -70,7 +133,6 @@ export function DuplicateResultsTable({ papers }: { papers: ResultPaper[] }) {
           <tbody>
             {papers.map((p) => {
               const isChecked = checked.includes(p.id)
-              const disabled = !isChecked && checked.length === 2
 
               return (
                 <tr
@@ -78,7 +140,6 @@ export function DuplicateResultsTable({ papers }: { papers: ResultPaper[] }) {
                   className={[
                     p.canonicalPaperId ? "opacity-40" : "",
                     isChecked ? "bg-primary/10" : "",
-                    disabled ? "opacity-30" : "",
                   ]
                     .filter(Boolean)
                     .join(" ")}
@@ -88,7 +149,7 @@ export function DuplicateResultsTable({ papers }: { papers: ResultPaper[] }) {
                       type="checkbox"
                       className="checkbox checkbox-sm"
                       checked={isChecked}
-                      disabled={disabled || !!p.canonicalPaperId}
+                      disabled={!!p.canonicalPaperId}
                       onChange={() => toggle(p.id)}
                     />
                   </td>

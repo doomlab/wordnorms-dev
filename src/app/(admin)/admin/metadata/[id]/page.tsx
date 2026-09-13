@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation"
 import db from "db"
 import { MetadataForm } from "../MetadataForm"
+import { PaperMetadataForm } from "../../papers/[id]/PaperMetadataForm"
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
@@ -67,17 +68,24 @@ export default async function AdminMetadataDetailPage({
 
       <div className="divide-y divide-base-200 text-sm mb-10">
         <Section title="Publication">
-          <Row label="Authors" value={paper.authors.join(", ") || undefined} />
-          <Row label="Year" value={paper.year?.toString()} />
-          <Row label="Journal" value={paper.journal ?? undefined} italic />
-          <Row label="DOI" value={paper.doi ?? undefined} />
+          <PaperMetadataForm
+            paper={{
+              id: paper.id,
+              title: paper.title,
+              authors: paper.authors,
+              year: paper.year,
+              doi: paper.doi,
+              journal: paper.journal,
+              abstract: paper.abstract,
+              pdfUrl: paper.pdfUrl,
+              openAlexId: paper.openAlexId,
+              authorMeta: Array.isArray(paper.authorMeta)
+                ? (paper.authorMeta as unknown as { name: string; orcid: string | null; openAlexId: string | null }[])
+                : null,
+            }}
+            backHref={backHref}
+          />
         </Section>
-
-        {paper.abstract && (
-          <Section title="Abstract">
-            <p className="text-base-content/70 leading-relaxed">{paper.abstract}</p>
-          </Section>
-        )}
 
         <Section title="Extracted Metadata">
           <MetadataForm
@@ -111,16 +119,6 @@ function Section({ title, children }: { title: string; children: React.ReactNode
         {title}
       </h2>
       <div className="space-y-0.5">{children}</div>
-    </div>
-  )
-}
-
-function Row({ label, value, italic }: { label: string; value: string | undefined; italic?: boolean }) {
-  if (!value) return null
-  return (
-    <div className="flex gap-3 py-1.5">
-      <span className="w-36 shrink-0 font-medium text-base-content/70">{label}</span>
-      <span className={`text-base-content/80 ${italic ? "italic" : ""}`}>{value}</span>
     </div>
   )
 }

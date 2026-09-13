@@ -187,21 +187,41 @@ export default async function AdminDuplicatesPage({ searchParams }: Props) {
   const titleGroups = groupBy(titleRows).filter(g => !ignoredTitleKeys.has(g[0]!.groupkey))
   const suggestionsCount = doiGroups.length + titleGroups.length
 
-  // Search mode
-  const results =
-    !isMergedTab && !isSuggestionsTab && !isDismissedTab && q && q.trim().length > 1
-      ? await db.paper.findMany({
-          where: {
-            OR: [
-              { title: { contains: q, mode: "insensitive" } },
-              { doi: { contains: q, mode: "insensitive" } },
-            ],
-          },
-          orderBy: { createdAt: "desc" },
-          take: 30,
+  // Search mode: substring match on title/DOI, plus fuzzy title matching (trigram
+  // similarity) with a threshold that scales with title length — short titles need
+  // a closer match to avoid noise, longer titles can tolerate more drift.
+  const isSearching = !isMergedTab && !isSuggestionsTab && !isDismissedTab && !!q && q.trim().length > 1
+  const candidateIds = isSearching
+    ? await db.$queryRaw<{ id: number }[]>`
+        SELECT id FROM "Paper" p
+        WHERE p.title ILIKE '%' || ${q} || '%'
+          OR p.doi ILIKE '%' || ${q} || '%'
+          OR similarity(p.title, ${q}) >= CASE
+            WHEN length(p.title) < 20 THEN 0.5
+            WHEN length(p.title) < 40 THEN 0.4
+            WHEN length(p.title) < 80 THEN 0.3
+            ELSE 0.25
+          END
+        ORDER BY
+          (p.title ILIKE '%' || ${q} || '%') DESC,
+          similarity(p.title, ${q}) DESC,
+          p."createdAt" DESC
+        LIMIT 30
+      `
+    : null
+
+  const results = candidateIds
+    ? await (async () => {
+        const ids = candidateIds.map((r) => r.id)
+        if (ids.length === 0) return []
+        const rows = await db.paper.findMany({
+          where: { id: { in: ids } },
           include: { canonical: { select: { id: true, title: true } }, duplicates: true },
         })
-      : null
+        const order = new Map(ids.map((id, i) => [id, i]))
+        return rows.sort((a, b) => order.get(a.id)! - order.get(b.id)!)
+      })()
+    : null
 
   return (
     <>
@@ -408,7 +428,8 @@ export default async function AdminDuplicatesPage({ searchParams }: Props) {
       ) : (
         <>
           <p className="text-base-content/60 mb-6 text-sm">
-            Search for papers by title or DOI, then check two to compare and merge.
+            Search for papers by title or DOI, then check two to compare and merge, or check
+            three or more to pick a canonical and merge them all at once.
           </p>
 
           <form className="flex gap-2 mb-8" method="get">
