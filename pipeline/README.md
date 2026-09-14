@@ -30,7 +30,7 @@ Admin reviews PENDING_REVIEW papers
 | Script | Trigger | What it does |
 |---|---|---|
 | `fetch.py` | Cron (e.g. weekly) | Queries OpenAlex, enriches missing abstracts via Crossref/EuropePMC, inserts new papers into DB (skips existing DOIs) |
-| `predict.py` | After fetch, or on demand | Trains SVM on reviewed papers, scores PENDING_REVIEW papers, logs a ModelRun |
+| `predict.py` | After fetch, or on demand | Trains XGBoost classifier on reviewed papers, scores PENDING_REVIEW papers, logs a ModelRun |
 | `extract.py` | Admin panel button | Runs extraction model on ACCEPTED papers, updates status to ADDED_TO_TRAINING |
 | `extract_local.py` | On demand | Bulk-extracts ACCEPTED papers using a local Ollama model (free, no API key) |
 | `download_pdfs.py` | On demand | Downloads PDFs for ACCEPTED papers and extracts author emails into `pdfs/emails.csv` |
@@ -45,7 +45,7 @@ All scripts connect to the same Postgres instance as the web app using `DATABASE
 
 **Paper table fields used by the pipeline:**
 - `status` — pipeline stage (PENDING_REVIEW → ACCEPTED/EXCLUDED → ADDED_TO_TRAINING)
-- `modelScore` — raw SVM decision score from the most recent predict run
+- `modelScore` — predicted probability (0–1) of inclusion from the most recent predict run
 - `isValidation` — marks holdout papers (set at seed time, grows over time; never demoted)
 
 **ModelRun table** — one row per predict.py run:

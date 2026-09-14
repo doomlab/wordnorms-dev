@@ -13,8 +13,8 @@ import unicodedata
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.feature_extraction.text import ENGLISH_STOP_WORDS
-from sklearn.svm import LinearSVC
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+from xgboost import XGBClassifier
 
 from db import get_conn, get_engine
 
@@ -151,14 +151,26 @@ def train(df_train):
         use_idf=True, min_df=0.0, max_df=1.0, max_features=1500
     )
     X = vectorizer.fit_transform(df_train["text"])
-    svm = LinearSVC(penalty="l2", C=1, random_state=RANDOM_SEED)
-    svm.fit(X, df_train["class"])
-    return vectorizer, svm
+
+    n_pos = df_train["class"].sum()
+    n_neg = (df_train["class"] == 0).sum()
+    scale_pos_weight = n_neg / n_pos if n_pos else 1.0
+
+    model = XGBClassifier(
+        n_estimators=300,
+        max_depth=4,
+        learning_rate=0.1,
+        scale_pos_weight=scale_pos_weight,
+        eval_metric="logloss",
+        random_state=RANDOM_SEED,
+    )
+    model.fit(X, df_train["class"])
+    return vectorizer, model
 
 
-def evaluate(vectorizer, svm, df_val):
+def evaluate(vectorizer, model, df_val):
     X = vectorizer.transform(df_val["text"])
-    y_pred = svm.predict(X)
+    y_pred = model.predict(X)
     return {
         "accuracy": accuracy_score(df_val["class"], y_pred),
         "precision": precision_score(df_val["class"], y_pred, zero_division=0),
@@ -189,8 +201,8 @@ def main():
 
         print(f"Training on {len(df_train)} papers, validating on {len(df_val)}")
 
-        vectorizer, svm = train(df_train)
-        metrics = evaluate(vectorizer, svm, df_val)
+        vectorizer, model = train(df_train)
+        metrics = evaluate(vectorizer, model, df_val)
 
         print(
             f"Metrics — accuracy: {metrics['accuracy']:.3f}  "
@@ -205,8 +217,8 @@ def main():
             print("No PENDING_REVIEW papers to score.")
         else:
             X_pending = vectorizer.transform(df_pending["text"])
-            df_pending["predicted"] = svm.predict(X_pending)
-            df_pending["score"] = svm.decision_function(X_pending)
+            df_pending["predicted"] = model.predict(X_pending)
+            df_pending["score"] = model.predict_proba(X_pending)[:, 1]
 
             df_include = df_pending[df_pending["predicted"] == 1]
             df_exclude = df_pending[df_pending["predicted"] == 0]
