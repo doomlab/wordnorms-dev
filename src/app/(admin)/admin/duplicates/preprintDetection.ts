@@ -33,6 +33,15 @@ const PREPRINT_SOURCES: { key: string; doiSubstrings: string[]; namePattern: Reg
   { key: "medrxiv", doiSubstrings: [], namePattern: /medrxiv/i },
   { key: "biorxiv", doiSubstrings: ["1101/"], namePattern: /biorxiv/i },
   { key: "techrxiv", doiSubstrings: ["36227/techrxiv"], namePattern: /techrxiv/i },
+  // HAL (Centre pour la Communication Scientifique Directe) mostly mints its own
+  // identifiers rather than a single DOI prefix, so match on domain substrings
+  // where present plus a word-boundary journal-name check ("hal" alone would also
+  // match unrelated words like "halcyon").
+  {
+    key: "hal",
+    doiSubstrings: ["hal.science", "archives-ouvertes.fr"],
+    namePattern: /\bhal\b/i,
+  },
 ]
 
 export function detectSource(m: Pick<GroupMember, "doi" | "journal">): string | null {

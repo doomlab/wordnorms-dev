@@ -13,7 +13,7 @@ export default resolver.pipe(
     const groups = await db.$queryRaw<GroupRow[]>`
       WITH zenodo AS (
         SELECT id,
-          left(regexp_replace(regexp_replace(lower(title), '[^a-z0-9 ]', '', 'g'), '\s+', ' ', 'g'), 80) AS ntitle,
+          left(regexp_replace(regexp_replace(lower(title), '[^a-z0-9 ]', '', 'g'), '\\s+', ' ', 'g'), 80) AS ntitle,
           (regexp_match(doi, '^10[.]5281/zenodo[.]([0-9]+)$'))[1]::int AS record_id
         FROM "Paper"
         WHERE doi ~ '^10[.]5281/zenodo[.][0-9]+$'

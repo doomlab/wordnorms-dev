@@ -10,6 +10,7 @@ export function AutomergeZenodoButton({ groupCount }: { groupCount: number }) {
   const router = useRouter()
   const [pending, setPending] = useState(false)
   const [result, setResult] = useState<{ merged: number; groups: number } | null>(null)
+  const [error, setError] = useState<string | null>(null)
 
   const handleClick = async () => {
     if (
@@ -19,10 +20,13 @@ export function AutomergeZenodoButton({ groupCount }: { groupCount: number }) {
     )
       return
     setPending(true)
+    setError(null)
     try {
       const res = await run({})
       setResult(res)
       router.refresh()
+    } catch (e: any) {
+      setError(e?.message ?? "Merge failed")
     } finally {
       setPending(false)
     }
@@ -37,12 +41,15 @@ export function AutomergeZenodoButton({ groupCount }: { groupCount: number }) {
   }
 
   return (
-    <button className="btn btn-warning btn-sm" onClick={handleClick} disabled={pending}>
-      {pending ? (
-        <span className="loading loading-spinner loading-xs" />
-      ) : (
-        `Merge ${groupCount} Zenodo groups`
-      )}
-    </button>
+    <div className="flex flex-col items-end gap-1">
+      <button className="btn btn-warning btn-sm" onClick={handleClick} disabled={pending}>
+        {pending ? (
+          <span className="loading loading-spinner loading-xs" />
+        ) : (
+          `Merge ${groupCount} Zenodo groups`
+        )}
+      </button>
+      {error && <span className="text-xs text-error">{error}</span>}
+    </div>
   )
 }
