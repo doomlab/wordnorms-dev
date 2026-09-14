@@ -1,100 +1,23 @@
-import fs from "fs"
-import path from "path"
 import { Suspense } from "react"
 import { Navbar } from "../components/Navbar"
 import { DatasetFilters } from "../components/DatasetFilters"
 import { SavedSearchBar } from "../components/SavedSearchBar"
 import { DatasetFavoriteButton } from "../components/DatasetFavoriteButton"
 import { SuggestDatasetButton } from "../components/SuggestDatasetButton"
-import { DECADE_LABELS } from "../data/datasets"
 import { getBlitzContext } from "../blitz-server"
+import {
+  loadDatasetData,
+  baseCards as baseCardsOf,
+  extractBaseLanguages,
+  filterDatasetCards,
+  parseDatasetFilterParams,
+  FLAG_LABELS,
+  type DatasetFilterSearchParams,
+} from "src/lib/datasetFilters"
 import db from "db"
 
 export const dynamic = "force-dynamic"
 export const metadata = { title: "Datasets – WordNorms" }
-
-type Card = {
-  bibtex: string
-  parentBibtex: string | null
-  citation: {
-    author: string
-    year: number | null
-    title: string
-    journal: string | null
-    doi: string | null
-  }
-  language: string | null
-  nRows: number | null
-  flags: string[]
-  wordColumns: string[]
-  rawColumns: string[]
-}
-
-type DataFile = { syncedAt: string; cards: Card[] }
-
-const FLAG_LABELS: Record<string, string> = {
-  accuracy: "Accuracy",
-  ambiguity: "Ambiguity",
-  aoa: "Age of acquisition",
-  arousal: "Arousal",
-  assoc: "Association",
-  category: "Category",
-  complex: "Complexity",
-  concrete: "Concreteness",
-  context: "Context",
-  dominate: "Dominance",
-  emotion: "Emotion",
-  familiar: "Familiarity",
-  freq: "Frequency",
-  imageagree: "Image agreement",
-  imagevar: "Image variability",
-  imagine: "Imageability",
-  intense: "Intensity",
-  letters: "Letters",
-  meaning: "Meaning",
-  modality: "Modality",
-  morph: "Morphology",
-  nameagree: "Name agreement",
-  orthon: "Orthog. neighbors",
-  phonemes: "Phonemes",
-  picture: "Picture",
-  pos: "Part of speech",
-  pronounce: "Pronunciation",
-  recognition: "Recognition",
-  relevance: "Relevance",
-  rt: "Reaction time",
-  semantic: "Semantic",
-  sensory: "Sensory",
-  similar: "Similarity",
-  syllables: "Syllables",
-  taboo: "Taboo",
-  typical: "Typicality",
-  valence: "Valence",
-  visualcomp: "Visual complexity",
-}
-
-// A comma-separated or underscore-suffixed language string like
-// "chinese_simplified_cue, chinese_simplified_response" → ["Chinese"]
-function extractBaseLanguages(raw: string): string[] {
-  const seen = new Set<string>()
-  for (const part of raw.split(",")) {
-    const base = part.trim().split("_")[0].toLowerCase()
-    if (!base) continue
-    const label = base.charAt(0).toUpperCase() + base.slice(1)
-    seen.add(label)
-  }
-  return Array.from(seen)
-}
-
-function loadData(): DataFile | null {
-  const p = path.join(process.cwd(), "data", "model-cards", "_data.json")
-  if (!fs.existsSync(p)) return null
-  try {
-    return JSON.parse(fs.readFileSync(p, "utf8")) as DataFile
-  } catch {
-    return null
-  }
-}
 
 function capFirst(s: string) {
   return s.charAt(0).toUpperCase() + s.slice(1)
@@ -103,30 +26,17 @@ function capFirst(s: string) {
 export default async function DatasetsPage({
   searchParams,
 }: {
-  searchParams: Promise<{
-    q?: string
-    lang?: string | string[]
-    decade?: string | string[]
-    flag?: string | string[]
-  }>
+  searchParams: Promise<DatasetFilterSearchParams>
 }) {
   const params = await searchParams
   const ctx = await getBlitzContext()
   const userId = ctx.session.userId as number | undefined
 
-  const q = params.q?.trim().toLowerCase() || undefined
-  const selectedLanguages = params.lang
-    ? Array.isArray(params.lang) ? params.lang : [params.lang]
-    : []
-  const selectedDecades = params.decade
-    ? Array.isArray(params.decade) ? params.decade : [params.decade]
-    : []
-  const selectedFlags = params.flag
-    ? Array.isArray(params.flag) ? params.flag : [params.flag]
-    : []
+  const filters = parseDatasetFilterParams(params)
+  const { q, languages: selectedLanguages, decades: selectedDecades, flags: selectedFlags } = filters
 
   const [data, favoritedBibtexSet, savedSearches] = await Promise.all([
-    Promise.resolve(loadData()),
+    Promise.resolve(loadDatasetData()),
     userId
       ? db.userDatasetFavorite
           .findMany({ where: { userId }, select: { bibtex: true } })
@@ -159,8 +69,7 @@ export default async function DatasetsPage({
     )
   }
 
-  // Exclude R1/R123 sub-variants (response-level splits of the same study)
-  const baseCards = data.cards.filter((c) => !/_R1(23)?$/.test(c.bibtex))
+  const baseCards = baseCardsOf(data)
 
   // Compute sidebar options from full card list
   const allLanguages = Array.from(
@@ -170,40 +79,7 @@ export default async function DatasetsPage({
   const allFlagKeys = Array.from(new Set(baseCards.flatMap((c) => c.flags))).sort()
   const allFlags = allFlagKeys.map((k) => ({ key: k, label: FLAG_LABELS[k] ?? k }))
 
-  // Filter cards
-  let cards = baseCards
-
-  if (q) {
-    cards = cards.filter(
-      (c) =>
-        c.citation.title.toLowerCase().includes(q) ||
-        c.citation.author.toLowerCase().includes(q) ||
-        (c.language && extractBaseLanguages(c.language).some((l) => l.toLowerCase().includes(q))) ||
-        c.flags.some((f) => (FLAG_LABELS[f] ?? f).toLowerCase().includes(q))
-    )
-  }
-
-  if (selectedLanguages.length) {
-    cards = cards.filter((c) => {
-      if (!c.language) return false
-      const cardLangs = extractBaseLanguages(c.language)
-      return selectedLanguages.some((l) => cardLangs.includes(l))
-    })
-  }
-
-  if (selectedDecades.length) {
-    cards = cards.filter((c) => {
-      if (!c.citation.year) return false
-      return selectedDecades.some((decade) => {
-        const range = DECADE_LABELS[decade]
-        return range && c.citation.year! >= range[0] && c.citation.year! <= range[1]
-      })
-    })
-  }
-
-  if (selectedFlags.length) {
-    cards = cards.filter((c) => selectedFlags.every((f) => c.flags.includes(f)))
-  }
+  const cards = filterDatasetCards(baseCards, filters)
 
   const hasFilters = !!(q || selectedLanguages.length || selectedDecades.length || selectedFlags.length)
 

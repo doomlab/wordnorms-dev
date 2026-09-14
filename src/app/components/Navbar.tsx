@@ -92,6 +92,9 @@ export async function Navbar({ leftLinks, rightExtra, className }: NavbarProps) 
                   <Link href="/favorites">★ My Favorites</Link>
                 </li>
                 <li>
+                  <Link href="/searches">My Searches</Link>
+                </li>
+                <li>
                   <Link href="/tutorial">How to verify</Link>
                 </li>
               </ul>

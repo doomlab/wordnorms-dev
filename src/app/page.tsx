@@ -1,66 +1,34 @@
 import { Suspense } from "react"
-import fs from "fs"
-import path from "path"
 import { Navbar } from "./components/Navbar"
 import { BrowseFilters } from "./components/BrowseFilters"
 import { SavedSearchBar } from "./components/SavedSearchBar"
 import { FavoriteButton } from "./components/FavoriteButton"
 import { ReportButton } from "./components/ReportButton"
-import { DECADE_LABELS } from "./data/datasets"
 import { getBlitzContext } from "./blitz-server"
 import { SuggestArticleButton } from "./components/SuggestArticleButton"
 import { Pagination } from "./components/Pagination"
 import { TrainingBanner } from "./components/TrainingBanner"
+import {
+  parseNormsFilterParams,
+  buildNormsWhere,
+  loadDatasetLookup,
+  type NormsFilterSearchParams,
+} from "src/lib/normsFilters"
 import db from "db"
 
 const PAGE_SIZE = 50
 
 const capFirst = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
 
-function loadDatasetLookup(): { byDoi: Map<string, string>; byTitle: Map<string, string> } {
-  const p = path.join(process.cwd(), "data", "model-cards", "_data.json")
-  if (!fs.existsSync(p)) return { byDoi: new Map(), byTitle: new Map() }
-  try {
-    const { cards } = JSON.parse(fs.readFileSync(p, "utf8")) as {
-      cards: { bibtex: string; citation: { doi: string | null; title: string } }[]
-    }
-    const byDoi = new Map<string, string>()
-    const byTitle = new Map<string, string>()
-    for (const c of cards) {
-      if (c.citation.doi) byDoi.set(c.citation.doi.toLowerCase(), c.bibtex)
-      byTitle.set(c.citation.title.toLowerCase().trim(), c.bibtex)
-    }
-    return { byDoi, byTitle }
-  } catch {
-    return { byDoi: new Map(), byTitle: new Map() }
-  }
-}
-
 export default async function Home({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string; lang?: string | string[]; decade?: string | string[]; stimuli?: string | string[]; status?: string | string[]; year?: string; page?: string }>
+  searchParams: Promise<NormsFilterSearchParams & { page?: string }>
 }) {
   const params = await searchParams
+  const filters = parseNormsFilterParams(params)
+  const { q, languages, decades, year, stimuliTypes, statuses } = filters
 
-  const q = params.q?.trim() || undefined
-  const languages = params.lang ? (Array.isArray(params.lang) ? params.lang : [params.lang]) : []
-  const decades = params.decade
-    ? Array.isArray(params.decade)
-      ? params.decade
-      : [params.decade]
-    : []
-  const year = params.year?.trim() ? parseInt(params.year, 10) : undefined
-  const stimuliTypes = params.stimuli
-    ? Array.isArray(params.stimuli)
-      ? params.stimuli
-      : [params.stimuli]
-    : []
-  const statuses = params.status
-    ? Array.isArray(params.status)
-      ? params.status
-      : [params.status]
-    : []
   const page = Math.max(1, parseInt(params.page ?? "1", 10) || 1)
   const skip = (page - 1) * PAGE_SIZE
 
@@ -69,85 +37,7 @@ export default async function Home({
   const ctx = await getBlitzContext()
   const userId = ctx.session.userId as number | undefined
 
-  // Prisma has no substring filter for String[] columns — raw queries for author
-  // and norms-collected matches so e.g. "words" also matches "word frequency"
-  const [authorMatchIds, normsMatchIds] = q
-    ? await Promise.all([
-        db.$queryRaw<{ id: number }[]>`
-          SELECT id FROM "Paper"
-          WHERE EXISTS (SELECT 1 FROM unnest(authors) AS a WHERE a ILIKE ${`%${q}%`})
-        `,
-        db.$queryRaw<{ id: number }[]>`
-          SELECT "paperId" AS id FROM "PaperExtraction"
-          WHERE EXISTS (SELECT 1 FROM unnest("normsCollected") AS n WHERE n ILIKE ${`%${q}%`})
-        `,
-      ])
-    : [[], []]
-  const authorMatchIdSet = authorMatchIds.map((r) => r.id)
-  const normsMatchIdSet = normsMatchIds.map((r) => r.id)
-
-  const andClauses: object[] = []
-
-  if (q) {
-    andClauses.push({
-      OR: [
-        { title: { contains: q, mode: "insensitive" } },
-        { abstract: { contains: q, mode: "insensitive" } },
-        { doi: { contains: q, mode: "insensitive" } },
-        ...(authorMatchIdSet.length ? [{ id: { in: authorMatchIdSet } }] : []),
-        ...(normsMatchIdSet.length ? [{ id: { in: normsMatchIdSet } }] : []),
-      ],
-    })
-  }
-
-  if (decades.length) {
-    andClauses.push({
-      OR: decades.flatMap((decade) => {
-        const range = DECADE_LABELS[decade]
-        return range ? [{ year: { gte: range[0], lte: range[1] } }] : []
-      }),
-    })
-  }
-
-  if (year !== undefined && !Number.isNaN(year)) {
-    andClauses.push({ year })
-  }
-
-  if (statuses.length) {
-    const statusClauses: object[] = []
-    if (statuses.includes("peer-reviewed")) {
-      statusClauses.push({ journal: { not: null } })
-    }
-    if (statuses.includes("awaiting")) {
-      statusClauses.push({ extraction: { is: null } })
-    }
-    if (statuses.includes("verified")) {
-      statusClauses.push({ extraction: { verifiedAt: { not: null } } })
-    }
-    if (statuses.includes("dataset")) {
-      const datasetDois = Array.from(datasetByDoi.keys()).filter(Boolean)
-      const datasetTitles = Array.from(datasetByTitle.keys()).filter(Boolean)
-      const dsClauses: object[] = []
-      if (datasetDois.length) dsClauses.push({ doi: { in: datasetDois } })
-      if (datasetTitles.length) dsClauses.push({ title: { in: datasetTitles } })
-      if (dsClauses.length) statusClauses.push({ OR: dsClauses })
-    }
-    if (statusClauses.length) andClauses.push({ OR: statusClauses })
-  }
-
-  const paperWhere = {
-    status: "ACCEPTED" as const,
-    canonicalPaperId: null,
-    ...(languages.length || stimuliTypes.length
-      ? {
-          extraction: {
-            ...(languages.length ? { language: { hasSome: languages } } : {}),
-            ...(stimuliTypes.length ? { stimuliType: { hasSome: stimuliTypes } } : {}),
-          },
-        }
-      : {}),
-    ...(andClauses.length ? { AND: andClauses } : {}),
-  }
+  const paperWhere = await buildNormsWhere(filters)
 
   const [papers, totalPapers, allPapers, favoritedIds, reportedIds, savedSearches] = await Promise.all([
     db.paper.findMany({

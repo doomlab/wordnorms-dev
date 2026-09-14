@@ -83,6 +83,12 @@ export function SavedSearchBar({
                 ))}
               </ul>
             )}
+            <a
+              href="/searches"
+              className="block mt-2 pt-2 border-t border-base-200 text-xs text-base-content/60 hover:text-base-content"
+            >
+              Manage all searches →
+            </a>
           </div>
         )}
       </div>
