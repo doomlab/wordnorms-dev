@@ -42,30 +42,29 @@ export default async function AdminMetadataDetailPage({
 
       <h1 className="text-2xl font-bold leading-snug mb-6">{cap(paper.title)}</h1>
 
-      {(paper.doi || paper.pdfUrl) && (
-        <div className="flex flex-wrap gap-2 mb-8">
-          {paper.doi && (
-            <a
-              href={`https://doi.org/${paper.doi}`}
-              target="_blank"
-              rel="noreferrer"
-              className="btn btn-outline btn-sm"
-            >
-              View DOI
-            </a>
-          )}
-          {paper.pdfUrl && (
-            <a
-              href={paper.pdfUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="btn btn-outline btn-sm"
-            >
-              View PDF
-            </a>
-          )}
-        </div>
-      )}
+      <div className="flex flex-wrap gap-2 mb-8">
+        {paper.doi && (
+          <a
+            href={`https://doi.org/${paper.doi}`}
+            target="_blank"
+            rel="noreferrer"
+            className="btn btn-outline btn-sm"
+          >
+            View DOI
+          </a>
+        )}
+        {paper.pdfUrl && (
+          <a
+            href={paper.pdfUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="btn btn-outline btn-sm"
+          >
+            View PDF
+          </a>
+        )}
+        <ImportExtractionModal paperId={paper.id} />
+      </div>
 
       <div className="divide-y divide-base-200 text-sm mb-10">
         <Section title="Publication">
@@ -88,10 +87,7 @@ export default async function AdminMetadataDetailPage({
           />
         </Section>
 
-        <Section
-          title="Extracted Metadata"
-          headerRight={<ImportExtractionModal paperId={paper.id} />}
-        >
+        <Section title="Extracted Metadata">
           <MetadataForm
             paperId={paper.id}
             extraction={{

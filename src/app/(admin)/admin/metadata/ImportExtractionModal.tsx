@@ -95,7 +95,7 @@ export function ImportExtractionModal({ paperId }: { paperId: number }) {
 
   return (
     <>
-      <button type="button" onClick={handleOpen} className="btn btn-outline btn-xs">
+      <button type="button" onClick={handleOpen} className="btn btn-outline btn-sm">
         Import LLM extraction →
       </button>
 
