@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation"
 import db from "db"
 import { MetadataForm } from "../MetadataForm"
+import { ImportExtractionModal } from "../ImportExtractionModal"
 import { PaperMetadataForm } from "../../papers/[id]/PaperMetadataForm"
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
@@ -89,14 +90,7 @@ export default async function AdminMetadataDetailPage({
 
         <Section
           title="Extracted Metadata"
-          headerRight={
-            <a
-              href={`/admin/import-extractions?paperId=${paper.id}&from=/admin/metadata/${paper.id}`}
-              className="btn btn-outline btn-xs"
-            >
-              Import LLM extraction →
-            </a>
-          }
+          headerRight={<ImportExtractionModal paperId={paper.id} />}
         >
           <MetadataForm
             paperId={paper.id}

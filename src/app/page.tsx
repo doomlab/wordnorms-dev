@@ -3,6 +3,7 @@ import fs from "fs"
 import path from "path"
 import { Navbar } from "./components/Navbar"
 import { BrowseFilters } from "./components/BrowseFilters"
+import { SavedSearchBar } from "./components/SavedSearchBar"
 import { FavoriteButton } from "./components/FavoriteButton"
 import { ReportButton } from "./components/ReportButton"
 import { DECADE_LABELS } from "./data/datasets"
@@ -68,15 +69,22 @@ export default async function Home({
   const ctx = await getBlitzContext()
   const userId = ctx.session.userId as number | undefined
 
-  // Prisma has no substring filter for String[] columns — raw query for author matches
-  const authorMatchIds = q
-    ? (
-        await db.$queryRaw<{ id: number }[]>`
+  // Prisma has no substring filter for String[] columns — raw queries for author
+  // and norms-collected matches so e.g. "words" also matches "word frequency"
+  const [authorMatchIds, normsMatchIds] = q
+    ? await Promise.all([
+        db.$queryRaw<{ id: number }[]>`
           SELECT id FROM "Paper"
           WHERE EXISTS (SELECT 1 FROM unnest(authors) AS a WHERE a ILIKE ${`%${q}%`})
-        `
-      ).map((r) => r.id)
-    : []
+        `,
+        db.$queryRaw<{ id: number }[]>`
+          SELECT "paperId" AS id FROM "PaperExtraction"
+          WHERE EXISTS (SELECT 1 FROM unnest("normsCollected") AS n WHERE n ILIKE ${`%${q}%`})
+        `,
+      ])
+    : [[], []]
+  const authorMatchIdSet = authorMatchIds.map((r) => r.id)
+  const normsMatchIdSet = normsMatchIds.map((r) => r.id)
 
   const andClauses: object[] = []
 
@@ -86,8 +94,8 @@ export default async function Home({
         { title: { contains: q, mode: "insensitive" } },
         { abstract: { contains: q, mode: "insensitive" } },
         { doi: { contains: q, mode: "insensitive" } },
-        { extraction: { normsCollected: { hasSome: [q] } } },
-        ...(authorMatchIds.length ? [{ id: { in: authorMatchIds } }] : []),
+        ...(authorMatchIdSet.length ? [{ id: { in: authorMatchIdSet } }] : []),
+        ...(normsMatchIdSet.length ? [{ id: { in: normsMatchIdSet } }] : []),
       ],
     })
   }
@@ -141,7 +149,7 @@ export default async function Home({
     ...(andClauses.length ? { AND: andClauses } : {}),
   }
 
-  const [papers, totalPapers, allPapers, favoritedIds, reportedIds] = await Promise.all([
+  const [papers, totalPapers, allPapers, favoritedIds, reportedIds, savedSearches] = await Promise.all([
     db.paper.findMany({
       where: paperWhere,
       include: { extraction: { select: { language: true, stimuliType: true, stimuliCount: true, normsCollected: true, verifiedAt: true } } },
@@ -168,6 +176,13 @@ export default async function Home({
           .findMany({ where: { userId }, select: { paperId: true } })
           .then((rows) => new Set(rows.map((r) => r.paperId)))
       : Promise.resolve(new Set<number>()),
+    userId
+      ? db.savedSearch.findMany({
+          where: { userId, path: "/" },
+          orderBy: { createdAt: "desc" },
+          select: { id: true, name: true, query: true },
+        })
+      : Promise.resolve([]),
   ])
 
   const allLanguages = Array.from(
@@ -191,18 +206,24 @@ export default async function Home({
       <Navbar />
       <TrainingBanner />
 
-      <div className="flex flex-1 w-full px-10 py-8 gap-8">
-        <Suspense fallback={<div className="w-56 shrink-0" />}>
+      <div className="flex-1 w-full px-10 py-8">
+        <Suspense fallback={<div className="h-24" />}>
           <BrowseFilters allLanguages={allLanguages} allStimuliTypes={allStimuliTypes} />
         </Suspense>
 
-        <div className="flex-1 min-w-0">
+        <div className="min-w-0">
           <div className="flex items-center justify-between mb-5">
             <p className="text-sm text-base-content/60">
               <span className="font-semibold text-base-content">{totalPapers}</span> norm{" "}
               {totalPapers === 1 ? "set" : "sets"}
             </p>
             <div className="flex items-center gap-2">
+              <SavedSearchBar
+                path="/"
+                currentQuery={downloadParams.toString()}
+                savedSearches={savedSearches}
+                isLoggedIn={!!userId}
+              />
               <a href={downloadHref} className="btn btn-outline btn-sm">
                 Download CSV
               </a>

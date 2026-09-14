@@ -3,6 +3,7 @@ import path from "path"
 import { Suspense } from "react"
 import { Navbar } from "../components/Navbar"
 import { DatasetFilters } from "../components/DatasetFilters"
+import { SavedSearchBar } from "../components/SavedSearchBar"
 import { DatasetFavoriteButton } from "../components/DatasetFavoriteButton"
 import { SuggestDatasetButton } from "../components/SuggestDatasetButton"
 import { DECADE_LABELS } from "../data/datasets"
@@ -124,13 +125,20 @@ export default async function DatasetsPage({
     ? Array.isArray(params.flag) ? params.flag : [params.flag]
     : []
 
-  const [data, favoritedBibtexSet] = await Promise.all([
+  const [data, favoritedBibtexSet, savedSearches] = await Promise.all([
     Promise.resolve(loadData()),
     userId
       ? db.userDatasetFavorite
           .findMany({ where: { userId }, select: { bibtex: true } })
           .then((rows) => new Set(rows.map((r) => r.bibtex)))
       : Promise.resolve(new Set<string>()),
+    userId
+      ? db.savedSearch.findMany({
+          where: { userId, path: "/datasets" },
+          orderBy: { createdAt: "desc" },
+          select: { id: true, name: true, query: true },
+        })
+      : Promise.resolve([]),
   ])
 
   if (!data) {
@@ -214,28 +222,28 @@ export default async function DatasetsPage({
     <div className="min-h-screen bg-base-100 flex flex-col">
       <Navbar />
 
-      <div className="flex flex-1 w-full px-10 py-8 gap-8">
-        <Suspense fallback={<div className="w-56 shrink-0" />}>
+      <div className="flex-1 w-full px-10 py-8">
+        <div className="mb-6">
+          <h1 className="text-3xl font-bold mb-1">Datasets</h1>
+          <p className="text-base-content/60 text-sm">
+            Word norm datasets from the{" "}
+            <a
+              href="https://github.com/SemanticPriming/semanticprimeR"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="link link-primary"
+            >
+              SemanticPrimeR
+            </a>{" "}
+            collection, synced {syncDate}.
+          </p>
+        </div>
+
+        <Suspense fallback={<div className="h-24" />}>
           <DatasetFilters allLanguages={allLanguages} allFlags={allFlags} />
         </Suspense>
 
-        <div className="flex-1 min-w-0">
-          <div className="mb-6">
-            <h1 className="text-3xl font-bold mb-1">Datasets</h1>
-            <p className="text-base-content/60 text-sm">
-              Word norm datasets from the{" "}
-              <a
-                href="https://github.com/SemanticPriming/semanticprimeR"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="link link-primary"
-              >
-                SemanticPrimeR
-              </a>{" "}
-              collection, synced {syncDate}.
-            </p>
-          </div>
-
+        <div className="min-w-0">
           <div className="flex items-center justify-between mb-5">
             <p className="text-sm text-base-content/60">
               <span className="font-semibold text-base-content">{cards.length}</span>{" "}
@@ -243,6 +251,12 @@ export default async function DatasetsPage({
               {hasFilters && " match your filters"}
             </p>
             <div className="flex items-center gap-2">
+              <SavedSearchBar
+                path="/datasets"
+                currentQuery={downloadParams.toString()}
+                savedSearches={savedSearches}
+                isLoggedIn={!!userId}
+              />
               <a href={downloadHref} className="btn btn-outline btn-sm">
                 Download CSV
               </a>

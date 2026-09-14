@@ -3,6 +3,7 @@
 import { useRouter, useSearchParams, usePathname } from "next/navigation"
 import { useCallback, useEffect, useRef, useState } from "react"
 import { DECADE_LABELS } from "../data/datasets"
+import { SearchableFilterField } from "./SearchableFilterField"
 
 export function DatasetFilters({
   allLanguages,
@@ -52,101 +53,111 @@ export function DatasetFilters({
     debounceRef.current = setTimeout(() => update("q", value), 400)
   }
 
-  const hasFilters =
-    q || selectedLanguages.length || selectedDecades.length || selectedFlags.length
+  const activeCount = selectedLanguages.length + selectedDecades.length + selectedFlags.length
+  const hasActiveFilters = activeCount > 0
+  const hasFilters = !!q || hasActiveFilters
 
   return (
-    <aside className="w-56 shrink-0">
-      <div className="flex items-center justify-between mb-4">
-        <span className="font-semibold text-sm">Filters</span>
-        {hasFilters && (
-          <a href={pathname} className="btn btn-primary btn-xs">
-            Reset
-          </a>
-        )}
-      </div>
-
+    <div className="mb-6">
       {/* Search */}
-      <div className="mb-6">
-        <label className="label py-1">
-          <span className="label-text text-xs font-medium uppercase tracking-wide text-base-content/50">
-            Search
-          </span>
-        </label>
-        <input
-          type="search"
-          value={inputValue}
-          onChange={(e) => handleSearchChange(e.target.value)}
-          placeholder="title, author, language…"
-          className="input input-bordered input-sm w-full"
-        />
-      </div>
+      <input
+        type="search"
+        value={inputValue}
+        onChange={(e) => handleSearchChange(e.target.value)}
+        placeholder="Search title, author, or language…"
+        className="input input-bordered w-full"
+      />
 
-      {/* Language */}
-      {allLanguages.length > 0 && (
-        <div className="mb-6">
-          <p className="text-xs font-medium uppercase tracking-wide text-base-content/50 mb-2">
-            Language
-          </p>
-          <div className="flex flex-col gap-1.5 max-h-48 overflow-y-auto pr-1">
-            {allLanguages.map((lang) => (
-              <label key={lang} className="flex items-center gap-2 cursor-pointer">
-                <input
-                  type="checkbox"
-                  className="checkbox checkbox-sm checkbox-primary"
-                  checked={selectedLanguages.includes(lang)}
-                  onChange={(e) => update("lang", lang, e.target.checked)}
-                />
-                <span className="text-sm">{lang}</span>
-              </label>
-            ))}
-          </div>
-        </div>
-      )}
+      {/* Advanced filters */}
+      <details className="mt-3 group" open={hasActiveFilters}>
+        <summary className="cursor-pointer select-none text-sm font-medium text-base-content/60 hover:text-base-content flex items-center gap-2 w-fit">
+          <span className="transition-transform group-open:rotate-90">▸</span>
+          Filters
+          {hasActiveFilters && <span className="badge badge-primary badge-sm">{activeCount}</span>}
+        </summary>
 
-      {/* Publication Year */}
-      <div className="mb-6">
-        <p className="text-xs font-medium uppercase tracking-wide text-base-content/50 mb-2">
-          Publication Year
-        </p>
-        <div className="flex flex-col gap-1.5">
-          {Object.keys(DECADE_LABELS).map((decade) => (
-            <label key={decade} className="flex items-center gap-2 cursor-pointer">
-              <input
-                type="checkbox"
-                className="checkbox checkbox-sm checkbox-primary"
-                checked={selectedDecades.includes(decade)}
-                onChange={(e) => update("decade", decade, e.target.checked)}
-              />
-              <span className="text-sm">{decade}</span>
-            </label>
-          ))}
-        </div>
-      </div>
+        <div className="mt-3 p-4 bg-base-200/50 rounded-lg flex flex-col gap-4">
+          {allLanguages.length > 0 && (
+            <SearchableFilterField
+              label="Language"
+              placeholder="Search languages…"
+              options={allLanguages}
+              selected={selectedLanguages}
+              onToggle={(v) => update("lang", v, !selectedLanguages.includes(v))}
+            />
+          )}
 
-      {/* Norms */}
-      {allFlags.length > 0 && (
-        <div className="mb-6">
-          <p className="text-xs font-medium uppercase tracking-wide text-base-content/50 mb-2">
-            Norms
-          </p>
-          <div className="flex flex-wrap gap-1">
-            {allFlags.map(({ key, label }) => (
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-sm text-base-content/50 w-32 shrink-0">Publication year</span>
+            {Object.keys(DECADE_LABELS).map((decade) => (
               <button
-                key={key}
-                onClick={() => update("flag", key, !selectedFlags.includes(key))}
-                className={`badge badge-sm cursor-pointer transition-colors ${
-                  selectedFlags.includes(key)
-                    ? "badge-primary"
-                    : "badge-ghost hover:badge-primary"
+                key={decade}
+                onClick={() => update("decade", decade, !selectedDecades.includes(decade))}
+                className={`badge cursor-pointer transition-colors ${
+                  selectedDecades.includes(decade) ? "badge-primary" : "badge-outline hover:badge-primary"
                 }`}
               >
-                {label}
+                {decade}
               </button>
             ))}
           </div>
+
+          {allFlags.length > 0 && (
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="text-sm text-base-content/50 w-32 shrink-0">Norms</span>
+              {allFlags.map(({ key, label }) => (
+                <button
+                  key={key}
+                  onClick={() => update("flag", key, !selectedFlags.includes(key))}
+                  className={`badge cursor-pointer transition-colors ${
+                    selectedFlags.includes(key) ? "badge-primary" : "badge-outline hover:badge-primary"
+                  }`}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      </details>
+
+      {/* Active filter chips */}
+      {hasFilters && (
+        <div className="flex flex-wrap items-center gap-2 mt-3">
+          {selectedLanguages.map((l) => (
+            <span key={l} className="badge badge-lg gap-1">
+              {l}
+              <button onClick={() => update("lang", l, false)} aria-label={`Remove ${l} filter`}>
+                ✕
+              </button>
+            </span>
+          ))}
+          {selectedDecades.map((d) => (
+            <span key={d} className="badge badge-lg gap-1">
+              {d}
+              <button onClick={() => update("decade", d, false)} aria-label={`Remove ${d} filter`}>
+                ✕
+              </button>
+            </span>
+          ))}
+          {selectedFlags.map((f) => (
+            <span key={f} className="badge badge-lg gap-1">
+              {allFlags.find((o) => o.key === f)?.label ?? f}
+              <button onClick={() => update("flag", f, false)} aria-label={`Remove ${f} filter`}>
+                ✕
+              </button>
+            </span>
+          ))}
+          {hasActiveFilters && (
+            <a
+              href={q ? `${pathname}?q=${encodeURIComponent(q)}` : pathname}
+              className="link link-primary text-sm ml-1"
+            >
+              Clear all
+            </a>
+          )}
         </div>
       )}
-    </aside>
+    </div>
   )
 }

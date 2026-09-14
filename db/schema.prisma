@@ -57,6 +57,7 @@ model User {
   pipelineRuns        PipelineRun[]
   extractionsVerified PaperExtraction[]
   articleSuggestions  ArticleSuggestion[]
+  savedSearches       SavedSearch[]
 }
 
 model Session {
@@ -141,6 +142,21 @@ model UserDatasetFavorite {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, bibtex])
+}
+
+// A user's saved search/filter combination on a browse page — stored as the
+// raw query string so it stays in sync with whatever filters exist (q, lang,
+// decade, stimuli, status, etc.) without needing its own schema per filter.
+model SavedSearch {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name      String
+  path      String // which browse page this search applies to, e.g. "/" or "/datasets"
+  query     String // raw query string, e.g. "q=concreteness&lang=English"
+
+  @@index([userId])
 }
 
 model PaperReport {

@@ -323,7 +323,7 @@ export default async function AdminDuplicatesPage({ searchParams }: Props) {
             <p className="font-semibold text-sm">Preprint/repository duplicates detected</p>
             <p className="text-sm text-base-content/60">
               {preprintMergeGroupsCount} groups have a matching title (and shared author) between
-              a figshare/OSF/arXiv/SSRN/Zenodo/Open Research Europe copy and either a journal
+              a figshare/OSF/arXiv/SSRN/Zenodo/Open Research Europe/bioRxiv/medRxiv/techRxiv copy and either a journal
               publication or a sibling copy with a DOI. These can be safely auto-merged.
             </p>
           </div>

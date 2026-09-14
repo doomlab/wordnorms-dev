@@ -27,6 +27,12 @@ const PREPRINT_SOURCES: { key: string; doiSubstrings: string[]; namePattern: Reg
     doiSubstrings: ["12688/openreseurope"],
     namePattern: /open research europe/i,
   },
+  // medRxiv shares bioRxiv's "10.1101/" DOI prefix (same platform), so it can only be
+  // told apart via the journal name; checked before "biorxiv" so a paper explicitly
+  // labeled medRxiv doesn't fall through to the DOI-prefix-only bioRxiv match below.
+  { key: "medrxiv", doiSubstrings: [], namePattern: /medrxiv/i },
+  { key: "biorxiv", doiSubstrings: ["1101/"], namePattern: /biorxiv/i },
+  { key: "techrxiv", doiSubstrings: ["36227/techrxiv"], namePattern: /techrxiv/i },
 ]
 
 export function detectSource(m: Pick<GroupMember, "doi" | "journal">): string | null {
