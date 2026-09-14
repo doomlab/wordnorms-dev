@@ -42,6 +42,7 @@ const PREPRINT_SOURCES: { key: string; doiSubstrings: string[]; namePattern: Reg
     doiSubstrings: ["hal.science", "archives-ouvertes.fr"],
     namePattern: /\bhal\b/i,
   },
+  { key: "research-square", doiSubstrings: ["21203/rs"], namePattern: /research square/i },
 ]
 
 export function detectSource(m: Pick<GroupMember, "doi" | "journal">): string | null {

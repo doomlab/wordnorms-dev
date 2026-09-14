@@ -14,7 +14,7 @@ export function AutomergeJournalButton({ groupCount }: { groupCount: number }) {
   const handleClick = async () => {
     if (
       !confirm(
-        `Auto-merge ${groupCount} preprint/repository duplicate groups (figshare, OSF, arXiv, SSRN, Zenodo, Open Research Europe, bioRxiv, medRxiv, techRxiv, HAL) into their journal version or the copy with a DOI?`
+        `Auto-merge ${groupCount} preprint/repository duplicate groups (figshare, OSF, arXiv, SSRN, Zenodo, Open Research Europe, bioRxiv, medRxiv, techRxiv, HAL, Research Square) into their journal version or the copy with a DOI?`
       )
     )
       return
